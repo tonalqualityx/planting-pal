@@ -25,7 +25,8 @@ function planting_pal_home(){
         navigator.geolocation.getCurrentPosition(function(position) {
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
-        document.location = "/geo/lat/" + lat + "/lon/" + lon;
+
+        document.location = "?lat=" + lat + "&lon=" + lon;
         });
     }
     }
@@ -39,17 +40,57 @@ function planting_pal_home(){
             </div>
                 <div class="row search-form">
                     <div class="col">
-                    <form action="/zip/" method="post">
+                    <form action="<?php site_url(); ?>" method="post">
                     <input class="form-control rounded-input4" type="text" name="zip" placeholder="Zipcode"><i class="material-icons" onclick="getLocation()" id="location-icon">my_location</i>
                     <input type="image" src="<?php echo INDPPL_ROOT_URL ?>assets/img/enter-geo.png" alt="Submit" border="0" class="geo-submit">
                     </form>
                 </div>
             </div>
         </div>
+
+  
+    <?php
+    if(isset($_GET['lat'])){
+        $lat = $_GET['lat'];
+        $lon = $_get['lon'];
+        $zip_array = geofind($lat, $lon);
+    }else if(isset($_POST['zip'])){
+        $zip_array = geozip($_POST['zip']);
+    }
+    if($zip_array){
+
+        $args = array(
+            'post_type' => 'store',
+            'meta_query' => array(
+                array(
+                    'key' => 'wpcf-zip',
+                    'value'   => $zip_array,
+                    'compare' => 'IN',
+
+                )
+            )
+        );
+        // var_dump($zip_array);
+        $the_query = new WP_Query( $args );
+        // The Loop
+        if ( $the_query->have_posts() ) {
+            echo '<ul>';
+            while ( $the_query->have_posts() ) {
+                $the_query->the_post();
+                echo '<li>' . get_the_title() . '</li>';
+            }
+            echo '</ul>';
+            /* Restore original Post Data */
+            wp_reset_postdata();
+        } else {
+            // no posts found
+        }
+    }
+
+    ?>
         <script src="<?php echo INDPPL_ROOT_URL ?>assets/js/jquery.min.js"></script>
         <script src="<?php echo INDPPL_ROOT_URL ?>assets/bootstrap/js/bootstrap.min.js"></script>
     </body>
-
     <!-- </html> -->
     <?php
     $return = ob_get_clean();
