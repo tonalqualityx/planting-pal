@@ -26,7 +26,10 @@ function indppl_enqueue(){
 add_action('wp_enqueue_scripts', 'indppl_enqueue');
 
 function page_template_enqueue(){
-    if(is_page_template("no-header-no-footer-template.php")){
+
+    global $post;
+
+    if(is_page_template("no-header-no-footer-template.php") || $post->post_type == "store"){
         wp_enqueue_style('indppl-bootstrap-style', INDPPL_ROOT_URL . 'assets/bootstrap/css/bootstrap.min.css');
         wp_enqueue_style('indppl-template-style', INDPPL_ROOT_URL . 'assets/css/styles.css');
         wp_enqueue_style('indppl-font-style', INDPPL_ROOT_URL . 'assets/fonts/material-icons.min.css');
@@ -35,3 +38,18 @@ function page_template_enqueue(){
     }
 }
 add_action('wp_enqueue_scripts', 'page_template_enqueue');
+
+//Add support for a custom single-store page
+function indppl_single_store_template($single) {
+    
+    global $post;
+
+    if ($post->post_type == "store" && $template !== locate_template(array("single-store.php"))) {   
+        return plugin_dir_path(__FILE__) . "/templates/single-store.php";
+    }
+
+    return $template;
+    
+}
+
+add_filter('single_template', 'indppl_single_store_template');
