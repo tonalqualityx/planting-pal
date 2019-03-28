@@ -8,7 +8,7 @@ function geofind($lat, $lon)
 {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
-
+    var_dump($xml);
     $xmlfile = file_get_contents($xml);
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
@@ -342,3 +342,17 @@ print_r(getProduct($pot_blends[$i]['productid']));
     }
     return $ea_totals;
 }
+function indppl_planting_pal_home_ajax(){
+    if(isset($_POST['lat'])){
+        $lat = $_POST['lat'];
+        $lon = $_POST['lon'];
+
+        // do_shortcode('[planting_pal_home]');
+        $return = planting_pal_home($lat, $lon);
+        echo $return;
+    }
+    // var_dump($_POST);
+    die();
+}
+add_action( 'wp_ajax_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_ajax' );
+add_action('wp_ajax_nopriv_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_ajax');
