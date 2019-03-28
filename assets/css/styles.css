@@ -269,12 +269,12 @@
 }
 
 .geo-submit {
-  margin-top: 15px;
-  margin-left: 15px;
+  margin:auto;
+  margin-top: 20px;
   display: block;
 }
 
-.results-store {
+/* .results-store {
   font-family: 'Open Sans';
   max-width: 292px;
   margin-left: 15px;
@@ -282,7 +282,7 @@
   color: #fff;
   padding-left: 43px;
   padding-top: 19px;
-}
+} */
 
 .search-form {
   margin: 0 auto;

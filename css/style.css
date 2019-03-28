@@ -1,0 +1,44 @@
+#location-icon{
+    position: absolute;
+    right: 20px;
+    top: 5px;
+}
+#zip-for-location{
+    margin-left: 0;
+    width: 85%;
+    /* margin: auto; */
+    margin-top: 20px;
+    border-radius: 8px;
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.39);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.39);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.geo-submit{
+    margin:auto;
+    margin-top: 20px;
+}
+.zip-search-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.store-list-container, .flex-left-justify{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.flex-left-justify{
+    align-items: flex-start;
+}
+.results-store, .store-list-text{
+    font-family: 'Open Sans';
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    padding-left: 0;
+    padding-top: 30px;
+}
+.store-list-text{
+    padding-top: 5px;
+}
