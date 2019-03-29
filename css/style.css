@@ -1,3 +1,59 @@
+/* loading icon */
+.indppl-loading-background{
+	position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: #0000005a;
+    z-index: 99999999;
+}
+#indppl-loading-icon{
+    position: absolute;
+    z-index: 99999999;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    animation: ind-fade 1s ease-in-out 1;
+}
+.image{
+  	position: absolute;
+  	-webkit-animation:spin 2s linear infinite;
+    -moz-animation:spin 2s linear infinite;
+    animation:spin 2s linear infinite;
+}
+.image-rev{
+  	position: absolute;
+  	-webkit-animation:revspin 4s linear infinite;
+    -moz-animation:revspin 4s linear infinite;
+    animation:revspin 4s linear infinite;
+}
+.image-rev-2{
+  	position: absolute;
+  	-webkit-animation:revspin 5s linear infinite;
+ 	-moz-animation:revspin 5s linear infinite;
+ 	animation:revspin 5s linear infinite;
+}
+@keyframes ind-fade {
+	0% {opacity: 0;}
+	100%{opacity: 1;} }
+@-moz-keyframes ind-fade {
+	0% {opacity: 0;}
+	100%{opacity: 1;} }
+@-webkit-keyframes ind-fade {
+	0% {opacity: 0;}
+	100%{opacity: 1;} }
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+@-moz-keyframes revspin { 100% { -moz-transform: rotate(-360deg); } }
+@-webkit-keyframes revspin { 100% { -webkit-transform: rotate(-360deg); } }
+@keyframes revspin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
+
+
+
 #location-icon{
     position: absolute;
     right: 20px;
