@@ -19,6 +19,7 @@ define('INDPPL_ROOT_URL', plugin_dir_url(__FILE__));
 require_once(INDPPL_ROOT_PATH . "/functions.php");
 require_once(INDPPL_ROOT_PATH . "/shortcodes.php");
 require_once(INDPPL_ROOT_PATH . "/conversion.php");
+require_once(INDPPL_ROOT_PATH . "/ajax-functions.php");
 
 function indppl_enqueue(){
     wp_enqueue_style('indppl-style', INDPPL_ROOT_URL . 'css/style.css');
