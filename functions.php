@@ -4,8 +4,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 Collection of functions for the entire site.
  */
 
-function geofind($lat, $lon)
-{
+function geofind($lat, $lon) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
 
@@ -22,8 +21,7 @@ function geofind($lat, $lon)
     return $allzips;
 } // end Function for Geo
 
-function geozip($zipcode)
-{
+function geozip($zipcode) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?postalcode=' . $zipcode . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
 
@@ -40,8 +38,7 @@ function geozip($zipcode)
     return $allzips;
 } // End Zip Find
 
-function phone_number_format($number)
-{
+function phone_number_format($number) {
     // Allow only Digits, remove all other characters.
     $number = preg_replace("/[^\d]/", "", $number);
 
@@ -56,15 +53,13 @@ function phone_number_format($number)
 }
 
 // Generate Unique ID for Results/Guide
-function uniqueID()
-{
+function uniqueID() {
     $thedate = date('U') + rand(0, 1000000); // Add some extra flair for seconds in-between
     $thehash = md5($thedate); // Hash the whole thing for a pretty hash.
     return $thehash;
 }
 
-function getBagsize($compare, $total)
-{
+function getBagsize($compare, $total) {
 
     $max = 1.15;
 
@@ -117,8 +112,7 @@ function getBagsize($compare, $total)
     ;
 } // End getBagsize
 
-function getClosest($search, $arr)
-{
+function getClosest($search, $arr) {
     $closest = null;
     foreach ($arr as $key => $item) {
         if ($closest === null || abs($search - $closest) > abs($item - $search)) {
@@ -129,26 +123,22 @@ function getClosest($search, $arr)
 }
 //echo "<br>Calc for Bag: " . getBagsize("test",$results_submit);
 
-function less_than_115($value)
-{
+function less_than_115($value) {
     return $value < 1.15;
 };
 
-function more_than_115($value)
-{
+function more_than_115($value) {
     return $value > 1.15;
 };
 
-function getProduct($id)
-{
+function getProduct($id) {
     global $dbconn;
     $grabSingle = "SELECT * FROM `products` WHERE `id` =" . $id;
     $grabProd = $dbconn->query($grabSingle);
     return $grabProd->fetch_array(MYSQLI_ASSOC);
 };
 
-function getProductFam($id)
-{
+function getProductFam($id) {
     global $dbconn;
     $grabSingle = "SELECT * FROM `products` WHERE `id` =" . $id . " OR `parentid` = " . $id;
     $grabProd = $dbconn->query($grabSingle);
@@ -158,8 +148,7 @@ function getProductFam($id)
     return $unitid;
 }
 
-function prodUnit($pid, $store)
-{
+function prodUnit($pid, $store) {
     global $dbconn;
     $prodPull = 'SELECT * FROM `products` WHERE `id` = ' . $pid . ' AND `storeid` = ' . $store;
     $grabProd = $dbconn->query($prodPull);
@@ -169,8 +158,7 @@ function prodUnit($pid, $store)
     return $unitid;
 }
 
-function productSize($pid, $store)
-{
+function productSize($pid, $store) {
     global $dbconn;
     //echo $pid . " - " .$store;
     $psPull = 'SELECT * FROM `products` WHERE `id` = ' . $pid . ' AND `storeid` = ' . $store;
@@ -183,8 +171,7 @@ function productSize($pid, $store)
 }
 
 // Checks Range of # if it fits.
-function in_range($number, $min, $max, $inclusive = false)
-{
+function in_range($number, $min, $max, $inclusive = false) {
     if (is_int($number) && is_int($min) && is_int($max)) {
         return $inclusive
         ? ($number >= $min && $number <= $max)
@@ -195,8 +182,7 @@ function in_range($number, $min, $max, $inclusive = false)
 }
 
 // Feed it the width of the box + the product amounts = qty of size to use.
-function sizeCheck($width, $ea8, $ea9, $ea24)
-{
+function sizeCheck($width, $ea8, $ea9, $ea24) {
 // Convert Strings to INT
     $width = intval($width);
     $ea8 = intval($ea8);
@@ -219,8 +205,7 @@ function sizeCheck($width, $ea8, $ea9, $ea24)
 }
 
 // Grab Bulk Fillers
-function grabBulk($total, $qty, $storeid, $potsize, $type)
-{
+function grabBulk($total, $qty, $storeid, $potsize, $type) {
     global $dbconn;
     $grabFillers = "SELECT * FROM `apprates` WHERE `storeid` = " . $storeid . " AND `type` LIKE '" . $type . "' AND `bf` = 1";
     $grabProd = $dbconn->query($grabFillers);
@@ -233,8 +218,7 @@ function grabBulk($total, $qty, $storeid, $potsize, $type)
 }; // End Grab Bulk
 
 // Grab Blended Addatives
-function grabBA($total, $qty, $storeid, $potsize, $type)
-{
+function grabBA($total, $qty, $storeid, $potsize, $type) {
     global $dbconn;
     $grabBlend = "SELECT * FROM `apprates` WHERE `storeid` = " . $storeid . " AND `type` LIKE '" . $type . "' AND `ba` LIKE '1'";
     $grabProd = $dbconn->query($grabBlend);
@@ -270,8 +254,7 @@ print_r(getProduct($pot_blends[$i]['productid']));
 }
 
 // Grab Blended Addatives
-function grabSA($total, $qty, $storeid, $potsize, $type)
-{
+function grabSA($total, $qty, $storeid, $potsize, $type) {
     global $dbconn;
     $grabBlend = "SELECT * FROM `apprates` WHERE `storeid` = " . $storeid . " AND `type` LIKE '" . $type . "' AND `sa` LIKE '1'";
     $grabProd = $dbconn->query($grabBlend);
@@ -307,8 +290,7 @@ print_r(getProduct($pot_blends[$i]['productid']));
 }
 
 // Grab Eaches
-function grabEA($total, $qty, $storeid, $potsize, $type)
-{
+function grabEA($total, $qty, $storeid, $potsize, $type) {
     global $dbconn;
     $grabBlend = "SELECT * FROM `apprates` WHERE `storeid` = " . $storeid . " AND `type` LIKE '" . $type . "' AND `ea` LIKE '1'";
     $grabProd = $dbconn->query($grabBlend);
