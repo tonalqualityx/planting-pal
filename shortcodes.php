@@ -102,3 +102,159 @@ function planting_pal_home($lat=NULL, $lon=NULL){
 }
 add_shortcode( 'planting-pal-home', 'planting_pal_home' );
 
+function pp_store_management(){
+
+    // if(isset($_POST)){
+        var_dump($_POST);
+    // }
+
+    // wp_handle_upload( $file, $overrides, $time );
+
+    ob_start();
+    ?>
+    <h1>Welcome to Planting Pal!</h1>
+    <p>We just need to get a few quick details to configure your store then you can begin building out your products and rates.</p>
+    <form method="post" action='#' id='store-management-form' class="form-horizontal">
+    <fieldset>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="store-name">Store Name</label>
+      <div class="col-md-4">
+      <input id="store-name" name="store-name" type="text" placeholder="" class="form-control input-md" required="">
+    
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="address1">Address Line 1</label>
+      <div class="col-md-4">
+      <input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="">
+    
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="address2">Address Line 2</label>
+      <div class="col-md-4">
+      <input id="address2" name="address2" type="text" placeholder="" class="form-control input-md">
+    
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="city">City</label>
+      <div class="col-md-4">
+      <input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="">
+    
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="state">State</label>
+      <div class="col-md-1">
+      <input id="state" name="state" type="text" placeholder="" class="form-control input-md" required="">
+    
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="zip">Zipcode</label>
+      <div class="col-md-2">
+      <input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="">
+    
+      </div>
+    </div>
+    <?php
+    // if ($grabList == '19'){
+    ?>
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="weburl">Store Website</label>
+      <div class="col-md-4">
+      <input id="weburl" name="weburl" type="text" placeholder="" class="form-control input-md">
+    
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="phone">Phone Number</label>
+      <div class="col-md-4">
+      <input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="">
+    
+      </div>
+    </div>
+    
+    <!-- Text input-->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="store-email">Email Address</label>
+      <div class="col-md-4">
+      <input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="">
+    
+      </div>
+    </div>
+    <?php
+    // };
+    
+    ?>
+    <?php
+    // if ($grabList == '19'){
+    ?>
+    <!-- Prepended text-->
+    <!-- <div class="form-group">
+      <label class="col-md-4 control-label" for="purl">Pretty URL</label>
+      <div class="col-md-5">
+        <div class="input-group">
+          <span class="input-group-addon">https://m.plantingpal.com/</span>
+          <input id="purl" name="purl" class="form-control" placeholder="yourname" type="text">
+        </div>
+    
+      </div>
+    </div> -->
+    
+    
+    <!-- File Button -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="logo">Store Logo</label>
+      <div class="col-md-4">
+        <input id="logo" name="logo" class="input-file" type="file">
+      </div>
+    </div>
+    <?php
+    // }
+    ?>
+    <!-- Button -->
+    <div class="form-group">
+      <label class="col-md-4 control-label" for="submit"></label>
+      <div class="col-md-4">
+        <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"  /></p>
+        <!-- <button id="submit" name="submit" class="btn btn-primary">Save Information</button> -->
+      </div>
+    </div>
+    <input type="hidden" name="setup" value="2">
+    </fieldset>
+    </form>
+
+    <script type="text/javascript">
+
+    $(function()
+    {
+        $('#logo').on('change',function ()
+        {
+            var filePath = $(this).val();
+            console.log(filePath);
+        });
+    });
+
+    </script>
+
+    <?php
+    $return = ob_get_clean();
+    return $return;
+}
+add_shortcode('pp-store-management', 'pp_store_management');
