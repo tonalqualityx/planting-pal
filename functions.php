@@ -343,9 +343,15 @@ print_r(getProduct($pot_blends[$i]['productid']));
     return $ea_totals;
 }
 
-indppl_user_status();
-function indppl_user_status(){
-    $user_id = get_current_user_id();
-    $user_meta = get_user_meta($user_id);
-    var_dump($user_id);
+function indppl_user_status($id){
+    $meta = get_user_meta($id)['wpnr_capabilities'];
+    $data = unserialize($meta[0]);
+    $account_array = array();
+    if(isset($data['paidaccount'])){
+        array_push($account_array, 'paidaccount');
+    }
+    if(isset($data['freeaccount'])){
+        array_push($account_array, 'freeaccount');
+    }
+    return $account_array;
 }
