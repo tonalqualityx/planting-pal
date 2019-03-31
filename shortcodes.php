@@ -3,24 +3,6 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 function planting_pal_home($lat=NULL, $lon=NULL){
     ob_start();
     ?>
-    <!-- <!DOCTYPE html>
-    <html> -->
-
-    <!-- <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-        <title>Planting Pal</title>
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="manifest" href="/site.webmanifest">
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#488A40">
-        <meta name="msapplication-TileColor" content="#488a40">
-        <meta name="theme-color" content="#488a40">
-    </head> -->
-    <!-- <script>
-    
-    </script> -->
     <body class="location-body ppl-green-bg">
         <!-- <div class="desktopWarning">
             <p class="desktopWarning-p">This site is optimized for mobile phones in portrait layout.</p><i class="material-icons d-block portrait-only">screen_lock_portrait</i></div> -->
@@ -119,3 +101,4 @@ function planting_pal_home($lat=NULL, $lon=NULL){
     return $top.$return;
 }
 add_shortcode( 'planting-pal-home', 'planting_pal_home' );
+

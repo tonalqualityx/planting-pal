@@ -342,17 +342,16 @@ print_r(getProduct($pot_blends[$i]['productid']));
     }
     return $ea_totals;
 }
-function indppl_planting_pal_home_ajax(){
-    if(isset($_POST['lat'])){
-        $lat = $_POST['lat'];
-        $lon = $_POST['lon'];
 
-        // do_shortcode('[planting_pal_home]');
-        $return = planting_pal_home($lat, $lon);
-        echo $return;
+function indppl_user_status($id){
+    $meta = get_user_meta($id)['wpnr_capabilities'];
+    $data = unserialize($meta[0]);
+    $account_array = array();
+    if(isset($data['paidaccount'])){
+        array_push($account_array, 'paidaccount');
     }
-    // var_dump($_POST);
-    die();
+    if(isset($data['freeaccount'])){
+        array_push($account_array, 'freeaccount');
+    }
+    return $account_array;
 }
-add_action( 'wp_ajax_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_ajax' );
-add_action('wp_ajax_nopriv_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_ajax');
