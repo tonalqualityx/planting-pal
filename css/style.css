@@ -1,3 +1,11 @@
+/***************
+UTILITY CLASSES
+***************/
+
+.margin-auto {
+    margin: auto;
+}
+
 /* loading icon */
 .indppl-loading-background{
 	position: fixed;
