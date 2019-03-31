@@ -62,26 +62,24 @@ $storeid = get_the_ID(  );
             </div>
         </div>
         <hr class="light-rule">
-<?
-// InGround data grab
-$storePull = 'SELECT * FROM `containers` WHERE `storeid` = '.$storeid.' AND `active` = 1';
-$grabList = $dbconn->query($storePull);
-while($shop = $grabList->fetch_array(MYSQLI_ASSOC)) {
-?>
-<div class="row">
-    <div class="col-3 offset-2" id="qty"><input type="number" class="rounded-input" name="IG|<?=$shop['id']?>"></div>
-    <div class="col-4" id="plant-size">
-        <p class="plant-size-format"><?=$shop['name']?></p>
-    </div>
-</div>
-<?
-}
 
-?>
+<?php 
+//START THE WP LOOP 
+$containers = types_child_posts('container');
+foreach($containers as $container){ ?>
+    <div class="row">
+        <div class="col-3 offset-2" id="qty">
+            <input type="number" class="rounded-input" name="IG|<?php  ?>" min="0">
+        </div>
+        <div class="col-4" id="plant-size">
+            <p class="plant-size-format"><?php echo $container->post_title; ?></p>
+        </div>
+    </div>
+<?php } ?>
     </div>
     <div class="row type-header">
         <div class="col">
-            <p id=pots><strong>pot Plantings</strong><br></p>
+            <p id="pots"><strong>Pot Plantings</strong><br></p>
         </div>
     </div>
     <div class="container ig-select">
