@@ -7,7 +7,7 @@ Collection of functions for the entire site.
 function geofind($lat, $lon) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
-
+    var_dump($xml);
     $xmlfile = file_get_contents($xml);
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
@@ -323,4 +323,17 @@ print_r(getProduct($pot_blends[$i]['productid']));
         $i++;
     }
     return $ea_totals;
+}
+
+function indppl_user_status($id){
+    $meta = get_user_meta($id)['wpnr_capabilities'];
+    $data = unserialize($meta[0]);
+    $account_array = array();
+    if(isset($data['paidaccount'])){
+        array_push($account_array, 'paidaccount');
+    }
+    if(isset($data['freeaccount'])){
+        array_push($account_array, 'freeaccount');
+    }
+    return $account_array;
 }

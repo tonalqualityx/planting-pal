@@ -1,0 +1,100 @@
+/* loading icon */
+.indppl-loading-background{
+	position: fixed;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: #0000005a;
+    z-index: 99999999;
+}
+#indppl-loading-icon{
+    position: absolute;
+    z-index: 99999999;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    animation: ind-fade 1s ease-in-out 1;
+}
+.image{
+  	position: absolute;
+  	-webkit-animation:spin 2s linear infinite;
+    -moz-animation:spin 2s linear infinite;
+    animation:spin 2s linear infinite;
+}
+.image-rev{
+  	position: absolute;
+  	-webkit-animation:revspin 4s linear infinite;
+    -moz-animation:revspin 4s linear infinite;
+    animation:revspin 4s linear infinite;
+}
+.image-rev-2{
+  	position: absolute;
+  	-webkit-animation:revspin 5s linear infinite;
+ 	-moz-animation:revspin 5s linear infinite;
+ 	animation:revspin 5s linear infinite;
+}
+@keyframes ind-fade {
+	0% {opacity: 0;}
+	100%{opacity: 1;} }
+@-moz-keyframes ind-fade {
+	0% {opacity: 0;}
+	100%{opacity: 1;} }
+@-webkit-keyframes ind-fade {
+	0% {opacity: 0;}
+	100%{opacity: 1;} }
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+@-moz-keyframes revspin { 100% { -moz-transform: rotate(-360deg); } }
+@-webkit-keyframes revspin { 100% { -webkit-transform: rotate(-360deg); } }
+@keyframes revspin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
+
+
+
+#location-icon{
+    position: absolute;
+    right: 20px;
+    top: 5px;
+}
+#zip-for-location{
+    margin-left: 0;
+    width: 85%;
+    /* margin: auto; */
+    margin-top: 20px;
+    border-radius: 8px;
+    -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.39);
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.39);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.geo-submit{
+    margin:auto;
+    margin-top: 20px;
+}
+.zip-search-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.store-list-container, .flex-left-justify{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.flex-left-justify{
+    align-items: flex-start;
+}
+.results-store, .store-list-text{
+    font-family: 'Open Sans';
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+    padding-left: 0;
+    padding-top: 30px;
+}
+.store-list-text{
+    padding-top: 5px;
+}
