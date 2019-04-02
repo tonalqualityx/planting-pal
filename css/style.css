@@ -1,4 +1,8 @@
 /* loading icon */
+.current-store-logo{
+    width: 50%;
+    padding-bottom: 10px;
+} 
 .indppl-loading-background{
 	position: fixed;
     top: 0;
