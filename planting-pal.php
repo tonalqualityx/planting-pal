@@ -21,6 +21,7 @@ require_once(INDPPL_ROOT_PATH . "/shortcodes.php");
 require_once(INDPPL_ROOT_PATH . "/conversion.php");
 require_once(INDPPL_ROOT_PATH . "/ajax-functions.php");
 
+
 function indppl_enqueue(){
     wp_enqueue_style('indppl-style', INDPPL_ROOT_URL . 'css/style.css');
     wp_register_script( 'indppl-js', INDPPL_ROOT_URL . 'js/app.js', array( 'jquery' ), true);
