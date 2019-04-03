@@ -1,3 +1,47 @@
+/* tabs */
+
+.indppl-nav-tabs{
+    display: flex;
+    padding-bottom: 10px;
+    width: 100%;
+    margin: 0;
+    list-style-type: none;
+    border-bottom: 1px solid #ddd;
+  }
+  .indppl-nav-tabs > li{
+    margin-bottom: -1px;
+    margin-top: 30px;
+  }
+  .indppl-nav-tabs > li > a{
+    margin-right: 2px;
+    line-height: 1.5;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px 4px 0 0;
+    text-decoration: none;
+  }
+  .indppl-nav-tabs > li > a:hover{
+    border-color: #eee #eee #ddd;
+  }
+  .indppl-nav-tabs > li.indppl-active > a,
+  .indppl-nav-tabs > li.indppl-active > a:hover,
+  .indppl-nav-tabs > li.indppl-active > a:active{
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+  }
+  .indppl-tab-content .indppl-tab-pane{
+    width: 100%;
+    display: none;
+  }
+  .indppl-tab-content > .indppl-tab-pane.indppl-active {
+    display: block;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 5px 4px -2px rgba(0,0,0,0.15);
+  }
 /* loading icon */
 .current-store-logo{
     width: 50%;
@@ -57,7 +101,10 @@
 @keyframes revspin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
 
 
-
+.state-selector{
+    float: left;
+    padding-left: 15px;
+}
 #location-icon{
     position: absolute;
     right: 20px;

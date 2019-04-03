@@ -58,7 +58,7 @@ function planting_pal_home($lat=NULL, $lon=NULL){
 				// var_dump('special');
                 $the_query->the_post();
 				$id = get_the_ID();
-				// var_dump(get_post_meta($id));
+				var_dump(get_post_meta($id));
                 $add = get_post_meta($id, 'wpcf-address1');
                 $city = get_post_meta($id, 'wpcf-city');
                 $state = get_post_meta($id, 'wpcf-state');
@@ -103,221 +103,91 @@ function planting_pal_home($lat=NULL, $lon=NULL){
 }
 add_shortcode( 'planting-pal-home', 'planting_pal_home' );
 
-function pp_store_management($store_id = NULL){
-	
-	if(isset($_POST['submit'])){
-		$store_id = indppl_save_post();
+function pp_store_management(){
+    if(isset($_GET['store-id'])){
+        $store_id = intval(htmlspecialchars($_GET['store-id']));
     }
-	if(is_int($store_id)){
-		$store_name = get_the_title($store_id);
-		$address1 = get_post_meta($store_id, 'wpcf-address1');
-		$address2 = get_post_meta($store_id, 'wpcf-address2');
-		$city = get_post_meta($store_id, 'wpcf-city');
-		$state = get_post_meta($store_id, 'wpcf-state');
-		$zip = get_post_meta($store_id, 'wpcf-zip');
-		$weburl = get_post_meta($store_id, 'wpcf-weburl');
-		$phone = get_post_meta($store_id, 'wpcf-phone');
-		$email = get_post_meta($store_id, 'wpcf-email');
-		$logo = get_post_meta($store_id, 'wpcf-logo');
-	}
-    // wp_handle_upload( $file, $overrides, $time );
-	
-    ob_start();
-	if(is_int($store_id)){ ?>
-		<h1>Edit Store Information</h1>
-	<?php }else{ ?>
-    	<h1>Welcome to Planting Pal!</h1>
-    	<p>We just need to get a few quick details to configure your store then you can begin building out your products and rates.</p>
-	<?php } ?>
-		<!-- <form method="post" action='#' id='store-management-form' class="form-horizontal"> -->
-    <form  method="post" action='#' id='store-management-form' class="form-horizontal" enctype="multipart/form-data">
-		<fieldset>
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="store-name">Store Name</label>
-			<div class="col-md-4">
-			<input id="store-name" name="store-name" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $store_name; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="address1">Address Line 1</label>
-			<div class="col-md-4">
-			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1[0]; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="address2">Address Line 2</label>
-			<div class="col-md-4">
-			<input id="address2" name="address2" type="text" placeholder="" class="form-control input-md" value="<?php echo $address2[0]; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="city">City</label>
-			<div class="col-md-4">
-			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $city[0]; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="state">State</label>
-			<div class="col-md-1">
-			<input id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $state[0]; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="zip">Zipcode</label>
-			<div class="col-md-2">
-			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $zip[0]; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="weburl">Store Website</label>
-			<div class="col-md-4">
-			<input id="weburl" name="weburl" type="text" placeholder="" class="form-control input-md" value="<?php echo $weburl[0]; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="phone">Phone Number</label>
-			<div class="col-md-4">
-			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $phone[0]; ?>">
-			
-			</div>
-			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="store-email">Email Address</label>
-			<div class="col-md-4">
-			<input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email[0]; ?>">
-			
-			</div>
-			</div>
-		
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="logo">Store Logo</label>
-			<div class="col-md-4">
-				<div class="store-edit-logo-container">
-					<?php if($logo){ ?>
-						<div class='current-store-logo'><img src='<?php echo $logo[0]; ?>'></div>
-						<div>
-							<!-- <a href="#" class='edit-logo-btn'>Change Logo</a>
-							<div class='edit-store-logo'> -->
-								<label for=b1>
-									Change Logo
-									<input type="file" name="my_file_upload[]" data-buttonText="Change Logo" onchange='optionalExtraProcessing(b1.files[0])'>
-								</label>
-							<!-- </div> -->
-						</div>
-						
-					<?php }else{ ?>
-						<input type="file" name="my_file_upload[]">
-					<?php } ?>
+    if(isset($_POST['submit'])){
+        if($store_id == null){$store_id = 0;}
+        if(!empty($_POST['store-id'])){
+            $store_id = $_POST['store-id'];
+        }
+        $store_id = indppl_save_post($store_id);
+    }
+	// if(is_int($store_id)){
+	// 	$store_name = get_the_title($store_id);
+	// 	$address1 = get_post_meta($store_id, 'wpcf-address1', true);
+	// 	$address2 = get_post_meta($store_id, 'wpcf-address2', true);
+	// 	$city = get_post_meta($store_id, 'wpcf-city', true);
+	// 	$state = get_post_meta($store_id, 'wpcf-state', true);
+	// 	$zip = get_post_meta($store_id, 'wpcf-zip', true);
+	// 	$weburl = get_post_meta($store_id, 'wpcf-weburl', true);
+	// 	$phone = get_post_meta($store_id, 'wpcf-phone', true);
+	// 	$email = get_post_meta($store_id, 'wpcf-email', true);
+	// 	$logo = get_post_meta($store_id, 'wpcf-logo', true);
+    // }
+    
+    
+    if(is_int($store_id)){
+        ob_start();
+        $setup = get_post_meta($store_id, 'wpcf-issetup', true);
+        if($setup){
+            ?>
+            <p>Your store is Live. To make your site private hit the button below.</p>
+            <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Private</a>
+            <?php
+        }else{
+            ?>
+            <p>Your store is not live. If you have filled out all the information below you can make your store live with this button.</p>
+            <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
+        <?php } ?>
 
-				</div>
-			</div>
-			</div>
-			<?php
-			// }
-			?>
-			<!-- Button -->
-			<div class="form-group">
-			<label class="col-md-4 control-label" for="submit"></label>
-			<div class="col-md-4">
-				<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"  /></p>
-			</div>
-			</div>
-			<input type="hidden" name="setup" value="2">
-		</fieldset>
-    </form>
-
-    <script type="text/javascript">
-
-    $(function()
-    {
-        $('#logo').on('change',function ()
-        {
-            var filePath = $(this).val();
-            console.log(filePath);
-        });
-    });
-
-    </script>
-
-    <?php
-
-$return = ob_get_clean();
-return $return;
-}
-function pp_store_management_shortcode(){
-	$return = pp_store_management();
+        <ul class='indppl-nav indppl-nav-tabs'>
+            <li class="indppl-active"><a href='#indppl-tab-1'>Store Info</a></li>
+            <li><a href='#indppl-tab-2'>Sizes</a></li>
+            <li><a href='#indppl-tab-3'>In-Ground</a></li>
+            <li><a href='#indppl-tab-4'>Pots</a></li>
+            <li><a href='#indppl-tab-5'>Raised Beds</a></li>
+            <li><a href='#indppl-tab-6'>Guides</a></li>
+        </ul>
+        
+        <div class='indppl-tab-content'>
+            <div id='indppl-tab-1' class='indppl-tab-pane indppl-active'>
+                <?php
+                $store_info  = indppl_store_info($store_id);
+                echo $store_info;
+                ?>
+            </div>
+            <div id='indppl-tab-2' class='indppl-tab-pane'>
+                
+                <p>Sizes</p>
+            </div>
+            <div id='indppl-tab-3' class='indppl-tab-pane'>
+                
+                <p>In-Ground</p>
+            </div>
+            <div id='indppl-tab-4' class='indppl-tab-pane'>
+                
+                <p>Pots</p>
+            </div>
+            <div id='indppl-tab-5' class='indppl-tab-pane'>
+                
+                <p>Raised Beds</p>
+            </div>
+            <div id='indppl-tab-6' class='indppl-tab-pane'>
+                
+                <p>Guides</p>
+            </div>
+        </div>
+        <?php
+        $return = ob_get_clean();
+    }else{
+        $return = indppl_store_info($store_id);
+    }
+    
+    
 	return $return;
 }
-add_shortcode('pp-store-management', 'pp_store_management_shortcode');
+add_shortcode('pp-store-management', 'pp_store_management');
 
-function indppl_save_post(){
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		require_once( ABSPATH . 'wp-admin/includes/image.php' );
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		require_once( ABSPATH . 'wp-admin/includes/media.php' );
-		
-		$store = array();
-		$files = $_FILES["my_file_upload"];
-		foreach ($files['name'] as $key => $value) {
-			if ($files['name'][$key]) {
-				$file = array(
-					'name' => $files['name'][$key],
-					'type' => $files['type'][$key],
-					'tmp_name' => $files['tmp_name'][$key],
-					'error' => $files['error'][$key],
-					'size' => $files['size'][$key]
-				);
-				$_FILES = array("upload_file" => $file);
-				$attachment_id = media_handle_upload("upload_file", 0);
-				// var_dump(wp_get_attachment_image_src($attachment_id));
-				if (is_wp_error($attachment_id)) {
-					// There was an error uploading the image.
-					echo "Error adding file";
-				}
-			}
-		}
-		$store = array(
-			'post_title' => wp_strip_all_tags($_POST['store-name']),
-			'post_author' => get_current_user_id(),
-			'post_type' => 'store',
-			'post_status' => "publish",
-			'meta_input' => array(
-				'wpcf-address1' => $_POST['address1'],
-				'wpcf-address2' => $_POST['address2'],
-				'wpcf-city' => $_POST['city'],
-				'wpcf-state' => $_POST['state'],
-				'wpcf-zip' => $_POST['zip'],
-				'wpcf-phone' => $_POST['phone'],
-				'wpcf-email' => $_POST['store-email'],
-				'wpcf-logo' => wp_get_attachment_image_src($attachment_id)[0],
-				'wpcf-weburl' => $_POST['weburl'],
-			),
-		);
-		$store_id = wp_insert_post($store);
-		return $store_id;
-	}
-}
+
