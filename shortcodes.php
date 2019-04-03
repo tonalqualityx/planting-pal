@@ -58,7 +58,7 @@ function planting_pal_home($lat=NULL, $lon=NULL){
 				// var_dump('special');
                 $the_query->the_post();
 				$id = get_the_ID();
-				var_dump(get_post_meta($id));
+				// var_dump(get_post_meta($id));
                 $add = get_post_meta($id, 'wpcf-address1');
                 $city = get_post_meta($id, 'wpcf-city');
                 $state = get_post_meta($id, 'wpcf-state');
@@ -218,7 +218,7 @@ function pp_store_management($store_id = NULL){
 			<div class="col-md-4">
 				<div class="store-edit-logo-container">
 					<?php if($logo){ ?>
-						<div class='current-store-logo'><?php echo $logo[0]; ?></div>
+						<div class='current-store-logo'><img src='<?php echo $logo[0]; ?>'></div>
 						<div>
 							<!-- <a href="#" class='edit-logo-btn'>Change Logo</a>
 							<div class='edit-store-logo'> -->
@@ -293,7 +293,7 @@ function indppl_save_post(){
 				);
 				$_FILES = array("upload_file" => $file);
 				$attachment_id = media_handle_upload("upload_file", 0);
-				
+				// var_dump(wp_get_attachment_image_src($attachment_id));
 				if (is_wp_error($attachment_id)) {
 					// There was an error uploading the image.
 					echo "Error adding file";
@@ -313,7 +313,7 @@ function indppl_save_post(){
 				'wpcf-zip' => $_POST['zip'],
 				'wpcf-phone' => $_POST['phone'],
 				'wpcf-email' => $_POST['store-email'],
-				'wpcf-logo' => wp_get_attachment_link($attachment_id),
+				'wpcf-logo' => wp_get_attachment_image_src($attachment_id)[0],
 				'wpcf-weburl' => $_POST['weburl'],
 			),
 		);
