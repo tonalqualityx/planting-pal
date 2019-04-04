@@ -68,12 +68,12 @@ jQuery(document).ready(function( $ ) {
             success: function(e){
                 indpplDelLoading();
                 console.log(e);
-                if(e == 1){
+                if(e == 0){
                     $(elem).prev('p').text("Your store is not live. If you have filled out all the information below you can make your store live with this button.");
-                    $(elem).html("Make Private");
-                }else if(e == 0){
-                    $(elem).prev('p').text("Your store is Live. To make your site private hit the button below.");
                     $(elem).html("Make Public");
+                }else if(e == 1){
+                    $(elem).prev('p').text("Your store is Live. To make your site private hit the button below.");
+                    $(elem).html("Make Private");
                 }
             }
         })

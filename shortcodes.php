@@ -190,4 +190,65 @@ function pp_store_management(){
 }
 add_shortcode('pp-store-management', 'pp_store_management');
 
-
+function pp_my_stores(){
+    ob_start();
+    ?>
+    <div class='indppl-my-stores-container'>
+        <?php
+            $user_id = get_current_user_id();
+            $args = array(
+                'author' => $user_id,
+                'post_type' => 'store',
+                'orderby' => 'post-date',
+            );
+            $stores = new WP_Query($args);
+            if($stores->have_posts()){
+                while($stores->have_posts()){
+                    $stores->the_post();
+                    
+                    $id = get_the_ID();
+                    $img = get_post_meta($id, 'wpcf-logo', true);
+                    $title = get_the_title();
+                    $address1 = get_post_meta($id, 'wpcf-address1', true);
+                    $city = get_post_meta($id, 'wpcf-city', true);
+                    $state = get_post_meta($id, 'wpcf-state', true);
+                    $link = home_url() . '/test2?store-id=' . $id;
+                    // var_dump($img);
+                    ?>
+                    <div class='indppl-single-store-container'>
+                        <div class='flex-half'>
+                            <div class='indppl-store-thumb'>
+                                <img src='<?php echo $img; ?>'>
+                            </div>
+                        </div>
+                        <div class='flex-half flex-half-text'>
+                            <h4 class='indppl-small-title'><?php echo $title; ?></h4>
+                            <p class='indppl-small-store-text'><?php echo $address1; ?></p>
+                            <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
+                            <a id='indppl-small-store-link' class='button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
+                        </div>
+                    </div>
+                    <?php
+                }
+                // remove else to allow the add store link to always be active.
+            }else{
+                ?>
+                <div class='indppl-add-store-container'>
+                    <a class='indppl-add-store-link' href='<?php echo home_url() . "/test2/"; ?>'>
+                        <div class='indppl-add-store-centered'>
+                            <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
+                            </svg>
+                        </div>
+                        <h4 class='indppl-add-store-text'>Add Store</h4>
+                    </a>
+                </div>
+                <?php 
+            }
+        ?>
+    </div>
+    <?php
+    $return = ob_get_clean();
+    return $return;
+}
+add_shortcode('pp-my-stores', 'pp_my_stores');

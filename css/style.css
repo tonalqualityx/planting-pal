@@ -149,3 +149,72 @@
 .store-list-text{
     padding-top: 5px;
 }
+.indppl-my-stores-container{
+  display:flex;
+  flex-wrap: wrap;
+}
+.indppl-single-store-container, .indppl-add-store-container{
+  display: flex;
+  flex-basis: 33%;
+  padding: 7px;
+}
+.flex-half{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+}
+.flex-half-text{
+  justify-content: start;
+}
+.indppl-small-title, .indppl-small-store-text{
+  margin-bottom: 0;
+}
+.indppl-small-title{
+  font-weight: 600;
+}
+#indppl-small-store-link{
+  padding-top: 0PX;
+  Padding-bottom: 0px;
+  width: 80%;
+  text-align: center;
+}
+.indppl-store-thumb{
+  padding-right: 5px;
+}
+.indppl-add-store-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100px;
+}
+.indppl-add-store-centered{
+  border: #4b79b5 3px solid;
+  width: 100px;
+  height: 100px;
+  transition: background 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
+}
+.indppl-add-store-centered:hover, .icon--plus:hover{
+  background: #a4c2f4;
+  color: white;
+}
+
+.icon--plus{
+  transition: background 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
+  background: white;
+}
+.icon--plus > path{
+  transition: fill 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
+  fill: #4b79b5;
+}
+.indppl-add-store-centered:hover svg path{
+  fill:white;
+}
+.indppl-add-store-text{
+  color: #4b79b5;
+  font-weight: 600;
+  text-align: center;
+}
+.indppl-add-store-link{
+  width:100px;
+}
