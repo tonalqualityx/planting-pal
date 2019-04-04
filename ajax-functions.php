@@ -1,4 +1,7 @@
 <?php
+
+//This is a comment! 
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 function indppl_planting_pal_home_ajax(){
     if(isset($_POST['lat'])){
