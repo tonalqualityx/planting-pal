@@ -340,17 +340,27 @@ function indppl_user_status($id){
 
 function indppl_store_info($store_id = NULL){
 	
-	
+    $store_name = '';
+    $address1 = '';
+    $address2 = '';
+    $city = '';
+    $state = '';
+    $zip = '';
+    $weburl = '';
+    $phone = '';
+    $email = '';
+    $logo = '';
+    
 	if(is_int($store_id)){
 		$store_name = get_the_title($store_id);
-		$address1 = get_post_meta($store_id, 'wpcf-address1');
-		$address2 = get_post_meta($store_id, 'wpcf-address2');
-		$city = get_post_meta($store_id, 'wpcf-city');
-		$state = get_post_meta($store_id, 'wpcf-state');
-		$zip = get_post_meta($store_id, 'wpcf-zip');
-		$weburl = get_post_meta($store_id, 'wpcf-weburl');
-		$phone = get_post_meta($store_id, 'wpcf-phone');
-		$email = get_post_meta($store_id, 'wpcf-email');
+		$address1 = get_post_meta($store_id, 'wpcf-address1', true);
+		$address2 = get_post_meta($store_id, 'wpcf-address2', true);
+		$city = get_post_meta($store_id, 'wpcf-city', true);
+		$state = get_post_meta($store_id, 'wpcf-state', true);
+		$zip = get_post_meta($store_id, 'wpcf-zip', true);
+		$weburl = get_post_meta($store_id, 'wpcf-weburl', true);
+		$phone = get_post_meta($store_id, 'wpcf-phone', true);
+		$email = get_post_meta($store_id, 'wpcf-email', true);
 		$logo = get_post_meta($store_id, 'wpcf-logo', true);
     }
     // var_dump($logo);
@@ -379,7 +389,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="address1">Address Line 1</label>
 			<div class="col-md-4">
-			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1[0]; ?>">
+			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1; ?>">
 			
 			</div>
 			</div>
@@ -388,7 +398,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="address2">Address Line 2</label>
 			<div class="col-md-4">
-			<input id="address2" name="address2" type="text" placeholder="" class="form-control input-md" value="<?php echo $address2[0]; ?>">
+			<input id="address2" name="address2" type="text" placeholder="" class="form-control input-md" value="<?php echo $address2; ?>">
 			
 			</div>
 			</div>
@@ -397,7 +407,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="city">City</label>
 			<div class="col-md-4">
-			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $city[0]; ?>">
+			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $city; ?>">
                 
 			</div>
 			</div>
@@ -406,11 +416,11 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="state">State</label>
 			<div class="state-selector">
-			<select id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $state[0]; ?>">
+			<select id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $state; ?>">
                 <?php
                     $state_array = array('AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY');
                     foreach($state_array as $value){
-                        if($value == $state[0]){
+                        if($value == $state){
                             $select = 'selected="selected"';
                         }else{
                             $select = '';
@@ -428,7 +438,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="zip">Zipcode</label>
 			<div class="col-md-2">
-			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $zip[0]; ?>">
+			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $zip; ?>">
 			
 			</div>
 			</div>
@@ -437,7 +447,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="weburl">Store Website</label>
 			<div class="col-md-4">
-			<input id="weburl" name="weburl" type="text" placeholder="" class="form-control input-md" value="<?php echo $weburl[0]; ?>">
+			<input id="weburl" name="weburl" type="text" placeholder="" class="form-control input-md" value="<?php echo $weburl; ?>">
 			
 			</div>
 			</div>
@@ -446,7 +456,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="phone">Phone Number</label>
 			<div class="col-md-4">
-			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $phone[0]; ?>">
+			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $phone; ?>">
 			
 			</div>
 			</div>
@@ -455,7 +465,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="store-email">Email Address</label>
 			<div class="col-md-4">
-			<input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email[0]; ?>">
+			<input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email; ?>">
 			
 			</div>
 			</div>
