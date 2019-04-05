@@ -565,3 +565,64 @@ function indppl_save_post($store_id = 0){
 	}
 }
 
+function indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta){
+    ob_start();
+    $available = '<div class="indppl-dot-container"><svg height="24" width="24">
+        <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/>
+        <circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>
+        Sorry, your browser does not support inline SVG.  
+    </svg></div>';
+    $not_available = '<div class="indppl-no-dot-container"><svg height="24" width="24">
+        <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.
+        </svg></div>';
+    ?>
+    <tr class='indppl-table-color-offset'>
+        <td><?php
+            if($meta){
+                echo $title;
+            }else{
+                ?>
+                <input type='text' class='indppl-container-edit-title' name='indppl-container-title' value='<?php echo $title; ?>'>
+                <?php
+            }
+        ?></td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && in_array('wpcf-available-in-spring', $int_array[$id])){
+                echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none" id="' . $id . '-' . 'spring" checked /><label class="margin-0" for="' . $id . '-' . 'spring">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none" id="' . $id . '-' . 'spring"/><label class="margin-0" for="' . $id . '-' . 'spring">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && in_array('wpcf-available-in-summer', $int_array[$id])){
+                echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none" id="' . $id . '-' . 'summer" checked /><label class="margin-0" for="' . $id . '-' . 'summer">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none" id="' . $id . '-' . 'summer"/><label class="margin-0" for="' . $id . '-' . 'summer">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && in_array('wpcf-available-in-fall', $int_array[$id])){
+                echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none" id="' . $id . '-' . 'fall" checked /><label class="margin-0" for="' . $id . '-' . 'fall">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none" id="' . $id . '-' . 'fall"/><label class="margin-0" for="' . $id . '-' . 'fall">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && in_array('wpcf-available-in-winter', $int_array[$id])){
+                echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none" id="' . $id . '-' . 'winter" checked /><label class="margin-0" for="' . $id . '-' . 'winter">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none" id="' . $id . '-' . 'winter"/><label class="margin-0" for="' . $id . '-' . 'winter">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+    </tr>
+    <?php
+    return ob_get_clean();
+}
