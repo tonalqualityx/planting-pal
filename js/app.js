@@ -78,6 +78,29 @@ jQuery(document).ready(function( $ ) {
             }
         })
     })
+    $('body').on('focus', '.container-date', function(e){
+        $(this).datepicker({ dateFormat: 'mm-dd' });
+    })
+    $('body').on('click', '.indppl-dot-container', function(e){
+        // var id = $(this).parent().prev().attr('id');
+        // if(!$(this).parent().prev().checked){
+        //     console.log('unchecked');
+        // }
+        $(this).replaceWith('<div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div>');
+    })
+    $('body').on('click', '.indppl-no-dot-container', function(e){
+        var id = $(this).parent().prev().attr('id');
+        // console.log(id);
+        // if($(this).parent().prev().checked){
+        //     console.log('checked');
+        // }
+        $(this).replaceWith('<div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>Sorry, your browser does not support inline SVG.</svg></div>');
+    })
+    $('body').on('click', '#container-submit', function(e){
+        e.preventDefault();
+        var form = $("#container-select-form").serialize();
+        console.log(form);
+    })
 });
 
 function getLocation() {

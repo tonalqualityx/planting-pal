@@ -218,3 +218,43 @@
 .indppl-add-store-link{
   width:100px;
 }
+.indppl-containers-table{
+  width:100%;
+}
+.contianer-date-col{
+  padding-right: 10px;
+  width: 150px;
+  color: #1ab1ec;
+}
+.container-date-container{
+  display: flex;
+  margin: 2.5px;
+}
+span.padding-right-5{
+  flex-basis: 50%;
+  color: #1ab1ec;
+}
+.padding-right-5{
+  padding-right: 5px;
+}
+.indppl-container-edit-title{
+  width: 80%!important;
+}
+.indppl-dot-container, .indppl-no-dot-container{
+  margin-left: 50%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  line-height: 0;
+}
+.container-submit{
+  margin-top: 20px;
+}
+.display-none{
+  display:none;
+}
+.indppl-table-color-offset:nth-of-type(even){
+  background: #97b4d247;
+}
+.margin-0{
+  margin: 0;
+}
