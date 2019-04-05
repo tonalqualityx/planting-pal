@@ -104,6 +104,7 @@ function planting_pal_home($lat=NULL, $lon=NULL){
 add_shortcode( 'planting-pal-home', 'planting_pal_home' );
 
 function pp_store_management(){
+    $store_id = '';
     if(isset($_GET['store-id'])){
         $store_id = intval(htmlspecialchars($_GET['store-id']));
     }
@@ -161,6 +162,10 @@ function pp_store_management(){
             <div id='indppl-tab-2' class='indppl-tab-pane'>
                 
                 <p>Sizes</p>
+                <?php
+                $containers = do_shortcode('[pp-store-containers]');
+                echo $containers;
+                ?>
             </div>
             <div id='indppl-tab-3' class='indppl-tab-pane'>
                 
@@ -252,3 +257,151 @@ function pp_my_stores(){
     return $return;
 }
 add_shortcode('pp-my-stores', 'pp_my_stores');
+
+function pp_store_containers(){
+    $store_id = $_GET['store-id'];
+    
+    $args2 = array('post_id' => $store_id);
+    $cons = types_child_posts('container', $args2);
+    $relation_array = array();
+    foreach($cons as $key => $value){
+        array_push($relation_array, $value->ID);
+    }
+
+    // var_dump($relation_array);
+    $int_args = array(
+        'post_type' => 'store-container'
+    );
+    $int = new WP_Query($int_args);
+    $int_array = array();
+    // int array has the relation for containers and season for this store.
+    if($int->have_posts()){
+        while($int->have_posts()){
+            $int->the_post();
+            $int_id = get_the_ID();
+            $post = get_post($int_id);
+            $slug = $post->post_name;
+            $slug_array = explode('-', $slug);
+            $cont_id = $slug_array[count($slug_array)-1];
+            // var_dump($cont_id);
+            $int_meta = get_post_meta($int_id);
+            $int_array[$cont_id] = array();
+            foreach($int_meta as $key => $value){
+                array_push($int_array[$cont_id], $key);
+            }
+        }
+        // var_dump('<br /><br />');
+        // var_dump($int_array);
+    }
+
+    
+    
+    
+    ob_start();
+    // var_dump($int);
+    ?>
+    <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
+        <table class='indppl-containers-table'>
+            <tr>
+                <th>Select all plant sizes you carry</th>
+                <th class='contianer-date-col'>
+                    Spring
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            starts
+                        </span>
+                        <input type='text' name='spring-start-date' class='container-date'>
+                    </div>
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            ends
+                        </span>
+                        <input type='text' name='spring-end-date' class='container-date'>
+                    </div>
+                </th>
+                <th class='contianer-date-col'>
+                    Summer
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            starts
+                        </span>
+                        <input type='text' name='summer-start-date' class='container-date'>
+                    </div>
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            ends
+                        </span>
+                        <input type='text' name='summer-end-date' class='container-date'>
+                    </div>
+                </th>
+                <th class='contianer-date-col'>
+                    Fall
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            starts
+                        </span>
+                        <input type='text' name='fall-start-date' class='container-date'>
+                    </div>
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            ends
+                        </span>
+                        <input type='text' name='fall-end-date' class='container-date'>
+                    </div>
+                </th>
+                <th class='contianer-date-col'>
+                    Winter
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            starts
+                        </span>
+                        <input type='text' name='winter-start-date' class='container-date'>
+                    </div>
+                    <div class='container-date-container'>
+                        <span class='padding-right-5'>
+                            ends
+                        </span>
+                        <input type='text' name='winter-end-date' class='container-date'>
+                    </div>
+                </th>
+            </tr>
+            <?php
+            $args = array(
+                'post_type' => 'container',
+                'posts_per_page' => -1,
+                'meta_query' => array(
+                    'relation' => 'OR',
+                    array(
+                        'key' => 'wpcf-default-container',
+                        'compare' => 'EXISTS',                    
+                    ),
+                    array(
+                        'key' => 'wpcf-default-container',
+                        'compare' => 'NOT EXISTS',
+                    ),
+                ),
+                'orderby' => array('meta_value' => 'ASC', 'date' => 'DESC'),
+            );
+            $containers = new WP_Query($args);
+            // var_dump($containers);
+            if($containers->have_posts()){
+                while($containers->have_posts()){
+                    $containers->the_post();
+                    $id = get_the_ID();
+                    $title = get_the_title();
+                    $meta = get_post_meta($id, 'wpcf-default-container', true);
+                    // if()
+                    // var_dump($meta);
+                    echo indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta);
+                }
+            }
+            ?>
+
+        </table>
+        <p class="container-submit"><input type="submit" name="container-submit" id="container-submit" class="button button-primary" value="Save Changes"/></p>
+    </form>
+    <?php
+    $return = ob_get_clean();
+    return $return;
+}
+add_shortcode('pp-store-containers', 'pp_store_containers');
