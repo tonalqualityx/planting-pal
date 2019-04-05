@@ -33,9 +33,16 @@ add_action( 'wp_ajax_indppl_switch_live_ajax', 'indppl_switch_live_ajax' );
 add_action('wp_ajax_nopriv_indppl_switch_live_ajax', 'indppl_switch_live_ajax');
 
 function indppl_save_container_data_ajax(){
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
     if(isset($_POST['date'])){
         $date = $_POST['date'];
-        echo $date[0]['name'];
+        foreach($date as $key => $value){
+            $name = 'wpcf-' . $value['name'];
+            $val = $value['value'];
+            update_post_meta($store_id, $name, $val);
+        }
     }
     die();
 }

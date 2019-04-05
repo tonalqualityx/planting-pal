@@ -294,13 +294,11 @@ function pp_store_containers(){
         // var_dump($int_array);
     }
 
-    
-    
-    
     ob_start();
     // var_dump($int);
     ?>
     <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
+        <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
         <table class='indppl-containers-table'>
             <fieldset>
             <tr>
@@ -312,14 +310,14 @@ function pp_store_containers(){
                             starts
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='spring-start-date' class='container-date'>
+                        <input type='text' name='spring-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-spring-start", true); ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='spring-end-date' class='container-date'>
+                        <input type='text' name='spring-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-spring-end", true); ?>'>
                     </div>
                 </th>
                 <th class='contianer-date-col'>
@@ -329,14 +327,14 @@ function pp_store_containers(){
                             starts
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='summer-start-date' class='container-date'>
+                        <input type='text' name='summer-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-summer-start", true); ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='summer-end-date' class='container-date'>
+                        <input type='text' name='summer-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-summer-end", true); ?>'>
                     </div>
                 </th>
                 <th class='contianer-date-col'>
@@ -346,14 +344,14 @@ function pp_store_containers(){
                             starts
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='fall-start-date' class='container-date'>
+                        <input type='text' name='fall-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-fall-start", true); ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='fall-end-date' class='container-date'>
+                        <input type='text' name='fall-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-fall-end", true); ?>'>
                     </div>
                 </th>
                 <th class='contianer-date-col'>
@@ -363,14 +361,14 @@ function pp_store_containers(){
                             starts
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='winter-start-date' class='container-date'>
+                        <input type='text' name='winter-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-winter-start", true); ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='winter-end-date' class='container-date'>
+                        <input type='text' name='winter-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-winter-end", true); ?>'>
                     </div>
                 </th>
             </tr>
@@ -407,7 +405,9 @@ function pp_store_containers(){
             }
             ?>
 
+
         </table>
+        <a href='#' class='add-container-btn button button-primary'>Add Container</a>
         <p class="container-submit"><input type="submit" name="container-submit" id="container-submit" class="button button-primary" value="Save Changes"/></p>
     </form>
     <?php
