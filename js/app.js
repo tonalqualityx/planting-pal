@@ -79,7 +79,7 @@ jQuery(document).ready(function( $ ) {
         })
     })
     $('body').on('focus', '.container-date', function(e){
-        $(this).datepicker({ dateFormat: 'mm-dd' });
+        $(this).datepicker({ dateFormat: 'm/d' });
     })
     $('body').on('click', '.indppl-dot-container', function(e){
         // var id = $(this).parent().prev().attr('id');
@@ -102,6 +102,7 @@ jQuery(document).ready(function( $ ) {
         var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
         var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
         var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
+        var store_id = $('#store-id').val();
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -111,6 +112,7 @@ jQuery(document).ready(function( $ ) {
                 date: date,
                 default_container: default_container,
                 non_default: non_default,
+                store_id: store_id,
             },
             typed: 'POST',
             success: function(e){
@@ -119,6 +121,10 @@ jQuery(document).ready(function( $ ) {
             }
         })
 
+    })
+    $('body').on('click', '.add-container-btn', function(e){
+        e.preventDefault();
+        $(this).prev().append('<tr><td class="padding-bottom-5"><input type="text" name="new-container"         class="indppl-container-edit-title" placeholder="Name"></td><td><input type="checkbox" name="new-spring" class="display-none indppl-non-default-container" id="new-spring"/><label class="margin-0" for="new-spring"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-summer" class="display-none indppl-non-default-container" id="new-summer"/><label class="margin-0" for="new-summer"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-fall" class="display-none indppl-non-default-container" id="new-fall"/><label class="margin-0" for="new-fall"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-winter" class="display-none indppl-non-default-container" id="new-winter"/><label class="margin-0" for="new-winter"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td></tr>');
     })
 });
 
