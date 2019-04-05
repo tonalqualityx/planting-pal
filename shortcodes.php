@@ -58,7 +58,7 @@ function planting_pal_home($lat=NULL, $lon=NULL){
 				// var_dump('special');
                 $the_query->the_post();
 				$id = get_the_ID();
-				var_dump(get_post_meta($id));
+				// var_dump(get_post_meta($id));
                 $add = get_post_meta($id, 'wpcf-address1');
                 $city = get_post_meta($id, 'wpcf-city');
                 $state = get_post_meta($id, 'wpcf-state');
@@ -302,6 +302,7 @@ function pp_store_containers(){
     ?>
     <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
         <table class='indppl-containers-table'>
+            <fieldset>
             <tr>
                 <th>Select all plant sizes you carry</th>
                 <th class='contianer-date-col'>
@@ -310,12 +311,14 @@ function pp_store_containers(){
                         <span class='padding-right-5'>
                             starts
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='spring-start-date' class='container-date'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='spring-end-date' class='container-date'>
                     </div>
                 </th>
@@ -325,12 +328,14 @@ function pp_store_containers(){
                         <span class='padding-right-5'>
                             starts
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='summer-start-date' class='container-date'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='summer-end-date' class='container-date'>
                     </div>
                 </th>
@@ -340,12 +345,14 @@ function pp_store_containers(){
                         <span class='padding-right-5'>
                             starts
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='fall-start-date' class='container-date'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='fall-end-date' class='container-date'>
                     </div>
                 </th>
@@ -355,16 +362,19 @@ function pp_store_containers(){
                         <span class='padding-right-5'>
                             starts
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='winter-start-date' class='container-date'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
+                        <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='winter-end-date' class='container-date'>
                     </div>
                 </th>
             </tr>
+            </fieldset>
             <?php
             $args = array(
                 'post_type' => 'container',

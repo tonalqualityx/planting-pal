@@ -31,3 +31,13 @@ function indppl_switch_live_ajax(){
 }
 add_action( 'wp_ajax_indppl_switch_live_ajax', 'indppl_switch_live_ajax' );
 add_action('wp_ajax_nopriv_indppl_switch_live_ajax', 'indppl_switch_live_ajax');
+
+function indppl_save_container_data_ajax(){
+    if(isset($_POST['date'])){
+        $date = $_POST['date'];
+        echo $date[0]['name'];
+    }
+    die();
+}
+add_action( 'wp_ajax_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax' );
+add_action('wp_ajax_nopriv_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax');

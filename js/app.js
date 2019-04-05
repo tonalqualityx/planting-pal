@@ -98,8 +98,27 @@ jQuery(document).ready(function( $ ) {
     })
     $('body').on('click', '#container-submit', function(e){
         e.preventDefault();
-        var form = $("#container-select-form").serialize();
-        console.log(form);
+        indpplAddLoading();
+        var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
+        var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
+        var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_save_container_data_ajax',
+                date: date,
+                default_container: default_container,
+                non_default: non_default,
+            },
+            typed: 'POST',
+            success: function(e){
+                indpplDelLoading();
+                console.log(e);
+            }
+        })
+
     })
 });
 
