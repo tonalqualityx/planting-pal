@@ -126,7 +126,25 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         $(this).prev().append('<tr class="indppl-table-color-offset"><td class="padding-bottom-5"><input type="text" name="new-container"         class="indppl-container-edit-title" placeholder="Name"></td><td><input type="checkbox" name="new-spring" class="display-none indppl-non-default-container" id="new-spring"/><label class="margin-0" for="new-spring"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-summer" class="display-none indppl-non-default-container" id="new-summer"/><label class="margin-0" for="new-summer"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-fall" class="display-none indppl-non-default-container" id="new-fall"/><label class="margin-0" for="new-fall"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-winter" class="display-none indppl-non-default-container" id="new-winter"/><label class="margin-0" for="new-winter"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td></tr>');
     })
+    $('body').on('click', function(){
+        check_on_load_and_click();
+    })
+    // same as above but it checks on load.
+    check_on_load_and_click();
 });
+
+function check_on_load_and_click(){
+    var add = 0;
+    var user_status = $('#user-status').val();
+    console.log(user_status);
+    add = $('.indppl-container-edit-title').length;
+    // console.log(add);
+    if(user_status == 'paidaccountpro' && add > 24){
+        $('.add-container-btn').remove();
+    }else if(user_status != 'paidaccountpro' && add > 4){
+        $('.add-container-btn').remove();
+    }
+}
 
 function getLocation() {
     if(navigator.geolocation) {

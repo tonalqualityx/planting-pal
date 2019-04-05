@@ -326,13 +326,15 @@ print_r(getProduct($pot_blends[$i]['productid']));
 }
 
 function indppl_user_status($id){
-    $meta = get_user_meta($id)['wpnr_capabilities'];
-    $data = unserialize($meta[0]);
+    $meta = get_user_meta($id, 'wpnr_capabilities', true);
     $account_array = array();
-    if(isset($data['paidaccount'])){
+    if(isset($meta['paidaccountpro'])){
+        array_push($account_array, 'paidaccountpro');
+    }
+    if(isset($meta['paidaccount'])){
         array_push($account_array, 'paidaccount');
     }
-    if(isset($data['freeaccount'])){
+    if(isset($meta['freeaccount'])){
         array_push($account_array, 'freeaccount');
     }
     return $account_array;
@@ -567,10 +569,13 @@ function indppl_save_post($store_id = 0){
 
 function indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta){
     ob_start();
+    // old check mark
+    // M14.1 25.2l7.1 7.2 16.7-16.8
+    $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 17 L30 37 L10 37 L10 17 Z"></path><path class="checkmark__check" fill="green" d="M15 18 L13 22 L20 27 L37 7 L20 23 L15 18"></path></svg>';
     $available = '<div class="indppl-dot-container"><svg height="24" width="24">
         <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/>
         <circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>
-        Sorry, your browser does not support inline SVG.  
+        Sorry, your browser does not support inline SVG. 
     </svg></div>';
     $not_available = '<div class="indppl-no-dot-container"><svg height="24" width="24">
         <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.
@@ -578,13 +583,21 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
     
     ?>
     <tr class='indppl-table-color-offset'>
-        <td><?php
+        <td class='padding-left-40 position-absolute'><?php
+        $fix_relative_issue = '';
+            if(in_array($id, $relation_array)){
+                ?>
+                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none container-available-in-store" name="<?php echo $id; ?>-container-available" checked>
+                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><?php echo $check_mark; ?></label>
+                <?php
+                $fix_relative_issue = 'container-title-fix';
+            }
             if($meta){
-                echo $title;
+                echo '<p class="' . $fix_relative_issue . ' container-title">' . $title . '</p>';
                 $defualt_or_not_class = 'indppl-default-container';
             }else{
                 ?>
-                <input type='text' class='indppl-container-edit-title' name='indppl-container-title' value='<?php echo $title; ?>'>
+                <input type='text' class='<?php echo $fix_relative_issue; ?> container-title indppl-container-edit-title' name='indppl-container-title' value='<?php echo $title; ?>'>
                 <?php
                 $defualt_or_not_class = 'indppl-non-default-container';
             }

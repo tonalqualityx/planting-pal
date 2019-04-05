@@ -272,3 +272,48 @@ span.padding-right-5{
 .padding-bottom-5{
   /* padding-bottom:5px; */
 }
+.color-red{
+  color:red;
+  text-decoration: none;
+}
+.container-limit{
+  padding-left: 20px;
+  /* text-decoration: none; */
+}
+.container-limit:hover{
+  text-decoration: none;
+}
+.checkmark {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 1;
+  stroke: green;
+  stroke-miterlimit: 10;
+  stroke-dashoffset: 0;
+  margin: 10% auto;
+}
+.container-available-check{
+  position: relative;
+  left: -42px;
+  top: -13px;
+}
+.padding-left-40{
+  padding-left: 40px;
+}
+.check-box{
+  fill: none;
+  stroke-width: 1;
+  stroke: #9c9b9b;
+}
+.container-title{
+  position: relative;
+  top: 8px;
+}
+.container-title-fix{
+  top: -46px;
+}
+.position-absolute{
+  position: absolute;
+}
