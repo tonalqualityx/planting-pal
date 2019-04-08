@@ -268,7 +268,19 @@ function pp_store_containers(){
     foreach($cons as $key => $value){
         array_push($relation_array, $value->ID);
     }
-
+    // var_dump($relation_array);
+    // $store_container_relations = toolset_get_related_posts(
+    //     $store_id, // get posts related to this one
+    //     'store-container', // relationship between the posts
+    //     'parent',
+    //     '100',
+    //     '0',
+    //     array(),
+    //     'post_id',
+    //     'intermediary'
+    // );
+    // // var_dump(get_post($store_container_relations[0]));
+    // var_dump($store_container_relations);
     // var_dump($relation_array);
     $int_args = array(
         'post_type' => 'store-container'
@@ -287,6 +299,7 @@ function pp_store_containers(){
             // var_dump($cont_id);
             $int_meta = get_post_meta($int_id);
             $int_array[$cont_id] = array();
+            // var_dump($int_id);
             foreach($int_meta as $key => $value){
                 array_push($int_array[$cont_id], $key);
             }
@@ -295,10 +308,9 @@ function pp_store_containers(){
         // var_dump('<br /><br />');
         // var_dump($int_array);
     }
-
-    $user_status = indppl_user_status(get_current_user_id());
+    // var_dump($int_array);
+    // $user_status = indppl_user_status(get_current_user_id());
     ob_start();
-    var_dump(get_post(208));
     ?>
     <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
         <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
@@ -401,7 +413,7 @@ function pp_store_containers(){
                     $title = get_the_title();
                     $meta = get_post_meta($id, 'wpcf-default-container', true);
                     // if()
-                    // var_dump($meta);
+                    // var_dump(get_post_meta($id));
                     echo indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta);
                 }
                 wp_reset_postdata();

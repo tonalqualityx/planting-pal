@@ -44,6 +44,17 @@ function indppl_save_container_data_ajax(){
             update_post_meta($store_id, $name, $val);
         }
     }
+    $store_container_relations = toolset_get_related_posts(
+        $store_id, // get posts related to this one
+        'store-container', // relationship between the posts
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'intermediary'
+    );
+    var_dump(get_post_meta($store_container_relations[1]));
     if(isset($_POST['default_container'])){
         $non_default = $_POST['non_default'];
         $available = $_POST['available'];
