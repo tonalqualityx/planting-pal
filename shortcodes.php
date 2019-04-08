@@ -304,7 +304,6 @@ function pp_store_containers(){
         <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
         <input type='hidden' id='user-status' name='user-status' value='<?php echo $user_status[0]; ?>'>
         <table class='indppl-containers-table'>
-            <fieldset>
             <tr>
                 <th>Select all plant sizes you carry</th>
                 <th class='contianer-date-col'>
@@ -376,7 +375,6 @@ function pp_store_containers(){
                     </div>
                 </th>
             </tr>
-            </fieldset>
             <?php
             $args = array(
                 'post_type' => 'container',

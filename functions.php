@@ -571,7 +571,8 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
     ob_start();
     // old check mark
     // M14.1 25.2l7.1 7.2 16.7-16.8
-    $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 17 L30 37 L10 37 L10 17 Z"></path><path class="checkmark__check" fill="green" d="M15 18 L13 22 L20 27 L37 7 L20 23 L15 18"></path></svg>';
+    $check_box = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
+    $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
     $available = '<div class="indppl-dot-container"><svg height="24" width="24">
         <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/>
         <circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>
@@ -587,8 +588,14 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         $fix_relative_issue = '';
             if(in_array($id, $relation_array)){
                 ?>
-                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none container-available-in-store" name="<?php echo $id; ?>-container-available" checked>
-                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><?php echo $check_mark; ?></label>
+                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" name="<?php echo $id; ?>-container-available" checked>
+                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-available-in-store"><?php echo $check_mark; ?></div></label>
+                <?php
+                $fix_relative_issue = 'container-title-fix';
+            }else{
+                ?>
+                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" name="<?php echo $id; ?>-container-available">
+                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-not-available-in-store"><?php echo $check_box; ?></div></label>
                 <?php
                 $fix_relative_issue = 'container-title-fix';
             }

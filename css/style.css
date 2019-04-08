@@ -257,7 +257,7 @@ span.padding-right-5{
   display:none;
 }
 .indppl-table-color-offset:nth-of-type(even){
-  background: #97b4d247;
+  background: rgba(151, 180, 210, 0.28);
 }
 .margin-0{
   margin: 0;
@@ -292,12 +292,12 @@ span.padding-right-5{
   stroke: green;
   stroke-miterlimit: 10;
   stroke-dashoffset: 0;
-  margin: 10% auto;
+  margin: 0;
 }
 .container-available-check{
   position: relative;
   left: -42px;
-  top: -13px;
+  top: 0px;
 }
 .padding-left-40{
   padding-left: 40px;
@@ -312,8 +312,11 @@ span.padding-right-5{
   top: 8px;
 }
 .container-title-fix{
-  top: -46px;
+  top: -33px;
 }
 .position-absolute{
   position: absolute;
+}
+.container-available-in-store, .container-not-available-in-store{
+  height: 35px;
 }
