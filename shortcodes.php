@@ -235,6 +235,7 @@ function pp_my_stores(){
                     </div>
                     <?php
                 }
+                wp_reset_postdata();
                 // remove else to allow the add store link to always be active.
             }else{
                 ?>
@@ -290,17 +291,19 @@ function pp_store_containers(){
                 array_push($int_array[$cont_id], $key);
             }
         }
+        wp_reset_postdata();
         // var_dump('<br /><br />');
         // var_dump($int_array);
     }
 
+    $user_status = indppl_user_status(get_current_user_id());
     ob_start();
     // var_dump($int);
     ?>
     <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
         <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
+        <input type='hidden' id='user-status' name='user-status' value='<?php echo $user_status[0]; ?>'>
         <table class='indppl-containers-table'>
-            <fieldset>
             <tr>
                 <th>Select all plant sizes you carry</th>
                 <th class='contianer-date-col'>
@@ -372,7 +375,6 @@ function pp_store_containers(){
                     </div>
                 </th>
             </tr>
-            </fieldset>
             <?php
             $args = array(
                 'post_type' => 'container',
@@ -402,10 +404,9 @@ function pp_store_containers(){
                     // var_dump($meta);
                     echo indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta);
                 }
+                wp_reset_postdata();
             }
             ?>
-
-
         </table>
         <a href='#' class='add-container-btn button button-primary'>Add Container</a>
         <p class="container-submit"><input type="submit" name="container-submit" id="container-submit" class="button button-primary" value="Save Changes"/></p>

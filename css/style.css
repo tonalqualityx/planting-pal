@@ -257,7 +257,7 @@ span.padding-right-5{
   display:none;
 }
 .indppl-table-color-offset:nth-of-type(even){
-  background: #97b4d247;
+  background: rgba(151, 180, 210, 0.28);
 }
 .margin-0{
   margin: 0;
@@ -271,4 +271,52 @@ span.padding-right-5{
 }
 .padding-bottom-5{
   /* padding-bottom:5px; */
+}
+.color-red{
+  color:red;
+  text-decoration: none;
+}
+.container-limit{
+  padding-left: 20px;
+  /* text-decoration: none; */
+}
+.container-limit:hover{
+  text-decoration: none;
+}
+.checkmark {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 1;
+  stroke: green;
+  stroke-miterlimit: 10;
+  stroke-dashoffset: 0;
+  margin: 0;
+}
+.container-available-check{
+  position: relative;
+  left: -42px;
+  top: 0px;
+}
+.padding-left-40{
+  padding-left: 40px;
+}
+.check-box{
+  fill: none;
+  stroke-width: 1;
+  stroke: #9c9b9b;
+}
+.container-title{
+  position: relative;
+  top: 8px;
+}
+.container-title-fix{
+  top: -33px;
+}
+.position-absolute{
+  position: absolute;
+}
+.container-available-in-store, .container-not-available-in-store{
+  height: 35px;
 }
