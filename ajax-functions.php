@@ -44,6 +44,28 @@ function indppl_save_container_data_ajax(){
             update_post_meta($store_id, $name, $val);
         }
     }
+    if(isset($_POST['default_container'])){
+        $non_default = $_POST['non_default'];
+        $available = $_POST['available'];
+        $default = $_POST['default_container'];
+        foreach ($default as $key => $value) {
+            $name = explode("-", $value['name']);
+            // $default[$key]['id'] = $name[0];
+            if(in_array($name[0], $available)){
+                echo $value['name'];
+                
+            }
+        }
+        
+        // $v;
+        // foreach($available as $key => $value){
+        //     $v = array_keys($default, $value);
+        //     // if(in_array($value, $default[$key]['id']){
+        //     //     echo $default[$key]['id'];
+        //     // }
+        //     var_dump($v);
+        // }
+    }
     die();
 }
 add_action( 'wp_ajax_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax' );

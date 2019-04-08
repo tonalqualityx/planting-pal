@@ -588,14 +588,18 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         $fix_relative_issue = '';
             if(in_array($id, $relation_array)){
                 ?>
-                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" name="<?php echo $id; ?>-container-available" checked>
-                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-available-in-store"><?php echo $check_mark; ?></div></label>
+                <div class='container-available indppl-checked'>
+                    <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" data-container="<?php echo $id; ?>" name="<?php echo $id; ?>-container-available" checked>
+                    <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-available-in-store"><?php echo $check_mark; ?></div></label>
+                </div>
                 <?php
                 $fix_relative_issue = 'container-title-fix';
             }else{
                 ?>
-                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" name="<?php echo $id; ?>-container-available">
-                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-not-available-in-store"><?php echo $check_box; ?></div></label>
+                <div class='container-available'>
+                    <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" data-container="<?php echo $id; ?>" name="<?php echo $id; ?>-container-available">
+                    <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-not-available-in-store"><?php echo $check_box; ?></div></label>
+                </div>
                 <?php
                 $fix_relative_issue = 'container-title-fix';
             }

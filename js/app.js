@@ -97,18 +97,30 @@ jQuery(document).ready(function( $ ) {
         $(this).replaceWith('<div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>Sorry, your browser does not support inline SVG.</svg></div>');
     })
     $('body').on('click', '.container-available-in-store', function(){
+        $(this).parent().parent().removeClass('indppl-checked');
         $(this).replaceWith('<div class="container-not-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg></div>');
+        
     })
     $('body').on('click', '.container-not-available-in-store', function(){
+        $(this).parent().parent().addClass('indppl-checked');
         $(this).replaceWith('<div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div>');
+        
     })
     $('body').on('click', '#container-submit', function(e){
         e.preventDefault();
         indpplAddLoading();
         var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
+        var available = [];
         var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
         var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
         var store_id = $('#store-id').val();
+
+        $(".indppl-checked").each(function(){
+            available.push($(this).find('input').data('container'));
+        })
+
+        console.log(available);
+        console.log(default_container);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -119,6 +131,7 @@ jQuery(document).ready(function( $ ) {
                 default_container: default_container,
                 non_default: non_default,
                 store_id: store_id,
+                available: available,
             },
             typed: 'POST',
             success: function(e){

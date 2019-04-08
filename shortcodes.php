@@ -298,7 +298,7 @@ function pp_store_containers(){
 
     $user_status = indppl_user_status(get_current_user_id());
     ob_start();
-    // var_dump($int);
+    var_dump(get_post(208));
     ?>
     <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
         <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
