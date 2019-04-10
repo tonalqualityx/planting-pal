@@ -169,7 +169,7 @@ function pp_store_management(){
             </div>
             <div id='indppl-tab-3' class='indppl-tab-pane'>
                 
-                <p>In-Ground</p>
+                <?php echo do_shortcode('[pp-store-products]'); ?>
             </div>
             <div id='indppl-tab-4' class='indppl-tab-pane'>
                 
@@ -264,17 +264,30 @@ function pp_store_containers(){
     
     $args2 = array('post_id' => $store_id);
     $cons = types_child_posts('container', $args2);
-    $relation_array = array();
+    // var_dump($cons);
+    $container_array = array();
     foreach($cons as $key => $value){
-        array_push($relation_array, $value->ID);
+        array_push($container_array, $value->ID);
     }
 
-    // var_dump($relation_array);
+    $store_container_relations = toolset_get_related_posts(
+        $store_id, // get posts related to this one
+        'store-container', // relationship between the posts
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'intermediary'
+    );
+
+    // var_dump($store_container_relations);
+    // var_dump($container_array);
     $int_args = array(
         'post_type' => 'store-container'
     );
     $int = new WP_Query($int_args);
-    $int_array = array();
+    $int_array = [];
     // int array has the relation for containers and season for this store.
     if($int->have_posts()){
         while($int->have_posts()){
@@ -284,9 +297,9 @@ function pp_store_containers(){
             $slug = $post->post_name;
             $slug_array = explode('-', $slug);
             $cont_id = $slug_array[count($slug_array)-1];
-            // var_dump($cont_id);
             $int_meta = get_post_meta($int_id);
             $int_array[$cont_id] = array();
+            // var_dump($int_id);
             foreach($int_meta as $key => $value){
                 array_push($int_array[$cont_id], $key);
             }
@@ -295,10 +308,9 @@ function pp_store_containers(){
         // var_dump('<br /><br />');
         // var_dump($int_array);
     }
-
     $user_status = indppl_user_status(get_current_user_id());
     ob_start();
-    // var_dump($int);
+
     ?>
     <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
         <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
@@ -380,32 +392,59 @@ function pp_store_containers(){
                 'post_type' => 'container',
                 'posts_per_page' => -1,
                 'meta_query' => array(
-                    'relation' => 'OR',
                     array(
                         'key' => 'wpcf-default-container',
                         'compare' => 'EXISTS',                    
                     ),
-                    array(
-                        'key' => 'wpcf-default-container',
-                        'compare' => 'NOT EXISTS',
-                    ),
                 ),
-                'orderby' => array('meta_value' => 'ASC', 'date' => 'DESC'),
+                'orderby' => array('title' => 'DESC'),
             );
             $containers = new WP_Query($args);
             // var_dump($containers);
-            if($containers->have_posts()){
-                while($containers->have_posts()){
-                    $containers->the_post();
-                    $id = get_the_ID();
-                    $title = get_the_title();
-                    $meta = get_post_meta($id, 'wpcf-default-container', true);
-                    // if()
-                    // var_dump($meta);
-                    echo indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta);
-                }
+            $user_args = array(
+                'post_type' => 'container',
+                'posts_per_page' => -1,
+                'meta_query' => array(
+                    array('key' => 'wpcf-default-container',
+                        'compare' => "NOT EXISTS",
+                    ),
+                ),
+                'post_author' => get_current_user_id(),
+                'orderby' => array('title' => 'DESC'),
+            );
+
+            $user_query = new WP_Query($user_args);
+
+            $obj_merge = new WP_Query();
+            $obj_merge->posts = array_merge($containers->posts, $user_query->posts);
+
+            foreach($obj_merge->posts as $post):
+                setup_postdata($post);
+                // var_dump($post);
+                // if($obj_merge->have_posts()){
+                    //     while($obj_merge->have_posts()){
+                        
+                        
+                        $obj_merge->the_post();
+                        $id = get_the_ID();
+                        $title = get_the_title();
+                        $meta = get_post_meta($id, 'wpcf-default-container', true);
+                        // if()
+                        // var_dump(get_post_meta($id));
+                        // var_dump($meta);
+                        $relation = array();
+                        if(in_array($id, $container_array)){
+                            $key = array_search($id, $container_array);
+                            $relation = get_post_meta($store_container_relations[$key]);
+                        }
+                        // $title = get_the_title($id);
+                        // $meta = get_post_meta($id, 'wpcf-default-container', true);
+                        echo indppl_build_container_relation_output($id, $title, $container_array, $relation, $meta);
+                        
+                        // }
+                    endforeach;
                 wp_reset_postdata();
-            }
+            // }
             ?>
         </table>
         <a href='#' class='add-container-btn button button-primary'>Add Container</a>
@@ -416,3 +455,16 @@ function pp_store_containers(){
     return $return;
 }
 add_shortcode('pp-store-containers', 'pp_store_containers');
+
+function pp_store_products(){
+    ?>
+        <div class='indppl-products-main-container'>
+            <h3 class='indppl-products-title'>In-Ground</h3>
+            <a href="#" class='indppl-add-product-btn'>Add Product</a>
+            <div class='indppl-product-list'>
+                <?php echo indppl_get_current_products("in-ground"); ?>
+            </div>
+        </div>
+    <?php
+}
+add_shortcode('pp-store-products', 'pp_store_products');

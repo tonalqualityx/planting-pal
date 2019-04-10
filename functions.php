@@ -567,6 +567,19 @@ function indppl_save_post($store_id = 0){
 	}
 }
 
+function indppl_create_container($new_array, $container_id = 0){
+    $container = array(
+        'ID' => $container_id,
+        'post_title' => $new_array['name'],
+        'post_author' => get_current_user_id(),
+        'post_type' => 'container',
+        'post_status' => 'publish',
+    );
+    $return_id = wp_insert_post($container);
+    return $return_id;
+
+}
+
 function indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta){
     ob_start();
     // old check mark
@@ -584,18 +597,22 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
     
     ?>
     <tr class='indppl-table-color-offset'>
-        <td class='padding-left-40 position-absolute'><?php
+        <td class='padding-left-40 position-absolute check-box-container'><?php
         $fix_relative_issue = '';
             if(in_array($id, $relation_array)){
                 ?>
-                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" name="<?php echo $id; ?>-container-available" checked>
-                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-available-in-store"><?php echo $check_mark; ?></div></label>
+                <div class='container-available indppl-checked'>
+                    <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" data-container="<?php echo $id; ?>" name="<?php echo $id; ?>-container-available" checked>
+                    <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-available-in-store"><?php echo $check_mark; ?></div></label>
+                </div>
                 <?php
                 $fix_relative_issue = 'container-title-fix';
             }else{
                 ?>
-                <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" name="<?php echo $id; ?>-container-available">
-                <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-not-available-in-store"><?php echo $check_box; ?></div></label>
+                <div class='container-available'>
+                    <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" data-container="<?php echo $id; ?>" name="<?php echo $id; ?>-container-available">
+                    <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-not-available-in-store"><?php echo $check_box; ?></div></label>
+                </div>
                 <?php
                 $fix_relative_issue = 'container-title-fix';
             }
@@ -604,14 +621,14 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
                 $defualt_or_not_class = 'indppl-default-container';
             }else{
                 ?>
-                <input type='text' class='<?php echo $fix_relative_issue; ?> container-title indppl-container-edit-title' name='indppl-container-title' value='<?php echo $title; ?>'>
+                <input type='text' class='container-title indppl-container-edit-title' name='indppl-container-title' value='<?php echo $title; ?>'>
                 <?php
                 $defualt_or_not_class = 'indppl-non-default-container';
             }
         ?></td>
         <td>
             <?php
-            if(in_array($id, $relation_array) && in_array('wpcf-available-in-spring', $int_array[$id])){
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-spring', $int_array)){
                 echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'spring" checked /><label class="margin-0" for="' . $id . '-' . 'spring">' . $available . '</label>';
             }else{
                 echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'spring"/><label class="margin-0" for="' . $id . '-' . 'spring">' . $not_available . '</label>';
@@ -620,7 +637,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         </td>
         <td>
             <?php
-            if(in_array($id, $relation_array) && in_array('wpcf-available-in-summer', $int_array[$id])){
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-summer', $int_array)){
                 echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'summer" checked /><label class="margin-0" for="' . $id . '-' . 'summer">' . $available . '</label>';
             }else{
                 echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'summer"/><label class="margin-0" for="' . $id . '-' . 'summer">' . $not_available . '</label>';
@@ -629,7 +646,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         </td>
         <td>
             <?php
-            if(in_array($id, $relation_array) && in_array('wpcf-available-in-fall', $int_array[$id])){
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-fall', $int_array)){
                 echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'fall" checked /><label class="margin-0" for="' . $id . '-' . 'fall">' . $available . '</label>';
             }else{
                 echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'fall"/><label class="margin-0" for="' . $id . '-' . 'fall">' . $not_available . '</label>';
@@ -638,7 +655,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         </td>
         <td>
             <?php
-            if(in_array($id, $relation_array) && in_array('wpcf-available-in-winter', $int_array[$id])){
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-winter', $int_array)){
                 echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'winter" checked /><label class="margin-0" for="' . $id . '-' . 'winter">' . $available . '</label>';
             }else{
                 echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'winter"/><label class="margin-0" for="' . $id . '-' . 'winter">' . $not_available . '</label>';
@@ -650,3 +667,42 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
     return ob_get_clean();
 }
 
+function indppl_add_relation($default, $store_container_relations){
+    // specific function not for wide use
+    foreach ($default as $key => $value) {
+        $name = explode("-", $value['name']);
+        $id = $name[0];
+        $season ='';
+        // var_dump(get_post_meta($id));
+        if($name[1] == 'spring'){
+            $season = 'wpcf-available-in-spring';
+        }
+        else if ($name[1] == 'summer'){
+            $season = 'wpcf-available-in-summer';
+        }
+        else if ($name[1] == 'fall'){
+            $season = 'wpcf-available-in-fall';
+        }
+        else if ($name[1] == 'winter'){
+            $season = 'wpcf-available-in-winter';
+        }
+        foreach($store_container_relations as $key2 => $rel_val){
+            $container = get_post($rel_val);
+            $name = $container->post_name;
+            $name_array = explode('-', $name);
+            $cont_id = $name_array[count($name_array)-1];
+            if($id == $cont_id){
+                $test = update_post_meta((int)$rel_val, (string)$season, "1");
+                
+                // var_dump($cont_id . " : " . $rel_val . " : ". $season . " = " . (bool)$test);
+            }
+        } 
+    }
+
+}
+
+function indppl_get_current_products(){
+    $return = get_post_meta(391, 'wpcf-type', true);
+    var_dump($return);
+    return $return;
+}
