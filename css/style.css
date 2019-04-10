@@ -243,6 +243,8 @@ span.padding-right-5{
 }
 .indppl-container-edit-title{
   width: 80%!important;
+  position: relative;
+  top: -41px;
 }
 .indppl-dot-container, .indppl-no-dot-container{
   margin-left: 50%;
@@ -309,7 +311,6 @@ span.padding-right-5{
 }
 .container-title{
   position: relative;
-  top: 8px;
 }
 .container-title-fix{
   top: -33px;
@@ -317,6 +318,9 @@ span.padding-right-5{
 .position-absolute{
   position: absolute;
 }
-.container-available-in-store, .container-not-available-in-store{
+.container-available-in-store, .container-not-available-in-store, .check-box-container{
   height: 35px;
+}
+.contianer-add-new{
+  top: 0px;
 }
