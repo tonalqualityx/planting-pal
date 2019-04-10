@@ -169,7 +169,7 @@ function pp_store_management(){
             </div>
             <div id='indppl-tab-3' class='indppl-tab-pane'>
                 
-                <p>In-Ground</p>
+                <?php echo do_shortcode('[pp-store-products]'); ?>
             </div>
             <div id='indppl-tab-4' class='indppl-tab-pane'>
                 
@@ -455,3 +455,16 @@ function pp_store_containers(){
     return $return;
 }
 add_shortcode('pp-store-containers', 'pp_store_containers');
+
+function pp_store_products(){
+    ?>
+        <div class='indppl-products-main-container'>
+            <h3 class='indppl-products-title'>In-Ground</h3>
+            <a href="#" class='indppl-add-product-btn'>Add Product</a>
+            <div class='indppl-product-list'>
+                <?php echo indppl_get_current_products("in-ground"); ?>
+            </div>
+        </div>
+    <?php
+}
+add_shortcode('pp-store-products', 'pp_store_products');

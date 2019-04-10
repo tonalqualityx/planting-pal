@@ -700,3 +700,9 @@ function indppl_add_relation($default, $store_container_relations){
     }
 
 }
+
+function indppl_get_current_products(){
+    $return = get_post_meta(391, 'wpcf-type', true);
+    var_dump($return);
+    return $return;
+}
