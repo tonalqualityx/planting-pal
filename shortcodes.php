@@ -450,9 +450,19 @@ function pp_store_products(){
     ?>
         <div class='indppl-products-main-container'>
             <h3 class='indppl-products-title'>In-Ground</h3>
-            <a href="#" class='indppl-add-product-btn'>Add Product</a>
+            <a href="#" class='indppl-add-product-btn' data-type='ground'>Add Product</a>
             <div class='indppl-product-list'>
                 <?php echo indppl_get_current_products("ground"); ?>
+            </div>
+            <h3 class='indppl-products-title'>Pots</h3>
+            <a href="#" class='indppl-add-product-btn' data-type='pot'>Add Product</a>
+            <div class='indppl-product-list'>
+                <?php echo indppl_get_current_products("pot"); ?>
+            </div>
+            <h3 class='indppl-products-title'>Raised beds</h3>
+            <a href="#" class='indppl-add-product-btn' data-type='bed'>Add Product</a>
+            <div class='indppl-product-list'>
+                <?php echo indppl_get_current_products("bed"); ?>
             </div>
         </div>
     <?php

@@ -708,16 +708,25 @@ function indppl_get_current_products($type){
     // }
     $args = array(
         'post_type' => 'product',
-        'relation' => 'OR',
         'meta_query' => array(
             array(
+                'key' => 'wpcf-type',
                 array(
-                    'key' => 'wpcf-type',
                     'value' => $type,
-                    'compare' => 'LIKE'
+                ),
+                'compare' => '=',
+            ),
+        ),
+        'relation' => 'OR',
+        array(
+            'author' => $id,
+            'meta_query' => array(
+                array(
+                    'key' => 'wpcf-default',
+                    'value' => 1,
+                    'compare' => '=',
                 ),
             ),
-            'author' => $id,
         ),
     );
 
@@ -726,39 +735,83 @@ function indppl_get_current_products($type){
     ob_start();
     ?>
     <table>
-        <th></th>
-        <th>Brand</th>
-        <th>Product Name</th>
-        <th>Sizes</th>
+        <th class='product-list-width'></th>
+        <th class='product-list-width'>Brand</th>
+        <th class='product-list-width'>Product Name</th>
+        <th class='product-list-width'>Sizes</th>
 
         <?php
+        // var_dump(get_post_meta(264, 'wpcf-prod-type')[0]);
         if($products->have_posts()){
             while($products->have_posts()){
                 $products->the_post();
                 $pid = get_the_id();
                 $title = get_the_title();
                 $brand = get_the_terms($pid, 'brand');
-                $size =  get_post_meta($pid);
-                ?>
-                <tr>
-                    <td>
-                        <a href="#" class="indppl-product-edit">edit</a>
-                        <a href="#" class="indppl-product-delete">delete</a>
-                    </td>
-                    <td>
-                        <?php echo $brand[0]->name; ?>
-                    </td>
-                    <td>
-                        <?php echo $title; ?>
-                    </td>
-                    <td>
-                        <?php var_dump($size); ?>
-                    </td>
-                </tr>
-                <?php
-                // var_dump($brand);
-                
-                // var_dump(get_the_terms($pid, 'brand'));
+                $default =  get_post_meta($pid, 'wpcf-type');
+                // var_dump($default);
+                $package_relations = toolset_get_related_posts(
+                    $pid, // get posts related to this one
+                    'product-package', // relationship between the posts
+                    'parent',
+                    '100',
+                    '0',
+                    array(),
+                    'post_id',
+                    'child'
+                );
+                $type_related = toolset_get_related_posts(
+                    $pid,
+                    'store-product',
+                    'child',
+                    '100',
+                    '0',
+                    array(),
+                    'post_id',
+                    'intermediary',
+                );
+                // var_dump($type_related);
+                $type_array = get_post_meta($type_related[1], 'wpcf-prod-type')[0];
+                if(is_array($type_array)){
+                    foreach($type_array as $key => $value){
+                        foreach($value as $key2 => $value2){
+                            if($value2 == $type){
+
+                                // var_dump($type_array);
+                                // var_dump($pid);
+                                
+                                ?>
+                                <tr class='indppl-table-color-offset'>
+                                    <td>
+                                        <a href="#" class="indppl-product-edit">edit</a>
+                                        <a href="#" class="indppl-product-delete">delete</a>
+                                    </td>
+                                    <td>
+                                        <?php echo $brand[0]->name; ?>
+                                    </td>
+                                    <td>
+                                        <?php echo $title; ?>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        foreach($package_relations as $key => $value){
+                                            $meta = get_post_meta($package_relations[$key]);
+                                            // var_dump($meta);
+                                            echo $meta['wpcf-size'][0];
+                                            echo $meta['wpcf-unit'][0];
+                                            echo ' ';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                                // var_dump($brand);
+                                
+                                // var_dump(get_the_terms($pid, 'brand'));
+                            }
+                        }
+                    }
+                }
             }
         }
     ?>

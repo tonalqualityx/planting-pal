@@ -185,3 +185,80 @@ function indppl_save_container_data_ajax(){
 }
 add_action( 'wp_ajax_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax');
+
+function indppl_add_new_product_ajax(){
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    
+    ob_start();
+    ?>
+    
+        <div class='slide-in-products-inside-container'>
+            <a href='#' class='modal-close'>X</a>
+            <h2>something <?php echo $type; ?></h2>
+            <form id='product-create-form' method="post" action='#' class="form-horizontal">
+                <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
+                    <option value='' disabled selected>Select Brand</option>
+                    <?php
+                    $brands = get_terms('brand');
+                    foreach($brands as $key => $value){
+                        ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> <?php
+                    }
+                    // var_dump($brands);
+                    ?>
+                </select>
+                <select class='product-create-product' id='product-create-product' name='product-create-product'>
+                    <option class='product-create-product-option' value='' disabled selected>Select Product</option>
+                </select>
+            </form>
+        </div>
+    <?php
+    $return = ob_get_clean();
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax' );
+add_action('wp_ajax_nopriv_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax');
+
+function indppl_get_products_by_brand_ajax(){
+    if(isset($_POST['brand'])){
+        $brand = $_POST['brand'];
+    }
+    $args = array(
+        'post_type' => 'product',
+        'tax_query' => [
+            [
+                'taxonomy' => 'brand',
+                'field'    => 'slug',
+                'terms'    => $brand
+            ],
+        ],
+        'relation' => 'OR',
+        'meta_query' => array(
+            array(
+                'key' => 'wpcf-default',
+                'value' => 1,
+            ),
+            'author' => get_current_user_id(),
+        ),
+    );
+    $products = new WP_Query($args);
+    // var_dump($products);
+    ob_start();
+    ?> <option class='product-create-product-option' value='' disabled selected>Select Product</option> <?php
+    if($products->have_posts()){
+        while($products->have_posts()){
+            $products->the_post();
+            $title = get_the_title();
+            $id = get_the_id();
+            ?>
+            <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
+            <?php
+        }
+    }
+    echo ob_get_clean();
+    die();
+}
+add_action( 'wp_ajax_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax' );
+add_action('wp_ajax_nopriv_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax');
