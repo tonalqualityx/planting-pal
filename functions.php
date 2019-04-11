@@ -701,8 +701,69 @@ function indppl_add_relation($default, $store_container_relations){
 
 }
 
-function indppl_get_current_products(){
-    $return = get_post_meta(391, 'wpcf-type', true);
-    var_dump($return);
+function indppl_get_current_products($type){
+    $id = get_current_user_id();
+    // foreach($type as $key => $value){
+    //     var_dump($value[0]);
+    // }
+    $args = array(
+        'post_type' => 'product',
+        'relation' => 'OR',
+        'meta_query' => array(
+            array(
+                array(
+                    'key' => 'wpcf-type',
+                    'value' => $type,
+                    'compare' => 'LIKE'
+                ),
+            ),
+            'author' => $id,
+        ),
+    );
+
+    $products = new WP_Query($args);
+    // var_dump($products);
+    ob_start();
+    ?>
+    <table>
+        <th></th>
+        <th>Brand</th>
+        <th>Product Name</th>
+        <th>Sizes</th>
+
+        <?php
+        if($products->have_posts()){
+            while($products->have_posts()){
+                $products->the_post();
+                $pid = get_the_id();
+                $title = get_the_title();
+                $brand = get_the_terms($pid, 'brand');
+                $size =  get_post_meta($pid);
+                ?>
+                <tr>
+                    <td>
+                        <a href="#" class="indppl-product-edit">edit</a>
+                        <a href="#" class="indppl-product-delete">delete</a>
+                    </td>
+                    <td>
+                        <?php echo $brand[0]->name; ?>
+                    </td>
+                    <td>
+                        <?php echo $title; ?>
+                    </td>
+                    <td>
+                        <?php var_dump($size); ?>
+                    </td>
+                </tr>
+                <?php
+                // var_dump($brand);
+                
+                // var_dump(get_the_terms($pid, 'brand'));
+            }
+        }
+    ?>
+    </table>
+    <?php
+    $return = ob_geT_clean();
     return $return;
 }

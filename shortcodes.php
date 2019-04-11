@@ -145,11 +145,9 @@ function pp_store_management(){
 
         <ul class='indppl-nav indppl-nav-tabs'>
             <li class="indppl-active"><a href='#indppl-tab-1'>Store Info</a></li>
-            <li><a href='#indppl-tab-2'>Sizes</a></li>
-            <li><a href='#indppl-tab-3'>In-Ground</a></li>
-            <li><a href='#indppl-tab-4'>Pots</a></li>
-            <li><a href='#indppl-tab-5'>Raised Beds</a></li>
-            <li><a href='#indppl-tab-6'>Guides</a></li>
+            <li><a href='#indppl-tab-2'>Plant Containers</a></li>
+            <li><a href='#indppl-tab-3'>Products</a></li>
+            <li><a href='#indppl-tab-4'>Guides</a></li>
         </ul>
         
         <div class='indppl-tab-content'>
@@ -172,14 +170,6 @@ function pp_store_management(){
                 <?php echo do_shortcode('[pp-store-products]'); ?>
             </div>
             <div id='indppl-tab-4' class='indppl-tab-pane'>
-                
-                <p>Pots</p>
-            </div>
-            <div id='indppl-tab-5' class='indppl-tab-pane'>
-                
-                <p>Raised Beds</p>
-            </div>
-            <div id='indppl-tab-6' class='indppl-tab-pane'>
                 
                 <p>Guides</p>
             </div>
@@ -462,7 +452,7 @@ function pp_store_products(){
             <h3 class='indppl-products-title'>In-Ground</h3>
             <a href="#" class='indppl-add-product-btn'>Add Product</a>
             <div class='indppl-product-list'>
-                <?php echo indppl_get_current_products("in-ground"); ?>
+                <?php echo indppl_get_current_products("ground"); ?>
             </div>
         </div>
     <?php
