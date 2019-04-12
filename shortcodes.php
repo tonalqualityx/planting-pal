@@ -1,5 +1,6 @@
 <?php
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
+
 function planting_pal_home($lat=NULL, $lon=NULL){
     ob_start();
     ?>

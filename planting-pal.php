@@ -57,8 +57,19 @@ function indppl_single_store_template($single) {
         return plugin_dir_path(__FILE__) . "/templates/single-store.php";
     }
 
+    
     return $template;
     
 }
 
 add_filter('single_template', 'indppl_single_store_template');
+
+function set_app_template(){
+
+    if ( is_page( 'app' ) ) {
+            $template = dirname( __FILE__ ) . '/templates/app.php';
+    }
+
+    return $template;
+}
+add_filter( 'page_template', 'set_app_template' );
