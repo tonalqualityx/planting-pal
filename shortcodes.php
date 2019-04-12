@@ -16,6 +16,7 @@ function planting_pal_home($lat=NULL, $lon=NULL){
                     <div class="col">
                     <form action="<?php site_url(); ?>" method="post">
                     <input class="form-control rounded-input4" id='zip-for-location' type="text" name="zip" placeholder="Zipcode"><i class="material-icons" id="location-icon">my_location</i>
+                    <button class="gradient-button">ENTER</button>
                     <input type="image" src="<?php echo INDPPL_ROOT_URL ?>assets/img/enter-geo.png" alt="Submit" border="0" class="geo-submit">
                     </form>
                 </div>
