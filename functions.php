@@ -706,17 +706,11 @@ function indppl_get_current_products($type){
     // foreach($type as $key => $value){
     //     var_dump($value[0]);
     // }
+    if(isset($_GET['store-id'])){
+        $store_id = $_GET['store-id'];
+    }
     $args = array(
         'post_type' => 'product',
-        'meta_query' => array(
-            array(
-                'key' => 'wpcf-type',
-                array(
-                    'value' => $type,
-                ),
-                'compare' => '=',
-            ),
-        ),
         'relation' => 'OR',
         array(
             'author' => $id,
@@ -731,7 +725,7 @@ function indppl_get_current_products($type){
     );
 
     $products = new WP_Query($args);
-    // var_dump($products);
+    // var_dump(get_post_meta(165, 'wpcf-type')[0]);
     ob_start();
     ?>
     <table>
@@ -749,7 +743,7 @@ function indppl_get_current_products($type){
                 $title = get_the_title();
                 $brand = get_the_terms($pid, 'brand');
                 $default =  get_post_meta($pid, 'wpcf-type');
-                // var_dump($default);
+                // var_dump($pid);
                 $package_relations = toolset_get_related_posts(
                     $pid, // get posts related to this one
                     'product-package', // relationship between the posts
@@ -760,58 +754,55 @@ function indppl_get_current_products($type){
                     'post_id',
                     'child'
                 );
-                $type_related = toolset_get_related_posts(
-                    $pid,
-                    'store-product',
-                    'child',
+                $store_related = toolset_get_related_posts(
+                    $store_id,
+                    'store-package',
+                    'parent',
                     '100',
                     '0',
                     array(),
                     'post_id',
-                    'intermediary',
+                    'child',
                 );
-                // var_dump($type_related);
-                $type_array = get_post_meta($type_related[1], 'wpcf-prod-type')[0];
-                if(is_array($type_array)){
-                    foreach($type_array as $key => $value){
-                        foreach($value as $key2 => $value2){
-                            if($value2 == $type){
+                // var_dump($package_relations);
+                // var_dump("<br /><br />");
 
-                                // var_dump($type_array);
-                                // var_dump($pid);
-                                
-                                ?>
-                                <tr class='indppl-table-color-offset'>
-                                    <td>
-                                        <a href="#" class="indppl-product-edit">edit</a>
-                                        <a href="#" class="indppl-product-delete">delete</a>
-                                    </td>
-                                    <td>
-                                        <?php echo $brand[0]->name; ?>
-                                    </td>
-                                    <td>
-                                        <?php echo $title; ?>
-                                    </td>
-                                    <td>
-                                        <?php
-                                        foreach($package_relations as $key => $value){
-                                            $meta = get_post_meta($package_relations[$key]);
-                                            // var_dump($meta);
-                                            echo $meta['wpcf-size'][0];
-                                            echo $meta['wpcf-unit'][0];
-                                            echo ' ';
-                                        }
-                                        ?>
-                                    </td>
-                                </tr>
-                                <?php
-                                // var_dump($brand);
-                                
-                                // var_dump(get_the_terms($pid, 'brand'));
-                            }
+                // var_dump($store_related);
+                
+    
+                // var_dump($type_array);
+                // var_dump($pid);
+                
+                ?>
+                <tr class='indppl-table-color-offset'>
+                    <td>
+                        <a href="#" class="indppl-product-edit">edit</a>
+                        <a href="#" class="indppl-product-delete">delete</a>
+                    </td>
+                    <td>
+                        <?php echo $brand[0]->name; ?>
+                    </td>
+                    <td>
+                        <?php echo $title; ?>
+                    </td>
+                    <td>
+                        <?php
+                        $size_array = array_intersect($package_relations, $store_related);
+                        foreach($size_array as $key => $value){
+                            $meta = get_post_meta($size_array[$key]);
+                            // var_dump($meta);
+                            echo $meta['wpcf-size'][0];
+                            echo $meta['wpcf-unit'][0];
+                            echo ' ';
                         }
-                    }
-                }
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                // var_dump($brand);
+                
+                // var_dump(get_the_terms($pid, 'brand'));
+                            
             }
         }
     ?>

@@ -333,6 +333,7 @@ span.padding-right-5{
   left: 65px;
 }
 .greyed-out-form{
+  z-index: 999999;
   left: 26%;
   height: 85%;
   width: 72%;
@@ -425,4 +426,19 @@ span.padding-right-5{
   height: 100%;
   width: 100%;
   background: white;
+}
+.indppl-product-create-size-btn{
+  padding: 5px 20px;
+  color: black;
+  text-decoration: none;
+  border: black 1px solid;
+}
+.indppl-product-create-size-btn:hover{
+  text-decoration: none;
+}
+.product-create-size-container{
+  margin-top: 10px;
+}
+.indppl-background-green{
+  background: green;
 }

@@ -230,6 +230,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('change', '#product-create-brand', function(){
         indpplAddLoading();
         var brand = $(this).val();
+        var type = $('#indppl-modal-product-type').val();
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -237,16 +238,64 @@ jQuery(document).ready(function( $ ) {
             data: {
                 action: 'indppl_get_products_by_brand_ajax',
                 brand: brand,
+                type: type,
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
+                $('.product-create-brand-cut-off').children().each(function(){
+                    $(this).empty();
+                })
                 $('.product-create-product').empty();
                 $('.product-create-product').append(e);
                 indpplDelLoading();
             }
         })
     });
+    $('body').on('change', '#product-create-product', function(e){
+        indpplAddLoading();
+        var product_id = $(this).val();
+        var store_id = $('#store-id').val();
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_get_product_info_ajax',
+                product_id: product_id,
+                store_id: store_id,
+            },
+            type: 'POST',
+            success: function(e){
+                array = JSON.parse(e);
+                console.log(array);
+                if(array["standard_unit"]){
+                    $('.product-create-standard-unit-container').append(array["standard_unit"]);
+                }
+                if(array['dry_wet']){
+                    $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
+                    units = indppl_get_units(array['dry_wet'][1]);
+                    $.each(units, function(index, value){
+                        if(value != array['dry_wet'][2]){
+                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+                        }
+                    })
+                }
+                if(array['size']){
+                    $('.product-create-size-container').append(array['size']);
+                }
+                indpplDelLoading();
+            }
+        })
+    });
+    $('body').on('click', '.product-create-dry-wet', function(){
+        var type = $(this).val();
+        array = indppl_get_units(type);
+        $('.product-create-standard-unit').empty();
+        $.each(array, function(index, value){
+            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+        })
+    })
     greyOutAllUnchecked();
     // same as above but it checks on load.
     check_on_load_and_click();
@@ -261,6 +310,15 @@ function greyOutAllUnchecked(){
         }
     })
 }
+
+function indppl_get_units($type = 'dry'){
+    if($type == 'dry'){
+        return ['tsp', 'tbls', 'qt', 'cuft', 'lb', 'g', 'kg', 'oz', 'mL', 'L', 'cups', 'eaches'];
+    }else{
+        return ['tsp', 'tbls', 'oz', 'qt', 'gal', 'mL', 'L', 'cups'];
+    }  
+}
+
 
 function check_on_load_and_click(){
     var add = 0;
