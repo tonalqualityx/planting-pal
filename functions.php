@@ -326,23 +326,19 @@ print_r(getProduct($pot_blends[$i]['productid']));
 }
 
 function indppl_user_status($id){
-    $meta = get_user_meta($id)['wpnr_capabilities'];
-    $data = unserialize($meta[0]);
+    $meta = get_user_meta($id, 'wpnr_capabilities', true);
     $account_array = array();
-    if(isset($data['paidaccount'])){
+    if(isset($meta['paidaccountpro'])){
+        array_push($account_array, 'paidaccountpro');
+    }
+    if(isset($meta['paidaccount'])){
         array_push($account_array, 'paidaccount');
     }
-    if(isset($data['freeaccount'])){
+    if(isset($meta['freeaccount'])){
         array_push($account_array, 'freeaccount');
     }
     return $account_array;
 }
-
-function indppl_test(){
-    return "<h2>TEST</h2>";
-}
-
-add_shortcode( 'indppl-h2-test', 'indppl_test');
 
 function indppl_apprates($store_id, $type = null, $args = null) {
 
@@ -451,4 +447,372 @@ function dummy_data() {
     var_dump($test);
 }
 
-add_shortcode('indppl-test', 'dummy_data');
+// add_shortcode('indppl-test', 'dummy_data');
+
+function indppl_store_info($store_id = NULL){
+	
+    $store_name = '';
+    $address1 = '';
+    $address2 = '';
+    $city = '';
+    $state = '';
+    $zip = '';
+    $weburl = '';
+    $phone = '';
+    $email = '';
+    $logo = '';
+    
+	if(is_int($store_id)){
+		$store_name = get_the_title($store_id);
+		$address1 = get_post_meta($store_id, 'wpcf-address1', true);
+		$address2 = get_post_meta($store_id, 'wpcf-address2', true);
+		$city = get_post_meta($store_id, 'wpcf-city', true);
+		$state = get_post_meta($store_id, 'wpcf-state', true);
+		$zip = get_post_meta($store_id, 'wpcf-zip', true);
+		$weburl = get_post_meta($store_id, 'wpcf-weburl', true);
+		$phone = get_post_meta($store_id, 'wpcf-phone', true);
+		$email = get_post_meta($store_id, 'wpcf-email', true);
+		$logo = get_post_meta($store_id, 'wpcf-logo', true);
+    }
+    // var_dump($logo);
+    // wp_handle_upload( $file, $overrides, $time );
+	
+    ob_start();
+	if(is_int($store_id)){ ?>
+		<h1>Edit Store Information</h1>
+	<?php }else{ ?>
+    	<h1>Welcome to Planting Pal!</h1>
+    	<p>We just need to get a few quick details to configure your store then you can begin building out your products and rates.</p>
+	<?php } ?>
+		<!-- <form method="post" action='#' id='store-management-form' class="form-horizontal"> -->
+    <form  method="post" action='#' id='store-management-form' class="form-horizontal" enctype="multipart/form-data">
+		<fieldset>
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="store-name">Store Name</label>
+			<div class="col-md-4">
+			<input id="store-name" name="store-name" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $store_name; ?>">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="address1">Address Line 1</label>
+			<div class="col-md-4">
+			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1; ?>">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="address2">Address Line 2</label>
+			<div class="col-md-4">
+			<input id="address2" name="address2" type="text" placeholder="" class="form-control input-md" value="<?php echo $address2; ?>">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="city">City</label>
+			<div class="col-md-4">
+			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $city; ?>">
+                
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="state">State</label>
+			<div class="state-selector">
+			<select id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $state; ?>">
+                <?php
+                    $state_array = array('AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY');
+                    foreach($state_array as $value){
+                        if($value == $state){
+                            $select = 'selected="selected"';
+                        }else{
+                            $select = '';
+                        }
+                        ?>
+                        <option <?php echo $select; ?> value="<?php echo $value; ?>"><?php echo $value; ?></option>
+                        <?php
+                    }
+                ?>
+            </select>
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="zip">Zipcode</label>
+			<div class="col-md-2">
+			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $zip; ?>">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="weburl">Store Website</label>
+			<div class="col-md-4">
+			<input id="weburl" name="weburl" type="text" placeholder="" class="form-control input-md" value="<?php echo $weburl; ?>">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="phone">Phone Number</label>
+			<div class="col-md-4">
+			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $phone; ?>">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="store-email">Email Address</label>
+			<div class="col-md-4">
+			<input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email; ?>">
+			
+			</div>
+			</div>
+		
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="logo">Store Logo</label>
+			<div class="col-md-4">
+				<div class="store-edit-logo-container">
+					<?php if($logo){ ?>
+						<div class='current-store-logo'><img src='<?php echo $logo; ?>'></div>
+						<div>
+							<!-- <a href="#" class='edit-logo-btn'>Change Logo</a>
+							<div class='edit-store-logo'> -->
+								<label for=b1>
+									Change Logo
+									<input type="file" name="my_file_upload[]" data-buttonText="Change Logo" onchange='optionalExtraProcessing(b1.files[0])'>
+								</label>
+							<!-- </div> -->
+						</div>
+						
+					<?php }else{ ?>
+						<input type="file" name="my_file_upload[]">
+					<?php } ?>
+
+				</div>
+			</div>
+			</div>
+            <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
+            <?php
+			// }
+			?>
+			<!-- Button -->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="submit"></label>
+			<div class="col-md-4">
+				<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"  /></p>
+			</div>
+			</div>
+		</fieldset>
+    </form>
+
+    <?php
+
+    $return = ob_get_clean();
+    return $return;
+}
+
+function indppl_save_post($store_id = 0){
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		require_once( ABSPATH . 'wp-admin/includes/file.php' );
+		require_once( ABSPATH . 'wp-admin/includes/media.php' );
+		
+		$store = array();
+        $files = $_FILES["my_file_upload"];
+        // var_dump($files);
+		// foreach ($files['name'] as $key => $value) {
+			if ($files['name'][0]) {
+				$file = array(
+					'name' => $files['name'][0],
+					'type' => $files['type'][0],
+					'tmp_name' => $files['tmp_name'][0],
+					'error' => $files['error'][0],
+					'size' => $files['size'][0]
+				);
+				$_FILES = array("upload_file" => $file);
+                $attachment_id = media_handle_upload("upload_file", 0);
+                // var_dump('lskdjf   :   ');
+				// var_dump(wp_get_attachment_image_src($attachment_id));
+				if (is_wp_error($attachment_id)) {
+                    // There was an error uploading the image.
+					echo "Error adding file";
+				}
+			}
+            // }
+        // var_dump(wp_get_attachment_image_src($attachment_id)[0]);
+        $store = array(
+            'ID' => $store_id,
+			'post_title' => wp_strip_all_tags($_POST['store-name']),
+			'post_author' => get_current_user_id(),
+			'post_type' => 'store',
+			'post_status' => "publish",
+			'meta_input' => array(
+				'wpcf-address1' => $_POST['address1'],
+				'wpcf-address2' => $_POST['address2'],
+				'wpcf-city' => $_POST['city'],
+				'wpcf-state' => $_POST['state'],
+				'wpcf-zip' => $_POST['zip'],
+				'wpcf-phone' => $_POST['phone'],
+				'wpcf-email' => $_POST['store-email'],
+				'wpcf-logo' => wp_get_attachment_image_src($attachment_id)[0],
+				'wpcf-weburl' => $_POST['weburl'],
+			),
+		);
+		$store_id = wp_insert_post($store);
+		return $store_id;
+	}
+}
+
+function indppl_create_container($new_array, $container_id = 0){
+    $container = array(
+        'ID' => $container_id,
+        'post_title' => $new_array['name'],
+        'post_author' => get_current_user_id(),
+        'post_type' => 'container',
+        'post_status' => 'publish',
+    );
+    $return_id = wp_insert_post($container);
+    return $return_id;
+
+}
+
+function indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta){
+    ob_start();
+    // old check mark
+    // M14.1 25.2l7.1 7.2 16.7-16.8
+    $check_box = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
+    $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
+    $available = '<div class="indppl-dot-container"><svg height="24" width="24">
+        <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/>
+        <circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>
+        Sorry, your browser does not support inline SVG. 
+    </svg></div>';
+    $not_available = '<div class="indppl-no-dot-container"><svg height="24" width="24">
+        <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.
+        </svg></div>';
+    
+    ?>
+    <tr class='indppl-table-color-offset'>
+        <td class='padding-left-40 position-absolute check-box-container'><?php
+        $fix_relative_issue = '';
+            if(in_array($id, $relation_array)){
+                ?>
+                <div class='container-available indppl-checked'>
+                    <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" data-container="<?php echo $id; ?>" name="<?php echo $id; ?>-container-available" checked>
+                    <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-available-in-store"><?php echo $check_mark; ?></div></label>
+                </div>
+                <?php
+                $fix_relative_issue = 'container-title-fix';
+            }else{
+                ?>
+                <div class='container-available'>
+                    <input type="checkbox" id="<?php echo $id; ?>-container-available" class="display-none" data-container="<?php echo $id; ?>" name="<?php echo $id; ?>-container-available">
+                    <label class="margin-0 container-available-check" for="<?php echo $id; ?>-container-available"><div class="container-not-available-in-store"><?php echo $check_box; ?></div></label>
+                </div>
+                <?php
+                $fix_relative_issue = 'container-title-fix';
+            }
+            if($meta){
+                echo '<p class="' . $fix_relative_issue . ' container-title">' . $title . '</p>';
+                $defualt_or_not_class = 'indppl-default-container';
+            }else{
+                ?>
+                <input type='text' class='container-title indppl-container-edit-title' name='indppl-container-title' value='<?php echo $title; ?>'>
+                <?php
+                $defualt_or_not_class = 'indppl-non-default-container';
+            }
+        ?></td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-spring', $int_array)){
+                echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'spring" checked /><label class="margin-0" for="' . $id . '-' . 'spring">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'spring"/><label class="margin-0" for="' . $id . '-' . 'spring">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-summer', $int_array)){
+                echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'summer" checked /><label class="margin-0" for="' . $id . '-' . 'summer">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'summer"/><label class="margin-0" for="' . $id . '-' . 'summer">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-fall', $int_array)){
+                echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'fall" checked /><label class="margin-0" for="' . $id . '-' . 'fall">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'fall"/><label class="margin-0" for="' . $id . '-' . 'fall">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if(in_array($id, $relation_array) && key_exists('wpcf-available-in-winter', $int_array)){
+                echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'winter" checked /><label class="margin-0" for="' . $id . '-' . 'winter">' . $available . '</label>';
+            }else{
+                echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'winter"/><label class="margin-0" for="' . $id . '-' . 'winter">' . $not_available . '</label>';
+            }
+            ?>
+        </td>
+    </tr>
+    <?php
+    return ob_get_clean();
+}
+
+function indppl_add_relation($default, $store_container_relations){
+    // specific function not for wide use
+    foreach ($default as $key => $value) {
+        $name = explode("-", $value['name']);
+        $id = $name[0];
+        $season ='';
+        // var_dump(get_post_meta($id));
+        if($name[1] == 'spring'){
+            $season = 'wpcf-available-in-spring';
+        }
+        else if ($name[1] == 'summer'){
+            $season = 'wpcf-available-in-summer';
+        }
+        else if ($name[1] == 'fall'){
+            $season = 'wpcf-available-in-fall';
+        }
+        else if ($name[1] == 'winter'){
+            $season = 'wpcf-available-in-winter';
+        }
+        foreach($store_container_relations as $key2 => $rel_val){
+            $container = get_post($rel_val);
+            $name = $container->post_name;
+            $name_array = explode('-', $name);
+            $cont_id = $name_array[count($name_array)-1];
+            if($id == $cont_id){
+                $test = update_post_meta((int)$rel_val, (string)$season, "1");
+                
+                // var_dump($cont_id . " : " . $rel_val . " : ". $season . " = " . (bool)$test);
+            }
+        } 
+    }
+
+}
+
+function indppl_get_current_products(){
+    $return = get_post_meta(391, 'wpcf-type', true);
+    var_dump($return);
+    return $return;
+}
+
