@@ -344,37 +344,56 @@ function indppl_test(){
 
 add_shortcode( 'indppl-h2-test', 'indppl_test');
 
-function indppl_update_apprates($store_id, $type, $args = array()) {
+function indppl_apprates($store_id, $type = null, $args = null) {
 
     // Start with the apprates from the store meta. Does it have data? If no, start fresh.
     $meta = get_post_meta($store_id, 'wpcf-apprates', true);
-    // var_dump($meta);
+    
+    // Create an array if no data exists.
     if ($meta == '' || $meta == null) {
-        $apprates = array();
+        $apprates = array('ground' => array(), 'pots' => array(), 'beds' => array());
     } else {
         $apprates = json_decode($meta, true);
     }
 
-    switch ($type) {
+    if($args){ // We want to make an update to the apprates
+        
+        switch ($type) { // Which type of product is getting added?
+    
+        case 'ground':
+            $apprates['ground'][key($args)] = $args[key($args)];
+            break;
+    
+        case 'pots':
 
-    case 'ground':
-        $apprates['ground'][key($args)] = $args[key($args)];
-        break;
+        case 'beds':
 
-    case 'pots':
+            foreach($args as $key => $val) {
+                var_dump($val);
+                echo "<br /><br />";
+                $apprates[$type][$key][key($val)] = $val[key($val)];
+            }
+    
+            break;
+        default:
+            return 'Something wrong...';
+            break;
+        }
+    
+        $apprates = json_encode($apprates);
+    
+        $update = update_post_meta($store_id, 'wpcf-apprates', $apprates);
 
-        break;
-    case 'beds':
+        $results = array( 'apprates' => $apprates, 'update' => $update);
 
-        break;
-    default:
-        return 'Something wrong...';
-        break;
+
+    } else {
+
+        $results = $apprates;
+
     }
 
-    $apprates = json_encode($apprates);
-
-    $result = update_post_meta($store_id, 'wpcf-apprates', $apprates);
+    return $results;
 
     // var_dump($result);
 
@@ -383,32 +402,53 @@ function indppl_update_apprates($store_id, $type, $args = array()) {
 function dummy_data() {
     // return '<h1>sdfsdf</h1>';
     $args = array(
-        17288 => array(
-            216 => array(
-                'unit'   => 'cuft',
-                'amount' => 3,
-            ),
-            216 => array(
-                'unit'   => 'cup',
-                'amount' => 4,
-            ),
-        ),
 
-        // 17257 => array(
-        //     218 => array(
-        //         'unit' => 'cuft',
-        //         'amount' => 3,
-        //     ),
-        //     216 => array(
-        //         'unit' => 'cup',
-        //         'amount' => 7,
+        // GROUND
+        // 17288 => array( 
+        //     'measurement' => 'other',
+        //     'containers' => array(
+
+        //         218 => array(
+        //             'unit'   => 'cuft',
+        //             'amount' => 3,
+        //         ),
+        //         216 => array(
+        //             'unit'   => 'cup',
+        //             'amount' => 100,
+        //         ),
         //     ),
         // ),
 
+        // POTS OR RAISED BEDS
+        'filler' => array(
+            172087 => array(
+                'primary' => true,
+                'amount' => 0.15,
+            ),
+        ),
+
+        'blended' => array(
+            17430 => array(
+                'unit'  => 'cups',
+                'amount' => 13,
+                'per-sqft' => 1, //could be 1, 10, or 100 
+            ),
+        ),
+
+        'each' => array( // pots only
+            17670 => array(
+                'small' => 2,
+                'medium' => 5,
+                'large' => 8,
+            ),
+        ),
+
     );
 
-    $test = indppl_update_apprates(252, 'ground', $args);
-
+    $test = indppl_apprates(252, 'pots', $args);
+    // $test = indppl_apprates(252);
+    
+    var_dump($test);
 }
 
 add_shortcode('indppl-test', 'dummy_data');
