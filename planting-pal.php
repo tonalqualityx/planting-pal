@@ -73,5 +73,3 @@ function set_app_template(){
     return $template;
 }
 add_filter( 'page_template', 'set_app_template' );
-
-

@@ -338,6 +338,12 @@ function indppl_user_status($id){
     return $account_array;
 }
 
+function indppl_test(){
+    return "<h2>TEST</h2>";
+}
+
+add_shortcode( 'indppl-h2-test', 'indppl_test');
+
 function indppl_update_apprates($store_id, $type, $args = array()) {
 
     // Start with the apprates from the store meta. Does it have data? If no, start fresh.
@@ -403,4 +409,4 @@ function dummy_data() {
     echo $test . 'sdfsdfsdf';
 }
 
-add_shortcode('tester', 'dummy_data');
+add_shortcode('indppl-test', 'dummy_data');
