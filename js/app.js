@@ -156,7 +156,7 @@ jQuery(document).ready(function( $ ) {
                 new_array: new_array,
                 remove_dot: remove_dot,
             },
-            typed: 'POST',
+            type: 'POST',
             success: function(e){
                 console.log(e);
                 var new_array = jQuery.parseJSON(e);
@@ -186,6 +186,40 @@ jQuery(document).ready(function( $ ) {
         });
             
     });
+    $('body').on('click', '.indppl-add-product-btn', function(e){
+        e.preventDefault();
+        $('body').prepend("<div class='slide-in-products-container'></div>");
+        setTimeout(function(){
+            $('.slide-in-products-container').addClass('left-0');
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20)
+        
+        var type = $(this).data('type');
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_add_new_product_ajax',
+                type: type,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                $('.slide-in-products-container').prepend(e);
+                indpplDelLoading();
+            }
+        })
+    })
+    $('body').on('click', '.modal-close', function(e){
+        $('.slide-in-products-container').removeClass('left-0');
+        setTimeout(function(){
+            $('.slide-in-products-container').remove();
+        }, 1000);
+    });
+    // $('body').on('click', '.slide-in-products-container', function(e){
+    //     $('.slide-in-products-container').remove();
+    // })
     $('body').on('click', '.add-container-btn', function(e){
         e.preventDefault();
         $(this).prev().append('<tr class="indppl-table-color-offset"><td class="padding-bottom-5"><input type="text" name="new-container"         class="container-add-new indppl-container-edit-title" placeholder="Name"></td><td><input type="checkbox" name="new-spring" class="display-none indppl-non-default-container" id="new-spring"/><label class="margin-0" for="new-spring"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-summer" class="display-none indppl-non-default-container" id="new-summer"/><label class="margin-0" for="new-summer"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-fall" class="display-none indppl-non-default-container" id="new-fall"/><label class="margin-0" for="new-fall"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-winter" class="display-none indppl-non-default-container" id="new-winter"/><label class="margin-0" for="new-winter"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td></tr>');
@@ -193,6 +227,102 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', function(){
         check_on_load_and_click();
     });
+    $('body').on('change', '#product-create-brand', function(){
+        indpplAddLoading();
+        var brand = $(this).val();
+        var type = $('#indppl-modal-product-type').val();
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_get_products_by_brand_ajax',
+                brand: brand,
+                type: type,
+            },
+            type: 'POST',
+            success: function(e){
+                // console.log(e);
+                $('.product-create-brand-cut-off').children().each(function(){
+                    $(this).empty();
+                })
+                $('.product-create-product').empty();
+                $('.product-create-product').append(e);
+                indpplDelLoading();
+            }
+        })
+    });
+    $('body').on('change', '#product-create-product', function(e){
+        indpplAddLoading();
+        var product_id = $(this).val();
+        var store_id = $('#store-id').val();
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_get_product_info_ajax',
+                product_id: product_id,
+                store_id: store_id,
+            },
+            type: 'POST',
+            success: function(e){
+                array = JSON.parse(e);
+                console.log(array);
+                $('.product-create-brand-cut-off').children().each(function(){
+                    $(this).empty();
+                })
+                if(array["standard_unit"]){
+                    $('.product-create-standard-unit-container').append(array["standard_unit"]);
+                }
+                if(array['size']){
+                    $('.product-create-size-container').append(array['size']);
+                }
+                if(array['new_size']){
+                    $('.product-create-new-size-container').append(array['new_size']);
+                }
+                if(array['dry_wet']){
+                    $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
+                    units = indppl_get_units(array['dry_wet'][1]);
+                    console.log(units);
+                    $.each(units, function(index, value){
+                        if(value != array['dry_wet'][2]){
+                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+                            
+                        }
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + value + '">' + value + '</option>');
+                    })
+                }
+               
+                indpplDelLoading();
+            }
+        })
+    });
+    $('body').on('click', '.product-create-dry-wet', function(){
+        var type = $(this).val();
+        array = indppl_get_units(type);
+        $('.product-create-standard-unit').empty();
+        $.each(array, function(index, value){
+            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+        })
+    })
+    $('body').on('click', '#indppl-product-create-new-size-btn', function(e){
+        e.preventDefault();
+        var size = $('#indpll-product-create-size-num').val();
+        var unit = $('#product-create-standard-unit-add').val();
+        $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-new-package indppl-background-green" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>')
+    })
+    $('body').on('mouseenter', '.indppl-new-package', function(){
+        $(this).append('<span class="indppl-x">X</span>');
+    })
+    $('body').on('mouseleave', '.indppl-new-package', function(){
+        $(".indppl-x").remove();
+    })
+    $('body').on('click', '.indppl-x', function(){
+        // this needs to remove a package in the back end.
+        $(this).parent().remove();
+
+    })
     greyOutAllUnchecked();
     // same as above but it checks on load.
     check_on_load_and_click();
@@ -207,6 +337,15 @@ function greyOutAllUnchecked(){
         }
     })
 }
+
+function indppl_get_units($type = 'dry'){
+    if($type == 'dry'){
+        return ['tsp', 'tbls', 'qt', 'cuft', 'lb', 'g', 'kg', 'oz', 'mL', 'L', 'cups', 'eaches'];
+    }else{
+        return ['tsp', 'tbls', 'oz', 'qt', 'gal', 'mL', 'L', 'cups'];
+    }  
+}
+
 
 function check_on_load_and_click(){
     var add = 0;
@@ -241,10 +380,8 @@ function getLocation() {
     }
 }
 
-function indpplAddLoading(){
-    var primary = 'white';
-    var secondary = 'white';
-    jQuery('body').append("<div class='indppl-loading-background'><div id='indppl-loading-icon'><svg class='image' width='100' height='100'><path d='M5,50 a1,1 0 0,0 90,0' fill='none' stroke-opacity='0.9' stroke='" + primary + "' stroke-width='9'/></svg><svg class='image-rev' width='100' height='100'><path d='M2,50 a1,1 0 0,1 96,0' fill='none' stroke-opacity='0.7' stroke='" + secondary + "' stroke-width='3.6'/></svg><svg class='image-rev-2' width='100' height='100'><path d='M10,50 a40,40 0 0,0  40,40' stroke-width='6' stroke-opacity='0.7' stroke='" + secondary + "' fill='none'</></svg></div></div>");
+function indpplAddLoading(location = 'body', primary = 'white', secondary = 'white', background = 'indppl-loading-background'){
+    jQuery(location).append("<div class='indppl-loading-background'><div class=" + background + "><div id='indppl-loading-icon'><svg class='image' width='100' height='100'><path d='M5,50 a1,1 0 0,0 90,0' fill='none' stroke-opacity='0.9' stroke='" + primary + "' stroke-width='9'/></svg><svg class='image-rev' width='100' height='100'><path d='M2,50 a1,1 0 0,1 96,0' fill='none' stroke-opacity='0.7' stroke='" + secondary + "' stroke-width='3.6'/></svg><svg class='image-rev-2' width='100' height='100'><path d='M10,50 a40,40 0 0,0  40,40' stroke-width='6' stroke-opacity='0.7' stroke='" + secondary + "' fill='none'</></svg></div></div></div>");
 }
 
 function indpplDelLoading(){

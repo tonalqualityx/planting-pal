@@ -701,8 +701,113 @@ function indppl_add_relation($default, $store_container_relations){
 
 }
 
-function indppl_get_current_products(){
-    $return = get_post_meta(391, 'wpcf-type', true);
-    var_dump($return);
+function indppl_get_current_products($type){
+    $id = get_current_user_id();
+    // foreach($type as $key => $value){
+    //     var_dump($value[0]);
+    // }
+    if(isset($_GET['store-id'])){
+        $store_id = $_GET['store-id'];
+    }
+    $args = array(
+        'post_type' => 'product',
+        'relation' => 'OR',
+        array(
+            'author' => $id,
+            'meta_query' => array(
+                array(
+                    'key' => 'wpcf-default',
+                    'value' => 1,
+                    'compare' => '=',
+                ),
+            ),
+        ),
+    );
+
+    $products = new WP_Query($args);
+    // var_dump(get_post_meta(165, 'wpcf-type')[0]);
+    ob_start();
+    ?>
+    <table>
+        <th class='product-list-width'></th>
+        <th class='product-list-width'>Brand</th>
+        <th class='product-list-width'>Product Name</th>
+        <th class='product-list-width'>Sizes</th>
+
+        <?php
+        // var_dump(get_post_meta(264, 'wpcf-prod-type')[0]);
+        if($products->have_posts()){
+            while($products->have_posts()){
+                $products->the_post();
+                $pid = get_the_id();
+                $title = get_the_title();
+                $brand = get_the_terms($pid, 'brand');
+                $default =  get_post_meta($pid, 'wpcf-type');
+                // var_dump($pid);
+                $package_relations = toolset_get_related_posts(
+                    $pid, // get posts related to this one
+                    'product-package', // relationship between the posts
+                    'parent',
+                    '100',
+                    '0',
+                    array(),
+                    'post_id',
+                    'child'
+                );
+                $store_related = toolset_get_related_posts(
+                    $store_id,
+                    'store-package',
+                    'parent',
+                    '100',
+                    '0',
+                    array(),
+                    'post_id',
+                    'child',
+                );
+                // var_dump($package_relations);
+                // var_dump("<br /><br />");
+
+                // var_dump($store_related);
+                
+    
+                // var_dump($type_array);
+                // var_dump($pid);
+                
+                ?>
+                <tr class='indppl-table-color-offset'>
+                    <td>
+                        <a href="#" class="indppl-product-edit">edit</a>
+                        <a href="#" class="indppl-product-delete">delete</a>
+                    </td>
+                    <td>
+                        <?php echo $brand[0]->name; ?>
+                    </td>
+                    <td>
+                        <?php echo $title; ?>
+                    </td>
+                    <td>
+                        <?php
+                        $size_array = array_intersect($package_relations, $store_related);
+                        foreach($size_array as $key => $value){
+                            $meta = get_post_meta($size_array[$key]);
+                            // var_dump($meta);
+                            echo $meta['wpcf-size'][0];
+                            echo $meta['wpcf-unit'][0];
+                            echo ' ';
+                        }
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                // var_dump($brand);
+                
+                // var_dump(get_the_terms($pid, 'brand'));
+                            
+            }
+        }
+    ?>
+    </table>
+    <?php
+    $return = ob_geT_clean();
     return $return;
 }
