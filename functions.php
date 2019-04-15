@@ -871,7 +871,7 @@ function indppl_get_current_products($type){
                     '0',
                     array(),
                     'post_id',
-                    'child',
+                    'child'
                 );
                 // var_dump($package_relations);
                 // var_dump("<br /><br />");
