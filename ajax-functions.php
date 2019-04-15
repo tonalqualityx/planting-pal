@@ -185,3 +185,201 @@ function indppl_save_container_data_ajax(){
 }
 add_action( 'wp_ajax_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax');
+
+
+function indppl_add_new_product_ajax(){
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    
+    ob_start();
+    ?>
+    
+        <div class='slide-in-products-inside-container'>
+            <a href='#' class='modal-close'>X</a>
+            <h2>something <?php echo $type; ?></h2>
+            <form id='product-create-form' method="post" action='#' class="form-horizontal">
+                <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
+                <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
+                    <option value='' disabled selected>Select Brand</option>
+                    <?php
+                    $brands = get_terms('brand');
+                    foreach($brands as $key => $value){
+                        ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> <?php
+                    }
+                    // var_dump($brands);
+                    ?>
+                </select>
+                <select class='product-create-product' id='product-create-product' name='product-create-product'>
+                    <option class='product-create-product-option' value='' disabled selected>Select Product</option>
+                </select>
+                <div class='product-create-brand-cut-off'>
+                    <div class='product-create-dry-wet-container'>
+                    </div>
+                    <div class='product-create-standard-unit-container'>
+                    </div>
+                    <div class='product-create-size-container'>
+                    </div>
+                    <div class='product-create-new-size-container'>
+                    </div>
+                    <div class='product-create-app-rate'>
+                    </div>
+                    <div class='product-create-5-cups'>
+                    </div>
+                    <div class='product-create-save-done'>
+                    </div>
+                </div>
+            </form>
+        </div>
+    <?php
+    $return = ob_get_clean();
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax' );
+add_action('wp_ajax_nopriv_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax');
+
+function indppl_get_products_by_brand_ajax(){
+    if(isset($_POST['brand'])){
+        $brand = $_POST['brand'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    $args = array(
+        'post_type' => 'product',
+        'tax_query' => array(
+            array(
+                'taxonomy' => 'brand',
+                'field'    => 'slug',
+                'terms'    => $brand,
+            ),
+        ),
+        'relation' => 'OR',
+        array(
+            'author' => get_current_user_id(),
+            'meta_query' => array(
+                array(
+                    'key' => 'wpcf-default',
+                    'value' => 1,
+                    'compare' => '=',
+                ),
+            ),
+        ),
+    );
+    $products = new WP_Query($args);
+    // var_dump($products);
+    ob_start();
+
+    ?> <option class='product-create-product-option' value='' disabled selected>Select Product</option> <?php
+    if($products->have_posts()){
+        while($products->have_posts()){
+            $products->the_post();
+            $title = get_the_title();
+            $id = get_the_id();
+            ?>
+            <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
+            <?php
+        }
+    }
+    echo ob_get_clean();
+    die();
+}
+add_action( 'wp_ajax_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax' );
+add_action('wp_ajax_nopriv_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax');
+
+function indppl_get_product_info_ajax(){
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    $default = get_post_meta($product_id, 'wpcf-default', true);
+    $unit = get_post_meta($product_id, 'wpcf-unit', true);
+    $dryliquid = get_post_meta($product_id, 'wpcf-dryliquid', true);
+    $send_array = array();
+    if($default){
+        $standard_unit = "<div id='product-create-standard-unit' data-unit='" . $unit . "'></div>";
+    }else{
+        ob_start();
+        ?>
+        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >Dry
+        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >Wet
+        <?php
+        $dry_wet = ob_get_clean();
+        ob_start();
+        ?>
+        <select class='product-create-standard-unit' id='product-create-standard-unit' name='product-create-standard-unit'>
+            <option class='product-create-standard-unit-option' value='<?php echo $unit; ?>' selected><?php echo $unit; ?></option>
+        </select>
+        <?php
+        $standard_unit = ob_get_clean();
+    }
+    // getting sizes
+    $product_related = toolset_get_related_posts(
+        $product_id,
+        'product-package',
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'child',
+    );
+    $store_related = toolset_get_related_posts(
+        $store_id,
+        'store-package',
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'child',
+    );
+    $sizes = '';
+    if($product_related){
+        foreach ($product_related as $key => $value) {
+            $size_meta = get_post_meta($value, 'wpcf-size', true);
+            $unit_meta = get_post_meta($value, 'wpcf-unit', true);
+            $author = get_post_field( 'post_author', $value );
+            $default_package = get_post_meta($value, 'wpcf-default-package', true);
+            if($author == get_current_user_id() || $default_package){
+                ob_start();
+                // echo $store_id;
+                $in_store = '';
+                if(in_array($value, $store_related)){
+                    $in_store = 'indppl-background-green indppl-new-package';
+                }
+                // echo $author;
+                // echo $default_package;
+                
+                ?>
+                <a href='#' class='<?php echo $in_store; ?> indppl-product-create-size-btn' data-size='<?php echo $size_meta; ?>' data-unit='<?php echo $unit_meta;?>'><?php echo $size_meta . " " . $unit_meta; ?></a>
+                <?php
+                $sizes .= ob_get_clean();
+            }
+
+
+        }
+    }
+    ob_start();
+    ?>
+    <input type='number' class='indppl-product-create-size-num' id='indpll-product-create-size-num' min='0' name='indppl-product-create-size-num'>
+    <select class='product-create-standard-unit-add' id='product-create-standard-unit-add' name='product-create-standard-unit-add'>
+        <option class='product-create-standard-unit-add-option' value='' disabled selected>Select Unit</option>
+    </select>
+    <a href='#' id='indppl-product-create-new-size-btn' class='indppl-button'>Create</a>
+    <?php
+    $new_size .= ob_get_clean();
+
+    $send_array['standard_unit'] = $standard_unit;
+    $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
+    $send_array['size'] = $sizes;
+    $send_array['new_size'] = $new_size;
+    echo json_encode($send_array);
+    die();
+}
+add_action( 'wp_ajax_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax' );
+add_action('wp_ajax_nopriv_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax');
+
