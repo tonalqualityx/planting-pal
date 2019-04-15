@@ -325,7 +325,7 @@ function indppl_get_product_info_ajax(){
         '0',
         array(),
         'post_id',
-        'child',
+        'child'
     );
     $store_related = toolset_get_related_posts(
         $store_id,
@@ -335,7 +335,7 @@ function indppl_get_product_info_ajax(){
         '0',
         array(),
         'post_id',
-        'child',
+        'child'
     );
     $sizes = '';
     if($product_related){
