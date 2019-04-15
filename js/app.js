@@ -269,21 +269,31 @@ jQuery(document).ready(function( $ ) {
             success: function(e){
                 array = JSON.parse(e);
                 console.log(array);
+                $('.product-create-brand-cut-off').children().each(function(){
+                    $(this).empty();
+                })
                 if(array["standard_unit"]){
                     $('.product-create-standard-unit-container').append(array["standard_unit"]);
-                }
-                if(array['dry_wet']){
-                    $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
-                    units = indppl_get_units(array['dry_wet'][1]);
-                    $.each(units, function(index, value){
-                        if(value != array['dry_wet'][2]){
-                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
-                        }
-                    })
                 }
                 if(array['size']){
                     $('.product-create-size-container').append(array['size']);
                 }
+                if(array['new_size']){
+                    $('.product-create-new-size-container').append(array['new_size']);
+                }
+                if(array['dry_wet']){
+                    $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
+                    units = indppl_get_units(array['dry_wet'][1]);
+                    console.log(units);
+                    $.each(units, function(index, value){
+                        if(value != array['dry_wet'][2]){
+                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+                            
+                        }
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + value + '">' + value + '</option>');
+                    })
+                }
+               
                 indpplDelLoading();
             }
         })
@@ -295,6 +305,23 @@ jQuery(document).ready(function( $ ) {
         $.each(array, function(index, value){
             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
         })
+    })
+    $('body').on('click', '#indppl-product-create-new-size-btn', function(e){
+        e.preventDefault();
+        var size = $('#indpll-product-create-size-num').val();
+        var unit = $('#product-create-standard-unit-add').val();
+        $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-new-package indppl-background-green" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>')
+    })
+    $('body').on('mouseenter', '.indppl-new-package', function(){
+        $(this).append('<span class="indppl-x">X</span>');
+    })
+    $('body').on('mouseleave', '.indppl-new-package', function(){
+        $(".indppl-x").remove();
+    })
+    $('body').on('click', '.indppl-x', function(){
+        // this needs to remove a package in the back end.
+        $(this).parent().remove();
+
     })
     greyOutAllUnchecked();
     // same as above but it checks on load.

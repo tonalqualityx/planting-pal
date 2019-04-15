@@ -380,11 +380,14 @@ span.padding-right-5{
   border: 1px solid #2d6ca2;
   text-decoration: none;
 }
+.indppl-button:focus{
+  color: white;
+}
 .product-list-width{
   min-width: 8em;
 }
 .slide-in-products-container{
-  position: absolute;
+  position: fixed;
   height: 100vh;
   width: 100vw;
   z-index: 100;
@@ -441,4 +444,27 @@ span.padding-right-5{
 }
 .indppl-background-green{
   background: green;
+}
+.product-create-new-size-container{
+  display: flex;
+  margin-top: 10px;
+  justify-content: flex-start;
+}
+.indppl-product-create-size-num{
+  flex-basis: 5%;
+  margin-right: 5px;
+  min-width: 50px;
+}
+.product-create-standard-unit-add{
+  flex-basis: 10%;
+  min-width: 150px;
+  margin-right: 5px;
+}
+.margin-right-4{
+  margin-right: 4px;
+}
+.indppl-x{
+  position: relative;
+  top: -6px;
+  right: -18px;
 }

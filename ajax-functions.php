@@ -348,7 +348,7 @@ function indppl_get_product_info_ajax(){
                 // echo $store_id;
                 $in_store = '';
                 if(in_array($value, $store_related)){
-                    $in_store = 'indppl-background-green';
+                    $in_store = 'indppl-background-green indppl-new-package';
                 }
                 // echo $author;
                 // echo $default_package;
@@ -358,12 +358,24 @@ function indppl_get_product_info_ajax(){
                 <?php
                 $sizes .= ob_get_clean();
             }
+
+
         }
     }
+    ob_start();
+    ?>
+    <input type='number' class='indppl-product-create-size-num' id='indpll-product-create-size-num' min='0' name='indppl-product-create-size-num'>
+    <select class='product-create-standard-unit-add' id='product-create-standard-unit-add' name='product-create-standard-unit-add'>
+        <option class='product-create-standard-unit-add-option' value='' disabled selected>Select Unit</option>
+    </select>
+    <a href='#' id='indppl-product-create-new-size-btn' class='indppl-button'>Create</a>
+    <?php
+    $new_size .= ob_get_clean();
 
     $send_array['standard_unit'] = $standard_unit;
     $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
     $send_array['size'] = $sizes;
+    $send_array['new_size'] = $new_size;
     echo json_encode($send_array);
     die();
 }
