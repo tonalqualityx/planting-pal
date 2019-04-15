@@ -340,6 +340,115 @@ function indppl_user_status($id){
     return $account_array;
 }
 
+function indppl_apprates($store_id, $type = null, $args = null) {
+
+    // Start with the apprates from the store meta. Does it have data? If no, start fresh.
+    $meta = get_post_meta($store_id, 'wpcf-apprates', true);
+    
+    // Create an array if no data exists.
+    if ($meta == '' || $meta == null) {
+        $apprates = array('ground' => array(), 'pots' => array(), 'beds' => array());
+    } else {
+        $apprates = json_decode($meta, true);
+    }
+
+    if($args){ // We want to make an update to the apprates
+        
+        switch ($type) { // Which type of product is getting added?
+    
+        case 'ground':
+            $apprates['ground'][key($args)] = $args[key($args)];
+            break;
+    
+        case 'pots':
+
+        case 'beds':
+
+            foreach($args as $key => $val) {
+                var_dump($val);
+                echo "<br /><br />";
+                $apprates[$type][$key][key($val)] = $val[key($val)];
+            }
+    
+            break;
+        default:
+            return 'Something wrong...';
+            break;
+        }
+    
+        $apprates = json_encode($apprates);
+    
+        $update = update_post_meta($store_id, 'wpcf-apprates', $apprates);
+
+        $results = array( 'apprates' => $apprates, 'update' => $update);
+
+
+    } else {
+
+        $results = $apprates;
+
+    }
+
+    return $results;
+
+    // var_dump($result);
+
+}
+
+function dummy_data() {
+    // return '<h1>sdfsdf</h1>';
+    $args = array(
+
+        // GROUND
+        // 17288 => array( 
+        //     'measurement' => 'other',
+        //     'containers' => array(
+
+        //         218 => array(
+        //             'unit'   => 'cuft',
+        //             'amount' => 3,
+        //         ),
+        //         216 => array(
+        //             'unit'   => 'cup',
+        //             'amount' => 100,
+        //         ),
+        //     ),
+        // ),
+
+        // POTS OR RAISED BEDS
+        'filler' => array(
+            172087 => array(
+                'primary' => true,
+                'amount' => 0.15,
+            ),
+        ),
+
+        'blended' => array(
+            17430 => array(
+                'unit'  => 'cups',
+                'amount' => 13,
+                'per-sqft' => 1, //could be 1, 10, or 100 
+            ),
+        ),
+
+        'each' => array( // pots only
+            17670 => array(
+                'small' => 2,
+                'medium' => 5,
+                'large' => 8,
+            ),
+        ),
+
+    );
+
+    $test = indppl_apprates(252, 'pots', $args);
+    // $test = indppl_apprates(252);
+    
+    var_dump($test);
+}
+
+// add_shortcode('indppl-test', 'dummy_data');
+
 function indppl_store_info($store_id = NULL){
 	
     $store_name = '';
@@ -811,3 +920,4 @@ function indppl_get_current_products($type){
     $return = ob_geT_clean();
     return $return;
 }
+

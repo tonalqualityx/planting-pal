@@ -186,6 +186,7 @@ function indppl_save_container_data_ajax(){
 add_action( 'wp_ajax_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax');
 
+
 function indppl_add_new_product_ajax(){
     if(isset($_POST['type'])){
         $type = $_POST['type'];
@@ -381,3 +382,4 @@ function indppl_get_product_info_ajax(){
 }
 add_action( 'wp_ajax_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax' );
 add_action('wp_ajax_nopriv_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax');
+

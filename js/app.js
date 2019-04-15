@@ -34,6 +34,7 @@ jQuery(document).ready(function( $ ) {
             })
         }, 200);
     })
+
     $('body').on('click', '.edit-logo-btn', function(e){
         e.preventDefault();
         $('.edit-store-logo').slideToggle();

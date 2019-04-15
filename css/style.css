@@ -1,3 +1,48 @@
+
+/***************
+UTILITY CLASSES
+***************/
+
+body {
+    min-height: 100vh;
+}
+
+.margin-auto {
+    margin: auto;
+}
+
+.ppl-green-bg {
+    background: #254921!important;
+}
+
+.gradient-button {
+    color: white;
+    font-size: 1.35em;
+    font-weight: 800;
+    border-radius: 30px;
+    padding: 12px 90px;
+    border: 2px solid #f5aa67;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f76a1c+0,fab159+100 */
+    background: #f76a1c; /* Old browsers */
+    background: -moz-linear-gradient(-15deg, #f76a1c 0%, #fab159 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-15deg, #f76a1c 0%,#fab159 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(165deg, #f76a1c 0%,#fab159 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f76a1c', endColorstr='#fab159',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    transition: background 0.35s ease-int-out;
+}
+
+.gradient-button:hover {
+    border: 2px solid #f5aa67;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f76a1c+0,fab159+100 */
+    background: #f76a1c; /* Old browsers */
+    background: -moz-linear-gradient(45deg, #f76a1c 0%, #fab159 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(45deg, #f76a1c 0%,#fab159 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(45deg, #f76a1c 0%,#fab159 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f76a1c', endColorstr='#fab159',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+/* loading icon */
+
 /* tabs */
 
 .indppl-nav-tabs{
@@ -47,6 +92,7 @@
     width: 50%;
     padding-bottom: 10px;
 } 
+
 .indppl-loading-background{
 	position: fixed;
     top: 0;
@@ -105,6 +151,7 @@
     float: left;
     padding-left: 15px;
 }
+
 #location-icon{
     position: absolute;
     right: 20px;
@@ -149,6 +196,7 @@
 .store-list-text{
     padding-top: 5px;
 }
+
 .indppl-my-stores-container{
   display:flex;
   flex-wrap: wrap;
@@ -380,6 +428,7 @@ span.padding-right-5{
   border: 1px solid #2d6ca2;
   text-decoration: none;
 }
+
 .indppl-button:focus{
   color: white;
 }

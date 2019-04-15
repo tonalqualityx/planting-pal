@@ -21,7 +21,6 @@ require_once(INDPPL_ROOT_PATH . "/shortcodes.php");
 require_once(INDPPL_ROOT_PATH . "/conversion.php");
 require_once(INDPPL_ROOT_PATH . "/ajax-functions.php");
 
-
 function indppl_enqueue(){
     wp_enqueue_style('indppl-style', INDPPL_ROOT_URL . 'css/style.css');
     wp_register_script( 'indppl-js', INDPPL_ROOT_URL . 'js/app.js', array( 'jquery' ), true);
@@ -58,8 +57,19 @@ function indppl_single_store_template($single) {
         return plugin_dir_path(__FILE__) . "/templates/single-store.php";
     }
 
+    
     return $template;
     
 }
 
 add_filter('single_template', 'indppl_single_store_template');
+
+function set_app_template(){
+
+    if ( is_page( 'app' ) ) {
+            $template = dirname( __FILE__ ) . '/templates/app.php';
+    }
+
+    return $template;
+}
+// add_filter( 'page_template', 'set_app_template' );
