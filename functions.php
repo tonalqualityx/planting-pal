@@ -338,3 +338,69 @@ function indppl_user_status($id){
     return $account_array;
 }
 
+function indppl_update_apprates($store_id, $type, $args = array()) {
+
+    // Start with the apprates from the store meta. Does it have data? If no, start fresh.
+    $meta = get_post_meta($store_id, 'wpcf-apprates', true);
+    var_dump($meta);
+    if ($meta == '' || $meta == null) {
+        $apprates = array();
+    } else {
+        $apprates = json_decode($meta);
+    }
+
+    switch ($type) {
+
+    case 'ground':
+        $apprates['ground'][key($args)] = $args[key($args)];
+        break;
+
+    case 'pots':
+
+        break;
+    case 'beds':
+
+        break;
+    default:
+        return 'Something wrong...';
+        break;
+    }
+
+    $apprates = json_encode($apprates);
+
+    $result = update_post_meta($store_id, 'wpcf-apprates', $apprates);
+
+}
+
+function dummy_data() {
+    return '<h1>sdfsdf</h1>';
+    $args = array(
+        17288 => array(
+            216 => array(
+                'unit'   => 'cuft',
+                'amount' => 3,
+            ),
+            216 => array(
+                'unit'   => 'cup',
+                'amount' => 4,
+            ),
+        ),
+
+        // 17257 => array(
+        //     216 => array(
+        //         'unit' => 'cuft',
+        //         'amount' => 3,
+        //     ),
+        //     216 => array(
+        //         'unit' => 'cup',
+        //         'amount' => 4,
+        //     ),
+        // ),
+
+    );
+
+    $test = indppl_update_apprates(252, 'ground', $args);
+    echo $test . 'sdfsdfsdf';
+}
+
+add_shortcode('tester', 'dummy_data');
