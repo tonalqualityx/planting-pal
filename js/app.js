@@ -257,6 +257,7 @@ jQuery(document).ready(function( $ ) {
         indpplAddLoading();
         var product_id = $(this).val();
         var store_id = $('#store-id').val();
+        var type = $('#indppl-modal-product-type').val();
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -265,6 +266,7 @@ jQuery(document).ready(function( $ ) {
                 action: 'indppl_get_product_info_ajax',
                 product_id: product_id,
                 store_id: store_id,
+                type: type,
             },
             type: 'POST',
             success: function(e){
@@ -285,7 +287,7 @@ jQuery(document).ready(function( $ ) {
                 if(array['dry_wet']){
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
-                
+                    console.log(array['dry_wet'][1]);
                     $.each(units, function(index, value){
                         if(value != array['dry_wet'][2]){
                             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
@@ -296,15 +298,14 @@ jQuery(document).ready(function( $ ) {
                 }
                 if(array['cups']){
                     $('.product-create-5-cups-container').append(array['cups']);
-                    units = indppl_get_units(array['dry_wet'][1]);
-                    $.each(units, function(index, value){
-                        $('.product-create-5-cups').append("<option class='product-create-5-cups-option' value='"+ value + "'>" + value + "</option>");
-                    })
 
                 }
                 // console.log(array['app_rate']);
-                if(array['app_rate']){
-                    $('.product-create-app-rate-container').append(array['app_rate']);
+                // if(array['app_rate']){
+                //     $('.product-create-app-rate-container').append(array['app_rate']);
+                // }
+                if(array['app_rates_chart']){
+                    $('.product-create-app-rates-chart-container').append(array['app_rates_chart']);
                 }
                 
                 indpplDelLoading();

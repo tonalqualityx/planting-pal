@@ -228,6 +228,8 @@ function indppl_add_new_product_ajax(){
                     </div>
                     <div class='product-create-save-done-container'>
                     </div>
+                    <div class='product-create-app-rates-chart-container'>
+                    </div>
                 </div>
             </form>
         </div>
@@ -295,6 +297,9 @@ function indppl_get_product_info_ajax(){
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
     $default = get_post_meta($product_id, 'wpcf-default', true);
     $unit = get_post_meta($product_id, 'wpcf-unit', true);
     $dryliquid = get_post_meta($product_id, 'wpcf-dryliquid', true);
@@ -339,7 +344,7 @@ function indppl_get_product_info_ajax(){
         'child'
     );
     $sizes = '';
-    $console = [];
+    $pack_units = [];
     ob_start();
     ?>
     <h3>Select the sizes you stock:</h3>
@@ -348,7 +353,7 @@ function indppl_get_product_info_ajax(){
         foreach ($product_related as $key => $value) {
             $size_meta = get_post_meta($value, 'wpcf-size', true);
             $unit_meta = get_post_meta($value, 'wpcf-unit', true);
-            $console[] = $unit_meta;
+            $pack_units[] = [$size_meta, $unit_meta];
             $author = get_post_field( 'post_author', $value );
             $default_package = get_post_meta($value, 'wpcf-default-package', true);
             if($author == get_current_user_id() || $default_package){
@@ -386,34 +391,118 @@ function indppl_get_product_info_ajax(){
     <?php
     $new_size .= ob_get_clean();
 
+    $cups_active = false;
+    // $app_rates_active = false;
+    if($dryliquid == 'dry' && !$default){
+        
+        foreach($pack_units as $key => $v){
+            // if($v[1] == 'lb' || $v[1] == 'g' || $v[1] == 'kg' || $v[1] == 'oz'){
+            //     $app_rates_active = true;
+            // }
+            // $console[] = intval($v[0]);
+            if(($v[1] == 'lb' && intval($v[0]) > 2.2) || ($v[1] == 'g' && intval($v[0]) > 997.9) || ($v[1] == 'kg' && intval($v[0]) > 0.998) || ($v[1] == 'oz' && intval($v[0]) > 35.2)){
+                $cups_active = true;
+            }
+        }
+    }
+    
+    if($cups_active){
+        ob_start();
+        ?>
+        <h3>How much does 5 level coups of this product weigh?</h3>
+        <div class='product-create-5-cups-inside-container'>
+            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num'>
+            <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
+                <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option>
+                <option class='product-create-5-cups-option' value='lb' >lb</option>
+                <option class='product-create-5-cups-option' value='g' >g</option>
+                <option class='product-create-5-cups-option' value='kg' >kg</option>
+                <option class='product-create-5-cups-option' value='oz' >oz</option>
+            </select>
+        </div>
+        <?php
+        // $console = $unit;
+        $cups = ob_get_clean();
+    }
+
+    // app rates chart container
     ob_start();
+    $containers = toolset_get_related_posts(
+        $store_id, // get posts related to this one
+        'store-container', // relationship between the posts
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'child'
+    );
+    if($type == 'ground'){
+        $header = 'In-Ground';
+    }
+
+    ?>
+    <div class='product-create-chart-header-container'>
+        <h3><?php echo $header; ?> Planting Application Rates For:</h3>
+        <div class='product-create-chart-title-container'>
+            <img src="https://via.placeholder.com/100.png">
+            <div style='margin-left: 10px'>
+                <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
+                <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
+            </div>
+        </div>
+    </div>
+    <table>
+    <tr>
+        <th colspan='2'>Choose Application Rates</th>
+        <th colspan='5'>
+            <p>Application Rates Automatically Calculated for Other Sizes</p>
+            <p>Use the numbers below to fine tune your application rate on the left</p>
+        </th>
+    </tr>
+    <tr>
+        <th colspan='2'></th>
+        <?php
+        foreach($product_related as $key => $value){
+            if(in_array($value, $store_related)){
+
+            ?>
+            <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
+            <?php
+            }
+        }
+        ?>
+    </tr>
+    <?php
+    $console = $product_related;
+    foreach($containers as $key => $id){
+        $title = get_the_title($id);
+        $pack_id = $store_related[$key];
+        $package = get_post_meta($pack_id, 'wpcf-unit', true);
+        ?>
+        <tr>
+            <td>
+                <?php echo $title; ?>
+            </td>
+        </tr>
+        <?php
+    }
     
     ?>
-    <h3>When recomending this product, is it recommended by:</h3>
-    <input type='radio' class='product-create-app-rate' name='product-create-app-rate' id='product-create-bag' <?php if(in_array('bag', $console)){ ?>checked<?php }?> value='bag' >Bag
-    <input type='radio' class='product-create-app-rate' name='product-create-app-rate' id='product-create-other' <?php if(!in_array('bag', $console)){ ?>checked<?php }?> value='other' >Other
-    <?php
-    $app_rate = ob_get_clean();
 
-    ob_start();
-    ?>
-    <h3>How much does 5 level coups of this product weigh?</h3>
-    <div class='product-create-5-cups-inside-container'>
-        <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num'>
-        <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
-            <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option>
-        </select>
-    </div>
+    </table>
     <?php
-    $console = $unit;
-    $cups = ob_get_clean();
+    $app_rates_chart = ob_get_clean();
 
+
+    
     $send_array['standard_unit'] = $standard_unit;
     $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
     $send_array['size'] = $sizes;
     $send_array['new_size'] = $new_size;
-    $send_array['app_rate'] = $app_rate;
+    // $send_array['app_rate'] = $app_rate;
     $send_array['cups'] = $cups;
+    $send_array['app_rates_chart'] = $app_rates_chart;
     $send_array['console'] = $console;
     echo json_encode($send_array);
     die();

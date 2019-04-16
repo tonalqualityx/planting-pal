@@ -529,3 +529,6 @@ span.padding-right-5{
 .product-create-product, .product-create-brand{
   height: 34px;
 }
+.product-create-chart-title-container{
+  display: flex;
+}
