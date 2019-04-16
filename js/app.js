@@ -269,7 +269,7 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 array = JSON.parse(e);
-                console.log(array);
+                console.log(array['console']);
                 $('.product-create-brand-cut-off').children().each(function(){
                     $(this).empty();
                 })
@@ -285,7 +285,7 @@ jQuery(document).ready(function( $ ) {
                 if(array['dry_wet']){
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
-                    console.log(units);
+                
                     $.each(units, function(index, value){
                         if(value != array['dry_wet'][2]){
                             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
@@ -294,7 +294,19 @@ jQuery(document).ready(function( $ ) {
                         $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + value + '">' + value + '</option>');
                     })
                 }
-               
+                if(array['cups']){
+                    $('.product-create-5-cups-container').append(array['cups']);
+                    units = indppl_get_units(array['dry_wet'][1]);
+                    $.each(units, function(index, value){
+                        $('.product-create-5-cups').append("<option class='product-create-5-cups-option' value='"+ value + "'>" + value + "</option>");
+                    })
+
+                }
+                // console.log(array['app_rate']);
+                if(array['app_rate']){
+                    $('.product-create-app-rate-container').append(array['app_rate']);
+                }
+                
                 indpplDelLoading();
             }
         })
@@ -323,6 +335,14 @@ jQuery(document).ready(function( $ ) {
         // this needs to remove a package in the back end.
         $(this).parent().remove();
 
+    })
+    $('body').on('click', '.indppl-product-create-size-btn', function(e){
+        e.preventDefault();
+        if(!$(this).hasClass('indppl-background-green')){
+            $(this).addClass('indppl-background-green');
+        }else{
+            $(this).removeClass('indppl-background-green');
+        }
     })
     greyOutAllUnchecked();
     // same as above but it checks on load.

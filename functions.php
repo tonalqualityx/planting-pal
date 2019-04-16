@@ -836,6 +836,8 @@ function indppl_get_current_products($type){
     $products = new WP_Query($args);
     // var_dump(get_post_meta(165, 'wpcf-type')[0]);
     ob_start();
+    $app_rates = indppl_apprates($store_id);
+    var_dump($app_rates);
     ?>
     <table>
         <th class='product-list-width'></th>
