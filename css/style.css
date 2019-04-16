@@ -498,6 +498,7 @@ span.padding-right-5{
   display: flex;
   margin-top: 10px;
   justify-content: flex-start;
+  flex-direction: column;
 }
 .indppl-product-create-size-num{
   flex-basis: 5%;
@@ -516,4 +517,15 @@ span.padding-right-5{
   position: relative;
   top: -6px;
   right: -18px;
+}
+.indppl-product-create-size-num-inside-container{
+  display: flex;
+  justify-content: flex-start;
+}
+.product-create-5-cups-inside-container{
+  display: flex;
+  max-width: 300px;
+}
+.product-create-product, .product-create-brand{
+  height: 34px;
 }

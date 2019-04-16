@@ -222,11 +222,11 @@ function indppl_add_new_product_ajax(){
                     </div>
                     <div class='product-create-new-size-container'>
                     </div>
-                    <div class='product-create-app-rate'>
+                    <div class='product-create-app-rate-container'>
                     </div>
-                    <div class='product-create-5-cups'>
+                    <div class='product-create-5-cups-container'>
                     </div>
-                    <div class='product-create-save-done'>
+                    <div class='product-create-save-done-container'>
                     </div>
                 </div>
             </form>
@@ -298,6 +298,7 @@ function indppl_get_product_info_ajax(){
     $default = get_post_meta($product_id, 'wpcf-default', true);
     $unit = get_post_meta($product_id, 'wpcf-unit', true);
     $dryliquid = get_post_meta($product_id, 'wpcf-dryliquid', true);
+    
     $send_array = array();
     if($default){
         $standard_unit = "<div id='product-create-standard-unit' data-unit='" . $unit . "'></div>";
@@ -338,14 +339,20 @@ function indppl_get_product_info_ajax(){
         'child'
     );
     $sizes = '';
+    $console = [];
+    ob_start();
+    ?>
+    <h3>Select the sizes you stock:</h3>
+    <?php
     if($product_related){
         foreach ($product_related as $key => $value) {
             $size_meta = get_post_meta($value, 'wpcf-size', true);
             $unit_meta = get_post_meta($value, 'wpcf-unit', true);
+            $console[] = $unit_meta;
             $author = get_post_field( 'post_author', $value );
             $default_package = get_post_meta($value, 'wpcf-default-package', true);
             if($author == get_current_user_id() || $default_package){
-                ob_start();
+                
                 // echo $store_id;
                 $in_store = '';
                 if(in_array($value, $store_related)){
@@ -355,28 +362,59 @@ function indppl_get_product_info_ajax(){
                 // echo $default_package;
                 
                 ?>
+                
                 <a href='#' class='<?php echo $in_store; ?> indppl-product-create-size-btn' data-size='<?php echo $size_meta; ?>' data-unit='<?php echo $unit_meta;?>'><?php echo $size_meta . " " . $unit_meta; ?></a>
                 <?php
-                $sizes .= ob_get_clean();
+                
             }
 
 
         }
     }
+    $sizes .= ob_get_clean();
+
     ob_start();
     ?>
-    <input type='number' class='indppl-product-create-size-num' id='indpll-product-create-size-num' min='0' name='indppl-product-create-size-num'>
-    <select class='product-create-standard-unit-add' id='product-create-standard-unit-add' name='product-create-standard-unit-add'>
-        <option class='product-create-standard-unit-add-option' value='' disabled selected>Select Unit</option>
-    </select>
-    <a href='#' id='indppl-product-create-new-size-btn' class='indppl-button'>Create</a>
+    <h3>Create a new size:</h3>
+    <div class='indppl-product-create-size-num-inside-container'>
+        <input type='number' class='indppl-product-create-size-num' id='indpll-product-create-size-num' min='0' name='indppl-product-create-size-num'>
+        <select class='product-create-standard-unit-add' id='product-create-standard-unit-add' name='product-create-standard-unit-add'>
+            <option class='product-create-standard-unit-add-option' value='' disabled selected>Select Unit</option>
+        </select>
+        <a href='#' id='indppl-product-create-new-size-btn' class='indppl-button'>Create</a>
+    </div>
     <?php
     $new_size .= ob_get_clean();
+
+    ob_start();
+    
+    ?>
+    <h3>When recomending this product, is it recommended by:</h3>
+    <input type='radio' class='product-create-app-rate' name='product-create-app-rate' id='product-create-bag' <?php if(in_array('bag', $console)){ ?>checked<?php }?> value='bag' >Bag
+    <input type='radio' class='product-create-app-rate' name='product-create-app-rate' id='product-create-other' <?php if(!in_array('bag', $console)){ ?>checked<?php }?> value='other' >Other
+    <?php
+    $app_rate = ob_get_clean();
+
+    ob_start();
+    ?>
+    <h3>How much does 5 level coups of this product weigh?</h3>
+    <div class='product-create-5-cups-inside-container'>
+        <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num'>
+        <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
+            <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option>
+        </select>
+    </div>
+    <?php
+    $console = $unit;
+    $cups = ob_get_clean();
 
     $send_array['standard_unit'] = $standard_unit;
     $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
     $send_array['size'] = $sizes;
     $send_array['new_size'] = $new_size;
+    $send_array['app_rate'] = $app_rate;
+    $send_array['cups'] = $cups;
+    $send_array['console'] = $console;
     echo json_encode($send_array);
     die();
 }
