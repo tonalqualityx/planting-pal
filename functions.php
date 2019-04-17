@@ -395,6 +395,37 @@ function indppl_apprates($store_id, $type = null, $args = null) {
 
 }
 
+function indppl_delete_apprate($store, $args = null) {
+    
+    $apprates = array();
+    
+    // If no arguments are given, wipe them all out
+    if(!$args){
+        $apprates = json_encode(array('ground' => array(), 'pots' => array(), 'beds' => array()));
+        $update = update_post_meta($store_id, 'wpcf-apprates', $apprates);
+
+        $results = array('apprates' => $apprates, 'update' => $update);
+
+    } else {
+        
+        $apprates = json_decode( get_post_meta( $store, 'wpcf-apprates', true));
+
+        if(is_array($args[0])){
+            // We have many items to remove
+            foreach($args as $k => $v) {
+                // Version 1.1
+            }
+
+        } else {
+            // We have just one item to remove
+            // Version 1.1
+        }
+
+    }
+
+    return $results;
+}
+
 function dummy_data() {
     // return '<h1>sdfsdf</h1>';
     $args = array(
