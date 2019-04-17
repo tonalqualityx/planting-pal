@@ -236,7 +236,7 @@ function indppl_import() {
                 $test = update_post_meta($cpt_id, 'wpcf-apprate-qty', $product['apprates']['ground'][$cont->post_title]['qty']);
                 $test2 = update_post_meta($cpt_id, 'wpcf-apprate-unit-holdover', $product['apprates']['ground'][$cont->post_title]['unit']);
 
-                var_dump($test);
+                
                 // }
 
             }
