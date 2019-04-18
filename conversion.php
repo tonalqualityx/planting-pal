@@ -1090,14 +1090,26 @@ function findCups($in_value, $in_unit, $in_target)
     }
 } // end FindCups
 
-function indppl_normalize($items = array(), $out_unit, $cups = null){
+function indppl_normalize($items = array(), $out_unit = null, $cups = null){
     // Enter an array of items to normalize to one unit type and spit them back in order
     // from largest to smallest. Hooray.
 
 
     $units = indppl_get_units();
 
+    // Find the most common unit
+    $common = array();
+    foreach($items as $item){
+        $common[] = $item['unit'];
+    }
+
+    $values = array_count_values($common);
+    asort($values);
+
+    var_dump($values);
+
     foreach($items as $k => $val){
+
         
         if (in_array($val['unit'], $units['volume'])) {
             $item_type = 'volume';

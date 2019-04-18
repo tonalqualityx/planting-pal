@@ -55,14 +55,23 @@ if(isset($_POST['storeid'])){
     foreach($products as $key => $val) {
         
         $meta = get_post_meta( $key);
-        $packages = types_child_posts('package');
+        // var_dump($key);
+        $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
+        // var_dump($packages);
+        echo "<br />";
         $convert = array();
         
         foreach($packages as $package) {
-            $size = get_post_meta($package->ID, 'wpcf-size', TRUE);
-            $unit = get_post_meta($package->ID, 'wpcf-unit', TRUE);
-            
+            $amount = get_post_meta($package, 'wpcf-size', TRUE);
+            $unit = get_post_meta($package, 'wpcf-unit', TRUE);
+            $convert[$amount . " " . $unit] = array(
+                'amount' => $amount,
+                'unit'  => $unit,
+            );
+            // var_dump($convert);
         } 
+
+        $normalized_packs = indppl_normalize($convert);
 
     }
 
