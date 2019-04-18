@@ -439,10 +439,11 @@ function indppl_get_product_info_ajax(){
         'child'
     );
     $test = array('parent' => array($product_id), 'child' => $containers);
+    $role = array('role_to_return' => 'all');
     $pro_container = toolset_get_related_posts(
         $test,
         'default-apprate',
-        ['role_to_return' => 'all'],
+        ['role_to_return' => 'all']
     );
 
     if($type == 'ground'){

@@ -963,7 +963,7 @@ function getMass($in_value, $in_input, $in_output)
     };
 };
 // CONVERSION: DENSITY
-function getDensity($in_value, $in_input, $in_output)
+function getDensity($in_value, $in_output)
 {
     $pre_calc = getVolume("5", "cup", $in_output);
     return $pre_calc / $in_value;
@@ -1089,3 +1089,71 @@ function findCups($in_value, $in_unit, $in_target)
         return getVolume($in_value, $in_unit, "cup");
     }
 } // end FindCups
+
+function indppl_normalize($items = array(), $out_unit, $cups = null){
+    // Enter an array of items to normalize to one unit type and spit them back in order
+    // from largest to smallest. Hooray.
+
+
+    $units = indppl_get_units();
+
+    foreach($items as $k => $val){
+        
+        if (in_array($val['unit'], $units['volume'])) {
+            $item_type = 'volume';
+        } else {
+            $item_type = 'mass';
+        }
+
+        if (in_array($out_unit, $units['volume'])) {
+            $out_type = 'volume';
+        } else {
+            $out_type = 'mass';
+        }
+   
+        //Compare and run the functions accordingly
+        if($item_type == $out_unit) {
+            $results[$k] = call_user_func("get" . ucfirst($item_type), $val['amount'] );
+        }
+        
+    }
+    
+
+
+}
+
+function indppl_get_units($return = 'all'){
+    $units = array(
+        "volume" => array(
+            "l",
+            "ci",
+            "cuft",
+            "cy",
+            "pt-d",
+            "qt-d",
+            "tsp",
+            "tbls",
+            "floz",
+            "cup",
+            "pt-l",
+            "qt-l",
+            "gal",
+            "cc",
+            "ml",
+        ),
+        "mass" => array(
+            "lbs",
+            "oz",
+            "g",
+            "kg",
+        ),
+    );
+
+    if($return != 'all'){
+        $units = $units[$return];
+    }
+
+    return $units;
+
+    
+}
