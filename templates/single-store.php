@@ -5,6 +5,77 @@
 wp_head();
 
 $storeid = get_the_ID(  );
+
+if(isset($_POST['storeid'])){
+
+    $ground = $_POST['ground'];
+    $ground = array_filter($ground);
+
+    $apprates = indppl_apprates($storeid);
+
+    $products = array();
+
+    foreach($ground as $container => $count){
+        foreach($apprates['ground'] as $key => $val) {
+            if(array_key_exists($container, $apprates['ground'][$key]['containers'])){
+                $product = get_the_title($key);
+                $standard = get_post_meta($key, 'wpcf-unit', TRUE);
+                $brand = get_the_terms($key, 'brand');
+                $brand = $brand[0];
+                $plant = get_the_title($container);
+                $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
+                $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
+                $need = 0;
+                if($standard != 'lb'){
+                    $need = getVolume($amount, $unit, $standard);
+                    echo "<h2>Volume: $need</h2>";
+                } else {
+                    $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
+                    $calc = getDensity($cups, $unit);
+                    $need = $amount/$calc;
+                    echo "<h2>Weight: $cups lbs = $calc $unit so $amount $unit = $need lbs</h2>";
+                }
+                
+                if(isset($products[$key])){
+                    $products[$key]['need'] += $need;
+                    // echo "true";
+                } else {
+                    $products[$key]['name'] = $brand->name . " " . $product;
+                    $products[$key]['need'] = $need;
+                    $products[$key]['unit'] = $standard;
+                }
+                
+                // var_dump($products);
+
+                echo "<h2>$plant needs $amount $unit of $brand->name $product </h2>";
+            }
+        }
+    }
+
+    foreach($products as $key => $val) {
+        
+        $meta = get_post_meta( $key);
+        // var_dump($key);
+        $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
+        // var_dump($packages);
+        echo "<br />";
+        $convert = array();
+        
+        foreach($packages as $package) {
+            $amount = get_post_meta($package, 'wpcf-size', TRUE);
+            $unit = get_post_meta($package, 'wpcf-unit', TRUE);
+            $convert[$amount . " " . $unit] = array(
+                'amount' => $amount,
+                'unit'  => $unit,
+            );
+            // var_dump($convert);
+        } 
+
+        $normalized_packs = indppl_normalize($convert);
+
+    }
+
+}
 ?>
 
 <body>
@@ -45,7 +116,7 @@ $storeid = get_the_ID(  );
             </div>
         </div>
     </div>
-    <form action="/proces's/" method="post">
+    <form action="" method="post">
       <input type="hidden" name="storeid" value="<?=$storeid?>">
     <div class="row type-header">
         <div class="col">
@@ -73,7 +144,7 @@ $storeid = get_the_ID(  );
 
                 <div class="row">
                     <div class="col-3 offset-2" id="qty">
-                        <input type="number" class="rounded-input margin-auto" name="IG|<?php  ?>" min="0">
+                        <input type="number" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0">
                     </div>
                     <div class="col-4" id="plant-size">
                         <p class="plant-size-format"><?php echo $container->post_title; ?></p>
