@@ -52,7 +52,7 @@ function indppl_save_container_data_ajax(){
     $send_back_arrary = [];
     
     // var_dump(get_post_meta($store_container_relations[1]));
-    if(isset($_POST['default_container'])){
+    // if(isset($_POST['default_container'])){
         if(isset($_POST['non_default'])){
             $non_default = $_POST['non_default'];
         }
@@ -88,6 +88,7 @@ function indppl_save_container_data_ajax(){
                 }
             }
         }
+        // var_dump($available);
         foreach($available as $key => $value){
             $cont_avail = toolset_connect_posts('store-container', $store_id, $value);
             // var_dump($cont_avail);
@@ -179,8 +180,8 @@ function indppl_save_container_data_ajax(){
         //     // }
         //     var_dump($v);
         // }
-        echo json_encode($send_back_arrary);
-    }
+        // echo json_encode($send_back_array);
+    // }
     die();
 }
 add_action( 'wp_ajax_indppl_save_container_data_ajax', 'indppl_save_container_data_ajax' );
@@ -437,6 +438,13 @@ function indppl_get_product_info_ajax(){
         'post_id',
         'child'
     );
+    $test = array('parent' => array($product_id), 'child' => $containers);
+    $pro_container = toolset_get_related_posts(
+        $test,
+        'default-apprate',
+        ['role_to_return' => 'all'],
+    );
+
     if($type == 'ground'){
         $header = 'In-Ground';
     }
@@ -452,7 +460,7 @@ function indppl_get_product_info_ajax(){
             </div>
         </div>
     </div>
-    <table>
+    <table class='product-create-chart-table'>
     <tr>
         <th colspan='2'>Choose Application Rates</th>
         <th colspan='5'>
@@ -463,6 +471,7 @@ function indppl_get_product_info_ajax(){
     <tr>
         <th colspan='2'></th>
         <?php
+
         foreach($product_related as $key => $value){
             if(in_array($value, $store_related)){
 
@@ -474,16 +483,60 @@ function indppl_get_product_info_ajax(){
         ?>
     </tr>
     <?php
-    $console = $product_related;
+    $console = $pro_container;
     foreach($containers as $key => $id){
         $title = get_the_title($id);
         $pack_id = $store_related[$key];
         $package = get_post_meta($pack_id, 'wpcf-unit', true);
+        // $app_qty_array = [];
         ?>
         <tr>
             <td>
                 <?php echo $title; ?>
             </td>
+            <td>
+                <?php
+                foreach($pro_container as $k => $v){
+                    if($id == $v['child']){
+                        // $app_qty_array[$k] = get_post_meta($v['intermediary']);
+                        $app_qty = get_post_meta($v['intermediary'], 'wpcf-apprate-qty', true);
+                        if($app_qty){
+                            ?>
+                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
+                            <?php
+                        }else{
+                            ?>
+                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
+                            <?php
+                        }
+                        echo ' ';
+                        
+                        $app_unit = get_post_meta($v['intermediary'], 'wpcf-apprate-unit-holdover', true);
+                        ?>
+                        <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
+                            
+                        </select>
+                        <?php
+                    }
+                }
+                ?>
+            </td>
+            <?php
+            foreach($product_related as $k => $val){
+                if(in_array($val, $store_related)){
+                    
+                    $package_size = get_post_meta($val, 'wpcf-size', true);
+                    $package_unit = get_post_meta($val, 'wpcf-unit', true);
+                    $conversion = getVolume($app_qty, 'tsp', 'floz');
+                    $final = $package_size / $conversion;
+                    
+                    ?>
+                    <td><?php echo $final . " Plants";  ?></td>
+                    <?php
+                }
+            }
+
+            ?>
         </tr>
         <?php
     }
@@ -491,6 +544,11 @@ function indppl_get_product_info_ajax(){
     ?>
 
     </table>
+    <div class="product-create-submit-container">
+        <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
+        <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="Save and add another product"/>
+        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="exit"/>
+    </div>
     <?php
     $app_rates_chart = ob_get_clean();
 
@@ -510,3 +568,36 @@ function indppl_get_product_info_ajax(){
 add_action( 'wp_ajax_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax' );
 add_action('wp_ajax_nopriv_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax');
 
+function indppl_save_product_ajax(){
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['brand'])){
+        $brand = $_POST['brand'];
+    }
+    if(isset($_POST['product_input'])){
+        $product_rate = $_POST['product_input'];
+    }
+    if(isset($_POST['product_select'])){
+        $product_unit = $_POST['product_select'];
+    }
+    $send_array = array($product_id => array());
+    foreach($product_rate as $key => $value){
+        $temp = array(
+                'unit' => $product_unit[$key]['value'],
+                'amount' => $value['value'],
+        );
+        $send_array[$product_id]['containers'][$value['name']] = $temp;
+    }
+    $save = indppl_apprates($store_id, $type, $send_array);
+    var_dump(json_encode($save));
+    die();
+}
+add_action( 'wp_ajax_indppl_save_product_ajax', 'indppl_save_product_ajax' );
+add_action('wp_ajax_nopriv_indppl_save_product_ajax', 'indppl_save_product_ajax');
