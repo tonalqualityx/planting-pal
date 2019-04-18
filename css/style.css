@@ -451,6 +451,7 @@ span.padding-right-5{
   /* border: #00000070 solid 1px; */
   background: white;
   padding: 15px;
+  overflow-y: auto;
 }
 .modal-close{
   position: relative;
@@ -529,3 +530,13 @@ span.padding-right-5{
 .product-create-product, .product-create-brand{
   height: 34px;
 }
+.product-create-chart-title-container{
+  display: flex;
+}
+.indppl-product-create-chart-app-rate-num{
+  width: 25%!important;
+  display: inline-block!important;
+}
+/* td:nth-last-child(2n){
+  border-right: black solid 1px;
+} */

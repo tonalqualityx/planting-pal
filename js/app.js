@@ -141,7 +141,7 @@ jQuery(document).ready(function( $ ) {
             }
         });
 
-        // console.log(non_default);
+        console.log(available);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -257,6 +257,7 @@ jQuery(document).ready(function( $ ) {
         indpplAddLoading();
         var product_id = $(this).val();
         var store_id = $('#store-id').val();
+        var type = $('#indppl-modal-product-type').val();
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -265,6 +266,7 @@ jQuery(document).ready(function( $ ) {
                 action: 'indppl_get_product_info_ajax',
                 product_id: product_id,
                 store_id: store_id,
+                type: type,
             },
             type: 'POST',
             success: function(e){
@@ -285,27 +287,42 @@ jQuery(document).ready(function( $ ) {
                 if(array['dry_wet']){
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
-                
+                    console.log(array['dry_wet'][1]);
                     $.each(units, function(index, value){
                         if(value != array['dry_wet'][2]){
-                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
                             
                         }
-                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + value + '">' + value + '</option>');
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + value + '" selected>' + value + '</option>');
                     })
                 }
                 if(array['cups']){
                     $('.product-create-5-cups-container').append(array['cups']);
-                    units = indppl_get_units(array['dry_wet'][1]);
-                    $.each(units, function(index, value){
-                        $('.product-create-5-cups').append("<option class='product-create-5-cups-option' value='"+ value + "'>" + value + "</option>");
-                    })
 
                 }
                 // console.log(array['app_rate']);
-                if(array['app_rate']){
-                    $('.product-create-app-rate-container').append(array['app_rate']);
+                // if(array['app_rate']){
+                //     $('.product-create-app-rate-container').append(array['app_rate']);
+                // }
+                if(array['app_rates_chart']){
+                    $('.product-create-app-rates-chart-container').append(array['app_rates_chart']);
                 }
+                var units = indppl_get_units(array['dry_wet'][1]);
+                console.log(units);
+                $('.indppl-product-create-chart-app-unit').each(function(){
+                    var select = $(this).data('unit');
+                    var elem = $(this);
+                    console.log(select);
+                    $.each(units, function(index, value){
+                        if(select == index){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                    });
+                    // console.log(unit);
+                });
                 
                 indpplDelLoading();
             }
@@ -344,6 +361,35 @@ jQuery(document).ready(function( $ ) {
             $(this).removeClass('indppl-background-green');
         }
     })
+    $('body').on('click', '.product-create-submit', function(e){
+        e.preventDefault();
+        // var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
+        var type = $('#indppl-modal-product-type').val();
+        var product_id = $('#product-create-product').val();
+        var brand = $('#product-create-brand').val();
+        var store_id = $('#store-id').val();
+        var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
+        var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
+        // console.log(product_array);
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_save_product_ajax',
+                product_id: product_id,
+                store_id: store_id,
+                type: type,
+                brand: brand,
+                product_input: product_input,
+                product_select: product_select,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+            }
+        });
+    });
     greyOutAllUnchecked();
     // same as above but it checks on load.
     check_on_load_and_click();
@@ -361,9 +407,9 @@ function greyOutAllUnchecked(){
 
 function indppl_get_units($type = 'dry'){
     if($type == 'dry'){
-        return ['tsp', 'tbls', 'qt', 'cuft', 'lb', 'g', 'kg', 'oz', 'mL', 'L', 'cups', 'eaches'];
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'eaches': 'Each'};
     }else{
-        return ['tsp', 'tbls', 'oz', 'qt', 'gal', 'mL', 'L', 'cups'];
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
     }  
 }
 
