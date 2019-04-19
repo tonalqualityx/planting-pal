@@ -1127,9 +1127,9 @@ function indppl_normalize($items = array(), $unit, $cups){
             $items[$k]['standard-amount'] = $item['amount']/$items[$k]['standard-amount-awesome'];
         }
     }
-    echo "<h1>NORMALIZE FOR $unit </h1>";
-    var_dump($items);
-    echo "<br /><br />";
+
+    return $items;
+    
 
     // foreach($items as $k => $val){
 
