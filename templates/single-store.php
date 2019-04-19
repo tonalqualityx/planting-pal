@@ -21,19 +21,24 @@ if(isset($_POST['storeid'])){
                 $product = get_the_title($key);
                 $standard = get_post_meta($key, 'wpcf-unit', TRUE);
                 $brand = get_the_terms($key, 'brand');
+                $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
                 $brand = $brand[0];
                 $plant = get_the_title($container);
                 $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
                 $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
                 $need = 0;
+                $unit_args = array(array('unit' => $unit, 'amount' => $amount));
+                indppl_normalize($unit_args, $standard, $cups);
+
                 if($standard != 'lb'){
                     $need = getVolume($amount, $unit, $standard);
-                    echo "<h2>Volume: $need</h2>";
+                    echo "<h2>Volume: $need $standard</h2>";
                 } else {
-                    $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
                     $calc = getDensity($cups, $unit);
-                    $need = $amount/$calc;
-                    echo "<h2>Weight: $cups lbs = $calc $unit so $amount $unit = $need lbs</h2>";
+                    $cups1 = $cups/5;
+                    $amount_cups = getVolume($amount, $unit, 'cup');
+                    $need = $amount_cups * $cups1;
+                    echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
                 }
                 
                 if(isset($products[$key])){
@@ -47,15 +52,16 @@ if(isset($_POST['storeid'])){
                 
                 // var_dump($products);
 
-                echo "<h2>$plant needs $amount $unit of $brand->name $product </h2>";
+                echo "<h2>$count $plant needs $amount $unit of $brand->name $product </h2>";
             }
         }
     }
 
     foreach($products as $key => $val) {
         
-        $meta = get_post_meta( $key);
-        // var_dump($key);
+        $standard = get_post_meta( $key, 'wpcf-standard-unit', TRUE);
+        var_dump($standard);
+        echo "<br />";
         $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
         // var_dump($packages);
         echo "<br />";
@@ -71,7 +77,7 @@ if(isset($_POST['storeid'])){
             // var_dump($convert);
         } 
 
-        $normalized_packs = indppl_normalize($convert);
+        // $normalized_packs = indppl_normalize($convert);
 
     }
 
@@ -157,7 +163,8 @@ if(isset($_POST['storeid'])){
 
     <?php $stati = indppl_user_status(7);
     $stati = array('paidaccount');
-    if(in_array('paidaccount', $stati)){ ?>
+    // if(in_array('paidaccount', $stati)){
+        if(false){ ?>
 
 
         <div class="row type-header">
@@ -274,7 +281,7 @@ if(isset($_POST['storeid'])){
     <?php } ?>
         <div class="container footer">
             <div class="row">
-                <div class="col"><input type="image" border="0" src="/assets/img/next-button.png" class="next-button"></form>
+                <div class="col"><input type="image" border="0" src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/next-button.png" class="next-button"></form>
                     <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p>
                 </div>
             </div>
