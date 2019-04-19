@@ -287,13 +287,14 @@ jQuery(document).ready(function( $ ) {
                 if(array['dry_wet']){
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
-                    console.log(array['dry_wet'][1]);
+                    console.log(array['dry_wet'][2]);
                     $.each(units, function(index, value){
+                        console.log(value);
                         if(value != array['dry_wet'][2]){
                             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
                             
                         }
-                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + value + '" selected>' + value + '</option>');
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + value + '</option>');
                     })
                 }
                 if(array['cups']){
@@ -323,6 +324,9 @@ jQuery(document).ready(function( $ ) {
                     });
                     // console.log(unit);
                 });
+                if(array['next_btn']){
+                    $('.product-create-save-done-container').append(array['next_btn']);
+                }
                 
                 indpplDelLoading();
             }
@@ -340,17 +344,29 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var size = $('#indpll-product-create-size-num').val();
         var unit = $('#product-create-standard-unit-add').val();
-        $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-new-package indppl-background-green" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>')
+        $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>');
+
     })
-    $('body').on('mouseenter', '.indppl-new-package', function(){
-        $(this).append('<span class="indppl-x">X</span>');
+    $('body').on('mouseenter', '.indppl-background-green', function(){
+        if($(this).hasClass('indppl-non-default-package')){
+            $(this).append('<span class="indppl-x">X</span>');
+        }
     })
-    $('body').on('mouseleave', '.indppl-new-package', function(){
+    $('body').on('mouseleave', '.indppl-background-green', function(){
         $(".indppl-x").remove();
     })
+    
     $('body').on('click', '.indppl-x', function(){
         // this needs to remove a package in the back end.
-        $(this).parent().remove();
+        if($(this).parent().hasClass('indppl-non-default-package')){
+            console.log('inside');
+            $(this).parent().hide();
+            setTimeout(function(){
+                $(this).parent().removeClass('indppl-background-green');
+            }, 200);
+        }else{
+            $(this).parent().remove();
+        }
 
     })
     $('body').on('click', '.indppl-product-create-size-btn', function(e){
@@ -363,6 +379,7 @@ jQuery(document).ready(function( $ ) {
     })
     $('body').on('click', '.product-create-submit', function(e){
         e.preventDefault();
+        indpplAddLoading();
         // var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
         var type = $('#indppl-modal-product-type').val();
         var product_id = $('#product-create-product').val();
@@ -371,6 +388,30 @@ jQuery(document).ready(function( $ ) {
         var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
         var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
         // console.log(product_array);
+        var package_array = [];
+        var package_remove = [];
+        var new_pack = {};
+        var i = 0;
+        $('.indppl-product-create-size-btn').each(function(){
+            if($(this).hasClass('indppl-background-green')){
+                if($(this).hasClass('indppl-new-package')){
+                    new_pack[i] = {};
+                    new_pack[i]['size'] = $(this).data('size');
+                    new_pack[i]['unit'] = $(this).data('unit');
+                    new_pack[i]['name'] = brand + " " + $('#product-create-product option:selected').text() + " " + $(this).data('size') + $(this).data('unit');
+                    i++;
+                }else{
+                    package_array.push($(this).data('id'));
+                }
+            }else{
+                if($(this).hasClass('indppl-non-default-package')){
+                    package_remove.push({'id': $(this).data('id')})
+                }else{
+                    package_remove.push($(this).data('id'));
+                }
+            }
+        })
+        console.log(new_pack);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -381,15 +422,45 @@ jQuery(document).ready(function( $ ) {
                 store_id: store_id,
                 type: type,
                 brand: brand,
+                package_array: package_array,
+                package_remove: package_remove,
                 product_input: product_input,
                 product_select: product_select,
+                new_pack: new_pack,
             },
             type: 'POST',
             success: function(e){
                 console.log(e);
+                $('.product-create-app-rates-chart-container').empty();
+                $('.product-create-app-rates-chart-container').append(e);
+                var units = indppl_get_units(array['dry_wet'][1]);
+                console.log(units);
+                $('.indppl-product-create-chart-app-unit').each(function(){
+                    var select = $(this).data('unit');
+                    var elem = $(this);
+                    console.log(select);
+                    $.each(units, function(index, value){
+                        if(select == index){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                    });
+                    // console.log(unit);
+                });
+                indpplDelLoading();
             }
         });
+
     });
+
+    $('body').on('click', '#product-create-next', function(e){
+        e.preventDefault();
+        var product_id = $('#product-create-product').val();
+        var store_id = $('#store-id').val();
+        var type = $('#indppl-modal-product-type').val();
+    })
     greyOutAllUnchecked();
     // same as above but it checks on load.
     check_on_load_and_click();
@@ -407,7 +478,7 @@ function greyOutAllUnchecked(){
 
 function indppl_get_units($type = 'dry'){
     if($type == 'dry'){
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'eaches': 'Each'};
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'eaches': 'Each', 'Bag': 'Bag'};
     }else{
         return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
     }  
