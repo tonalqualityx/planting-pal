@@ -1123,7 +1123,7 @@ function indppl_normalize($items = array(), $unit, $cups){
             $convert = 'get' . ucfirst($standard_type);
             $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
         } else {
-            $items[$k]['standard-amount-awesome'] = getDensity($cups, $item['unit']);
+            $items[$k]['unit-per-standard'] = getDensity($cups, $item['unit']);
             $items[$k]['standard-amount'] = $item['amount']/$items[$k]['standard-amount-awesome'];
         }
     }
