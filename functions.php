@@ -7,7 +7,7 @@ Collection of functions for the entire site.
 function geofind($lat, $lon) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
-    var_dump($xml);
+    // var_dump($xml);
     $xmlfile = file_get_contents($xml);
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
@@ -365,7 +365,7 @@ function indppl_apprates($store_id, $type = null, $args = null) {
         case 'beds':
 
             foreach($args as $key => $val) {
-                var_dump($val);
+                // var_dump($val);
                 echo "<br /><br />";
                 $apprates[$type][$key][key($val)] = $val[key($val)];
             }
@@ -395,7 +395,7 @@ function indppl_apprates($store_id, $type = null, $args = null) {
 
 }
 
-function indppl_delete_apprate($store, $args = null) {
+function indppl_delete_apprate($store_id, $args = null) {
     
     $apprates = array();
     
@@ -408,13 +408,19 @@ function indppl_delete_apprate($store, $args = null) {
 
     } else {
         
-        $apprates = json_decode( get_post_meta( $store, 'wpcf-apprates', true));
-
-        if(is_array($args[0])){
+        $apprates = json_decode( get_post_meta( $store_id, 'wpcf-apprates', true), true);
+        $results = $apprates;
+        if(is_array($args)){
             // We have many items to remove
             foreach($args as $k => $v) {
-                // Version 1.1
+                if($k == 'ground'){
+                    unset($apprates['ground'][$v]);
+                    // $results = $apprates;
+                }
             }
+            $newapprates = json_encode($apprates);
+            $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
+            $results = array('apprates' => $newapprates, 'update' => $update);
 
         } else {
             // We have just one item to remove
@@ -475,7 +481,7 @@ function dummy_data() {
     $test = indppl_apprates(252, 'pots', $args);
     // $test = indppl_apprates(252);
     
-    var_dump($test);
+    // var_dump($test);
 }
 
 // add_shortcode('indppl-test', 'dummy_data');
@@ -881,6 +887,8 @@ function indppl_get_current_products($type){
     // }
     if(isset($_GET['store-id'])){
         $store_id = $_GET['store-id'];
+    }else if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
     }
     $args = array(
         'post_type' => 'product',
@@ -901,7 +909,8 @@ function indppl_get_current_products($type){
     // var_dump(get_post_meta(165, 'wpcf-type')[0]);
     ob_start();
     $app_rates = indppl_apprates($store_id);
-    var_dump($app_rates);
+    // var_dump($app_rates);
+    // var_dump($type);
     ?>
     <table>
         <th class='product-list-width'></th>
@@ -910,8 +919,65 @@ function indppl_get_current_products($type){
         <th class='product-list-width'>Sizes</th>
 
         <?php
-        foreach($app_rates as $key => $value){
+        $product_array = $app_rates[$type];
+        // var_dump($product_array);
+        if(is_array($product_array)){
+            foreach($product_array as $key => $value){
+                if($key != 0){
+                    // var_dump($key);
+                    $pid = $key;
+                    $title = get_the_title($pid);
+                    $brand = get_the_terms($pid, 'brand');
+                    $default =  get_post_meta($pid, 'wpcf-type');
+                    $package_relations = toolset_get_related_posts(
+                        $pid, // get posts related to this one
+                        'product-package', // relationship between the posts
+                        'parent',
+                        '100',
+                        '0',
+                        array(),
+                        'post_id',
+                        'child'
+                    );
+                    $store_related = toolset_get_related_posts(
+                        $store_id,
+                        'store-package',
+                        'parent',
+                        '100',
+                        '0',
+                        array(),
+                        'post_id',
+                        'child'
+                    );
+                    ?>
+                    <tr class='indppl-table-color-offset'>
+                        <td>
+                            <a href="#" class="indppl-product-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
+                            <a href="#" class="indppl-product-delete" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>delete</a>
+                        </td>
+                        <td>
+                            <?php echo $brand[0]->name; ?>
+                        </td>
+                        <td>
+                            <?php echo $title; ?>
+                        </td>
+                        <td>
+                            <?php
+                            $size_array = array_intersect($package_relations, $store_related);
+                            foreach($size_array as $key => $value){
+                                $meta = get_post_meta($size_array[$key]);
+                                echo $meta['wpcf-size'][0];
+                                echo $meta['wpcf-unit'][0];
+                                echo ' ';
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    <?php  
+                }
+            }
         }
+
         // var_dump(get_post_meta(264, 'wpcf-prod-type')[0]);
         // if($products->have_posts()){
         //     while($products->have_posts()){
@@ -1128,13 +1194,70 @@ function update_package_table($store_id, $product_id, $type){
 
     </table>
     <div class="product-create-submit-container">
+        <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/>
         <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
         <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="Save and add another product"/>
-        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="exit"/>
+        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/>
     </div>
     <?php
     $app_rates_chart = ob_get_clean();
 
     // $send_array['app_rates_chart'] = $app_rates_chart;
     return $app_rates_chart;
+}
+
+function indppl_get_product_info(){
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    
+    ob_start();
+    if($type == 'ground'){
+        $heading = 'Product Selection for In-Ground Plantings';
+    }
+    ?>
+    
+        <div class='slide-in-products-inside-container'>
+            <a href='#' class='modal-close'>X</a>
+            <h2><?php echo $heading; ?></h2>
+            <form id='product-create-form' method="post" action='#' class="form-horizontal">
+                <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
+                <select class='product-create-first-part-container product-create-brand' id='product-create-brand' name='product-create-brand'>
+                    <option value='' disabled selected>Select Brand</option>
+                    <?php
+                    $brands = get_terms('brand');
+                    foreach($brands as $key => $value){
+                        ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> <?php
+                    }
+                    // var_dump($brands);
+                    ?>
+                </select>
+                <select class='product-create-first-part-container product-create-product' id='product-create-product' name='product-create-product'>
+                    <option class='product-create-product-option' value='' disabled selected>Select Product</option>
+                </select>
+                <div class='product-create-brand-cut-off'>
+                    <div class='product-create-first-part-container product-create-add-product-name'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-dry-wet-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-standard-unit-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-size-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-new-size-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-app-rate-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-5-cups-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-save-done-container'>
+                    </div>
+                    <div class='product-create-app-rates-chart-container'>
+                    </div>
+                </div>
+            </form>
+        </div>
+    <?php
+    $return = ob_get_clean();
+    return $return;
 }
