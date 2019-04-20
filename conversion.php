@@ -1090,45 +1090,77 @@ function findCups($in_value, $in_unit, $in_target)
     }
 } // end FindCups
 
-function indppl_normalize($items = array(), $out_unit = null, $cups = null){
+function indppl_normalize($items = array(), $unit, $cups = null){
     // Enter an array of items to normalize to one unit type and spit them back in order
     // from largest to smallest. Hooray.
+    // Each item should be given at least a 'unit' and an 'amount' value
+    // Will return a 'standardized-amount' and 'standardized-unit' value
+    // CANNOT CONTAIN THESE KEYS OR THEY WILL BE OVERWRITEEN 
+    // 'type' 'standardized-unit' 'standardized-value'
 
 
     $units = indppl_get_units();
 
-    // Find the most common unit
-    $common = array();
-    foreach($items as $item){
-        $common[] = $item['unit'];
+    if (in_array($unit, $units['volume'])) {
+        $standard_type = 'volume';
+    } else {
+        $standard_type = 'mass';
     }
 
-    $values = array_count_values($common);
-    asort($values);
+    $ref = &$items; // Copy items so we can manipulate it
+    foreach($ref as $k => $item){
+        // Find the type of the unit
+        if (in_array($item['unit'], $units['volume'])) {
+            $items[$k]['type'] = 'volume';
+        } else {
+            $items[$k]['type'] = 'mass';
+        }
+        
+        // echo "<h4>Type</h4>";
+        // var_dump($items[$k]['type']);
+        // var_dump($standard_type);
+        // Compare and run the appropriate function
+        if($standard_type == $items[$k]['type']){
+            if($unit == $item['unit']){
+                $items[$k]['standard-amount'] = $item['amount'];
+            } else {
+                $convert = 'get' . ucfirst($standard_type);
+                $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
+            }
+        } else {
+            $items[$k]['unit-per-standard'] = getDensity($cups, $item['unit']);
+            $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
+            // echo "<h4>Amount</h4>";
+            // var_dump($items[$k]['amount']);
+        }
+        // echo "<h4>{$item['amount']} {$item['unit']}<br /> Unit: $unit <br /> Per Standard: {$items[$k]['unit-per-standard']}<br />Item Unit: {$item['unit']}<br />5 Cups = $cups <br /> Size = {$item['amount']} <br /> Standard size: {$items[$k]['standard-amount']}</h4>";
+    }
+    
+    // var_dump($items);
+    return $items;
+    
 
-    var_dump($values);
-
-    foreach($items as $k => $val){
+    // foreach($items as $k => $val){
 
         
-        if (in_array($val['unit'], $units['volume'])) {
-            $item_type = 'volume';
-        } else {
-            $item_type = 'mass';
-        }
+    //     if (in_array($val['unit'], $units['volume'])) {
+    //         $item_type = 'volume';
+    //     } else {
+    //         $item_type = 'mass';
+    //     }
 
-        if (in_array($out_unit, $units['volume'])) {
-            $out_type = 'volume';
-        } else {
-            $out_type = 'mass';
-        }
+    //     if (in_array($out_unit, $units['volume'])) {
+    //         $out_type = 'volume';
+    //     } else {
+    //         $out_type = 'mass';
+    //     }
    
-        //Compare and run the functions accordingly
-        if($item_type == $out_unit) {
-            $results[$k] = call_user_func("get" . ucfirst($item_type), $val['amount'] );
-        }
+    //     //Compare and run the functions accordingly
+    //     if($item_type == $out_unit) {
+    //         $results[$k] = call_user_func("get" . ucfirst($item_type), $val['amount'] );
+    //     }
         
-    }
+    // }
     
 
 
@@ -1158,6 +1190,7 @@ function indppl_get_units($return = 'all'){
             "oz",
             "g",
             "kg",
+            "lb"
         ),
     );
 
