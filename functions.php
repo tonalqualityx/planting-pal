@@ -1124,6 +1124,7 @@ function update_package_table($store_id, $product_id, $type){
     $console = $pro_container;
     // var_dump($containers); used for sorting
     foreach($containers as $key => $id){
+        // echo 'inside';
         $title = get_the_title($id);
         $pack_id = $store_related[$key];
         $package = get_post_meta($pack_id, 'wpcf-unit', true);
@@ -1136,6 +1137,7 @@ function update_package_table($store_id, $product_id, $type){
             <td>
                 <?php
                 foreach($pro_container as $k => $v){
+                    
                     if($id == $v['child']){
                         // $app_qty_array[$k] = get_post_meta($v['intermediary']);
                         // var_dump($type);
@@ -1168,6 +1170,21 @@ function update_package_table($store_id, $product_id, $type){
                         <?php
                     }
                 }
+                if(!$pro_container){
+                    if(!empty($app_rates[$type][$product_id]['containers'])){
+                        $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
+                    }
+                    if(!empty($app_rates[$type][$product_id]['containers'])){
+                        $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
+                    }
+                    ?>
+                    <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?>>
+                    <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
+                        
+                    </select>
+                    <?php
+                    
+                }
                 ?>
             </td>
             <?php
@@ -1178,6 +1195,7 @@ function update_package_table($store_id, $product_id, $type){
                     $package_unit = get_post_meta($val, 'wpcf-unit', true);
                     $conversion = getVolume($app_qty, $app_unit, $package_unit);
                     $final = $package_size / $conversion;
+                    echo $final;
                     
                     ?>
                     <td><?php echo round($final, 2) . " Plants";  ?></td>
@@ -1222,7 +1240,7 @@ function indppl_get_product_info(){
             <h2><?php echo $heading; ?></h2>
             <form id='product-create-form' method="post" action='#' class="form-horizontal">
                 <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
-                <select class='product-create-first-part-container product-create-brand' id='product-create-brand' name='product-create-brand'>
+                <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
                     <option value='' disabled selected>Select Brand</option>
                     <?php
                     $brands = get_terms('brand');
@@ -1232,7 +1250,7 @@ function indppl_get_product_info(){
                     // var_dump($brands);
                     ?>
                 </select>
-                <select class='product-create-first-part-container product-create-product' id='product-create-product' name='product-create-product'>
+                <select class='product-create-product' id='product-create-product' name='product-create-product'>
                     <option class='product-create-product-option' value='' disabled selected>Select Product</option>
                 </select>
                 <div class='product-create-brand-cut-off'>

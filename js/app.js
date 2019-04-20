@@ -381,18 +381,24 @@ jQuery(document).ready(function( $ ) {
         console.log(brand);
         var store_id = $('#store-id').val();
         var product_unit = $('.indppl-new-package').first().data('unit');
-        var cups_num = $('.indppl-product-create-cups-num').val();
-        var cups_unit = $('.product-create-5-cups').val();
+        
         var product_dryliquid = $('.product-create-dry-wet').val();
         var product_name = $('.indppl-add-product-name').val();
-        var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
-        var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
-        // console.log(product_array);
+        if(!$(this).is('#product-create-next')){
+            var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
+            var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
+        }else{
+            var cups_num = $('.indppl-product-create-cups-num').val();
+            var cups_unit = $('.product-create-5-cups').val();
+        }
+            // console.log(product_array);
         var elem = $(this);
         var package_array = [];
         var package_remove = [];
         var new_pack = {};
         var i = 0;
+        console.log(product_input);
+        console.log(product_select);
         if($(this).is('#product-create-next')){
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-background-green')){
@@ -441,12 +447,13 @@ jQuery(document).ready(function( $ ) {
                 // console.log(e);
                 array = JSON.parse(e);
                 console.log(array);
+                console.log(array['console']);
                 if(product_id == 'new'){
                     $('.product-create-product').children().last().attr('value', array['product_id']);
                 }
                 $('.product-create-app-rates-chart-container').empty();
                 $('.product-create-app-rates-chart-container').append(array['app_rates']);
-                // var units = indppl_get_units(array['dry_wet'][1]);
+                var units = indppl_get_units(array['dryliquid']);
                 // console.log(units);
                 $('.indppl-product-create-chart-app-unit').each(function(){
                     var select = $(this).data('unit');
@@ -465,6 +472,7 @@ jQuery(document).ready(function( $ ) {
                 if($(elem).is('#product-create-next')){
                     $('.product-create-app-rates-chart-container').slideToggle();
                     $('.product-create-first-part-container').slideToggle();
+                    
                 }
                 if($(elem).is('#product-create-submit-exit')){
                     // getProductInfo();
@@ -486,6 +494,7 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         $('.product-create-app-rates-chart-container').slideToggle();
         $('.product-create-first-part-container').slideToggle();
+        $('.indppl-background-green').removeClass('indppl-new-package');
     })
 
     $('body').on('click', '.indppl-product-edit', function(e){

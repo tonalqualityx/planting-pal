@@ -266,6 +266,7 @@ function indppl_get_product_info_ajax(){
     }else{
         $default = get_post_meta($product_id, 'wpcf-default', true);
         $unit = get_post_meta($product_id, 'wpcf-unit', true);
+        $fivecups = get_post_meta($product_id, 'wpcf-5cups', true);
         $dryliquid = get_post_meta($product_id, 'wpcf-dryliquid', true);
     }
 
@@ -312,7 +313,7 @@ function indppl_get_product_info_ajax(){
         'child'
     );
     $sizes = '';
-    $pack_units = [];
+    $pack_units[] = [$fivecups, 'lb'];
     ob_start();
     ?>
     <h3>Select the sizes you stock:</h3>
@@ -321,7 +322,7 @@ function indppl_get_product_info_ajax(){
         foreach ($product_related as $key => $value) {
             $size_meta = get_post_meta($value, 'wpcf-size', true);
             $unit_meta = get_post_meta($value, 'wpcf-unit', true);
-            $pack_units[] = [$size_meta, $unit_meta];
+            // $pack_units[] = [$size_meta, $unit_meta];
             $author = get_post_field( 'post_author', $value );
             $default_package = get_post_meta($value, 'wpcf-default-package', true);
             if($author == get_current_user_id() || $default_package){
@@ -380,16 +381,25 @@ function indppl_get_product_info_ajax(){
     
     if($cups_active || $product_id == 'new'){
         ob_start();
+        $weight_array = ['lb', 'g', 'kg', 'oz'];
         ?>
         <h3>How much does 5 level coups of this product weigh?</h3>
         <div class='product-create-5-cups-inside-container'>
-            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num'>
+            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='<?php echo $fivecups; ?>'>
             <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
-                <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option>
-                <option class='product-create-5-cups-option' value='lb' >lb</option>
-                <option class='product-create-5-cups-option' value='g' >g</option>
-                <option class='product-create-5-cups-option' value='kg' >kg</option>
-                <option class='product-create-5-cups-option' value='oz' >oz</option>
+                <!-- <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option> -->
+                <?php
+                foreach($weight_array as $weight_unit){
+                    if($weight_unit == $finecups[0][1]){
+                        $selected_unit = 'selected';
+                    }
+                    ?>
+                    <option class='product-create-5-cups-option' value='<?php echo $weight_unit; ?>' <?php echo $selected_unit; ?> >
+                    <?php echo $weight_unit; ?>
+                    </option>
+                <?php
+                }
+                ?>
             </select>
         </div>
         <?php
@@ -481,7 +491,7 @@ function indppl_save_product_ajax(){
     if(isset($_POST['cups_unit'])){
         $cups_unit = $_POST['cups_unit'];
     }
-    
+    $console = $cups_num;
     if($product_id == 'new'){
         $new_product_args = array(
             'post_type' => 'product',
@@ -491,8 +501,8 @@ function indppl_save_product_ajax(){
             'meta_input' => array(
                 'wpcf-dryliquid' => $product_dryliquid,
                 'wpcf-unit' => $product_unit,
-                'wpcf-5cups-unit' => $cups_unit,
                 'wpcf-5cups' => $cups_num,
+                'wpcf-5cups-unit' => $cups_unit,
             ),
         );
         $product_id = wp_insert_post($new_product_args);
@@ -508,7 +518,10 @@ function indppl_save_product_ajax(){
         );
         $send_array[$product_id]['containers'][$value['name']] = $temp;
     }
-    $save = indppl_apprates($store_id, $type, $send_array);
+    if($product_rate){
+        // $console = $send_array;
+        $save = indppl_apprates($store_id, $type, $send_array);
+    }
     // var_dump($package_array);
     // var_dump($new_pack);
     foreach($new_pack as $key => $value){
@@ -533,10 +546,12 @@ function indppl_save_product_ajax(){
         }
     }
     $updated_app_rates = update_package_table($store_id, $product_id, $type);
-    $send_array =[];
-    $send_array['app_rates'] = $updated_app_rates;
-    $send_array['product_id'] = $product_id;
-    echo json_encode($send_array);
+    $ajax_array =[];
+    $ajax_array['app_rates'] = $updated_app_rates;
+    $ajax_array['product_id'] = $product_id;
+    $ajax_array['dryliquid'] = $product_dryliquid;
+    $ajax_array['console'] = $console;
+    echo json_encode($ajax_array);
     die();
 }
 add_action( 'wp_ajax_indppl_save_product_ajax', 'indppl_save_product_ajax' );
