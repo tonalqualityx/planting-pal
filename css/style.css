@@ -518,6 +518,7 @@ span.padding-right-5{
   position: relative;
   top: -6px;
   right: -18px;
+  color: black;
 }
 .indppl-product-create-size-num-inside-container{
   display: flex;
@@ -537,6 +538,12 @@ span.padding-right-5{
   width: 25%!important;
   display: inline-block!important;
 }
-/* td:nth-last-child(2n){
-  border-right: black solid 1px;
-} */
+.product-create-app-rates-chart-container{
+  display: none;
+}
+.indppl-product-list td, .indppl-product-list th{
+  padding: 0px 0 0 10px;
+}
+.product-create-add-product-name{
+  max-width: 300px;
+}

@@ -7,7 +7,7 @@ Collection of functions for the entire site.
 function geofind($lat, $lon) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
-    var_dump($xml);
+    // var_dump($xml);
     $xmlfile = file_get_contents($xml);
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
@@ -365,7 +365,7 @@ function indppl_apprates($store_id, $type = null, $args = null) {
         case 'beds':
 
             foreach($args as $key => $val) {
-                var_dump($val);
+                // var_dump($val);
                 echo "<br /><br />";
                 $apprates[$type][$key][key($val)] = $val[key($val)];
             }
@@ -395,7 +395,7 @@ function indppl_apprates($store_id, $type = null, $args = null) {
 
 }
 
-function indppl_delete_apprate($store, $args = null) {
+function indppl_delete_apprate($store_id, $args = null) {
     
     $apprates = array();
     
@@ -408,13 +408,19 @@ function indppl_delete_apprate($store, $args = null) {
 
     } else {
         
-        $apprates = json_decode( get_post_meta( $store, 'wpcf-apprates', true));
-
-        if(is_array($args[0])){
+        $apprates = json_decode( get_post_meta( $store_id, 'wpcf-apprates', true), true);
+        $results = $apprates;
+        if(is_array($args)){
             // We have many items to remove
             foreach($args as $k => $v) {
-                // Version 1.1
+                if($k == 'ground'){
+                    unset($apprates['ground'][$v]);
+                    // $results = $apprates;
+                }
             }
+            $newapprates = json_encode($apprates);
+            $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
+            $results = array('apprates' => $newapprates, 'update' => $update);
 
         } else {
             // We have just one item to remove
@@ -475,7 +481,7 @@ function dummy_data() {
     $test = indppl_apprates(252, 'pots', $args);
     // $test = indppl_apprates(252);
     
-    var_dump($test);
+    // var_dump($test);
 }
 
 // add_shortcode('indppl-test', 'dummy_data');
@@ -720,6 +726,23 @@ function indppl_create_container($new_array, $container_id = 0){
 
 }
 
+function indppl_create_package($new_array, $package_id = 0){
+    $package = array(
+        'ID' => $package_id,
+        'post_title' => $new_array['name'],
+        'post_author' => get_current_user_id(),
+        'meta_input' => array(
+            'wpcf-size' => $new_array['size'],
+            'wpcf-unit' => $new_array['unit'],
+        ),
+        'post_type' => 'package',
+        'post_status' => 'publish',
+    );
+    $return_id = wp_insert_post($package);
+    return $return_id;
+
+}
+
 function indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta){
     ob_start();
     // old check mark
@@ -864,6 +887,8 @@ function indppl_get_current_products($type){
     // }
     if(isset($_GET['store-id'])){
         $store_id = $_GET['store-id'];
+    }else if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
     }
     $args = array(
         'post_type' => 'product',
@@ -884,7 +909,8 @@ function indppl_get_current_products($type){
     // var_dump(get_post_meta(165, 'wpcf-type')[0]);
     ob_start();
     $app_rates = indppl_apprates($store_id);
-    var_dump($app_rates);
+    // var_dump($app_rates);
+    // var_dump($type);
     ?>
     <table>
         <th class='product-list-width'></th>
@@ -893,46 +919,95 @@ function indppl_get_current_products($type){
         <th class='product-list-width'>Sizes</th>
 
         <?php
-        // var_dump(get_post_meta(264, 'wpcf-prod-type')[0]);
-        if($products->have_posts()){
-            while($products->have_posts()){
-                $products->the_post();
-                $pid = get_the_id();
-                $title = get_the_title();
-                $brand = get_the_terms($pid, 'brand');
-                $default =  get_post_meta($pid, 'wpcf-type');
-                // var_dump($pid);
-                $package_relations = toolset_get_related_posts(
-                    $pid, // get posts related to this one
-                    'product-package', // relationship between the posts
-                    'parent',
-                    '100',
-                    '0',
-                    array(),
-                    'post_id',
-                    'child'
-                );
-                $store_related = toolset_get_related_posts(
-                    $store_id,
-                    'store-package',
-                    'parent',
-                    '100',
-                    '0',
-                    array(),
-                    'post_id',
-                    'child'
-                );
-                // var_dump($package_relations);
-                // var_dump("<br /><br />");
+        $product_array = $app_rates[$type];
+        // var_dump($product_array);
+        if(is_array($product_array)){
+            foreach($product_array as $key => $value){
+                if($key != 0){
+                    // var_dump($key);
+                    $pid = $key;
+                    $title = get_the_title($pid);
+                    $brand = get_the_terms($pid, 'brand');
+                    $default =  get_post_meta($pid, 'wpcf-type');
+                    $package_relations = toolset_get_related_posts(
+                        $pid, // get posts related to this one
+                        'product-package', // relationship between the posts
+                        'parent',
+                        '100',
+                        '0',
+                        array(),
+                        'post_id',
+                        'child'
+                    );
+                    $store_related = toolset_get_related_posts(
+                        $store_id,
+                        'store-package',
+                        'parent',
+                        '100',
+                        '0',
+                        array(),
+                        'post_id',
+                        'child'
+                    );
+                    ?>
+                    <tr class='indppl-table-color-offset'>
+                        <td>
+                            <a href="#" class="indppl-product-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
+                            <a href="#" class="indppl-product-delete" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>delete</a>
+                        </td>
+                        <td>
+                            <?php echo $brand[0]->name; ?>
+                        </td>
+                        <td>
+                            <?php echo $title; ?>
+                        </td>
+                        <td>
+                            <?php
+                            $size_array = array_intersect($package_relations, $store_related);
+                            foreach($size_array as $key => $value){
+                                $meta = get_post_meta($size_array[$key]);
+                                echo $meta['wpcf-size'][0];
+                                echo $meta['wpcf-unit'][0];
+                                echo ' ';
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                    <?php  
+                }
+            }
+        }
 
-                // var_dump($store_related);
-                
-    
-                // var_dump($type_array);
-                // var_dump($pid);
-                
+        // var_dump(get_post_meta(264, 'wpcf-prod-type')[0]);
+        // if($products->have_posts()){
+        //     while($products->have_posts()){
+        //         $products->the_post();
+        //         $pid = get_the_id();
+        //         $title = get_the_title();
+        //         $brand = get_the_terms($pid, 'brand');
+        //         $default =  get_post_meta($pid, 'wpcf-type');
+        //         $package_relations = toolset_get_related_posts(
+        //             $pid, // get posts related to this one
+        //             'product-package', // relationship between the posts
+        //             'parent',
+        //             '100',
+        //             '0',
+        //             array(),
+        //             'post_id',
+        //             'child'
+        //         );
+        //         $store_related = toolset_get_related_posts(
+        //             $store_id,
+        //             'store-package',
+        //             'parent',
+        //             '100',
+        //             '0',
+        //             array(),
+        //             'post_id',
+        //             'child'
+        //         );
                 ?>
-                <tr class='indppl-table-color-offset'>
+                <!-- <tr class='indppl-table-color-offset'>
                     <td>
                         <a href="#" class="indppl-product-edit">edit</a>
                         <a href="#" class="indppl-product-delete">delete</a>
@@ -940,29 +1015,24 @@ function indppl_get_current_products($type){
                     <td>
                         <?php echo $brand[0]->name; ?>
                     </td>
-                    <td>
-                        <?php echo $title; ?>
-                    </td>
-                    <td>
+                    <td> -->
+                        <!-- <?php echo $title; ?> -->
+                    <!-- </td>
+                    <td> -->
                         <?php
-                        $size_array = array_intersect($package_relations, $store_related);
-                        foreach($size_array as $key => $value){
-                            $meta = get_post_meta($size_array[$key]);
-                            // var_dump($meta);
-                            echo $meta['wpcf-size'][0];
-                            echo $meta['wpcf-unit'][0];
-                            echo ' ';
-                        }
+                        // $size_array = array_intersect($package_relations, $store_related);
+                        // foreach($size_array as $key => $value){
+                        //     $meta = get_post_meta($size_array[$key]);
+                        //     echo $meta['wpcf-size'][0];
+                        //     echo $meta['wpcf-unit'][0];
+                        //     echo ' ';
+                        // }
                         ?>
-                    </td>
-                </tr>
-                <?php
-                // var_dump($brand);
-                
-                // var_dump(get_the_terms($pid, 'brand'));
-                            
-            }
-        }
+                    <!-- </td>
+                </tr> -->
+                <?php         
+        //     }
+        // }
     ?>
     </table>
     <?php
@@ -970,3 +1040,242 @@ function indppl_get_current_products($type){
     return $return;
 }
 
+function update_package_table($store_id, $product_id, $type){
+    // app rates chart container
+    $app_rates = indppl_apprates($store_id);
+    // var_dump($app_rates);
+    ob_start();
+    $containers = toolset_get_related_posts(
+        $store_id, // get posts related to this one
+        'store-container', // relationship between the posts
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'child'
+    );
+    $product_related = toolset_get_related_posts(
+       $product_id,
+       'product-package',
+       'parent',
+       '100',
+       '0',
+       array(),
+       'post_id',
+       'child'
+   );
+   $store_related = toolset_get_related_posts(
+       $store_id,
+       'store-package',
+       'parent',
+       '100',
+       '0',
+       array(),
+       'post_id',
+       'child'
+   );
+    $test = array('parent' => array($product_id), 'child' => $containers);
+    $role = array('role_to_return' => 'all');
+    $pro_container = toolset_get_related_posts(
+        $test,
+        'default-apprate',
+        ['role_to_return' => 'all']
+    );
+
+    if($type == 'ground'){
+        $header = 'In-Ground';
+    }
+
+    ?>
+    <div class='product-create-chart-header-container'>
+        <h3><?php echo $header; ?> Planting Application Rates For:</h3>
+        <div class='product-create-chart-title-container'>
+            <img src="https://via.placeholder.com/100.png">
+            <div style='margin-left: 10px'>
+                <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
+                <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
+            </div>
+        </div>
+    </div>
+    <table class='product-create-chart-table'>
+    <tr>
+        <th colspan='2'>Choose Application Rates</th>
+        <th colspan='5'>
+            <p>Application Rates Automatically Calculated for Other Sizes</p>
+            <p>Use the numbers below to fine tune your application rate on the left</p>
+        </th>
+    </tr>
+    <tr>
+        <th colspan='2'></th>
+        <?php
+
+        foreach($product_related as $key => $value){
+            if(in_array($value, $store_related)){
+
+            ?>
+            <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
+            <?php
+            }
+        }
+        ?>
+    </tr>
+    <?php
+    $console = $pro_container;
+    // var_dump($containers); used for sorting
+    foreach($containers as $key => $id){
+        // echo 'inside';
+        $title = get_the_title($id);
+        $pack_id = $store_related[$key];
+        $package = get_post_meta($pack_id, 'wpcf-unit', true);
+        // $app_qty_array = [];
+        ?>
+        <tr>
+            <td>
+                <?php echo $title; ?>
+            </td>
+            <td>
+                <?php
+                foreach($pro_container as $k => $v){
+                    
+                    if($id == $v['child']){
+                        // $app_qty_array[$k] = get_post_meta($v['intermediary']);
+                        // var_dump($type);
+                        if(!empty($app_rates[$type][$product_id]['containers'])){
+                            $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
+                        }else{
+                            $app_qty = get_post_meta($v['intermediary'], 'wpcf-apprate-qty', true);
+                        }
+                        
+                        if($app_qty){
+                            ?>
+                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
+                            <?php
+                        }else{
+                            ?>
+                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
+                            <?php
+                        }
+                        echo ' ';
+                        
+                        if(!empty($app_rates[$type][$product_id]['containers'])){
+                            $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
+                        }else{
+                            $app_unit = get_post_meta($v['intermediary'], 'wpcf-apprate-unit-holdover', true);
+                        }
+                        ?>
+                        <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
+                            
+                        </select>
+                        <?php
+                    }
+                }
+                if(!$pro_container){
+                    if(!empty($app_rates[$type][$product_id]['containers'])){
+                        $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
+                    }
+                    if(!empty($app_rates[$type][$product_id]['containers'])){
+                        $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
+                    }
+                    ?>
+                    <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?>>
+                    <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
+                        
+                    </select>
+                    <?php
+                    
+                }
+                ?>
+            </td>
+            <?php
+            foreach($product_related as $k => $val){
+                if(in_array($val, $store_related)){
+                    
+                    $package_size = get_post_meta($val, 'wpcf-size', true);
+                    $package_unit = get_post_meta($val, 'wpcf-unit', true);
+                    $conversion = getVolume($app_qty, $app_unit, $package_unit);
+                    $final = $package_size / $conversion;
+                    echo $final;
+                    
+                    ?>
+                    <td><?php echo round($final, 2) . " Plants";  ?></td>
+                    <?php
+                }
+            }
+
+            ?>
+        </tr>
+        <?php
+    }
+    
+    ?>
+
+    </table>
+    <div class="product-create-submit-container">
+        <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/>
+        <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
+        <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="Save and add another product"/>
+        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/>
+    </div>
+    <?php
+    $app_rates_chart = ob_get_clean();
+
+    // $send_array['app_rates_chart'] = $app_rates_chart;
+    return $app_rates_chart;
+}
+
+function indppl_get_product_info(){
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    
+    ob_start();
+    if($type == 'ground'){
+        $heading = 'Product Selection for In-Ground Plantings';
+    }
+    ?>
+    
+        <div class='slide-in-products-inside-container'>
+            <a href='#' class='modal-close'>X</a>
+            <h2><?php echo $heading; ?></h2>
+            <form id='product-create-form' method="post" action='#' class="form-horizontal">
+                <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
+                <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
+                    <option value='' disabled selected>Select Brand</option>
+                    <?php
+                    $brands = get_terms('brand');
+                    foreach($brands as $key => $value){
+                        ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> <?php
+                    }
+                    // var_dump($brands);
+                    ?>
+                </select>
+                <select class='product-create-product' id='product-create-product' name='product-create-product'>
+                    <option class='product-create-product-option' value='' disabled selected>Select Product</option>
+                </select>
+                <div class='product-create-brand-cut-off'>
+                    <div class='product-create-first-part-container product-create-add-product-name'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-dry-wet-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-standard-unit-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-size-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-new-size-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-app-rate-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-5-cups-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-save-done-container'>
+                    </div>
+                    <div class='product-create-app-rates-chart-container'>
+                    </div>
+                </div>
+            </form>
+        </div>
+    <?php
+    $return = ob_get_clean();
+    return $return;
+}

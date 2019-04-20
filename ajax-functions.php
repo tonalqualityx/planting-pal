@@ -189,53 +189,7 @@ add_action('wp_ajax_nopriv_indppl_save_container_data_ajax', 'indppl_save_contai
 
 
 function indppl_add_new_product_ajax(){
-    if(isset($_POST['type'])){
-        $type = $_POST['type'];
-    }
-    
-    ob_start();
-    ?>
-    
-        <div class='slide-in-products-inside-container'>
-            <a href='#' class='modal-close'>X</a>
-            <h2>something <?php echo $type; ?></h2>
-            <form id='product-create-form' method="post" action='#' class="form-horizontal">
-                <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
-                <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
-                    <option value='' disabled selected>Select Brand</option>
-                    <?php
-                    $brands = get_terms('brand');
-                    foreach($brands as $key => $value){
-                        ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> <?php
-                    }
-                    // var_dump($brands);
-                    ?>
-                </select>
-                <select class='product-create-product' id='product-create-product' name='product-create-product'>
-                    <option class='product-create-product-option' value='' disabled selected>Select Product</option>
-                </select>
-                <div class='product-create-brand-cut-off'>
-                    <div class='product-create-dry-wet-container'>
-                    </div>
-                    <div class='product-create-standard-unit-container'>
-                    </div>
-                    <div class='product-create-size-container'>
-                    </div>
-                    <div class='product-create-new-size-container'>
-                    </div>
-                    <div class='product-create-app-rate-container'>
-                    </div>
-                    <div class='product-create-5-cups-container'>
-                    </div>
-                    <div class='product-create-save-done-container'>
-                    </div>
-                    <div class='product-create-app-rates-chart-container'>
-                    </div>
-                </div>
-            </form>
-        </div>
-    <?php
-    $return = ob_get_clean();
+    $return = indppl_get_product_info();
     echo $return;
     die();
 }
@@ -301,10 +255,21 @@ function indppl_get_product_info_ajax(){
     if(isset($_POST['type'])){
         $type = $_POST['type'];
     }
-    $default = get_post_meta($product_id, 'wpcf-default', true);
-    $unit = get_post_meta($product_id, 'wpcf-unit', true);
-    $dryliquid = get_post_meta($product_id, 'wpcf-dryliquid', true);
+    if(isset($_POST['edit'])){
+        $container = indppl_get_product_info();
+    }
     
+    if($product_id == 'new'){
+        $default = 0;
+        $unit = 'oz';
+        $dryliquid = 'dry';
+    }else{
+        $default = get_post_meta($product_id, 'wpcf-default', true);
+        $unit = get_post_meta($product_id, 'wpcf-unit', true);
+        $fivecups = get_post_meta($product_id, 'wpcf-5cups', true);
+        $dryliquid = get_post_meta($product_id, 'wpcf-dryliquid', true);
+    }
+
     $send_array = array();
     if($default){
         $standard_unit = "<div id='product-create-standard-unit' data-unit='" . $unit . "'></div>";
@@ -323,17 +288,20 @@ function indppl_get_product_info_ajax(){
         <?php
         $standard_unit = ob_get_clean();
     }
+    $product_related = [];
     // getting sizes
-    $product_related = toolset_get_related_posts(
-        $product_id,
-        'product-package',
-        'parent',
-        '100',
-        '0',
-        array(),
-        'post_id',
-        'child'
-    );
+    if($product_id != 'new'){
+        $product_related = toolset_get_related_posts(
+            $product_id,
+            'product-package',
+            'parent',
+            '100',
+            '0',
+            array(),
+            'post_id',
+            'child'
+        );
+    }
     $store_related = toolset_get_related_posts(
         $store_id,
         'store-package',
@@ -345,31 +313,35 @@ function indppl_get_product_info_ajax(){
         'child'
     );
     $sizes = '';
-    $pack_units = [];
+    $pack_units[] = [$fivecups, 'lb'];
     ob_start();
     ?>
     <h3>Select the sizes you stock:</h3>
     <?php
-    if($product_related){
+    if($product_related && $product_id != 'new'){
         foreach ($product_related as $key => $value) {
             $size_meta = get_post_meta($value, 'wpcf-size', true);
             $unit_meta = get_post_meta($value, 'wpcf-unit', true);
-            $pack_units[] = [$size_meta, $unit_meta];
+            // $pack_units[] = [$size_meta, $unit_meta];
             $author = get_post_field( 'post_author', $value );
             $default_package = get_post_meta($value, 'wpcf-default-package', true);
             if($author == get_current_user_id() || $default_package){
                 
                 // echo $store_id;
+                $non_default = '';
+                if(!$default_package){
+                    $non_default = 'indppl-non-default-package';
+                }
                 $in_store = '';
                 if(in_array($value, $store_related)){
-                    $in_store = 'indppl-background-green indppl-new-package';
+                    $in_store = 'indppl-background-green';
                 }
                 // echo $author;
                 // echo $default_package;
                 
                 ?>
                 
-                <a href='#' class='<?php echo $in_store; ?> indppl-product-create-size-btn' data-size='<?php echo $size_meta; ?>' data-unit='<?php echo $unit_meta;?>'><?php echo $size_meta . " " . $unit_meta; ?></a>
+                <a href='#' class='<?php echo $in_store . " " . $non_default; ?> indppl-product-create-size-btn' data-size='<?php echo $size_meta; ?>' data-unit='<?php echo $unit_meta;?>' data-id='<?php echo $value; ?>'><?php echo $size_meta . " " . $unit_meta; ?></a>
                 <?php
                 
             }
@@ -407,153 +379,53 @@ function indppl_get_product_info_ajax(){
         }
     }
     
-    if($cups_active){
+    if($cups_active || $product_id == 'new'){
         ob_start();
+        $weight_array = ['lb', 'g', 'kg', 'oz'];
         ?>
         <h3>How much does 5 level coups of this product weigh?</h3>
         <div class='product-create-5-cups-inside-container'>
-            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num'>
+            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='<?php echo $fivecups; ?>'>
             <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
-                <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option>
-                <option class='product-create-5-cups-option' value='lb' >lb</option>
-                <option class='product-create-5-cups-option' value='g' >g</option>
-                <option class='product-create-5-cups-option' value='kg' >kg</option>
-                <option class='product-create-5-cups-option' value='oz' >oz</option>
+                <!-- <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option> -->
+                <?php
+                foreach($weight_array as $weight_unit){
+                    if($weight_unit == $finecups[0][1]){
+                        $selected_unit = 'selected';
+                    }
+                    ?>
+                    <option class='product-create-5-cups-option' value='<?php echo $weight_unit; ?>' <?php echo $selected_unit; ?> >
+                    <?php echo $weight_unit; ?>
+                    </option>
+                <?php
+                }
+                ?>
             </select>
         </div>
         <?php
         // $console = $unit;
+        
         $cups = ob_get_clean();
     }
 
     // app rates chart container
+    if($product_id != 'new'){
+        $app_rates_chart = update_package_table($store_id, $product_id, $type);
+    }
+
     ob_start();
-    $containers = toolset_get_related_posts(
-        $store_id, // get posts related to this one
-        'store-container', // relationship between the posts
-        'parent',
-        '100',
-        '0',
-        array(),
-        'post_id',
-        'child'
-    );
-    $test = array('parent' => array($product_id), 'child' => $containers);
-    $role = array('role_to_return' => 'all');
-    $pro_container = toolset_get_related_posts(
-        $test,
-        'default-apprate',
-        ['role_to_return' => 'all']
-    );
-
-    if($type == 'ground'){
-        $header = 'In-Ground';
-    }
-
     ?>
-    <div class='product-create-chart-header-container'>
-        <h3><?php echo $header; ?> Planting Application Rates For:</h3>
-        <div class='product-create-chart-title-container'>
-            <img src="https://via.placeholder.com/100.png">
-            <div style='margin-left: 10px'>
-                <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
-                <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
-            </div>
-        </div>
-    </div>
-    <table class='product-create-chart-table'>
-    <tr>
-        <th colspan='2'>Choose Application Rates</th>
-        <th colspan='5'>
-            <p>Application Rates Automatically Calculated for Other Sizes</p>
-            <p>Use the numbers below to fine tune your application rate on the left</p>
-        </th>
-    </tr>
-    <tr>
-        <th colspan='2'></th>
-        <?php
-
-        foreach($product_related as $key => $value){
-            if(in_array($value, $store_related)){
-
-            ?>
-            <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
-            <?php
-            }
-        }
-        ?>
-    </tr>
+    <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next">
     <?php
-    $console = $pro_container;
-    foreach($containers as $key => $id){
-        $title = get_the_title($id);
-        $pack_id = $store_related[$key];
-        $package = get_post_meta($pack_id, 'wpcf-unit', true);
-        // $app_qty_array = [];
-        ?>
-        <tr>
-            <td>
-                <?php echo $title; ?>
-            </td>
-            <td>
-                <?php
-                foreach($pro_container as $k => $v){
-                    if($id == $v['child']){
-                        // $app_qty_array[$k] = get_post_meta($v['intermediary']);
-                        $app_qty = get_post_meta($v['intermediary'], 'wpcf-apprate-qty', true);
-                        if($app_qty){
-                            ?>
-                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
-                            <?php
-                        }else{
-                            ?>
-                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
-                            <?php
-                        }
-                        echo ' ';
-                        
-                        $app_unit = get_post_meta($v['intermediary'], 'wpcf-apprate-unit-holdover', true);
-                        ?>
-                        <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
-                            
-                        </select>
-                        <?php
-                    }
-                }
-                ?>
-            </td>
-            <?php
-            foreach($product_related as $k => $val){
-                if(in_array($val, $store_related)){
-                    
-                    $package_size = get_post_meta($val, 'wpcf-size', true);
-                    $package_unit = get_post_meta($val, 'wpcf-unit', true);
-                    $conversion = getVolume($app_qty, 'tsp', 'floz');
-                    $final = $package_size / $conversion;
-                    
-                    ?>
-                    <td><?php echo $final . " Plants";  ?></td>
-                    <?php
-                }
-            }
+    $next_btn = ob_get_clean();
 
-            ?>
-        </tr>
+    if($product_id == 'new'){
+        ob_start();
+        ?>
+        <input type='text' class='indppl-add-product-name' name='indppl-add-product-name' placeholder='Product Name'>
         <?php
+        $add_product = ob_get_clean();
     }
-    
-    ?>
-
-    </table>
-    <div class="product-create-submit-container">
-        <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
-        <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="Save and add another product"/>
-        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="exit"/>
-    </div>
-    <?php
-    $app_rates_chart = ob_get_clean();
-
-
     
     $send_array['standard_unit'] = $standard_unit;
     $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
@@ -562,7 +434,17 @@ function indppl_get_product_info_ajax(){
     // $send_array['app_rate'] = $app_rate;
     $send_array['cups'] = $cups;
     $send_array['app_rates_chart'] = $app_rates_chart;
+    $send_array['next_btn'] = $next_btn;
     $send_array['console'] = $console;
+    if($container){
+        $send_array['container'] = $container;
+        $brand = get_the_terms($product_id, 'brand', true);
+        $send_array['brand'] = $brand[0]->name;
+        $send_array['product'] = get_the_title($product_id);
+    }
+    if($product_id == 'new'){
+        $send_array['new_product'] = $add_product;
+    }
     echo json_encode($send_array);
     die();
 }
@@ -588,6 +470,46 @@ function indppl_save_product_ajax(){
     if(isset($_POST['product_select'])){
         $product_unit = $_POST['product_select'];
     }
+    if(isset($_POST['package_array'])){
+        $package_array = $_POST['package_array'];
+    }
+    if(isset($_POST['package_remove'])){
+        $package_remove = $_POST['package_remove'];
+    }
+    if(isset($_POST['new_pack'])){
+        $new_pack = $_POST['new_pack'];
+    }
+    if(isset($_POST['product_name'])){
+        $product_name = $_POST['product_name'];
+    }
+    if(isset($_POST['product_dryliquid'])){
+        $product_dryliquid = $_POST['product_dryliquid'];
+    }
+    if(isset($_POST['cups_num'])){
+        $cups_num = $_POST['cups_num'];
+    }
+    if(isset($_POST['cups_unit'])){
+        $cups_unit = $_POST['cups_unit'];
+    }
+    $console = $cups_num;
+    if($product_id == 'new'){
+        $new_product_args = array(
+            'post_type' => 'product',
+            'post_author' => get_current_user_id(),
+            'post_title' => $product_name,
+            'post_status' => 'publish',
+            'meta_input' => array(
+                'wpcf-dryliquid' => $product_dryliquid,
+                'wpcf-unit' => $product_unit,
+                'wpcf-5cups' => $cups_num,
+                'wpcf-5cups-unit' => $cups_unit,
+            ),
+        );
+        $product_id = wp_insert_post($new_product_args);
+        wp_set_object_terms($product_id, $brand, 'brand');
+    }
+
+
     $send_array = array($product_id => array());
     foreach($product_rate as $key => $value){
         $temp = array(
@@ -596,9 +518,101 @@ function indppl_save_product_ajax(){
         );
         $send_array[$product_id]['containers'][$value['name']] = $temp;
     }
-    $save = indppl_apprates($store_id, $type, $send_array);
-    var_dump(json_encode($save));
+    if($product_rate){
+        // $console = $send_array;
+        $save = indppl_apprates($store_id, $type, $send_array);
+    }
+    // var_dump($package_array);
+    // var_dump($new_pack);
+    foreach($new_pack as $key => $value){
+        $new_id = indppl_create_package($value);
+        $new_package = toolset_connect_posts('store-package', $store_id, $new_id);
+        $prod_pack = toolset_connect_posts('product-package', $product_id, $new_id);
+        // var_dump($new_package);
+    }
+    foreach($package_array as $package_id){
+        if(!$package_id == 0){
+            $new_package = toolset_connect_posts('store-package', $store_id, $package_id);
+        }
+        // var_dump($new_package);
+    }
+    foreach($package_remove as $pack_id){
+        if(is_array($pack_id)){
+            // var_dump('inssidldke');
+            wp_delete_post($pack_id['id']);
+        }
+        else{
+            $remove = toolset_disconnect_posts('store-package', $store_id, $pack_id);
+        }
+    }
+    $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    $ajax_array =[];
+    $ajax_array['app_rates'] = $updated_app_rates;
+    $ajax_array['product_id'] = $product_id;
+    $ajax_array['dryliquid'] = $product_dryliquid;
+    $ajax_array['console'] = $console;
+    echo json_encode($ajax_array);
     die();
 }
 add_action( 'wp_ajax_indppl_save_product_ajax', 'indppl_save_product_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_product_ajax', 'indppl_save_product_ajax');
+
+function indppl_product_save_exit_ajax(){
+    echo do_shortcode('[pp-store-products]');
+    die();
+}
+add_action( 'wp_ajax_indppl_product_save_exit_ajax', 'indppl_product_save_exit_ajax' );
+add_action('wp_ajax_nopriv_indppl_product_save_exit_ajax', 'indppl_product_save_exit_ajax');
+
+
+function indppl_remove_package_from_store_ajax(){
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    $args = array(
+        $type => $product_id,
+    );
+    indppl_delete_apprate($store_id, $args);
+    $default = get_post_meta($product_id, 'wpcf-default', true);
+    $product_related = toolset_get_related_posts(
+        $product_id,
+        'product-package',
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'child'
+    );
+    $store_related = toolset_get_related_posts(
+        $store_id,
+        'store-package',
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'child'
+    );
+    foreach($product_related as $package){
+        if(in_array($package, $store_related)){
+            $test = toolset_disconnect_posts('store-package', $store_id, $package);
+            if(!get_post_meta($package, 'wpcf-default-package', true)){
+                wp_delete_post($package);
+            }
+        }
+    }
+    if(!$default){
+        wp_delete_post($product_id);
+    }
+    var_dump($test);
+    die();
+}
+add_action( 'wp_ajax_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax' );
+add_action('wp_ajax_nopriv_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax');
