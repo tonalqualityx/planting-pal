@@ -1108,26 +1108,35 @@ function indppl_normalize($items = array(), $unit, $cups){
     }
 
     $ref = &$items; // Copy items so we can manipulate it
-    var_dump($ref);
     foreach($ref as $k => $item){
-        var_dump($item);
         // Find the type of the unit
         if (in_array($item['unit'], $units['volume'])) {
+            $items[$k]['type'] = 'volume';
         } else {
             $items[$k]['type'] = 'mass';
         }
-        $items[$k]['type'] = 'volume';
         
+        // echo "<h4>Type</h4>";
+        // var_dump($items[$k]['type']);
+        // var_dump($standard_type);
         // Compare and run the appropriate function
         if($standard_type == $items[$k]['type']){
-            $convert = 'get' . ucfirst($standard_type);
-            $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
+            if($unit == $item['unit']){
+                $items[$k]['standard-amount'] = $item['amount'];
+            } else {
+                $convert = 'get' . ucfirst($standard_type);
+                $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
+            }
         } else {
             $items[$k]['unit-per-standard'] = getDensity($cups, $item['unit']);
-            $items[$k]['standard-amount'] = $item['amount']/$items[$k]['standard-amount-awesome'];
+            $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
+            // echo "<h4>Amount</h4>";
+            // var_dump($items[$k]['amount']);
         }
+        // echo "<h4>{$item['amount']} {$item['unit']}<br /> Unit: $unit <br /> Per Standard: {$items[$k]['unit-per-standard']}<br />Item Unit: {$item['unit']}<br />5 Cups = $cups <br /> Size = {$item['amount']} <br /> Standard size: {$items[$k]['standard-amount']}</h4>";
     }
-
+    
+    // var_dump($items);
     return $items;
     
 
@@ -1181,6 +1190,7 @@ function indppl_get_units($return = 'all'){
             "oz",
             "g",
             "kg",
+            "lb"
         ),
     );
 

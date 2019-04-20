@@ -20,27 +20,34 @@ if(isset($_POST['storeid'])){
             if(array_key_exists($container, $apprates['ground'][$key]['containers'])){
                 $product = get_the_title($key);
                 $standard = get_post_meta($key, 'wpcf-unit', TRUE);
+                // echo "<h2>STANDARD L1 $standard</h2>";
                 $brand = get_the_terms($key, 'brand');
                 $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
                 $brand = $brand[0];
                 $plant = get_the_title($container);
                 $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
                 $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
-                $need = 0;
                 $unit_args = array(array('unit' => $unit, 'amount' => $amount));
-                indppl_normalize($unit_args, $standard, $cups);
-
+                
+                $normalized = indppl_normalize($unit_args, $standard, $cups);
+                
                 if($standard != 'lb'){
                     $need = getVolume($amount, $unit, $standard);
-                    echo "<h2>Volume: $need $standard</h2>";
+                    // echo "<h2>Volume: $need $standard</h2>";
                 } else {
                     $calc = getDensity($cups, $unit);
                     $cups1 = $cups/5;
                     $amount_cups = getVolume($amount, $unit, 'cup');
                     $need = $amount_cups * $cups1;
-                    echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
+                    // echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
                 }
                 
+                
+                $need = 0;
+                foreach($normalized as $k => $v) {
+                    $need += $v['standard-amount']; 
+                }
+
                 if(isset($products[$key])){
                     $products[$key]['need'] += $need;
                     // echo "true";
@@ -56,17 +63,20 @@ if(isset($_POST['storeid'])){
             }
         }
     }
-
+    
+    // Calculate the shopping list!
+    $shopping_list = array();
     foreach($products as $key => $val) {
-        
-        $standard = get_post_meta( $key, 'wpcf-standard-unit', TRUE);
-        var_dump($standard);
-        echo "<br />";
+
+        // Setup the important values
+        $standard = get_post_meta( $key, 'wpcf-unit', TRUE);
+        $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
+        $brand = get_the_terms( $key, 'brand' );
+        $brand = $brand[0]->name;
         $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
-        // var_dump($packages);
-        echo "<br />";
+
+        // Create a conversion array and fill it with all the package sizes for conversion
         $convert = array();
-        
         foreach($packages as $package) {
             $amount = get_post_meta($package, 'wpcf-size', TRUE);
             $unit = get_post_meta($package, 'wpcf-unit', TRUE);
@@ -74,14 +84,88 @@ if(isset($_POST['storeid'])){
                 'amount' => $amount,
                 'unit'  => $unit,
             );
-            // var_dump($convert);
         } 
+        // var_dump($convert);
+        $normalized_packs = indppl_normalize($convert, $standard, $cups);
+        // echo "<h3>Normalization</h3>";
+        // var_dump($normalized_packs);
+        // echo "<br /><br /><h4>Sorted</h4>";
+        // Sort the packages from larges to smallest
+        uasort($normalized_packs, function($b, $a) {
+            return $a['standard-amount'] <=> $b['standard-amount'];
+        });
 
-        // $normalized_packs = indppl_normalize($convert);
+
+
+        // Find the largest package that the needed amount is larger than
+        $ref = &$normalized_packs;
+        $check_last = array_keys($normalized_packs);
+        $last_pack = array_pop($check_last);
+        $skipped_packs = array();
+        foreach($ref as $pack_key => $pack) {
+            var_dump($pack);
+            echo "<h2>KEY $key </h2>";
+            if($val['need'] >= $pack['standard-amount']){
+                $pack_count = $val['need']/$pack['standard-amount'];
+                $whole = floor($pack_count);
+                $dec = $pack_count - $whole;
+                $pack_name = $pack_key;
+
+                // If the remainder is more than 15% we need to round up
+                if($dec > 0.15){
+                    $whole++;
+                    $new_amount = $whole * $pack['standard-amount'];
+                    foreach($skipped_packs as $k => $v){
+                        if($new_amount >= $v['standard-amount']) {
+                            $whole = 1;
+                            $pack_name = $v['name'];
+                        }
+                    }
+                }
+
+                $pack_count = $whole;
+                $shopping_list[$key] = array(
+                    'count' => $pack_count,
+                    'name' => $pack_name,
+                    'product' => $val['name'],
+                    'brand' => $brand,
+                    'unit'  => $pack['unit'],
+                ); 
+                // echo "<h3>$pack_count $pack_name {$val['name']}</h3> ";
+                break;
+
+            } else {
+
+                if($pack_key == $last_pack){
+
+                    $shopping_list[$key] = array(
+                        'count'   => 1,
+                        'name'    => $pack_key,
+                        'product' => $val['name'],
+                        'brand'   => $brand,
+                    );
+
+                } else {
+
+                    // Add the skipped package to the array so we can compare rounded values later
+                    $skipped_packs[] = array(
+                        'standard-amount'   => $pack['standard-amount'],
+                        'name'              => $key,
+                    );
+
+                }
+            }
+        }
 
     }
 
 }
+
+foreach($shopping_list as $id => $item) {
+    var_dump($item);
+    echo "<br /><br />";
+}
+
 ?>
 
 <body>
@@ -161,10 +245,10 @@ if(isset($_POST['storeid'])){
         </div>
     </div>
 
-    <?php $stati = indppl_user_status(7);
-    $stati = array('paidaccount');
-    // if(in_array('paidaccount', $stati)){
-        if(false){ ?>
+    <?php 
+    
+    $stati = indppl_user_status(2);
+    if(in_array('paidaccount', $stati)){ ?>
 
 
         <div class="row type-header">
