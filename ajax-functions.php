@@ -616,3 +616,55 @@ function indppl_remove_package_from_store_ajax(){
 }
 add_action( 'wp_ajax_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax' );
 add_action('wp_ajax_nopriv_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax');
+
+function indppl_update_app_rates_ajax(){
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['brand'])){
+        $brand = $_POST['brand'];
+    }
+    if(isset($_POST['current_pack'])){
+        $current_pack = $_POST['current_pack'];
+    }
+    if(isset($_POST['container_id'])){
+        $container_id = $_POST['container_id'];
+    }
+    if(isset($_POST['container_num'])){
+        $container_num = $_POST['container_num'];
+    }
+    if(isset($_POST['container_unit'])){
+        $container_unit = $_POST['container_unit'];
+    }
+    $cups = get_post_meta($product_id, 'wpcf-5cups', true);
+    $update_array = [];
+    $items = array(
+        array(
+            'unit' => $container_unit,
+            'amount' => $container_num,
+        ),
+    );
+    // var_dump($cups);
+    // var_dump($container_unit);
+    foreach($current_pack as $key => $value){
+        $conversion = indppl_normalize($items, $value['unit'], intval($cups));
+        // var_dump($items);
+        // var_dump($value['unit']);
+        // var_dump($cups);
+        $final = $value['size'] / $conversion[0]['standard-amount'];
+        $update_array[] = round($final, 2);
+    }
+    $send_array = [];
+    $send_array['app_rates'] = $update_array;
+    echo json_encode($send_array);
+    // var_dump($send_array);
+    die();
+}
+add_action( 'wp_ajax_indppl_update_app_rates_ajax', 'indppl_update_app_rates_ajax' );
+add_action('wp_ajax_nopriv_indppl_update_app_rates_ajax', 'indppl_update_app_rates_ajax');
