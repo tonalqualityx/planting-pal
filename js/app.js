@@ -378,7 +378,6 @@ jQuery(document).ready(function( $ ) {
         var type = $('#indppl-modal-product-type').val();
         var product_id = $('#product-create-product').val();
         var brand = $('#product-create-brand').val();
-        console.log(brand);
         var store_id = $('#store-id').val();
         var product_unit = $('.indppl-new-package').first().data('unit');
         
@@ -397,8 +396,8 @@ jQuery(document).ready(function( $ ) {
         var package_remove = [];
         var new_pack = {};
         var i = 0;
-        console.log(product_input);
-        console.log(product_select);
+        // console.log(product_input);
+        // console.log(product_select);
         if($(this).is('#product-create-next')){
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-background-green')){
@@ -530,6 +529,9 @@ jQuery(document).ready(function( $ ) {
         })
     })
 
+    $('body').on('change', '.some-kind-of-wonderful', function(){
+        updateAppRates($(this));
+    })
     greyOutAllUnchecked();
     // same as above but it checks on load.
     check_on_load_and_click();
@@ -724,4 +726,58 @@ function indpplEditProduct(type, store_id, product_id){
             indpplDelLoading();
         }
     })
+}
+
+function updateAppRates(elem){
+    if($(elem).hasClass('indppl-product-create-chart-app-rate-num')){
+        var cont_id = $(elem).attr('name');
+        var num = $(elem).attr('value');
+        var unit = $(elem).next().val();
+    }else if($(elem).hasClass('indppl-product-create-chart-app-unit')){
+        var cont_id = $(elem).attr('name');
+        var num = $(elem).prev().attr('value');
+        var unit = $(elem).val();
+    }
+    var type = $('#indppl-modal-product-type').val();
+    var product_id = $('#product-create-product').val();
+    var brand = $('#product-create-brand').val();
+    var store_id = $('#store-id').val();
+    var current_pack = {};
+    var i = 0;
+    $('.indppl-product-create-size-btn').each(function(){
+        if($(this).hasClass('indppl-background-green')){
+            current_pack[i] = {};
+            current_pack[i]['size'] = $(this).data('size');
+            current_pack[i]['unit'] = $(this).data('unit');
+            i++;
+        }
+    })
+    console.log(unit);
+    $.ajax({
+        url:indppl_ajax.ajaxurl,
+        dataType: 'text',
+        method: 'POST',
+        data: {
+            action: 'indppl_update_app_rates_ajax',
+            type: type,
+            store_id: store_id,
+            product_id: product_id,
+            brand: brand,
+            current_pack: current_pack,
+            container_id: cont_id,
+            container_num: num,
+            container_unit: unit,
+        },
+        type: 'POST',
+        success: function(e){
+            array = JSON.parse(e);
+            // console.log(elem);
+            // console.log(array);
+            $.each(array['app_rates'], function(index, value){
+                console.log(index);
+
+               $(elem).parent().siblings().eq(1+index).text(value + "Plants");
+            })
+        }
+    });
 }

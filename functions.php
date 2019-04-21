@@ -1188,17 +1188,27 @@ function update_package_table($store_id, $product_id, $type){
                 ?>
             </td>
             <?php
+            $items = array(
+                array(
+                    'unit' => $app_unit,
+                    'amount' => $app_qty,
+                )
+            );
             foreach($product_related as $k => $val){
                 if(in_array($val, $store_related)){
                     
                     $package_size = get_post_meta($val, 'wpcf-size', true);
                     $package_unit = get_post_meta($val, 'wpcf-unit', true);
-                    $conversion = getVolume($app_qty, $app_unit, $package_unit);
-                    $final = $package_size / $conversion;
-                    echo $final;
+                    $cups = get_post_meta($product_id, 'wpcf-5cups', true);
+                    // var_dump($cups);
+                    $conversion = indppl_normalize($items, $package_unit, intval($cups));
+                    // var_dump($conversion);
+                    // $conversion = getVolume($app_qty, $app_unit, $package_unit);
+                    $final = $package_size / $conversion[0]['standard-amount'];
+                    // echo $;
                     
                     ?>
-                    <td><?php echo round($final, 2) . " Plants";  ?></td>
+                    <td><?php echo round($final, 2) . " Plants ";  ?></td>
                     <?php
                 }
             }

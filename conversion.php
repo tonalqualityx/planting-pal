@@ -898,6 +898,7 @@ function getMass($in_value, $in_input, $in_output)
                     return $in_value * 1;
                     break;
                 case "lbs":
+                case "lb":
                     return $in_value / 166;
                     break;
                 case "g":
@@ -910,9 +911,11 @@ function getMass($in_value, $in_input, $in_output)
             break;
 
         case "lbs":
+        case "lb":
             // All Inputs in Pounds
             switch ($in_output) {
                 case "lbs":
+                case "lb":
                     return $in_value * 1;
                     break;
                 case "oz":
@@ -927,6 +930,7 @@ function getMass($in_value, $in_input, $in_output)
             }
             break;
 
+
         case "g":
             // All Inputs in Pounds
             switch ($in_output) {
@@ -937,6 +941,7 @@ function getMass($in_value, $in_input, $in_output)
                     return $in_value / 28.349523125;
                     break;
                 case "lbs":
+                case "lb":
                     return $in_value / 28.349523125 / 16;
                     break;
                 case "kg":
@@ -953,6 +958,8 @@ function getMass($in_value, $in_input, $in_output)
                     return $in_value * 1000 / 28.349523125;
                     break;
                 case "lbs":
+                case "lb":
+                case "lb":
                     return $in_value * 1000 / 28.349523125 / 16;
                     break;
                 case "g":
@@ -1126,6 +1133,7 @@ function indppl_normalize($items = array(), $unit, $cups = null){
             } else {
                 $convert = 'get' . ucfirst($standard_type);
                 $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
+                // var_dump($item['']);
             }
         } else {
             $items[$k]['unit-per-standard'] = getDensity($cups, $item['unit']);
