@@ -670,9 +670,9 @@ function indpplEditProduct(type, store_id, product_id){
                 $('#product-create-product').append('<option value=' + product_id + ' selected></option>')
                 $('#product-create-form').prev().html('Edit ' + array['product'] + ' by ' + array['brand']);
             }
-            if(array["standard_unit"]){
-                $('.product-create-standard-unit-container').append(array["standard_unit"]);
-            }
+            // if(array["standard_unit"]){
+            //     $('.product-create-standard-unit-container').append(array["standard_unit"]);
+            // }
             if(array['size']){
                 $('.product-create-size-container').append(array['size']);
             }

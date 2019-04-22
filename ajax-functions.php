@@ -500,7 +500,7 @@ function indppl_save_product_ajax(){
             'post_status' => 'publish',
             'meta_input' => array(
                 'wpcf-dryliquid' => $product_dryliquid,
-                'wpcf-unit' => $product_unit,
+                'wpcf-unit' => $new_pack[count($new_pack)-1]['unit'],
                 'wpcf-5cups' => $cups_num,
                 'wpcf-5cups-unit' => $cups_unit,
             ),
