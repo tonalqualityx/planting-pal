@@ -5,6 +5,11 @@
 wp_head();
 
 $storeid = get_the_ID(  );
+$tests = get_posts( array('post_type' => 'store-container', 'posts_per_page' => -1) );
+foreach($tests as $test) {
+    var_dump($test);
+    echo "<br /><br />";
+}
 $user_plants = array();
 $display = 'plants_form';
 

@@ -55,15 +55,16 @@
         <div class="container">
             <?php 
             //Get the containers!
-            $containers = types_child_posts('container');
-            foreach($containers as $container){ ?>
+            $cs = types_child_posts($storeid, 'container', 'parent',-1,1,'post_object','parent');
+            // var_dump($containers);
+            foreach($cs as $c){ ?>
 
                 <div class="row">
                     <div class="col-3 offset-2" id="qty">
-                        <input type="number" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0">
+                        <input type="number" class="rounded-input margin-auto" name="ground[<?php echo $c->ID; ?>]" min="0">
                     </div>
                     <div class="col-4" id="plant-size">
-                        <p class="plant-size-format"><?php echo $container->post_title; ?></p>
+                        <p class="plant-size-format"><?php echo $c->post_title; ?></p>
                     </div>
                 </div>
                 
