@@ -506,6 +506,9 @@ span.padding-right-5{
   margin-right: 5px;
   min-width: 50px;
 }
+.product-create-standard-unit-container{
+  display: none;
+}
 .product-create-standard-unit-add{
   flex-basis: 10%;
   min-width: 150px;
@@ -546,4 +549,22 @@ span.padding-right-5{
 }
 .product-create-add-product-name{
   max-width: 300px;
+}
+.spining-loader{
+  height: 25px;
+  animation-name: small-rotate;
+  animation-duration: 2s; 
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes small-rotate {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+.product-create-submit-container{
+  padding-top: 10px;
+}
+.indppl-add-product-usage-type{
+  display:flex;
+  flex-direction: column;
 }

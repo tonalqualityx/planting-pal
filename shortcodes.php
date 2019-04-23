@@ -604,7 +604,7 @@ function pp_store_products(){
                 <?php echo indppl_get_current_products("ground"); ?>
             </div>
             <h3 class='indppl-products-title'>Pots</h3>
-            <a href="#" class='indppl-add-product-btn' data-type='pots'>Add Product</a>
+            <a href="#" class='indppl-add-product-pots-btn' data-type='pots'>Add Product</a>
             <div class='indppl-product-list'>
                 <?php echo indppl_get_current_products("pots"); ?>
             </div>

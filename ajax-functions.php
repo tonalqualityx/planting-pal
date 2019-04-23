@@ -276,6 +276,7 @@ function indppl_get_product_info_ajax(){
     }else{
         ob_start();
         ?>
+        <h3 class='product-create-dry-wet-title'>Select Dry or Wet for this product</h3>
         <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >Dry
         <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >Wet
         <?php
@@ -414,9 +415,16 @@ function indppl_get_product_info_ajax(){
     }
 
     ob_start();
-    ?>
-    <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next">
-    <?php
+    if($type == 'pots'){
+        ?>
+        <input type="submit" name="product-create-pots-next" data-exit="true" id="product-create-pots-next" class="product-create-pots-submit" value="Next">
+        <?php
+    }else{
+        ?>
+        <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next">
+        <?php
+
+    }
     $next_btn = ob_get_clean();
 
     if($product_id == 'new'){
@@ -425,6 +433,27 @@ function indppl_get_product_info_ajax(){
         <input type='text' class='indppl-add-product-name' name='indppl-add-product-name' placeholder='Product Name'>
         <?php
         $add_product = ob_get_clean();
+    }
+    if($type == 'pots'){
+        ob_start();
+        ?>
+        <div class='indppl-add-product-usage-type'>
+            <h3>Select Usage Type (check all that apply)</h3>
+            <div>
+                <input type='checkbox' name='indppl-add-product-bulk-filler' class='indppl-add-usage-type-check' id='indppl-add-product-bulk-filler'>
+                <label for='indppl-add-product-bulk-filler'>Bulk Filler/Substrate(ie Potting Soil)</label>
+            </div>
+            <div>
+                <input type='checkbox' name='indppl-add-product-additive-blend' class='indppl-add-usage-type-check' id='indppl-add-product-additive-blend'>
+                <label for='indppl-add-product-additive-blend'>Additive Blended In thie Potting Soil</label>
+            </div>
+            <div>
+                <input type='checkbox' name='indppl-add-product-additive-surface' class='indppl-add-usage-type-check' id='indppl-add-product-additive-surface'>
+                <label for='indppl-add-product-additive-surface'>Additive Surface Applied after planting</label>
+            </div>
+        </div>
+        <?php
+        $usage_type = ob_get_clean();
     }
     
     $send_array['standard_unit'] = $standard_unit;
@@ -444,6 +473,9 @@ function indppl_get_product_info_ajax(){
     }
     if($product_id == 'new'){
         $send_array['new_product'] = $add_product;
+    }
+    if($type == 'pots'){
+        $send_array['usage_type'] = $usage_type;
     }
     echo json_encode($send_array);
     die();
@@ -545,7 +577,13 @@ function indppl_save_product_ajax(){
             $remove = toolset_disconnect_posts('store-package', $store_id, $pack_id);
         }
     }
-    $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    // testing
+    $bag_selected = true;
+    if($bag_selected){
+        $updated_app_rates = update_bag_package_table($store_id, $product_id, $type);
+    }else{
+        $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    }
     $ajax_array =[];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
