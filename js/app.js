@@ -811,25 +811,31 @@ function indppl_get_units($type = 'dry'){
 
 
 function check_on_load_and_click(){
-    var add = 0;
-    var user_status = $('#user-status').val();
-    // console.log(user_status);
-    add = $('.indppl-container-edit-title').length;
-    // console.log(add);
-    if(user_status == 'paidaccountpro' && add > 24){
-        $('.add-container-btn').remove();
-    }else if(user_status != 'paidaccountpro' && add > 4){
-        $('.add-container-btn').remove();
+    (function($){
 
-    }
+        var add = 0;
+        var user_status = $('#user-status').val();
+        // console.log(user_status);
+        add = $('.indppl-container-edit-title').length;
+        // console.log(add);
+        if(user_status == 'paidaccountpro' && add > 24){
+            $('.add-container-btn').remove();
+        }else if(user_status != 'paidaccountpro' && add > 4){
+            $('.add-container-btn').remove();
+    
+        }
+
+    })(jQuery);
     
 }
 
 function check_on_load(){
-    var user_status = $('#user-status').val();
-    if(user_status != 'paidaccountpro'){
-        $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="#" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
-    }
+    (function($){
+        var user_status = $('#user-status').val();
+        if(user_status != 'paidaccountpro'){
+            $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="#" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
+        }
+    })(jQuery);
 }
 
 function getLocation() {
