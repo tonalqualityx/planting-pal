@@ -358,15 +358,21 @@ function indppl_apprates($store_id, $type = null, $args = null) {
     
         case 'ground':
             $apprates['ground'][key($args)] = $args[key($args)];
-            break;
-    
-        case 'pots':
 
+            break;
+        case 'pots':
+            foreach($args as $key => $val) {
+                // var_dump($val);
+                // echo "<br /><br />";
+                $apprates[$type][$key][key($val)] = $val[key($val)];
+            }
+
+            break;
         case 'beds':
 
             foreach($args as $key => $val) {
                 // var_dump($val);
-                echo "<br /><br />";
+                // echo "<br /><br />";
                 $apprates[$type][$key][key($val)] = $val[key($val)];
             }
     
@@ -413,10 +419,9 @@ function indppl_delete_apprate($store_id, $args = null) {
         if(is_array($args)){
             // We have many items to remove
             foreach($args as $k => $v) {
-                if($k == 'ground'){
-                    unset($apprates['ground'][$v]);
-                    // $results = $apprates;
-                }
+                // if($k == 'ground'){
+                    unset($apprates[$k][$v]);
+                // }
             }
             $newapprates = json_encode($apprates);
             $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
@@ -987,62 +992,6 @@ function indppl_get_current_products($type){
                 }
             }
         }
-
-        // var_dump(get_post_meta(264, 'wpcf-prod-type')[0]);
-        // if($products->have_posts()){
-        //     while($products->have_posts()){
-        //         $products->the_post();
-        //         $pid = get_the_id();
-        //         $title = get_the_title();
-        //         $brand = get_the_terms($pid, 'brand');
-        //         $default =  get_post_meta($pid, 'wpcf-type');
-        //         $package_relations = toolset_get_related_posts(
-        //             $pid, // get posts related to this one
-        //             'product-package', // relationship between the posts
-        //             'parent',
-        //             '100',
-        //             '0',
-        //             array(),
-        //             'post_id',
-        //             'child'
-        //         );
-        //         $store_related = toolset_get_related_posts(
-        //             $store_id,
-        //             'store-package',
-        //             'parent',
-        //             '100',
-        //             '0',
-        //             array(),
-        //             'post_id',
-        //             'child'
-        //         );
-                ?>
-                <!-- <tr class='indppl-table-color-offset'>
-                    <td>
-                        <a href="#" class="indppl-product-edit">edit</a>
-                        <a href="#" class="indppl-product-delete">delete</a>
-                    </td>
-                    <td>
-                        <?php echo $brand[0]->name; ?>
-                    </td>
-                    <td> -->
-                        <!-- <?php echo $title; ?> -->
-                    <!-- </td>
-                    <td> -->
-                        <?php
-                        // $size_array = array_intersect($package_relations, $store_related);
-                        // foreach($size_array as $key => $value){
-                        //     $meta = get_post_meta($size_array[$key]);
-                        //     echo $meta['wpcf-size'][0];
-                        //     echo $meta['wpcf-unit'][0];
-                        //     echo ' ';
-                        // }
-                        ?>
-                    <!-- </td>
-                </tr> -->
-                <?php         
-        //     }
-        // }
     ?>
     </table>
     <?php
@@ -1531,6 +1480,8 @@ function indppl_get_product_info(){
                     <div class='product-create-first-part-container product-create-5-cups-container'>
                     </div>
                     <div class='product-create-first-part-container product-create-usage-type'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-fraction-bag'>
                     </div>
                     <div class='product-create-first-part-container product-create-save-done-container'>
                     </div>

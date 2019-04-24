@@ -319,7 +319,15 @@ jQuery(document).ready(function( $ ) {
                 if(array['usage_type']){
                     $('.product-create-usage-type').append(array['usage_type']);
                 }
-                
+                console.log(array['fraction']);
+                if(array['fraction']){
+                    $('.product-create-fraction-bag').append(array['fraction']);
+                }
+                if(array['default']){
+                    if(array['default'] == 1){
+                        $('.product-create-fraction-bag').hide();
+                    }
+                }
                 indpplDelLoading();
             }
         })
@@ -372,18 +380,17 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.product-create-submit', function(e){
         e.preventDefault();
         indpplAddLoading();
-        if($(this).is('#product-create-next')){
-            setTimeout(function(){
-                getProductInfo();
-            }, 10000);
-        }
+        
         // var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
         var type = $('#indppl-modal-product-type').val();
         var product_id = $('#product-create-product').val();
         var brand = $('#product-create-brand').val();
         var store_id = $('#store-id').val();
         var product_unit = $('.indppl-new-package').first().data('unit');
-        
+        var fraction = false;
+        if($('#product-create-fraction-bag').is(':checked')){
+            fraction = true;
+        }
         var product_dryliquid = $('.product-create-dry-wet').val();
         var product_name = $('.indppl-add-product-name').val();
         if(!$(this).is('#product-create-next')){
@@ -422,7 +429,7 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
-        // console.log(new_pack);
+        console.log(fraction);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -442,6 +449,7 @@ jQuery(document).ready(function( $ ) {
                 new_pack: new_pack,
                 cups_num: cups_num,
                 cups_unit: cups_unit,
+                fraction: fraction,
                 product_name: product_name,
             },
             type: 'POST',
@@ -502,6 +510,11 @@ jQuery(document).ready(function( $ ) {
                     $('.slide-in-products-container').remove();
                     indpplAddProduct(type);
                 }
+                if($(elem).is('.product-create-submit')){
+                    // setTimeout(function(){
+                        getProductInfo();
+                    // }, 10000);
+                }
                 indpplDelLoading();
             }
         });
@@ -557,30 +570,50 @@ jQuery(document).ready(function( $ ) {
         indpplAddProduct(type);
     })
 
-    $('body').on('click', '.product-create-pots-next', function(e){
+    $('body').on('click', '.product-create-pots-submit', function(e){
         e.preventDefault();
+        indpplAddLoading();
         var store_id = $('#store-id').val();
         var type = $('#indppl-modal-product-type').val();
         var brand = $('#product-create-brand').val();
-        var product = $('#product-create-product').val();
+        var product_id = $('#product-create-product').val();
         var product_unit = $('.indppl-new-package').last().data('unit');
         var product_dryliquid = $('.product-create-dry-wet').val();
+        var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
+        var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
         var product_name = $('.indppl-add-product-name').val();
         var cups_num = $('.indppl-product-create-cups-num').val();
         var cups_unit = $('.product-create-5-cups').val();
         var elem = $(this);
+        var fraction = false;
+        if($('#product-create-fraction-bag').is(':checked')){
+            $fraction = true;
+        }
+        var filler = false;
+        if($('#indppl-add-product-bulk-filler').is(":checked")){
+            filler = true;
+        }
+        var blend = false;
+        if($('#indppl-add-product-additive-blend').is(":checked")){
+            blend = true;
+        }
+        var surface = false;
+        if($('#indppl-add-product-additive-surface').is(":checked")){
+            surface = true;
+        }
         var package_array = [];
         var package_remove = [];
         var new_pack = {};
+        console.log(type);
         var i = 0;
-        if($(this).is('#product-create-next')){
+        if($(this).is('#product-create-pots-next')){
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-background-green')){
                     if($(this).hasClass('indppl-new-package')){
                         new_pack[i] = {};
                         new_pack[i]['size'] = $(this).data('size');
                         new_pack[i]['unit'] = $(this).data('unit');
-                        new_pack[i]['name'] = brand + " " + $('#product-create-product option:selected').text() + " " + $(this).data('size') + $(this).data('unit');
+                        new_pack[i]['name'] = brand + " " + product_name + " " + $(this).data('size') + $(this).data('unit');
                         i++;
                     }else{
                         package_array.push($(this).data('id'));
@@ -594,6 +627,9 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
+        console.log(filler);
+        console.log(blend);
+        console.log(surface);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -606,21 +642,71 @@ jQuery(document).ready(function( $ ) {
                 brand: brand,
                 package_array: package_array,
                 package_remove: package_remove,
+                prodcut_unit: product_unit,
                 product_input: product_input,
                 product_select: product_select,
-                prodcut_unit: product_unit,
                 product_dryliquid: product_dryliquid,
                 new_pack: new_pack,
                 cups_num: cups_num,
+                filler: filler,
+                blend: blend,
+                surface: surface,
                 cups_unit: cups_unit,
+                fraction: fraction,
                 product_name: product_name,
             },
             type: 'POST',
             success: function(e){
+                // array = JSON.parse(e);
+                // console.log(array);
                 console.log(e);
+                getProductInfo();
+                $('.slide-in-products-container').removeClass('left-0');
+                setTimeout(function(){
+                    $('.slide-in-products-container').remove();
+                }, 1000);
+                indpplDelLoading();
             }
         });
     });
+    $('body').on('click', '.indppl-product-pots-edit', function(e){
+        e.preventDefault();
+        var store_id = $(this).data('store');
+        var type = $(this).data('type');
+        var product_id = $(this).data('product');
+        console.log('edit');
+        indpplEditProduct(type, store_id, product_id);
+    });
+
+    $('body').on('click', '.indppl-application-rates-pots-btn', function(e){
+        e.preventDefault();
+        $('body').prepend("<div class='slide-in-products-container'></div>");
+        setTimeout(function(){
+            $('.slide-in-products-container').addClass('left-0');
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+        var store_id = $('#store-id').val();
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_get_pot_apprates_ajax',
+                store_id: store_id,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                $('.slide-in-products-container').append(e);
+                get100Percent();
+                indpplDelLoading();
+            }
+        })
+    })
+
+    $('body').on('change', '.pots-apprates-filler', function(e){
+        get100Percent();
+    })
 
     greyOutAllUnchecked();
     // same as above but it checks on load.
@@ -628,7 +714,29 @@ jQuery(document).ready(function( $ ) {
     check_on_load();
 });
 
-
+function get100Percent(){
+    var total = 0;
+    $('.pots-apprates-filler').each(function(){
+        total = total + Number($(this).val());
+    })
+    console.log(total);
+    if(total == 100){
+        $('.pots-apprates-filler-total').removeClass('color-red');
+        $('.pots-apprates-filler-total').addClass('color-green');
+        $('.pots-apprates-filler-message').removeClass('color-red');
+        $('.pots-apprates-filler-message').addClass('color-green');
+        $('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
+    }else{
+        if($('.pots-apprates-filler-total').hasClass('color-green')){
+            $('.pots-apprates-filler-total').removeClass('color-green');
+            $('.pots-apprates-filler-total').addClass('color-red');
+            $('.pots-apprates-filler-message').removeClass('color-green');
+            $('.pots-apprates-filler-message').addClass('color-red');
+            $('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
+        }
+    }
+    $('.pots-apprates-filler-total').text(total);
+}
 
 function getProductInfo(){
     var store_id = $('#store-id').val();
@@ -642,7 +750,7 @@ function getProductInfo(){
         },
         type: 'POST',
         success: function(e){
-            console.log(e);
+            // console.log(e);
             $('#indppl-tab-3').empty();
             $('#indppl-tab-3').append(e);
         }
@@ -816,6 +924,14 @@ function indpplEditProduct(type, store_id, product_id){
             });
             if(array['next_btn']){
                 $('.product-create-save-done-container').append(array['next_btn']);
+            }
+            if(array['fraction']){
+                $('.product-create-fraction-bag').append(array['fraction']);
+            }
+            if(array['default']){
+                if(array['default'] == 1){
+                    $('.product-create-fraction-bag').hide();
+                }
             }
             
             indpplDelLoading();
