@@ -15,6 +15,10 @@ body {
     background: #254921!important;
 }
 
+.pad-top-3 {
+  padding-top: 2%;
+}
+
 .gradient-button {
     color: white;
     font-size: 1.35em;
@@ -167,6 +171,8 @@ body {
     box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.39);
     -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+
 }
 .geo-submit{
     margin:auto;
@@ -185,7 +191,7 @@ body {
 .flex-left-justify{
     align-items: flex-start;
 }
-.results-store, .store-list-text{
+.results-store, .store-list-text, .results-store a{
     font-family: 'Open Sans';
     font-weight: 600;
     color: #fff;
@@ -446,6 +452,9 @@ span.padding-right-5{
   z-index: 100;
   left: 100%;
   background: white;
+  -webkit-box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
+  -moz-box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
+  box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
   transition: left 1s ease-in-out;
 }
 .slide-in-products-inside-container, .pots-apprates-container{

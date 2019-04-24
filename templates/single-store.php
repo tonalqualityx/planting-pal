@@ -64,7 +64,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
             }
         }
     }
-    
+
     // Calculate the shopping list!
     $shopping_list = array();
     foreach($products as $key => $val) {
@@ -150,7 +150,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     // Add the skipped package to the array so we can compare rounded values later
                     $skipped_packs[] = array(
                         'standard-amount'   => $pack['standard-amount'],
-                        'name'              => $key,
+                        'name'              => $pack_key,
                     );
 
                 }
