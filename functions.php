@@ -362,18 +362,22 @@ function indppl_apprates($store_id, $type = null, $args = null) {
             break;
         case 'pots':
             foreach($args as $key => $val) {
-                // var_dump($val);
-                // echo "<br /><br />";
-                $apprates[$type][$key][key($val)] = $val[key($val)];
+                foreach($val as $k => $v){
+                    $apprates[$type][$key][$k][key($v)] = $v[key($v)];
+                    // var_dump($key);
+                    // var_dump($val);
+                    // var_dump($k);
+                    // var_dump($v);
+                    // var_dump('<br /><br />');
+                }
             }
-            var_dump($apprates);
+            // var_dump($apprates);
 
             break;
         case 'beds':
 
             foreach($args as $key => $val) {
-                // var_dump($val);
-                // echo "<br /><br />";
+                
                 $apprates[$type][$key][key($val)] = $val[key($val)];
             }
     
@@ -420,9 +424,16 @@ function indppl_delete_apprate($store_id, $args = null) {
         if(is_array($args)){
             // We have many items to remove
             foreach($args as $k => $v) {
-                // if($k == 'ground'){
+                if($k == 'ground'){
                     unset($apprates[$k][$v]);
-                // }
+                }
+                $fill_type = array('filler', 'blended', 'surface', 'each');
+                if($k == 'pots'){
+                    foreach($fill_type as $val){
+                        unset($apprates[$k][$val][$v]);
+
+                    }
+                }
             }
             $newapprates = json_encode($apprates);
             $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
@@ -927,69 +938,20 @@ function indppl_get_current_products($type){
         <?php
         $product_array = $app_rates[$type];
         // var_dump($product_array);
+        $no_duplicates = array();
         if(is_array($product_array)){
             foreach($product_array as $key => $value){
-                if($key != 0){
-                    // var_dump($key);
-                    $pid = $key;
-                    $title = get_the_title($pid);
-                    $brand = get_the_terms($pid, 'brand');
-                    $default =  get_post_meta($pid, 'wpcf-type');
-                    $package_relations = toolset_get_related_posts(
-                        $pid, // get posts related to this one
-                        'product-package', // relationship between the posts
-                        'parent',
-                        '100',
-                        '0',
-                        array(),
-                        'post_id',
-                        'child'
-                    );
-                    $store_related = toolset_get_related_posts(
-                        $store_id,
-                        'store-package',
-                        'parent',
-                        '100',
-                        '0',
-                        array(),
-                        'post_id',
-                        'child'
-                    );
-                    ?>
-                    <tr class='indppl-table-color-offset'>
-                        <td>
-                            <?php
-                            if($type == 'pots'){
-                                ?>
-                                <a href="#" class="indppl-product-pots-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
-                                <?php
-                            }else{
-                                ?>
-                                <a href="#" class="indppl-product-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
-                                <?php
-                            }
-                            ?>
-                            <a href="#" class="indppl-product-delete" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>delete</a>
-                        </td>
-                        <td>
-                            <?php echo $brand[0]->name; ?>
-                        </td>
-                        <td>
-                            <?php echo $title; ?>
-                        </td>
-                        <td>
-                            <?php
-                            $size_array = array_intersect($package_relations, $store_related);
-                            foreach($size_array as $key => $value){
-                                $meta = get_post_meta($size_array[$key]);
-                                echo $meta['wpcf-size'][0];
-                                echo $meta['wpcf-unit'][0];
-                                echo ' ';
-                            }
-                            ?>
-                        </td>
-                    </tr>
-                    <?php  
+                if($type == 'pots'){
+                    foreach($value as $k => $v){
+                        if($k != 0 && !in_array($k, $no_duplicates)){
+                            $no_duplicates[] = $k;
+                            indppl_get_products($store_id, $k, 'pots');
+                        }
+                    }
+                }else{
+                    if($key != 0){
+                        indppl_get_products($store_id, $key, 'ground');
+                    }
                 }
             }
         }
@@ -1097,10 +1059,10 @@ function update_package_table($store_id, $product_id, $type){
             <td>
                 <?php
                 foreach($pro_container as $k => $v){
-                    
+                    // echo 'inside-foreach';
                     if($id == $v['child']){
+                        // echo $v['intermediary'];
                         // $app_qty_array[$k] = get_post_meta($v['intermediary']);
-                        // var_dump($type);
                         if(!empty($app_rates[$type][$product_id]['containers'])){
                             $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
                         }else{
@@ -1131,6 +1093,7 @@ function update_package_table($store_id, $product_id, $type){
                     }
                 }
                 if(!$pro_container){
+                    // echo 'no foreach';
                     if(!empty($app_rates[$type][$product_id]['containers'])){
                         $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
                     }
@@ -1161,6 +1124,10 @@ function update_package_table($store_id, $product_id, $type){
                     $package_unit = get_post_meta($val, 'wpcf-unit', true);
                     $cups = get_post_meta($product_id, 'wpcf-5cups', true);
                     // var_dump($cups);
+                    // echo $cups;
+                    // echo $app_unit;
+                    // echo $app_qty;
+                    // echo $package_unit;
                     $conversion = indppl_normalize($items, $package_unit, intval($cups));
                     // var_dump($conversion);
                     // $conversion = getVolume($app_qty, $app_unit, $package_unit);
@@ -1494,4 +1461,68 @@ function indppl_get_product_info(){
     <?php
     $return = ob_get_clean();
     return $return;
+}
+
+function indppl_get_products($store_id, $key, $type){
+        // var_dump($key);
+        $pid = $key;
+        $title = get_the_title($pid);
+        $brand = get_the_terms($pid, 'brand');
+        // var_dump($type);
+        $package_relations = toolset_get_related_posts(
+            $pid, // get posts related to this one
+            'product-package', // relationship between the posts
+            'parent',
+            '100',
+            '0',
+            array(),
+            'post_id',
+            'child'
+        );
+        $store_related = toolset_get_related_posts(
+            $store_id,
+            'store-package',
+            'parent',
+            '100',
+            '0',
+            array(),
+            'post_id',
+            'child'
+        );
+        ?>
+        <tr class='indppl-table-color-offset'>
+            <td>
+                <?php
+                if($type == 'pots'){
+                    ?>
+                    <a href="#" class="indppl-product-pots-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
+                    <?php
+                }else{
+                    ?>
+                    <a href="#" class="indppl-product-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
+                    <?php
+                }
+                ?>
+                <a href="#" class="indppl-product-delete" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>delete</a>
+            </td>
+            <td>
+                <?php echo $brand[0]->name; ?>
+            </td>
+            <td>
+                <?php echo $title; ?>
+            </td>
+            <td>
+                <?php
+                $size_array = array_intersect($package_relations, $store_related);
+                foreach($size_array as $key => $value){
+                    $meta = get_post_meta($size_array[$key]);
+                    echo $meta['wpcf-size'][0];
+                    echo $meta['wpcf-unit'][0];
+                    echo ' ';
+                }
+                ?>
+            </td>
+        </tr>
+        <?php  
+    
 }

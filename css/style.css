@@ -467,11 +467,11 @@ span.padding-right-5{
   overflow-y: auto;
 }
 .modal-close{
-  position: relative;
-  left: 99%;
-  width: 20px;
-  padding: 2px 5px;
-  height: 20px;
+  position: fixed;
+  left: 86%;
+  width: 24px;
+  padding: 1px 5px;
+  height: 24px;
   text-align: center;
   border: black solid 1px;
   border-radius: 50%;
@@ -485,7 +485,7 @@ span.padding-right-5{
   text-decoration: none;
 }
 .left-0{
-  left:-20px;
+  left:0;
 }
 .white-bg-for-loading{
   top: 0;
@@ -597,7 +597,7 @@ span.padding-right-5{
 .pots-apprates-filler{
   width: 70px;
 }
-.pots-apprates-filler-cell{
+.pots-apprates-filler-cell, .pots-apprates-blended-cell, .pots-apprates-surface-cell, .pots-apprates-each-cell{
   padding: 5px;
 }
 .height-50{
@@ -626,4 +626,17 @@ span.padding-right-5{
 }
 .pots-apprates-filler-message{
   min-width: 300px;
+}
+input.blended-num, input.surface-num{
+  width: 70px!important;
+  /* width: 70px; */
+}
+.blended-select, .surface-select-sqft, .surface-select{
+  height: 35px;
+}
+.pots-apprates-blended-cell, .pots-apprates-surface-cell, .pots-apprates-each-cell{
+  padding-right: 10px;
+}
+.max-width-100, .pots-apprates-each-num{
+  max-width: 100px;
 }
