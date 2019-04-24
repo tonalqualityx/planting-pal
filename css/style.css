@@ -326,6 +326,10 @@ span.padding-right-5{
   color:red;
   text-decoration: none;
 }
+.color-green{
+  color: green;
+  text-decoration: none;
+}
 .container-limit{
   padding-left: 20px;
   /* text-decoration: none; */
@@ -444,7 +448,7 @@ span.padding-right-5{
   background: white;
   transition: left 1s ease-in-out;
 }
-.slide-in-products-inside-container{
+.slide-in-products-inside-container, .pots-apprates-container{
   margin: 5% 10%;
   height: 80vh;
   /* border-radius: 10px; */
@@ -506,6 +510,9 @@ span.padding-right-5{
   margin-right: 5px;
   min-width: 50px;
 }
+.product-create-standard-unit-container{
+  display: none;
+}
 .product-create-standard-unit-add{
   flex-basis: 10%;
   min-width: 150px;
@@ -544,6 +551,70 @@ span.padding-right-5{
 .indppl-product-list td, .indppl-product-list th{
   padding: 0px 0 0 10px;
 }
-.product-create-add-product-name{
+.product-create-add-product-name, .max-width-300{
   max-width: 300px;
+}
+.spining-loader{
+  height: 25px;
+  animation-name: small-rotate;
+  animation-duration: 2s; 
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+@keyframes small-rotate {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+.product-create-submit-container{
+  padding-top: 10px;
+}
+.indppl-add-product-usage-type{
+  display:flex;
+  flex-direction: column;
+}
+.product-create-save-done-container{
+  padding-top: 10px;
+}
+.indppl-application-rates-pots-btn{
+  padding-left: 20px;
+}
+.pots-apprates-filler-container{
+  /* display: flex;
+  flex-direction: column; */
+}
+.pots-apprates-filler-inside-container{
+  /* display:flex; */
+}
+.pots-apprates-filler{
+  width: 70px;
+}
+.pots-apprates-filler-cell{
+  padding: 5px;
+}
+.height-50{
+  height: 50px;
+}
+.pots-apprates-brand{
+  font-size: 1.2em;
+  margin-bottom: 0;
+}
+.pots-apprates-title{
+  font-size: 1.4em;
+  margin-top: 0;
+}
+.pots-apprates-filler-total{
+  font-size: 2em;
+  font-weight: 600;
+  text-align: center;
+}
+.max-width-500{
+  max-width: 500px;
+}
+.pots-apprates-filler-percent{
+  font-weight: 600;
+  font-size: 1.3em;
+  color: black;
+}
+.pots-apprates-filler-message{
+  min-width: 300px;
 }
