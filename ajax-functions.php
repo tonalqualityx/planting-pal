@@ -889,6 +889,7 @@ function indppl_get_pot_apprates_ajax(){
     }
 
     ob_start();
+    var_dump($app_rates);
     ?>
     <div class='pots-apprates-container'>
         <a href='#' class='modal-close'>X</a>
@@ -958,6 +959,19 @@ function indppl_get_pot_apprates_ajax(){
         </tr>
         </table>
         
+        <h4>Additives Blended in with Potting Soil</h4>
+        <table>
+            <?php
+            foreach($app_rates['pots'] as $key => $value){
+                if($value['blended']){
+
+                }
+            }
+            ?>
+            <tr>
+            
+            </tr>
+        </table>
     </div>
     <?php
     $return = ob_get_clean();

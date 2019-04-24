@@ -366,6 +366,7 @@ function indppl_apprates($store_id, $type = null, $args = null) {
                 // echo "<br /><br />";
                 $apprates[$type][$key][key($val)] = $val[key($val)];
             }
+            var_dump($apprates);
 
             break;
         case 'beds':

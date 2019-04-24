@@ -627,9 +627,9 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
-        console.log(filler);
-        console.log(blend);
-        console.log(surface);
+        // console.log(filler);
+        // console.log(blend);
+        // console.log(surface);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -674,7 +674,7 @@ jQuery(document).ready(function( $ ) {
         var store_id = $(this).data('store');
         var type = $(this).data('type');
         var product_id = $(this).data('product');
-        console.log('edit');
+        // console.log('edit');
         indpplEditProduct(type, store_id, product_id);
     });
 
@@ -696,7 +696,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
                 $('.slide-in-products-container').append(e);
                 get100Percent();
                 indpplDelLoading();
@@ -719,7 +719,7 @@ function get100Percent(){
     $('.pots-apprates-filler').each(function(){
         total = total + Number($(this).val());
     })
-    console.log(total);
+    // console.log(total);
     if(total == 100){
         $('.pots-apprates-filler-total').removeClass('color-red');
         $('.pots-apprates-filler-total').addClass('color-green');
@@ -861,7 +861,7 @@ function indpplEditProduct(type, store_id, product_id){
         type: 'POST',
         success: function(e){
             array = JSON.parse(e);
-            console.log(array);
+            // console.log(array);
             $('.product-create-brand-cut-off').children().each(function(){
                 $(this).empty();
             })
@@ -971,8 +971,8 @@ function updateAppRates(elem){
     if(unit == null){
         unit = 'lb'
     }
-    console.log(num);
-    console.log(unit);
+    // console.log(num);
+    // console.log(unit);
     var type = $('#indppl-modal-product-type').val();
     var product_id = $('#product-create-product').val();
     var brand = $('#product-create-brand').val();
@@ -987,7 +987,7 @@ function updateAppRates(elem){
             i++;
         }
     })
-    console.log(unit);
+    // console.log(unit);
     $.ajax({
         url:indppl_ajax.ajaxurl,
         dataType: 'text',
@@ -1009,7 +1009,7 @@ function updateAppRates(elem){
             // console.log(elem);
             // console.log(array);
             $.each(array['app_rates'], function(index, value){
-                console.log(index);
+                // console.log(index);
 
                $(elem).parent().siblings().eq(1+index).text(value + " Plants");
             })
