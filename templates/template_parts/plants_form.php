@@ -55,7 +55,7 @@
         <div class="container">
             <?php 
             //Get the containers!
-            $containers = types_child_posts('container');
+            $containers = toolset_get_related_posts($storeid, 'store-container', ['query_by_role' => 'parent', 'role_to_return' => 'other', 'return' => 'post_object']);
             foreach($containers as $container){ ?>
 
                 <div class="row">

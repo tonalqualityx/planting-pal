@@ -674,6 +674,42 @@ function indppl_remove_package_from_store_ajax(){
 add_action( 'wp_ajax_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax' );
 add_action('wp_ajax_nopriv_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax');
 
+
+// Setup the guide form 
+function indppl_setup_guide_forms_ajax(){
+
+    $form = $_POST['form'];
+    $defaults = get_posts(array("post_type" => "guide-defaults", 'meta_key' => 'wpcf-guide-type', 'meta_value' => $form));
+    $defaults = $defaults[0];
+    
+    switch($form){
+        case 'ground' :
+
+            break;
+        case 'pots':
+
+            break;
+
+        case 'beds':
+
+            break;
+
+    }
+
+    ob_start(); ?>
+
+    <div class="container">
+        <h2></h2>
+        <?php var_dump($defaults); ?>
+    </div>
+
+    <?php echo ob_get_clean();
+    die();
+}
+
+add_action('wp_ajax_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_ajax');
+add_action('wp_ajax_nopriv_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_ajax');
+
 function indppl_update_app_rates_ajax(){
     if(isset($_POST['type'])){
         $type = $_POST['type'];
