@@ -587,12 +587,14 @@ function getProductInfo(){
 }
 
 function greyOutAllUnchecked(){
-    $('.container-available').each(function(){
+    (function($){
         if(!$(this).find('input').is(":checked")){
+            $('.container-available').each(function(){
             $(this).parent().parent().prepend("<div class='greyed-out-section'></div>");
-            // console.log('this');
+                // console.log('this');
+            })
         }
-    })
+    })(jQuery);
 }
 
 function indppl_get_units($type = 'dry'){
