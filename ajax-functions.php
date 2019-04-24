@@ -276,6 +276,7 @@ function indppl_get_product_info_ajax(){
     }else{
         ob_start();
         ?>
+        <h3 class='product-create-dry-wet-title'>Select Dry or Wet for this product</h3>
         <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >Dry
         <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >Wet
         <?php
@@ -414,9 +415,16 @@ function indppl_get_product_info_ajax(){
     }
 
     ob_start();
-    ?>
-    <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next">
-    <?php
+    if($type == 'pots'){
+        ?>
+        <input type="submit" name="product-create-pots-next" data-exit="true" id="product-create-pots-next" class="product-create-pots-submit" value="Next">
+        <?php
+    }else{
+        ?>
+        <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next">
+        <?php
+
+    }
     $next_btn = ob_get_clean();
 
     if($product_id == 'new'){
@@ -426,6 +434,39 @@ function indppl_get_product_info_ajax(){
         <?php
         $add_product = ob_get_clean();
     }
+    if($type == 'pots'){
+        ob_start();
+        $filler = get_post_meta($product_id, 'wpcf-use-blended-filler');
+        $additive = get_post_meta($product_id, 'wpcf-use-blended-additive');
+        $surface = get_post_meta($product_id, 'wpcf-use-surface');
+        ?>
+        <div class='indppl-add-product-usage-type'>
+            <h3>Select Usage Type (check all that apply)</h3>
+            <div>
+                <input type='checkbox' name='indppl-add-product-bulk-filler' class='indppl-add-usage-type-check' id='indppl-add-product-bulk-filler' <?php if($filler){ ?>checked<?php }?>>
+                <label for='indppl-add-product-bulk-filler'>Bulk Filler/Substrate(ie Potting Soil)</label>
+            </div>
+            <div>
+                <input type='checkbox' name='indppl-add-product-additive-blend' class='indppl-add-usage-type-check' id='indppl-add-product-additive-blend' <?php if($additive){ ?>checked<?php }?>>
+                <label for='indppl-add-product-additive-blend'>Additive Blended In thie Potting Soil</label>
+            </div>
+            <div>
+                <input type='checkbox' name='indppl-add-product-additive-surface' class='indppl-add-usage-type-check' id='indppl-add-product-additive-surface' <?php if($surface){ ?>checked<?php }?>>
+                <label for='indppl-add-product-additive-surface'>Additive Surface Applied after planting</label>
+            </div>
+        </div>
+        <?php
+        $usage_type = ob_get_clean();
+    }
+    ob_start();
+    $fraction = get_post_meta($product_id, 'wpcf-fraction', true);
+    ?>
+    <div class='indppl-add-product-fraction-bag'>
+    <h3 class='product-create-fraction-bag-title'>When you recommend apply this product, is it by:</h3>
+        <input type='checkbox' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag
+    </div>
+    <?php
+    $fraction_bag = ob_get_clean();
     
     $send_array['standard_unit'] = $standard_unit;
     $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
@@ -435,6 +476,8 @@ function indppl_get_product_info_ajax(){
     $send_array['cups'] = $cups;
     $send_array['app_rates_chart'] = $app_rates_chart;
     $send_array['next_btn'] = $next_btn;
+    $send_array['fraction'] = $fraction_bag;
+    $send_array['default'] = $default;
     $send_array['console'] = $console;
     if($container){
         $send_array['container'] = $container;
@@ -444,6 +487,9 @@ function indppl_get_product_info_ajax(){
     }
     if($product_id == 'new'){
         $send_array['new_product'] = $add_product;
+    }
+    if($type == 'pots'){
+        $send_array['usage_type'] = $usage_type;
     }
     echo json_encode($send_array);
     die();
@@ -491,6 +537,9 @@ function indppl_save_product_ajax(){
     if(isset($_POST['cups_unit'])){
         $cups_unit = $_POST['cups_unit'];
     }
+    if(isset($_POST['fraction'])){
+        $fraction = $_POST['fraction'];
+    }
     $console = $cups_num;
     if($product_id == 'new'){
         $new_product_args = array(
@@ -500,7 +549,7 @@ function indppl_save_product_ajax(){
             'post_status' => 'publish',
             'meta_input' => array(
                 'wpcf-dryliquid' => $product_dryliquid,
-                'wpcf-unit' => $product_unit,
+                'wpcf-unit' => $new_pack[count($new_pack)-1]['unit'],
                 'wpcf-5cups' => $cups_num,
                 'wpcf-5cups-unit' => $cups_unit,
             ),
@@ -521,6 +570,7 @@ function indppl_save_product_ajax(){
     if($product_rate){
         // $console = $send_array;
         $save = indppl_apprates($store_id, $type, $send_array);
+        
     }
     // var_dump($package_array);
     // var_dump($new_pack);
@@ -545,7 +595,14 @@ function indppl_save_product_ajax(){
             $remove = toolset_disconnect_posts('store-package', $store_id, $pack_id);
         }
     }
-    $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    $console = $fraction;
+    if($fraction == 'true'){
+        update_post_meta($product_id, 'wpcf-fraction', 1);
+        $updated_app_rates = update_bag_package_table($store_id, $product_id, $type);
+    }else{
+        delete_post_meta($product_id, 'wpcf-fraction');
+        $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    }
     $ajax_array =[];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
@@ -617,6 +674,7 @@ function indppl_remove_package_from_store_ajax(){
 add_action( 'wp_ajax_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax' );
 add_action('wp_ajax_nopriv_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax');
 
+
 // Setup the guide form 
 function indppl_setup_guide_forms_ajax(){
 
@@ -651,3 +709,296 @@ function indppl_setup_guide_forms_ajax(){
 
 add_action('wp_ajax_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_ajax');
 add_action('wp_ajax_nopriv_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_ajax');
+
+function indppl_update_app_rates_ajax(){
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['brand'])){
+        $brand = $_POST['brand'];
+    }
+    if(isset($_POST['current_pack'])){
+        $current_pack = $_POST['current_pack'];
+    }
+    if(isset($_POST['container_id'])){
+        $container_id = $_POST['container_id'];
+    }
+    if(isset($_POST['container_num'])){
+        $container_num = $_POST['container_num'];
+    }
+    if(isset($_POST['container_unit'])){
+        $container_unit = $_POST['container_unit'];
+    }
+    $cups = get_post_meta($product_id, 'wpcf-5cups', true);
+    $update_array = [];
+    $items = array(
+        array(
+            'unit' => $container_unit,
+            'amount' => $container_num,
+        ),
+    );
+    // var_dump($cups);
+    // var_dump($container_unit);
+    foreach($current_pack as $key => $value){
+        $conversion = indppl_normalize($items, $value['unit'], intval($cups));
+        // var_dump($items);
+        // var_dump($value['unit']);
+        // var_dump($cups);
+        $final = $value['size'] / $conversion[0]['standard-amount'];
+        $update_array[] = round($final, 2);
+    }
+    $send_array = [];
+    $send_array['app_rates'] = $update_array;
+    echo json_encode($send_array);
+    // var_dump($send_array);
+    die();
+}
+add_action( 'wp_ajax_indppl_update_app_rates_ajax', 'indppl_update_app_rates_ajax' );
+add_action('wp_ajax_nopriv_indppl_update_app_rates_ajax', 'indppl_update_app_rates_ajax');
+
+function indppl_save_pots_product_ajax(){
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['brand'])){
+        $brand = $_POST['brand'];
+    }
+    if(isset($_POST['product_input'])){
+        $product_rate = $_POST['product_input'];
+    }
+    if(isset($_POST['product_select'])){
+        $product_unit = $_POST['product_select'];
+    }
+    if(isset($_POST['package_array'])){
+        $package_array = $_POST['package_array'];
+    }
+    if(isset($_POST['package_remove'])){
+        $package_remove = $_POST['package_remove'];
+    }
+    if(isset($_POST['new_pack'])){
+        $new_pack = $_POST['new_pack'];
+    }
+    if(isset($_POST['product_name'])){
+        $product_name = $_POST['product_name'];
+    }
+    if(isset($_POST['product_dryliquid'])){
+        $product_dryliquid = $_POST['product_dryliquid'];
+    }
+    if(isset($_POST['cups_num'])){
+        $cups_num = $_POST['cups_num'];
+    }
+    if(isset($_POST['cups_unit'])){
+        $cups_unit = $_POST['cups_unit'];
+    }
+    if(isset($_POST['fraction'])){
+        $fraction = $_POST['fraction'];
+    }
+    if(isset($_POST['filler'])){
+        $filler = $_POST['filler'];
+        var_dump($filler);
+    }
+    if(isset($_POST['blend'])){
+        $blend = $_POST['blend'];
+        var_dump($blend);
+    }
+    if(isset($_POST['surface'])){
+        $surface = $_POST['surface'];
+        var_dump($surface);
+    }
+    if($product_id == 'new'){
+        $new_product_args = array(
+            'post_type' => 'product',
+            'post_author' => get_current_user_id(),
+            'post_title' => $product_name,
+            'post_status' => 'publish',
+            'meta_input' => array(
+                'wpcf-dryliquid' => $product_dryliquid,
+                'wpcf-unit' => $new_pack[count($new_pack)-1]['unit'],
+                'wpcf-5cups' => $cups_num,
+                'wpcf-5cups-unit' => $cups_unit,
+            ),
+        );
+        $product_id = wp_insert_post($new_product_args);
+        wp_set_object_terms($product_id, $brand, 'brand');
+    }
+
+
+    $send_array = array($product_id => array());
+    // foreach($product_rate as $key => $value){
+        $temp = array();
+        if($filler == 'true'){
+            $temp['filler'] = array();
+        }
+        if($blend == 'true'){
+            $temp['blended'] = array();
+
+        }
+        if($surface == 'true'){
+            $temp['surface'] = array();
+        }
+        $send_array[$product_id] = $temp;
+    // }
+    if($product_rate){
+        // var_dump($type);
+        var_dump($send_array);
+        $save = indppl_apprates($store_id, $type, $send_array);
+        // $console = $save;
+    }
+    // var_dump($package_array);
+    // var_dump($new_pack);
+    foreach($new_pack as $key => $value){
+        $new_id = indppl_create_package($value);
+        $new_package = toolset_connect_posts('store-package', $store_id, $new_id);
+        $prod_pack = toolset_connect_posts('product-package', $product_id, $new_id);
+        // var_dump($new_package);
+    }
+    foreach($package_array as $package_id){
+        if(!$package_id == 0){
+            $new_package = toolset_connect_posts('store-package', $store_id, $package_id);
+        }
+        // var_dump($new_package);
+    }
+    foreach($package_remove as $pack_id){
+        if(is_array($pack_id)){
+            // var_dump('inssidldke');
+            wp_delete_post($pack_id['id']);
+        }
+        else{
+            $remove = toolset_disconnect_posts('store-package', $store_id, $pack_id);
+        }
+    }
+    // $console = $fraction;
+    if($fraction == 'true'){
+        update_post_meta($product_id, 'wpcf-fraction', 1);
+        // $updated_app_rates = update_bag_package_table($store_id, $product_id, $type);
+    }else{
+        delete_post_meta($product_id, 'wpcf-fraction');
+        // $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    }
+    $ajax_array =[];
+    // $console = $product_rate;
+    // $ajax_array['app_rates'] = $updated_app_rates;
+    // $ajax_array['product_id'] = $product_id;
+    // $ajax_array['dryliquid'] = $product_dryliquid;
+    // $ajax_array['console'] = $console;
+    // echo json_encode($ajax_array);
+    die();
+}
+add_action( 'wp_ajax_indppl_save_pots_product_ajax', 'indppl_save_pots_product_ajax' );
+add_action('wp_ajax_nopriv_indppl_save_pots_product_ajax', 'indppl_save_pots_product_ajax');
+
+function indppl_get_pot_apprates_ajax(){
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    $app_rates = indppl_apprates($store_id);
+    $num = 0;
+    foreach($app_rates['pots'] as $key => $value){
+        if(isset($value['filler'])){
+            $num++;
+        }
+    }
+    $ind = floor(100 / $num);
+    $count = 100 - ($ind * $num);
+    $percent_array = array();
+    while($num > 0){
+        if($count > 0){
+            $temp = $ind + 1;
+            $count--;
+        }else{
+            $temp = $ind;
+        }
+        $percent_array[] = $temp;
+        $num--;
+    }
+
+    ob_start();
+    ?>
+    <div class='pots-apprates-container'>
+        <a href='#' class='modal-close'>X</a>
+        <h2>Pots / Containers Application Rates</h2>
+        <p>Bulk Filler / Substrate(ie Potting Soil)</p>
+        <p>Enter the percentage of each product to be used. Percentages must total 100%.</p>
+        <table class='pots-apprates-filler-container'>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th>
+            </tr>
+        <?php
+        $counter = 0;
+        foreach($app_rates['pots'] as $key => $value){
+            if(isset($value['filler'])){
+                $title = get_the_title($key);
+                $brand = get_the_terms($key, 'brand', true);
+                $brand = $brand[0]->name;
+                // var_dump($brand);
+                ?>
+                <tr class='pots-apprates-filler-inside-container'>
+                    <td class='pots-apprates-filler-cell'>
+                        <input type='number' min='0' max='100' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <span class='pots-apprates-filler-percent'>%</span>
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <img class='height-50' src="https://via.placeholder.com/100.png">
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <div class='pots-apprates-brand-title'>
+                            <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                            <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                        </div>
+
+                    </td>
+                    <td class=''>
+                        <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio'>
+                    </td>
+                </tr>
+                <?php
+                $counter++;
+            }
+
+        }
+        ?>
+        <tr>
+            <td>
+                <div class='pots-apprates-filler-total color-red'>0</div>
+            </td>
+            <td>
+                <div class='pots-apprates-filler-percent'>%</div>
+            </td>
+            <td>
+
+            </td>
+            <td>
+                <div class='pots-apprates-filler-message color-red'>
+                    <p>Oops! This mix doesn't add up to 100%.</p>
+                    <p>Please check your numbers and try again.</p>
+                </div>
+            </td>
+        </tr>
+        </table>
+        
+    </div>
+    <?php
+    $return = ob_get_clean();
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_ajax' );
+add_action('wp_ajax_nopriv_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_ajax');
