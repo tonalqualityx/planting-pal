@@ -1090,7 +1090,7 @@ function findCups($in_value, $in_unit, $in_target)
     }
 } // end FindCups
 
-function indppl_normalize($items = array(), $unit, $cups = null){
+function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = null){
     // Enter an array of items to normalize to one unit type and spit them back in order
     // from largest to smallest. Hooray.
     // Each item should be given at least a 'unit' and an 'amount' value

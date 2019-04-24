@@ -15,6 +15,10 @@ body {
     background: #254921!important;
 }
 
+.pad-top-3 {
+  padding-top: 2%;
+}
+
 .gradient-button {
     color: white;
     font-size: 1.35em;
@@ -444,6 +448,9 @@ span.padding-right-5{
   z-index: 100;
   left: 100%;
   background: white;
+  -webkit-box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
+  -moz-box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
+  box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
   transition: left 1s ease-in-out;
 }
 .slide-in-products-inside-container{

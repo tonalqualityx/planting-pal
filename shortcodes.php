@@ -321,6 +321,10 @@ function pp_store_management(){
             <div id='indppl-tab-4' class='indppl-tab-pane'>
                 
                 <p>Guides</p>
+                <?php 
+                $guides = do_shortcode('[pp-store-guides]');
+                echo $guides; 
+                ?>
             </div>
         </div>
         <?php
@@ -617,3 +621,32 @@ function pp_store_products(){
     <?php
 }
 add_shortcode('pp-store-products', 'pp_store_products');
+
+function indppl_store_guides(){
+    $user = get_current_user_id(  );
+    $stati = indppl_user_status($user);
+    $pots_text = "Manage Potted Plants Planting Guide";
+    $beds_text = "Manage Raised Bed Planting Guide";
+    
+    $pots = "<span style='font-style:italic;font-weight: 100;'>{$pots_text} (Pro Required)</span>";
+    $beds = "<span style='font-style:italic;font-weight: 100;'>{$beds_text} (Pro Required)</span>";
+
+
+    if(in_array('paidaccountpro', $stati)){
+        $pots = "<a href='#' class='edit-guides pots-guide' data-target='pots'>{$pots_text}</a>";
+        $beds = "<a href='#' class='edit-guides pots-guide' data-target='beds'>{$beds_text}</a>";
+    }
+    
+    ob_start(); ?>
+    <h3 class="indppl-products-title">Your Planting Guides</h3>
+    <ul>
+        <li><a href="#" class="edit-guides ground-guide" data-target="ground">Manage In Ground Planting Guide</a></li>
+        <li><?php echo $pots; ?></li>
+        <li><?php echo $beds; ?></li>
+    </ul>
+    <?php
+    return ob_get_clean();
+
+}
+
+add_shortcode( 'pp-store-guides', 'indppl_store_guides' );

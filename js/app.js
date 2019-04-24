@@ -534,6 +534,37 @@ jQuery(document).ready(function( $ ) {
     // same as above but it checks on load.
     check_on_load_and_click();
     check_on_load();
+
+
+    // GUIDES RELATED JS
+
+    $("body").on('click', '.edit-guides', function (e) {
+
+        e.preventDefault();
+        console.log('sdfs');
+        $('body').prepend("<div class='slide-in-products-container'><div class='container pad-top-3'><a href='#' class='modal-close'>X</a></div></div>");
+        setTimeout(function () {
+            $('.slide-in-products-container').addClass('left-0');
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+
+        var target = $(this).data('target');
+
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_setup_guide_forms_ajax',
+                form: target,
+            },
+            type: 'POST',
+            success: function (response) {
+               $('.indppl-loading-background').remove();
+               $('.slide-in-products-container').append(response); 
+            }
+        });
+    });
 });
 
 function getProductInfo(){
@@ -723,5 +754,6 @@ function indpplEditProduct(type, store_id, product_id){
             
             indpplDelLoading();
         }
-    })
+    });
+
 }
