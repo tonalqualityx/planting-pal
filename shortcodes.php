@@ -640,7 +640,7 @@ function indppl_store_guides(){
     
     ob_start(); ?>
     <h3 class="indppl-products-title">Your Planting Guides</h3>
-    <ul>
+    <ul class="style-free">
         <li><a href="#" class="edit-guides ground-guide" data-target="ground">Manage In Ground Planting Guide</a></li>
         <li><?php echo $pots; ?></li>
         <li><?php echo $beds; ?></li>

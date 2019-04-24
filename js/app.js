@@ -719,7 +719,6 @@ jQuery(document).ready(function( $ ) {
     $("body").on('click', '.edit-guides', function (e) {
 
         e.preventDefault();
-        console.log('sdfs');
         $('body').prepend("<div class='slide-in-products-container'><div class='container pad-top-3'><a href='#' class='modal-close'>X</a></div></div>");
         setTimeout(function () {
             $('.slide-in-products-container').addClass('left-0');
@@ -739,53 +738,68 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function (response) {
                $('.indppl-loading-background').remove();
-               $('.slide-in-products-container').append(response); 
+               $('.slide-in-products-container .container').append(response); 
             }
         });
+    });
+
+    // Toggle planting guide sections
+    $("body").on('click', '.planting-guide-sections .indppl-button', function(e){
+        e.preventDefault();
+        var target = $(this).data('target');
+        console.log(target);
+        $(this).parents('.planting-guide-options').slideToggle();
+        $('.' + target).slideToggle();
     });
 });
 
 function get100Percent(){
-    var total = 0;
-    $('.pots-apprates-filler').each(function(){
-        total = total + Number($(this).val());
-    })
-    console.log(total);
-    if(total == 100){
-        $('.pots-apprates-filler-total').removeClass('color-red');
-        $('.pots-apprates-filler-total').addClass('color-green');
-        $('.pots-apprates-filler-message').removeClass('color-red');
-        $('.pots-apprates-filler-message').addClass('color-green');
-        $('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
-    }else{
-        if($('.pots-apprates-filler-total').hasClass('color-green')){
-            $('.pots-apprates-filler-total').removeClass('color-green');
-            $('.pots-apprates-filler-total').addClass('color-red');
-            $('.pots-apprates-filler-message').removeClass('color-green');
-            $('.pots-apprates-filler-message').addClass('color-red');
-            $('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
+    (function($){
+
+        var total = 0;
+        $('.pots-apprates-filler').each(function(){
+            total = total + Number($(this).val());
+        })
+        console.log(total);
+        if(total == 100){
+            $('.pots-apprates-filler-total').removeClass('color-red');
+            $('.pots-apprates-filler-total').addClass('color-green');
+            $('.pots-apprates-filler-message').removeClass('color-red');
+            $('.pots-apprates-filler-message').addClass('color-green');
+            $('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
+        }else{
+            if($('.pots-apprates-filler-total').hasClass('color-green')){
+                $('.pots-apprates-filler-total').removeClass('color-green');
+                $('.pots-apprates-filler-total').addClass('color-red');
+                $('.pots-apprates-filler-message').removeClass('color-green');
+                $('.pots-apprates-filler-message').addClass('color-red');
+                $('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
+            }
         }
-    }
-    $('.pots-apprates-filler-total').text(total);
+        $('.pots-apprates-filler-total').text(total);
+    })(jQuery);
 }
 
 function getProductInfo(){
-    var store_id = $('#store-id').val();
-    $.ajax({
-        url:indppl_ajax.ajaxurl,
-        dataType: 'text',
-        method: 'POST',
-        data: {
-            action: 'indppl_product_save_exit_ajax',
-            store_id: store_id,
-        },
-        type: 'POST',
-        success: function(e){
-            // console.log(e);
-            $('#indppl-tab-3').empty();
-            $('#indppl-tab-3').append(e);
-        }
-    });
+    (function($){
+
+        var store_id = $('#store-id').val();
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_product_save_exit_ajax',
+                store_id: store_id,
+            },
+            type: 'POST',
+            success: function(e){
+                // console.log(e);
+                $('#indppl-tab-3').empty();
+                $('#indppl-tab-3').append(e);
+            }
+        });
+    })(jQuery);
 }
 
 function greyOutAllUnchecked(){
@@ -857,27 +871,30 @@ function indpplDelLoading(){
     jQuery('.indppl-loading-background').remove();
 }
 function indpplAddProduct(type){
-    $('body').prepend("<div class='slide-in-products-container'></div>");
-    setTimeout(function(){
-        $('.slide-in-products-container').addClass('left-0');
-        indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
-    }, 20);
-    $.ajax({
-        url:indppl_ajax.ajaxurl,
-        dataType: 'text',
-        method: 'POST',
-        data: {
-            action: 'indppl_add_new_product_ajax',
-            type: type,
-        },
-        type: 'POST',
-        success: function(e){
-            // console.log(e);
-            $('.slide-in-products-container').prepend(e);
+    (function($){
 
-            indpplDelLoading();
-        }
-    })
+        $('body').prepend("<div class='slide-in-products-container'></div>");
+        setTimeout(function(){
+            $('.slide-in-products-container').addClass('left-0');
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_add_new_product_ajax',
+                type: type,
+            },
+            type: 'POST',
+            success: function(e){
+                // console.log(e);
+                $('.slide-in-products-container').prepend(e);
+    
+                indpplDelLoading();
+            }
+        })
+    })(jQuery);
 }
 
 function indpplEditProduct(type, store_id, product_id){
