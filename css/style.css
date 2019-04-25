@@ -7,8 +7,28 @@ body {
     min-height: 100vh;
 }
 
+.indppl-flex {
+  display: flex;
+}
+
+.indppl-space-between {
+  justify-content: space-between;
+}
+
+.indppl-align-center {
+  align-items: center;
+}
+
+.indppl-justify-center {
+  justify-content: center;
+}
+
 .margin-auto {
     margin: auto;
+}
+
+.orange-text {
+  color: #f79f2c;
 }
 
 .ppl-green-bg {
@@ -17,6 +37,12 @@ body {
 
 .pad-top-3 {
   padding-top: 2%;
+}
+
+ul.style-free {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .gradient-button {
@@ -274,6 +300,7 @@ body {
 }
 .indppl-containers-table{
   width:100%;
+  position: relative;
 }
 input.container-date{
   padding-left: 36px!important;
@@ -382,7 +409,8 @@ span.padding-right-5{
 .container-add-new{
   top: 0px;
 }
-.greyed-out-section, .greyed-out-form{
+/* .greyed-out-section, */
+.greyed-out-form{
   width: 91.5%;
   height: 34px;
   background: rgba(0, 0, 0, 0.36);
@@ -391,11 +419,13 @@ span.padding-right-5{
   left: 65px;
 }
 .greyed-out-form{
-  z-index: 999999;
+  /* z-index: 999999; */
+  /* height: 85%; */
   left: 26%;
-  height: 85%;
-  width: 72%;
-  background: rgba(0, 0, 0, 0.57);
+  height: auto;
+  top: 0;
+  bottom: 0;
+  width: 75%;
 }
 .up-sell-overlay{
   position: relative;
@@ -448,6 +478,8 @@ span.padding-right-5{
 .slide-in-products-container{
   position: fixed;
   height: 100vh;
+  max-height: 100vh;
+  overflow-y: auto;
   width: 100vw;
   z-index: 100;
   left: 100%;
@@ -457,6 +489,11 @@ span.padding-right-5{
   box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
   transition: left 1s ease-in-out;
 }
+
+.slide-in-products-container .container {
+  padding-bottom: 50px;
+}
+
 .slide-in-products-inside-container, .pots-apprates-container{
   margin: 5% 10%;
   height: 80vh;
@@ -627,6 +664,72 @@ span.padding-right-5{
 .pots-apprates-filler-message{
   min-width: 300px;
 }
+
+/**************
+GUIDES STYLES
+**************/
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input{
+  width: 15%;
+  min-width: 15%;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input p{
+  max-width: 85%;
+  width: 85%;
+  min-width: 85%;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input input{
+  margin-right: 10px;
+}
+
+.planting-guide-preview {
+  border: 2px solid #333;
+  width: 100%;
+  min-height: 500px;
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.planting-guide .store-info img {
+  max-height: 100px;
+}
+
+.store-address {
+  margin-left: 10px;
+}
+
+.store-address p {
+  margin-bottom: 0;
+}
+
+.overflow {
+  max-height: 500px;
+  overflow-y: scroll;
+  width: calc(100% + 5px);
+  padding-right: 8px;
+  position: relative;
+  right: -8px;
+  padding: 5px 15px;
+}
+
+.planting-guide-products {
+  margin-bottom: 15px;
+}
+
+.planting-guide-products input[type=checkbox] {
+  flex-basis: 5%;
+}
+
+.planting-guide-products label {
+  flex-basis: 15%;
+}
+
+.planting-guide-products textarea {
+  flex-grow: 999;
+}
+
 input.blended-num, input.surface-num{
   width: 70px!important;
   /* width: 70px; */

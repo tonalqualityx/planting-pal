@@ -626,6 +626,7 @@ add_shortcode('pp-store-products', 'pp_store_products');
 function indppl_store_guides(){
     $user = get_current_user_id(  );
     $stati = indppl_user_status($user);
+    $store = htmlspecialchars($_GET['store-id']);
     $pots_text = "Manage Potted Plants Planting Guide";
     $beds_text = "Manage Raised Bed Planting Guide";
     
@@ -640,8 +641,8 @@ function indppl_store_guides(){
     
     ob_start(); ?>
     <h3 class="indppl-products-title">Your Planting Guides</h3>
-    <ul>
-        <li><a href="#" class="edit-guides ground-guide" data-target="ground">Manage In Ground Planting Guide</a></li>
+    <ul class="style-free">
+        <li><a href="#" class="edit-guides ground-guide" data-target="ground" data-storeid="<?php echo $store; ?>">Manage In Ground Planting Guide</a></li>
         <li><?php echo $pots; ?></li>
         <li><?php echo $beds; ?></li>
     </ul>
