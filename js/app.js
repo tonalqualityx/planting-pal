@@ -782,35 +782,11 @@ jQuery(document).ready(function( $ ) {
             scrollTop: scrollTo.offset().top - myContainer.offset().top + myContainer.scrollTop()
         });
     });
-});
 
-function get100Percent(){
-    
-
-    var total = 0;
-    jQuery('.pots-apprates-filler').each(function(){
-        total = total + Number(jQuery(this).val());
-    })
-    console.log(total);
-    if(total == 100){
-        jQuery('.pots-apprates-filler-total').removeClass('color-red');
-        jQuery('.pots-apprates-filler-total').addClass('color-green');
-        jQuery('.pots-apprates-filler-message').removeClass('color-red');
-        jQuery('.pots-apprates-filler-message').addClass('color-green');
-        jQuery('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
-    }else{
-        if(jQuery('.pots-apprates-filler-total').hasClass('color-green')){
-            jQuery('.pots-apprates-filler-total').removeClass('color-green');
-            jQuery('.pots-apprates-filler-total').addClass('color-red');
-            jQuery('.pots-apprates-filler-message').removeClass('color-green');
-            jQuery('.pots-apprates-filler-message').addClass('color-red');
-            jQuery('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
-        }
-    }
-
-
-    jQuery('body').on('click', '.pots-apprates-save-btn', function(e){
+    $('body').on('click', '.pots-apprates-save-btn', function(e){
         e.preventDefault();
+        indpplAddLoading();
+        console.log('something');
         var store_id = $('#store-id').val();
         var fill_array = {};
         $('.pots-apprates-filler').each(function(){
@@ -822,9 +798,9 @@ function get100Percent(){
             }
         });
         var blend_array = {};
-        jQuery('.blended-num').each(function(){
-            blend_array[jQuery(this).data('product')] = {'amount': jQuery(this).val()};
-            blend_array[jQuery(this).data('product')]['unit'] = jQuery(this).parent().parent().find('.blended-select').val();
+        $('.blended-num').each(function(){
+            blend_array[$(this).data('product')] = {'amount': $(this).val()};
+            blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
         });
         var surface_array = {}
         $('.surface-num').each(function(){
@@ -855,21 +831,20 @@ function get100Percent(){
             type: 'POST',
             success: function(e){
                 console.log(e);
-                
+                indpplDelLoading();
             }
         });
     })
-
-
-};
+});
 
 function get100Percent(){
+    
 
     var total = 0;
     jQuery('.pots-apprates-filler').each(function(){
         total = total + Number(jQuery(this).val());
     })
-    // console.log(total);
+    console.log(total);
     if(total == 100){
         jQuery('.pots-apprates-filler-total').removeClass('color-red');
         jQuery('.pots-apprates-filler-total').addClass('color-green');
@@ -883,12 +858,10 @@ function get100Percent(){
             jQuery('.pots-apprates-filler-message').removeClass('color-green');
             jQuery('.pots-apprates-filler-message').addClass('color-red');
             jQuery('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
-
         }
-        jQuery('.pots-apprates-filler-total').text(total);
     }
-
-}
+    $('.pots-apprates-filler-total').text(total);
+};
 
 function getProductInfo(){
     (function($){

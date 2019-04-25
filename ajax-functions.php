@@ -1294,7 +1294,7 @@ function indppl_save_pot_apprates_ajax(){
         'each' => $each_array,
     );
     $save = indppl_apprates($store_id, 'pots', $args);
-    // var_dump($save);
+    var_dump($save);
     die();
 }
 add_action( 'wp_ajax_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax' );
