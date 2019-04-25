@@ -526,7 +526,7 @@ function indppl_store_info($store_id = NULL){
 		$zip = get_post_meta($store_id, 'wpcf-zip', true);
 		$weburl = get_post_meta($store_id, 'wpcf-weburl', true);
 		$phone = get_post_meta($store_id, 'wpcf-phone', true);
-		$email = get_post_meta($store_id, 'wpcf-email', true);
+        $email = get_post_meta($store_id, 'wpcf-email', true);
 		$logo = get_post_meta($store_id, 'wpcf-logo', true);
     }
     // var_dump($logo);
@@ -681,54 +681,56 @@ function indppl_store_info($store_id = NULL){
 
 function indppl_save_post($store_id = 0){
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		require_once( ABSPATH . 'wp-admin/includes/image.php' );
-		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		require_once( ABSPATH . 'wp-admin/includes/media.php' );
-		
-		$store = array();
+        require_once( ABSPATH . 'wp-admin/includes/image.php' );
+        require_once( ABSPATH . 'wp-admin/includes/file.php' );
+        require_once( ABSPATH . 'wp-admin/includes/media.php' );
+        
+        $store = array();
         $files = $_FILES["my_file_upload"];
         // var_dump($files);
-		// foreach ($files['name'] as $key => $value) {
-			if ($files['name'][0]) {
-				$file = array(
-					'name' => $files['name'][0],
-					'type' => $files['type'][0],
-					'tmp_name' => $files['tmp_name'][0],
-					'error' => $files['error'][0],
-					'size' => $files['size'][0]
-				);
-				$_FILES = array("upload_file" => $file);
-                $attachment_id = media_handle_upload("upload_file", 0);
-                // var_dump('lskdjf   :   ');
-				// var_dump(wp_get_attachment_image_src($attachment_id));
-				if (is_wp_error($attachment_id)) {
-                    // There was an error uploading the image.
-					echo "Error adding file";
-				}
-			}
-            // }
-        // var_dump(wp_get_attachment_image_src($attachment_id)[0]);
+        // foreach ($files['name'] as $key => $value) {
+        if ($files['name'][0]) {
+            $file = array(
+                'name' => $files['name'][0],
+                'type' => $files['type'][0],
+                'tmp_name' => $files['tmp_name'][0],
+                'error' => $files['error'][0],
+                'size' => $files['size'][0]
+            );
+            $_FILES = array("upload_file" => $file);
+            $attachment_id = media_handle_upload("upload_file", 0);
+            // var_dump('lskdjf   :   ');
+            // var_dump(wp_get_attachment_image_src($attachment_id));
+            if (is_wp_error($attachment_id)) {
+                // There was an error uploading the image.
+                echo "Error adding file";
+            }
+        }
+        // }
         $store = array(
             'ID' => $store_id,
-			'post_title' => wp_strip_all_tags($_POST['store-name']),
-			'post_author' => get_current_user_id(),
-			'post_type' => 'store',
-			'post_status' => "publish",
-			'meta_input' => array(
-				'wpcf-address1' => $_POST['address1'],
-				'wpcf-address2' => $_POST['address2'],
-				'wpcf-city' => $_POST['city'],
-				'wpcf-state' => $_POST['state'],
-				'wpcf-zip' => $_POST['zip'],
-				'wpcf-phone' => $_POST['phone'],
-				'wpcf-email' => $_POST['store-email'],
-				'wpcf-logo' => wp_get_attachment_image_src($attachment_id)[0],
-				'wpcf-weburl' => $_POST['weburl'],
-			),
-		);
-		$store_id = wp_insert_post($store);
-		return $store_id;
-	}
+            'post_title' => wp_strip_all_tags($_POST['store-name']),
+            'post_author' => get_current_user_id(),
+            'post_type' => 'store',
+            'post_status' => "publish",
+            'meta_input' => array(
+                'wpcf-address1' => $_POST['address1'],
+                'wpcf-address2' => $_POST['address2'],
+                'wpcf-city' => $_POST['city'],
+                'wpcf-state' => $_POST['state'],
+                'wpcf-zip' => $_POST['zip'],
+                'wpcf-phone' => $_POST['phone'],
+                'wpcf-email' => $_POST['store-email'],
+                
+                'wpcf-weburl' => $_POST['weburl'],
+            ),
+        );
+        if(isset(wp_get_attachment_image_src($attachment_id)[0])){
+            $store['meta_input']['wpcf-logo'] = wp_get_attachment_image_src($attachment_id)[0];
+        }
+        $store_id = wp_insert_post($store);
+        return $store_id;
+    }
 }
 
 function indppl_create_container($new_array, $container_id = 0){
