@@ -785,84 +785,89 @@ jQuery(document).ready(function( $ ) {
 });
 
 function get100Percent(){
-    (function($){
+    
 
-        var total = 0;
-        $('.pots-apprates-filler').each(function(){
-            total = total + Number($(this).val());
-        })
-        console.log(total);
-        if(total == 100){
-            $('.pots-apprates-filler-total').removeClass('color-red');
-            $('.pots-apprates-filler-total').addClass('color-green');
-            $('.pots-apprates-filler-message').removeClass('color-red');
-            $('.pots-apprates-filler-message').addClass('color-green');
-            $('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
-        }else{
-            if($('.pots-apprates-filler-total').hasClass('color-green')){
-                $('.pots-apprates-filler-total').removeClass('color-green');
-                $('.pots-apprates-filler-total').addClass('color-red');
-                $('.pots-apprates-filler-message').removeClass('color-green');
-                $('.pots-apprates-filler-message').addClass('color-red');
-                $('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
-            }
+    var total = 0;
+    jQuery('.pots-apprates-filler').each(function(){
+        total = total + Number(jQuery(this).val());
+    })
+    console.log(total);
+    if(total == 100){
+        jQuery('.pots-apprates-filler-total').removeClass('color-red');
+        jQuery('.pots-apprates-filler-total').addClass('color-green');
+        jQuery('.pots-apprates-filler-message').removeClass('color-red');
+        jQuery('.pots-apprates-filler-message').addClass('color-green');
+        jQuery('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
+    }else{
+        if(jQuery('.pots-apprates-filler-total').hasClass('color-green')){
+            jQuery('.pots-apprates-filler-total').removeClass('color-green');
+            jQuery('.pots-apprates-filler-total').addClass('color-red');
+            jQuery('.pots-apprates-filler-message').removeClass('color-green');
+            jQuery('.pots-apprates-filler-message').addClass('color-red');
+            jQuery('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
+        }
+    }
 
-    $('body').on('click', '.pots-apprates-save-btn', function(e){
+
+    jQuery('body').on('click', '.pots-apprates-save-btn', function(e){
         e.preventDefault();
         var fill_array = {};
-        $('.pots-apprates-filler').each(function(){
-            fill_array[$(this).data('product')] = {'amount': $(this).val()};
-            if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
-                fill_array[$(this).data('product')]['primary'] = true;
+        jQuery('.pots-apprates-filler').each(function(){
+            fill_array[jQuery(this).data('product')] = {'amount': jQuery(this).val()};
+            if(jQuery(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
+                fill_array[jQuery(this).data('product')]['primary'] = true;
             }
         });
         var blend_array = {};
-        $('.blended-num').each(function(){
-            blend_array[$(this).data('product')] = {'amount': $(this).val()};
-            blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
+        jQuery('.blended-num').each(function(){
+            blend_array[jQuery(this).data('product')] = {'amount': jQuery(this).val()};
+            blend_array[jQuery(this).data('product')]['unit'] = jQuery(this).parent().parent().find('.blended-select').val();
         });
         var surface_array = {}
-        $('.surface-num').each(function(){
-            surface_array[$(this).data('product')] = {'amount': $(this).val()};
-            surface_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.surface-select').val();
-            surface_array[$(this).data('product')]['per-sqft'] = $(this).parent().parent().find('.surface-select-sqft').val();
+        jQuery('.surface-num').each(function(){
+            surface_array[jQuery(this).data('product')] = {'amount': jQuery(this).val()};
+            surface_array[jQuery(this).data('product')]['unit'] = jQuery(this).parent().parent().find('.surface-select').val();
+            surface_array[jQuery(this).data('product')]['per-sqft'] = jQuery(this).parent().parent().find('.surface-select-sqft').val();
         })
         var each_array = {};
-        $('.pots-apprates-each-num-8').each(function(){
-            var product = $(this).data('product');
-            each_array[product] = {'small': $(this).val()};
-            each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
-            each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
+        jQuery('.pots-apprates-each-num-8').each(function(){
+            var product = jQuery(this).data('product');
+            each_array[product] = {'small': jQuery(this).val()};
+            each_array[product]['medium'] = jQuery(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
+            each_array[product]['large'] = jQuery(this).parent().parent().find('.pots-apprates-each-num-24').val();
         })
         console.log(each_array);
 
-    })
+    });
 
-});
+
+};
 
 function get100Percent(){
+
     var total = 0;
-    $('.pots-apprates-filler').each(function(){
-        total = total + Number($(this).val());
+    jQuery('.pots-apprates-filler').each(function(){
+        total = total + Number(jQuery(this).val());
     })
     // console.log(total);
     if(total == 100){
-        $('.pots-apprates-filler-total').removeClass('color-red');
-        $('.pots-apprates-filler-total').addClass('color-green');
-        $('.pots-apprates-filler-message').removeClass('color-red');
-        $('.pots-apprates-filler-message').addClass('color-green');
-        $('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
+        jQuery('.pots-apprates-filler-total').removeClass('color-red');
+        jQuery('.pots-apprates-filler-total').addClass('color-green');
+        jQuery('.pots-apprates-filler-message').removeClass('color-red');
+        jQuery('.pots-apprates-filler-message').addClass('color-green');
+        jQuery('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
     }else{
-        if($('.pots-apprates-filler-total').hasClass('color-green')){
-            $('.pots-apprates-filler-total').removeClass('color-green');
-            $('.pots-apprates-filler-total').addClass('color-red');
-            $('.pots-apprates-filler-message').removeClass('color-green');
-            $('.pots-apprates-filler-message').addClass('color-red');
-            $('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
+        if(jQuery('.pots-apprates-filler-total').hasClass('color-green')){
+            jQuery('.pots-apprates-filler-total').removeClass('color-green');
+            jQuery('.pots-apprates-filler-total').addClass('color-red');
+            jQuery('.pots-apprates-filler-message').removeClass('color-green');
+            jQuery('.pots-apprates-filler-message').addClass('color-red');
+            jQuery('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
 
         }
-        $('.pots-apprates-filler-total').text(total);
-    })(jQuery);
+        jQuery('.pots-apprates-filler-total').text(total);
+    }
+
 }
 
 function getProductInfo(){
@@ -1097,40 +1102,40 @@ function indpplDelSmallLoading(){
 
 function updateAppRates(elem){
     var img = indpplAddSmallLoading();
-    $(elem).parent().parent().append(img);
-    if($(elem).hasClass('indppl-product-create-chart-app-rate-num')){
-        var cont_id = $(elem).attr('name');
-        var num = $(elem).attr('value');
-        var unit = $(elem).next().val();
-    }else if($(elem).hasClass('indppl-product-create-chart-app-unit')){
-        var cont_id = $(elem).attr('name');
-        var num = $(elem).prev().attr('value');
-        var unit = $(elem).val();
+    jQuery(elem).parent().parent().append(img);
+    if(jQuery(elem).hasClass('indppl-product-create-chart-app-rate-num')){
+        var cont_id = jQuery(elem).attr('name');
+        var num = jQuery(elem).attr('value');
+        var unit = jQuery(elem).next().val();
+    }else if(jQuery(elem).hasClass('indppl-product-create-chart-app-unit')){
+        var cont_id = jQuery(elem).attr('name');
+        var num = jQuery(elem).prev().attr('value');
+        var unit = jQuery(elem).val();
     }
     if(num == null){
         num = 1;
     }
     if(unit == null){
-        unit = 'lb'
+        unit = 'lb';
     }
     // console.log(num);
     // console.log(unit);
-    var type = $('#indppl-modal-product-type').val();
-    var product_id = $('#product-create-product').val();
-    var brand = $('#product-create-brand').val();
-    var store_id = $('#store-id').val();
+    var type = jQuery('#indppl-modal-product-type').val();
+    var product_id = jQuery('#product-create-product').val();
+    var brand = jQuery('#product-create-brand').val();
+    var store_id = jQuery('#store-id').val();
     var current_pack = {};
     var i = 0;
-    $('.indppl-product-create-size-btn').each(function(){
-        if($(this).hasClass('indppl-background-green')){
+    jQuery('.indppl-product-create-size-btn').each(function(){
+        if(jQuery(this).hasClass('indppl-background-green')){
             current_pack[i] = {};
-            current_pack[i]['size'] = $(this).data('size');
-            current_pack[i]['unit'] = $(this).data('unit');
+            current_pack[i]['size'] = jQuery(this).data('size');
+            current_pack[i]['unit'] = jQuery(this).data('unit');
             i++;
         }
-    })
+    });
     // console.log(unit);
-    $.ajax({
+    jQuery.ajax({
         url:indppl_ajax.ajaxurl,
         dataType: 'text',
         method: 'POST',
@@ -1150,13 +1155,13 @@ function updateAppRates(elem){
             array = JSON.parse(e);
             // console.log(elem);
             // console.log(array);
-            $.each(array['app_rates'], function(index, value){
+            jQuery.each(array['app_rates'], function(index, value){
                 // console.log(index);
 
-               $(elem).parent().siblings().eq(1+index).text(value + " Plants");
-            })
+               jQuery(elem).parent().siblings().eq(1+index).text(value + " Plants");
+            });
             indpplDelSmallLoading();
         }
     });
-
+    
 }

@@ -64,12 +64,12 @@ function indppl_single_store_template($single) {
 
 add_filter('single_template', 'indppl_single_store_template');
 
-function indppl_set_app_template(){
-
+function indppl_set_app_template($template){
     if ( is_page( 'app' ) ) {
-            $template = dirname( __FILE__ ) . '/templates/app.php';
+        $directory = dirname( __FILE__ );
+        return  $directory . '/templates/app.php';
     }
 
     return $template;
 }
-// add_filter( 'page_template', 'indppl_set_app_template' );
+add_filter( 'template_include', 'indppl_set_app_template' );

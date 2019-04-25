@@ -728,6 +728,7 @@ GUIDES STYLES
 
 .planting-guide-products textarea {
   flex-grow: 999;
+}
 
 input.blended-num, input.surface-num{
   width: 70px!important;
