@@ -681,8 +681,9 @@ function indppl_setup_guide_forms_ajax(){
     $form = $_POST['form'];
     $defaults = get_posts(array("post_type" => "guide-defaults", 'meta_key' => 'wpcf-guide-type', 'meta_value' => $form));
     $default = $defaults[0];
-
+    $store = htmlspecialchars($_POST['store']);
     $options = toolset_get_related_posts($default->ID, 'guide-steps',['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child']);
+    $apprates = indppl_apprates($store);
 
     $sections = array();
     

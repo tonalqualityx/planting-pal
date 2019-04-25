@@ -726,6 +726,7 @@ jQuery(document).ready(function( $ ) {
         }, 20);
 
         var target = $(this).data('target');
+        var storeid = $(this).data('storeid');
 
         $.ajax({
             url: indppl_ajax.ajaxurl,
@@ -734,6 +735,7 @@ jQuery(document).ready(function( $ ) {
             data: {
                 action: 'indppl_setup_guide_forms_ajax',
                 form: target,
+                store: storeid,
             },
             type: 'POST',
             success: function (response) {
@@ -750,6 +752,19 @@ jQuery(document).ready(function( $ ) {
         console.log(target);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
+    });
+
+    $("body").on('click', '.planting-guide-instructions input[type=radio]', function() {
+        var content = $("#" + $(this).data('content')).text();
+        var target = $(this).data('target');
+        $("#" + target).html(content);
+        var myContainer = $('.planting-guide-preview')
+
+        var scrollTo = $("#" + target);
+        console.log(scrollTo);
+        myContainer.animate({
+            scrollTop: scrollTo.offset().top - myContainer.offset().top + myContainer.scrollTop()
+        });
     });
 });
 
