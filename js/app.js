@@ -55,7 +55,7 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var store_id = $(this).data('id');
         var elem = $(this);
-        console.log(store_id);
+        // console.log(store_id);
         indpplAddLoading();
         $.ajax({
             url:indppl_ajax.ajaxurl,
@@ -68,7 +68,7 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 indpplDelLoading();
-                console.log(e);
+                // console.log(e);
                 if(e == 0){
                     $(elem).prev('p').text("Your store is not live. If you have filled out all the information below you can make your store live with this button.");
                     $(elem).html("Make Public");
@@ -141,7 +141,7 @@ jQuery(document).ready(function( $ ) {
             }
         });
 
-        console.log(available);
+        // console.log(available);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -159,9 +159,9 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
                 var new_array = jQuery.parseJSON(e);
-                console.log(new_array);
+                // console.log(new_array);
                 var i = 0;
                 $('.container-add-new').each(function(){
                     $(this).attr('name', "indppl-container-title");
@@ -193,6 +193,7 @@ jQuery(document).ready(function( $ ) {
         indpplAddProduct(type);
     })
     $('body').on('click', '.modal-close', function(e){
+        $(this).hide();
         $('.slide-in-products-container').removeClass('left-0');
         setTimeout(function(){
             $('.slide-in-products-container').remove();
@@ -230,7 +231,7 @@ jQuery(document).ready(function( $ ) {
                 $('.product-create-product').empty();
                 $('.product-create-product').append(e);
                 var status = $('#user-status').val();
-                console.log(status);
+                // console.log(status);
                 if(status != 'paidaccountpro'){
                     $('.product-create-product').append('<option value="new">Add Product</option>');
                 }
@@ -257,7 +258,7 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 array = JSON.parse(e);
-                console.log(array['console']);
+                // console.log(array['console']);
                 $('.product-create-brand-cut-off').children().each(function(){
                     $(this).empty();
                 })
@@ -273,9 +274,9 @@ jQuery(document).ready(function( $ ) {
                 if(array['dry_wet']){
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
-                    console.log(array['dry_wet'][2]);
+                    // console.log(array['dry_wet'][2]);
                     $.each(units, function(index, value){
-                        console.log(value);
+                        // console.log(value);
                         if(value != array['dry_wet'][2]){
                             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
                             
@@ -295,11 +296,11 @@ jQuery(document).ready(function( $ ) {
                     $('.product-create-app-rates-chart-container').append(array['app_rates_chart']);
                 }
                 var units = indppl_get_units(array['dry_wet'][1]);
-                console.log(units);
+                // console.log(units);
                 $('.indppl-product-create-chart-app-unit').each(function(){
                     var select = $(this).data('unit');
                     var elem = $(this);
-                    console.log(select);
+                    // console.log(select);
                     $.each(units, function(index, value){
                         if(select == index){
                             selected = `selected`;
@@ -319,7 +320,7 @@ jQuery(document).ready(function( $ ) {
                 if(array['usage_type']){
                     $('.product-create-usage-type').append(array['usage_type']);
                 }
-                console.log(array['fraction']);
+                // console.log(array['fraction']);
                 if(array['fraction']){
                     $('.product-create-fraction-bag').append(array['fraction']);
                 }
@@ -359,7 +360,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.indppl-x', function(){
         // this needs to remove a package in the back end.
         if($(this).parent().hasClass('indppl-non-default-package')){
-            console.log('inside');
+            // console.log('inside');
             $(this).parent().hide();
             setTimeout(function(){
                 $(this).parent().removeClass('indppl-background-green');
@@ -429,7 +430,7 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
-        console.log(fraction);
+        // console.log(fraction);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -454,68 +455,78 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                // console.log(e);
-                array = JSON.parse(e);
-                console.log(array);
-                console.log(array['console']);
-                if(product_id == 'new'){
-                    $('.product-create-product').children().last().attr('value', array['product_id']);
-                }
-                $('.product-create-app-rates-chart-container').empty();
-                $('.product-create-app-rates-chart-container').append(array['app_rates']);
-                var units = indppl_get_units(array['dryliquid']);
-                // console.log(units);
-                $('.indppl-product-create-chart-app-unit').each(function(){
-                    var select = $(this).data('unit');
-                    var elem = $(this);
-                    // console.log(select);
-                    $.each(units, function(index, value){
-                        if(select == index){
-                            selected = `selected`;
-                        }else{
-                            selected = ``;
-                        }
-                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
-                    });
-                    // console.log(unit);
-                });
-                var bagunits = indppl_get_units('bag');
-                $('.indppl-product-create-chart-bag-unit').each(function(){
-                    var select = $(this).data('unit');
-                    var elem = $(this);
-                    console.log(select);
-                    $.each(bagunits, function(index, value){
-                        if(select == index){
-                            selected = `selected`;
-                        }else{
-                            selected = ``;
-                        }
-                        $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
-                    });
-                    // console.log(unit);
-                });
-                if($(elem).is('#product-create-next')){
-                    $('.product-create-app-rates-chart-container').slideToggle();
-                    $('.product-create-first-part-container').slideToggle();
-                    
-                }
-                if($(elem).is('#product-create-submit-exit')){
-                    // getProductInfo();
+                console.log(type);
+                if(type == 'pots'){
+                    getProductInfo();
                     $('.slide-in-products-container').removeClass('left-0');
                     setTimeout(function(){
                         $('.slide-in-products-container').remove();
                     }, 1000);
+                    indpplDelLoading();
+                }else{
+                    // console.log(e);
+                    array = JSON.parse(e);
+                    // console.log(array);
+                    // console.log(array['console']);
+                    if(product_id == 'new'){
+                        $('.product-create-product').children().last().attr('value', array['product_id']);
+                    }
+                    $('.product-create-app-rates-chart-container').empty();
+                    $('.product-create-app-rates-chart-container').append(array['app_rates']);
+                    var units = indppl_get_units(array['dryliquid']);
+                    // console.log(units);
+                    $('.indppl-product-create-chart-app-unit').each(function(){
+                        var select = $(this).data('unit');
+                        var elem = $(this);
+                        // console.log(select);
+                        $.each(units, function(index, value){
+                            if(select == index || (select == 'tbl' && index == 'tbls')){
+                                selected = `selected`;
+                            }else{
+                                selected = ``;
+                            }
+                            $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                        });
+                        // console.log(unit);
+                    });
+                    var bagunits = indppl_get_units('bag');
+                    $('.indppl-product-create-chart-bag-unit').each(function(){
+                        var select = $(this).data('unit');
+                        var elem = $(this);
+                        console.log(select);
+                        $.each(bagunits, function(index, value){
+                            if(select == index || (select == 'tbl' && index == 'tbls')){
+                                selected = `selected`;
+                            }else{
+                                selected = ``;
+                            }
+                            $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                        });
+                        // console.log(unit);
+                    });
+                    if($(elem).is('#product-create-next')){
+                        $('.product-create-app-rates-chart-container').slideToggle();
+                        $('.product-create-first-part-container').slideToggle();
+                        
+                    }
+                    if($(elem).is('#product-create-submit-exit')){
+                        // getProductInfo();
+                        $('.slide-in-products-container').removeClass('left-0');
+                        setTimeout(function(){
+                            $('.slide-in-products-container').remove();
+                        }, 1000);
+                    }
+                    if($(elem).is('#product-create-submit')){
+                        $('.slide-in-products-container').remove();
+                        indpplAddProduct(type);
+                    }
+                    if($(elem).is('.product-create-submit')){
+                        // setTimeout(function(){
+                            getProductInfo();
+                        // }, 10000);
+                    }
+                    indpplDelLoading();
                 }
-                if($(elem).is('#product-create-submit')){
-                    $('.slide-in-products-container').remove();
-                    indpplAddProduct(type);
-                }
-                if($(elem).is('.product-create-submit')){
-                    // setTimeout(function(){
-                        getProductInfo();
-                    // }, 10000);
-                }
-                indpplDelLoading();
             }
         });
 
@@ -532,12 +543,14 @@ jQuery(document).ready(function( $ ) {
         var store_id = $(this).data('store');
         var type = $(this).data('type');
         var product_id = $(this).data('product');
-        console.log('edit');
+        // console.log('edit');
         indpplEditProduct(type, store_id, product_id);
     })
 
     $('body').on('click', '.indppl-product-delete', function(e){
         e.preventDefault();
+        var load = indpplAddSmallLoading();
+        $(this).parent().parent().append(load);
         var store_id = $(this).data('store');
         var type = $(this).data('type');
         var product_id = $(this).data('product');
@@ -556,6 +569,7 @@ jQuery(document).ready(function( $ ) {
             success: function(e){
                 $(elem).parent().parent().remove();
                 // console.log(e);
+                indpplDelSmallLoading();
             }
         })
     })
@@ -580,7 +594,7 @@ jQuery(document).ready(function( $ ) {
         var product_unit = $('.indppl-new-package').last().data('unit');
         var product_dryliquid = $('.product-create-dry-wet').val();
         var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
-        var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
+        var product_select = $("#product-create-form").find('sel ect').filter('.some-kind-of-wonderful').serializeArray();
         var product_name = $('.indppl-add-product-name').val();
         var cups_num = $('.indppl-product-create-cups-num').val();
         var cups_unit = $('.product-create-5-cups').val();
@@ -604,7 +618,7 @@ jQuery(document).ready(function( $ ) {
         var package_array = [];
         var package_remove = [];
         var new_pack = {};
-        console.log(type);
+        // console.log(type);
         var i = 0;
         if($(this).is('#product-create-pots-next')){
             $('.indppl-product-create-size-btn').each(function(){
@@ -719,7 +733,7 @@ jQuery(document).ready(function( $ ) {
     $("body").on('click', '.edit-guides', function (e) {
 
         e.preventDefault();
-        console.log('sdfs');
+        // console.log('sdfs');
         $('body').prepend("<div class='slide-in-products-container'><div class='container pad-top-3'><a href='#' class='modal-close'>X</a></div></div>");
         setTimeout(function () {
             $('.slide-in-products-container').addClass('left-0');
@@ -743,6 +757,38 @@ jQuery(document).ready(function( $ ) {
             }
         });
     });
+
+    $('body').on('click', '.pots-apprates-save-btn', function(e){
+        e.preventDefault();
+        var fill_array = {};
+        $('.pots-apprates-filler').each(function(){
+            fill_array[$(this).data('product')] = {'amount': $(this).val()};
+            if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
+                fill_array[$(this).data('product')]['primary'] = true;
+            }
+        });
+        var blend_array = {};
+        $('.blended-num').each(function(){
+            blend_array[$(this).data('product')] = {'amount': $(this).val()};
+            blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
+        });
+        var surface_array = {}
+        $('.surface-num').each(function(){
+            surface_array[$(this).data('product')] = {'amount': $(this).val()};
+            surface_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.surface-select').val();
+            surface_array[$(this).data('product')]['per-sqft'] = $(this).parent().parent().find('.surface-select-sqft').val();
+        })
+        var each_array = {};
+        $('.pots-apprates-each-num-8').each(function(){
+            var product = $(this).data('product');
+            each_array[product] = {'small': $(this).val()};
+            each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
+            each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
+        })
+        console.log(each_array);
+
+    })
+
 });
 
 function get100Percent(){
@@ -799,7 +845,7 @@ function greyOutAllUnchecked(){
 
 function indppl_get_units($type = 'dry'){
     if($type == 'dry'){
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'eaches': 'Each', 'Bag': 'Bag'};
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each', 'Bag': 'Bag'};
     }else if($type == 'bag'){
         return {'ppb': 'plants per bag / contianer', 'bpp': 'bags / containers per plant'};
     }else{

@@ -47,6 +47,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value / 231 * 128 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value / 231 * 128 * 2;
                     break;
                 case "floz":
@@ -104,6 +105,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * $pre_calc / 231 * 128 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     $pre_calc = 12 ** 3;
                     return $in_value * $pre_calc / 231 * 128 * 2;
                     break;
@@ -167,6 +169,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * $pre_calc / 231 * 128 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     $pre_calc = 36 ** 3;
                     return $in_value * $pre_calc / 231 * 128 * 2;
                     break;
@@ -227,6 +230,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 111.71013061;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value * 37.236710204;
                     break;
                 case "floz":
@@ -278,6 +282,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 223.42026122;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value * 74.473420407;
                     break;
                 case "floz":
@@ -331,6 +336,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 223.42026122;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value / 3;
                     break;
                 case "floz":
@@ -364,9 +370,11 @@ function getVolume($in_value, $in_input, $in_output)
             break;
 
         case "tbls":
+        case "tbl":
             // All inputs for Tablespoons
             switch ($in_output) {
                 case "tbls":
+                case "tbl":
                     return $in_value * 1;
                     break;
                 case "ci":
@@ -446,6 +454,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value * 2;
                     break;
                 case "cup":
@@ -502,6 +511,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 8 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value * 8 * 2;
                     break;
                 case "floz":
@@ -558,6 +568,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 16 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value * 16 * 2;
                     break;
                 case "floz":
@@ -614,6 +625,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 32 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value * 32 * 2;
                     break;
                 case "floz":
@@ -670,6 +682,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 128 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     return $in_value * 128 * 2;
                     break;
                 case "floz":
@@ -728,6 +741,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 1000 / $pre_calc / 231 * 128 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     $pre_calc = 25.4 ** 3;
                     return $in_value * 1000 / $pre_calc / 231 * 128 * 2;
                     break;
@@ -791,6 +805,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * $pre_calc ** 3 / 231 * 128 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     $pre_calc = 10 / 25.4;
                     return $in_value * $pre_calc ** 3 / 231 * 128 * 2;
                     break;
@@ -853,6 +868,7 @@ function getVolume($in_value, $in_input, $in_output)
                     return $in_value * 1000 * $pre_calc ** 3 / 231 * 128 * 6;
                     break;
                 case "tbls":
+                case "tbl":
                     $pre_calc = 10 / 25.4;
                     return $in_value * 1000 * $pre_calc ** 3 / 231 * 128 * 2;
                     break;
@@ -1185,6 +1201,7 @@ function indppl_get_units($return = 'all'){
             "qt-d",
             "tsp",
             "tbls",
+            "tbl",
             "floz",
             "cup",
             "pt-l",

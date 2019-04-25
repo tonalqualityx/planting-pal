@@ -602,6 +602,7 @@ function indppl_save_product_ajax(){
     }else{
         delete_post_meta($product_id, 'wpcf-fraction');
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
+        $console = $updated_app_rates;
     }
     $ajax_array =[];
     $ajax_array['app_rates'] = $updated_app_rates;
@@ -807,15 +808,15 @@ function indppl_save_pots_product_ajax(){
     }
     if(isset($_POST['filler'])){
         $filler = $_POST['filler'];
-        var_dump($filler);
+        // var_dump($filler);
     }
     if(isset($_POST['blend'])){
         $blend = $_POST['blend'];
-        var_dump($blend);
+        // var_dump($blend);
     }
     if(isset($_POST['surface'])){
         $surface = $_POST['surface'];
-        var_dump($surface);
+        // var_dump($surface);
     }
     if($product_id == 'new'){
         $new_product_args = array(
@@ -837,24 +838,37 @@ function indppl_save_pots_product_ajax(){
 
     $send_array = array($product_id => array());
     // foreach($product_rate as $key => $value){
-        $temp = array();
-        if($filler == 'true'){
-            $temp['filler'] = array();
-        }
-        if($blend == 'true'){
-            $temp['blended'] = array();
+    $temp = array();
+    if($filler == 'true'){
+        $temp['filler'] = array(
+            $product_id => array(),
+        );
+    }
+    if($blend == 'true'){
+        $temp['blended'] = array(
+            $product_id => array(),
+        );
 
-        }
-        if($surface == 'true'){
-            $temp['surface'] = array();
-        }
-        $send_array[$product_id] = $temp;
+    }
+    if($surface == 'true'){
+        $temp['surface'] = array(
+            $product_id => array(),
+        );
+    }
+    var_dump($new_pack);
+    if($new_pack[count($new_pack)-1]['unit'] == 'each'){
+        $temp['each'] = array(
+            $product_id => array(),
+        );
+    }
+    $send_array = $temp;
     // }
-    if($product_rate){
+    if($product_id != 'new'){
         // var_dump($type);
-        var_dump($send_array);
+        // var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
-        // $console = $save;
+
+        // var_dump($save);
     }
     // var_dump($package_array);
     // var_dump($new_pack);
@@ -905,10 +919,10 @@ function indppl_get_pot_apprates_ajax(){
     }
     $app_rates = indppl_apprates($store_id);
     $num = 0;
-    foreach($app_rates['pots'] as $key => $value){
-        if(isset($value['filler'])){
+    foreach($app_rates['pots']['filler'] as $key => $value){
+        // if(isset($value['filler'])){
             $num++;
-        }
+        // }
     }
     $ind = floor(100 / $num);
     $count = 100 - ($ind * $num);
@@ -925,7 +939,7 @@ function indppl_get_pot_apprates_ajax(){
     }
 
     ob_start();
-    var_dump($app_rates);
+    // var_dump($app_rates);
     ?>
     <div class='pots-apprates-container'>
         <a href='#' class='modal-close'>X</a>
@@ -940,74 +954,216 @@ function indppl_get_pot_apprates_ajax(){
                 <th></th>
                 <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th>
             </tr>
-        <?php
-        $counter = 0;
-        foreach($app_rates['pots'] as $key => $value){
-            if(isset($value['filler'])){
-                $title = get_the_title($key);
-                $brand = get_the_terms($key, 'brand', true);
-                $brand = $brand[0]->name;
-                // var_dump($brand);
-                ?>
-                <tr class='pots-apprates-filler-inside-container'>
-                    <td class='pots-apprates-filler-cell'>
-                        <input type='number' min='0' max='100' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
-                    </td>
-                    <td class='pots-apprates-filler-cell'>
-                        <span class='pots-apprates-filler-percent'>%</span>
-                    </td>
-                    <td class='pots-apprates-filler-cell'>
-                        <img class='height-50' src="https://via.placeholder.com/100.png">
-                    </td>
-                    <td class='pots-apprates-filler-cell'>
-                        <div class='pots-apprates-brand-title'>
-                            <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
-                            <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
-                        </div>
+            <?php
+            $counter = 0;
+            foreach($app_rates['pots']['filler'] as $key => $value){
+                // if(isset($value['filler'])){
+                    $title = get_the_title($key);
+                    $brand = get_the_terms($key, 'brand', true);
+                    $brand = $brand[0]->name;
+                    // var_dump($brand);
+                    ?>
+                    <tr class='pots-apprates-filler-inside-container'>
+                        <td class='pots-apprates-filler-cell'>
+                            <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
+                        </td>
+                        <td class='pots-apprates-filler-cell'>
+                            <span class='pots-apprates-filler-percent'>%</span>
+                        </td>
+                        <td class='pots-apprates-filler-cell'>
+                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                        </td>
+                        <td class='pots-apprates-filler-cell'>
+                            <div class='pots-apprates-brand-title'>
+                                <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                                <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                            </div>
 
-                    </td>
-                    <td class=''>
-                        <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio'>
-                    </td>
+                        </td>
+                        <td class=''>
+                            <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio'>
+                        </td>
+                    </tr>
+                    <?php
+                    $counter++;
+                // }
+
+            }
+            if(empty($app_rates['pots']['filler'])){
+                ?>
+                <tr>
+                    <th class='color-red'>There are no Products Setup for This section.</th>
                 </tr>
                 <?php
-                $counter++;
+            }else{
+                ?>
+                <tr>
+                    <td>
+                        <div class='pots-apprates-filler-total color-red'>0</div>
+                    </td>
+                    <td>
+                        <div class='pots-apprates-filler-percent'>%</div>
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <div class='pots-apprates-filler-message color-red'>
+                            <p>Oops! This mix doesn't add up to 100%.</p>
+                            <p>Please check your numbers and try again.</p>
+                        </div>
+                    </td>
+                </tr>
+            <?php
             }
-
-        }
-        ?>
-        <tr>
-            <td>
-                <div class='pots-apprates-filler-total color-red'>0</div>
-            </td>
-            <td>
-                <div class='pots-apprates-filler-percent'>%</div>
-            </td>
-            <td>
-
-            </td>
-            <td>
-                <div class='pots-apprates-filler-message color-red'>
-                    <p>Oops! This mix doesn't add up to 100%.</p>
-                    <p>Please check your numbers and try again.</p>
-                </div>
-            </td>
-        </tr>
+            ?>
         </table>
         
         <h4>Additives Blended in with Potting Soil</h4>
         <table>
             <?php
-            foreach($app_rates['pots'] as $key => $value){
-                if($value['blended']){
+            foreach($app_rates['pots']['blended'] as $key => $value){
+                // var_dump($value);
+                // var_dump("<br /><br />");
+                // if(isset($value['blended'])){
+                    $title = get_the_title($key);
+                    $brand = get_the_terms($key, 'brand', true);
+                    $brand = $brand[0]->name;
+                    ?>
+                    <tr>
+                        <td class='pots-apprates-blended-cell'>
+                            <input type="number" min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' class='blended-num'>
+                        </td>
+                        <td class='pots-apprates-blended-cell'>
+                            <select name='blended-select-<?php echo $key; ?>' class='blended-select'>
+                                <option value='cup'>Cups</option>
+                                <option value='tbls'>Tablespoons</option>
+                                <option value='tsp'>Teaspoons</option>
+                            </select>
+                        </td>
+                        <td class='pots-apprates-blended-cell'>
+                            per cuft of soil
+                        </td>
+                        <td class='pots-apprates-blended-cell'>
+                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                        </td>
+                        <td class='pots-apprates-blended-cell'>
+                            <div class='pots-apprates-brand-title'>
+                                <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                                <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                            </div>
+                        </td>
 
-                }
+
+                    </tr>
+                    <?php
+                // }
+            }
+            if(empty($app_rates['pots']['blended'])){
+                ?>
+                <tr>
+                    <th class='color-red'>There are no Products Setup for This section.</th>
+                </tr>
+                <?php
             }
             ?>
-            <tr>
-            
-            </tr>
         </table>
+        <p>Typical Application Rates:</p>
+        <p>Organic Fertilizer - 1 Cup per cuft of soil</p>
+        <p>Chemical Fertilizer - 1 tbs per cuft of soil</p>
+        <p>Microbe Products - .25 tsp per cuft of soil</p>
+
+        <h4>Additives Surface Applied after planting</h4>
+        <table>
+            <?php
+            foreach($app_rates['pots']['surface'] as $key => $value){
+                // if(isset($value['surface'])){
+                    $title = get_the_title($key);
+                    $brand = get_the_terms($key, 'brand', true);
+                    $brand = $brand[0]->name;
+                    ?>
+                    <tr>
+                        <td class='pots-apprates-surface-cell'>
+                            <input type='number' min='0' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' class='surface-num'>
+                        </td>
+                        <td class='pots-apprates-surface-cell'>
+                        <select name='surface-select-<?php echo $key; ?>' class='surface-select'>
+                                    <option value='cup'>Cups</option>
+                                    <option value='tbls'>Tablespoons</option>
+                                    <option value='tsp'>Teaspoons</option>
+                                </select>
+                        </td>
+                        <td class='pots-apprates-surface-cell'>
+                            <select name='surface-select-sqft-<?php echo $key; ?>' class='surface-select-sqft'>
+                                <option value='1'>Per 1 sqft</option>
+                                <option value='10'>Per 10 sqft</option>
+                                <option value='100'>Per 100 sqft</option>
+                            </select>
+                        </td>
+                        <td class='pots-apprates-surface-cell'>
+                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                        </td>
+                        <td class='pots-apprates-surface-cell'>
+                            <div class='pots-apprates-brand-title'>
+                                <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                                <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php
+                // }
+            }
+            if(empty($app_rates['pots']['surface'])){
+                ?>
+                <tr>
+                    <th class='color-red'>There are no Products Setup for This section.</th>
+                </tr>
+                <?php
+            }
+            ?>
+        </table>
+
+        <h4>Products used as 'Eaches'</h4>
+        <p>These products will be recommended based on the width of your customer's pot/container:</p>
+        <table>
+            <tr>
+                <th style="text-align: center">&lt;8" wide</th>
+                <th style="text-align: center">8-24" wide</th>
+                <th style="text-align: center">&gt;24" wide</th>
+            </tr>
+            <?php
+            foreach($app_rates['pots']['each'] as $key => $value){
+                $title = get_the_title($key);
+                $brand = get_the_terms($key, 'brand', true);
+                $brand = $brand[0]->name;
+                ?>
+                <tr>
+                    <td class='pots-apprates-each-cell'>
+                        <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' placeholder='#eaches'>
+                    </td>
+                    <td class='pots-apprates-each-cell'>
+                        <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' placeholder='#eaches'>
+                    </td>
+                    <td class='pots-apprates-each-cell'>
+                        <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' placeholder='#eaches'>
+                    </td>
+                    <td class='pots-apprates-each-cell'>
+                        <img class='height-50' src="https://via.placeholder.com/100.png">
+                    </td>
+                    <td class='pots-apprates-each-cell'>
+                        <div class='pots-apprates-brand-title'>
+                            <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                            <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                        </div>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+        </table>
+        <div class='pots-apprates-save-container'>
+            <a href='#' class='pots-apprates-save-btn indppl-button'>SAVE</a>
+        </div>
     </div>
     <?php
     $return = ob_get_clean();
