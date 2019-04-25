@@ -965,7 +965,7 @@ function indppl_get_pot_apprates_ajax(){
                     ?>
                     <tr class='pots-apprates-filler-inside-container'>
                         <td class='pots-apprates-filler-cell'>
-                            <input type='number' min='0' max='100' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
+                            <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
                         </td>
                         <td class='pots-apprates-filler-cell'>
                             <span class='pots-apprates-filler-percent'>%</span>
@@ -1032,7 +1032,7 @@ function indppl_get_pot_apprates_ajax(){
                     ?>
                     <tr>
                         <td class='pots-apprates-blended-cell'>
-                            <input type="number" name='blended-num-<?php echo $key; ?>' class='blended-num'>
+                            <input type="number" min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' class='blended-num'>
                         </td>
                         <td class='pots-apprates-blended-cell'>
                             <select name='blended-select-<?php echo $key; ?>' class='blended-select'>
@@ -1084,7 +1084,7 @@ function indppl_get_pot_apprates_ajax(){
                     ?>
                     <tr>
                         <td class='pots-apprates-surface-cell'>
-                            <input type='number' name='surface-num-<?php echo $key; ?>' class='surface-num'>
+                            <input type='number' min='0' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' class='surface-num'>
                         </td>
                         <td class='pots-apprates-surface-cell'>
                         <select name='surface-select-<?php echo $key; ?>' class='surface-select'>
@@ -1139,13 +1139,13 @@ function indppl_get_pot_apprates_ajax(){
                 ?>
                 <tr>
                     <td class='pots-apprates-each-cell'>
-                        <input type='number' class='pots-apprates-each-num' name='pots-apprates-each-8' placeholder='#eaches'>
+                        <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' placeholder='#eaches'>
                     </td>
                     <td class='pots-apprates-each-cell'>
-                        <input type='number' class='pots-apprates-each-num' name='pots-apprates-each-8-24' placeholder='#eaches'>
+                        <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' placeholder='#eaches'>
                     </td>
                     <td class='pots-apprates-each-cell'>
-                        <input type='number' class='pots-apprates-each-num' name='pots-apprates-each-24' placeholder='#eaches'>
+                        <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' placeholder='#eaches'>
                     </td>
                     <td class='pots-apprates-each-cell'>
                         <img class='height-50' src="https://via.placeholder.com/100.png">

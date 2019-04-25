@@ -637,6 +637,6 @@ input.blended-num, input.surface-num{
 .pots-apprates-blended-cell, .pots-apprates-surface-cell, .pots-apprates-each-cell{
   padding-right: 10px;
 }
-.max-width-100, .pots-apprates-each-num{
+.max-width-100{
   max-width: 100px;
 }

@@ -757,6 +757,38 @@ jQuery(document).ready(function( $ ) {
             }
         });
     });
+
+    $('body').on('click', '.pots-apprates-save-btn', function(e){
+        e.preventDefault();
+        var fill_array = {};
+        $('.pots-apprates-filler').each(function(){
+            fill_array[$(this).data('product')] = {'amount': $(this).val()};
+            if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
+                fill_array[$(this).data('product')]['primary'] = true;
+            }
+        });
+        var blend_array = {};
+        $('.blended-num').each(function(){
+            blend_array[$(this).data('product')] = {'amount': $(this).val()};
+            blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
+        });
+        var surface_array = {}
+        $('.surface-num').each(function(){
+            surface_array[$(this).data('product')] = {'amount': $(this).val()};
+            surface_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.surface-select').val();
+            surface_array[$(this).data('product')]['per-sqft'] = $(this).parent().parent().find('.surface-select-sqft').val();
+        })
+        var each_array = {};
+        $('.pots-apprates-each-num-8').each(function(){
+            var product = $(this).data('product');
+            each_array[product] = {'small': $(this).val()};
+            each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
+            each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
+        })
+        console.log(each_array);
+
+    })
+
 });
 
 function get100Percent(){
