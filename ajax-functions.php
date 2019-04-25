@@ -945,7 +945,7 @@ function indppl_get_pot_apprates_ajax(){
         }
     }
     ob_start();
-    var_dump($get_apps);
+    // var_dump($get_apps);
     ?>
     <div class='pots-apprates-container'>
         <a href='#' class='modal-close'>X</a>
@@ -1283,7 +1283,7 @@ function indppl_save_pot_apprates_ajax(){
         'each' => $each_array,
     );
     $save = indppl_apprates($store_id, 'pots', $args);
-    var_dump($save);
+    // var_dump($save);
     die();
 }
 add_action( 'wp_ajax_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax' );

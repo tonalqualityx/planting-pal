@@ -370,11 +370,6 @@ function indppl_apprates($store_id, $type = null, $args = null) {
                     }else{
                         $apprates[$type][$key][$k][key($v)] = $v[key($v)];
                     }
-                    // var_dump($key);
-                    // var_dump($val);
-                    // var_dump($k);
-                    // var_dump($v);
-                    // var_dump('<br /><br />');
                 }
             }
             // var_dump($apprates);
@@ -1057,6 +1052,8 @@ function update_package_table($store_id, $product_id, $type){
         $pack_id = $store_related[$key];
         $package = get_post_meta($pack_id, 'wpcf-unit', true);
         // $app_qty_array = [];
+        $app_unit;
+        $app_qty;
         ?>
         <tr>
             <td>
@@ -1069,7 +1066,7 @@ function update_package_table($store_id, $product_id, $type){
                     if($id == $v['child']){
                         // echo $v['intermediary'];
                         // $app_qty_array[$k] = get_post_meta($v['intermediary']);
-                        if(!empty($app_rates[$type][$product_id]['containers'])){
+                        if(!empty($app_rates[$type][$product_id]['containers'][$id]['amount'])){
                             $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
                         }else{
                             $app_qty = get_post_meta($v['intermediary'], 'wpcf-apprate-qty', true);
@@ -1086,7 +1083,7 @@ function update_package_table($store_id, $product_id, $type){
                         }
                         echo ' ';
                         
-                        if(!empty($app_rates[$type][$product_id]['containers'])){
+                        if(!empty($app_rates[$type][$product_id]['containers'][$id]['unit'])){
                             $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
                         }else{
                             $app_unit = get_post_meta($v['intermediary'], 'wpcf-apprate-unit-holdover', true);
@@ -1100,10 +1097,10 @@ function update_package_table($store_id, $product_id, $type){
                 }
                 if(!$pro_container){
                     // echo 'no foreach';
-                    if(!empty($app_rates[$type][$product_id]['containers'])){
+                    if(!empty($app_rates[$type][$product_id]['containers'][$id]['amount'])){
                         $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
                     }
-                    if(!empty($app_rates[$type][$product_id]['containers'])){
+                    if(!empty($app_rates[$type][$product_id]['containers'][$id]['unit'])){
                         $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
                     }
                     ?>
