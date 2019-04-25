@@ -1190,17 +1190,17 @@ function update_bag_package_table($store_id, $product_id, $type){
        array(),
        'post_id',
        'child'
-   );
-   $store_related = toolset_get_related_posts(
-       $store_id,
-       'store-package',
-       'parent',
-       '100',
-       '0',
-       array(),
-       'post_id',
-       'child'
-   );
+    );
+    $store_related = toolset_get_related_posts(
+        $store_id,
+        'store-package',
+        'parent',
+        '100',
+        '0',
+        array(),
+        'post_id',
+        'child'
+    );
     $test = array('parent' => array($product_id), 'child' => $containers);
     $role = array('role_to_return' => 'all');
     $pro_container = toolset_get_related_posts(
@@ -1208,6 +1208,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         'default-apprate',
         ['role_to_return' => 'all']
     );
+    // var_dump($pro_container);
 
     if($type == 'ground'){
         $header = 'In-Ground';
@@ -1236,20 +1237,34 @@ function update_bag_package_table($store_id, $product_id, $type){
         <th colspan='1'></th>
         <!-- <th colspan='1'>Largest Product</th> -->
         <?php
-
+        $order_array = array();
         foreach($product_related as $key => $value){
             if(in_array($value, $store_related)){
-
+                $order_array[get_post_meta($value, 'wpcf-size', true)] = $value;
+                
+            }
+        }
+        krsort($order_array);
+        foreach($order_array as $key => $value){
             ?>
             <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
             <?php
-            }
         }
         ?>
     </tr>
     <?php
     $console = $pro_container;
     // var_dump($containers); used for sorting
+    // var_dump($containers);
+    // var_dump("<br /><br />");
+    // var_dump($store_related);
+    // var_dump("<br /><br />");
+    // var_dump($product_related);
+    // var_dump("<br /><br />");
+    // var_dump($order_array);
+    // var_dump("<br /><br />");
+    // var_dump($pro_container);
+    $first_key = array_key_first($order_array);
     foreach($containers as $key => $id){
         // echo 'inside';
         $title = get_the_title($id);
@@ -1261,69 +1276,78 @@ function update_bag_package_table($store_id, $product_id, $type){
             <td>
                 <?php echo $title; ?>
             </td>
-            <td>
                 <?php
-                foreach($pro_container as $k => $v){
-                    $items = array(
-                        array(
-                            'unit' => $app_unit,
-                            'amount' => $app_qty,
-                        )
-                    );
-                    if($id == $v['child']){
-                        $iterator = 0;
-                        $pack_id = 0;
-                        foreach($product_related as $k => $val){
-                            if(in_array($val, $store_related)){
-                                if($iterator == 0){
-                                    $pack_id = $val;
+                foreach($order_array as $knife => $pack_id){
+                    ?>
+                    <td>
+                    <?php
+                    foreach($pro_container as $k => $v){
+                        $items = array(
+                            array(
+                                'unit' => $app_unit,
+                                'amount' => $app_qty,
+                                )
+                            );
+
+                        if($id == $v['child']){
+                            // var_dump($pack_id);
+
+                            $qty = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-qty', true);
+                            $unit = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-unit-holdover', true);
+                            // var_dump(get_post_meta($pack_id, 'wpcf-size', true));
+                            $package_size = get_post_meta($pack_id, 'wpcf-size', true);
+                            $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
+                            // var_dump($package_size);
+                            $cups = get_post_meta($product_id, 'wpcf-5cups', true);
+                            $pp_dilema = 'ppb';
+                            if($package_unit == 'cuft'){
+                                $conversion = getVolume($qty, $unit, $package_unit);
+                                if($conversion > $package_size){
+                                    $final = $conversion / $package_size;
+                                    $pp_dilema = 'bpp';
+                                }else{
+                                    $final = $package_size / $conversion;
+                                    $pp_dilema = 'ppb';
                                 }
+                                // var_dump($conversion);
+                            }else{
+                                $conversion = indppl_normalize($items, $package_unit, intval($cups));
+                                $conversion = $conversion[0]['standard-amount'];
+                                $final = $package_size / $conversion;
+                            }
+                            $app_qty = round($final, 2);
+                            if($knife != $first_key){
+                                if($pp_dilema == 'ppb'){
+                                    $ppb_text = "plants per bag / container";
+                                }else{
+                                    $ppb_text = 'bags / containers per plant';
+                                }
+                                ?>
+                                <p><?php echo $app_qty . "  " . $ppb_text; ?></p>
+                                <?php
+                            }else{
+                                if($app_qty){
+                                    ?>
+                                    <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
+                                    <?php
+                                }else{
+                                    ?>
+                                    <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
+                                    <?php
+                                }
+                                echo ' ';
+                                
+                                ?>
+                                <select class='some-kind-of-wonderful indppl-product-create-chart-bag-unit' name=<?php echo $id; ?> data-unit=<?php echo $pp_dilema; ?>>
+                                    
+                                </select>
+                                <?php
                             }
                         }
-                                
-                        $package_size = get_post_meta($pack_id, 'wpcf-size', true);
-                        $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
-                        $cups = get_post_meta($product_id, 'wpcf-5cups', true);
-                        // var_dump($cups);
-                        $conversion = indppl_normalize($items, $package_unit, intval($cups));
-                        // var_dump($conversion);
-                        // $conversion = getVolume($app_qty, $app_unit, $package_unit);
-                        $final = $package_size / $conversion[0]['standard-amount'];
-                        // echo $;
-                        
-                        ?>
-                        <?php $app_qut = round($final, 2);  ?>
-                        <?php
-                        // $app_qty_array[$k] = get_post_meta($v['intermediary']);
-                        // var_dump($type);
-                        // if(!empty($app_rates[$type][$product_id]['containers'])){
-                        //     $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
-                        // }else{
-                        //     $app_qty = get_post_meta($v['intermediary'], 'wpcf-apprate-qty', true);
-                        // }
-                        
-                        if($app_qty){
-                            ?>
-                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
-                            <?php
-                        }else{
-                            ?>
-                            <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
-                            <?php
-                        }
-                        echo ' ';
-                        
-                        if(!empty($app_rates[$type][$product_id]['containers'])){
-                            $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
-                        }else{
-                            $app_unit = get_post_meta($v['intermediary'], 'wpcf-apprate-unit-holdover', true);
-                        }
-                        ?>
-                        <select class='some-kind-of-wonderful indppl-product-create-chart-bag-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
-                            
-                        </select>
-                        <?php
                     }
+                    ?>
+                    </td>
+                    <?php
                 }
                 if(!$pro_container){
                     $val = $product_related[0];
@@ -1356,36 +1380,40 @@ function update_bag_package_table($store_id, $product_id, $type){
                     
                 }
                 ?>
-            </td>
+            <!-- </td> -->
             <?php
-            $items = array(
-                array(
-                    'unit' => $app_unit,
-                    'amount' => $app_qty,
-                )
-            );
-            $iterator = 0;
-            foreach($product_related as $k => $val){
-                if(in_array($val, $store_related)){
-                    if($iterator == 0){
-                        $iterator++;
-                    }else{
-                        $package_size = get_post_meta($val, 'wpcf-size', true);
-                        $package_unit = get_post_meta($val, 'wpcf-unit', true);
-                        $cups = get_post_meta($product_id, 'wpcf-5cups', true);
-                        // var_dump($cups);
-                        $conversion = indppl_normalize($items, $package_unit, intval($cups));
-                        // var_dump($conversion);
-                        // $conversion = getVolume($app_qty, $app_unit, $package_unit);
-                        $final = $package_size / $conversion[0]['standard-amount'];
-                        // echo $;
+            // $items = array(
+            //     array(
+            //         'unit' => $app_unit,
+            //         'amount' => $app_qty,
+            //     )
+            // );
+            // $iterator = 0;
+            // foreach($order_array as $k => $val){
+            //     if(in_array($val, $store_related)){
+            //         if($iterator == 0){
+            //             $iterator++;
+            //         }else{
+            //             $package_size = get_post_meta($val, 'wpcf-size', true);
+            //             $package_unit = get_post_meta($val, 'wpcf-unit', true);
+            //             $cups = get_post_meta($product_id, 'wpcf-5cups', true);
+            //             // var_dump($cups);
+            //             $conversion = indppl_normalize($items, $package_unit, intval($cups));
+            //             // var_dump($conversion);
+            //             // $conversion = getVolume($app_qty, $app_unit, $package_unit);
+            //             $final = $package_size / $conversion[0]['standard-amount'];
+            //             // echo $;
                         
                         ?>
-                        <td><?php echo round($final, 2) . " Plants ";  ?></td>
+                        <!-- <td> -->
+                            <?php 
+                            // echo round($final, 2) . " Plants ";  
+                            ?>
+                        <!-- </td> -->
                         <?php
-                    }
-                }
-            }
+            //         }
+            //     }
+            // }
 
             ?>
         </tr>
