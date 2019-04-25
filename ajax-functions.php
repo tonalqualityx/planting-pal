@@ -681,30 +681,41 @@ function indppl_setup_guide_forms_ajax(){
 
     $form = $_POST['form'];
     $defaults = get_posts(array("post_type" => "guide-defaults", 'meta_key' => 'wpcf-guide-type', 'meta_value' => $form));
-    $defaults = $defaults[0];
+    $default = $defaults[0];
+    $store = htmlspecialchars($_POST['store']);
+    $options = toolset_get_related_posts($default->ID, 'guide-steps',['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child']);
+    $apprates = indppl_apprates($store);
+
+    $sections = array();
     
-    switch($form){
-        case 'ground' :
-
-            break;
-        case 'pots':
-
-            break;
-
-        case 'beds':
-
-            break;
-
+    foreach($options as $option) {
+        $sections[get_post_meta($option, 'wpcf-step-title', TRUE)] = array(
+            'a-instructions' => get_post_meta($option, 'wpcf-option-a-instructions', TRUE),
+            'a-image' => get_post_meta($option, 'wpcf-option-a-image', TRUE),
+            'b-instructions' => get_post_meta($option, 'wpcf-option-b-instructions', TRUE),
+            'b-image' => get_post_meta($option, 'wpcf-option-b-image', TRUE),
+            'id' => $option,
+        );
     }
+    
+    ob_start(); 
+    
+        switch($form){
+            case 'ground' :
+                include(INDPPL_ROOT_PATH . '/templates/guides/ground.php');
+                break;
+            case 'pots':
 
-    ob_start(); ?>
+                break;
 
-    <div class="container">
-        <h2></h2>
-        <?php var_dump($defaults); ?>
-    </div>
+            case 'beds':
 
-    <?php echo ob_get_clean();
+                break;
+
+        } ?>
+
+    <?php $response = ob_get_clean();
+    echo $response;
     die();
 }
 
