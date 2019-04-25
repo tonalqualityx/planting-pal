@@ -760,11 +760,14 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.pots-apprates-save-btn', function(e){
         e.preventDefault();
+        var store_id = $('#store-id').val();
         var fill_array = {};
         $('.pots-apprates-filler').each(function(){
             fill_array[$(this).data('product')] = {'amount': $(this).val()};
             if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
                 fill_array[$(this).data('product')]['primary'] = true;
+            }else{
+                fill_array[$(this).data('product')]['primary'] = false;
             }
         });
         var blend_array = {};
@@ -785,8 +788,29 @@ jQuery(document).ready(function( $ ) {
             each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
             each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
         })
+        console.log(fill_array);
+        console.log(blend_array);
+        console.log(surface_array);
         console.log(each_array);
 
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_save_pot_apprates_ajax',
+                store_id: store_id,
+                fill_array: fill_array,
+                blend_array: blend_array,
+                surface_array: surface_array,
+                each_array: each_array,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                
+            }
+        });
     })
 
 });

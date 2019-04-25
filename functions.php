@@ -363,7 +363,13 @@ function indppl_apprates($store_id, $type = null, $args = null) {
         case 'pots':
             foreach($args as $key => $val) {
                 foreach($val as $k => $v){
-                    $apprates[$type][$key][$k][key($v)] = $v[key($v)];
+                    if(is_array($v)){
+                        foreach($v as $item => $value){
+                            $apprates[$type][$key][$k][$item] = $value;
+                        }
+                    }else{
+                        $apprates[$type][$key][$k][key($v)] = $v[key($v)];
+                    }
                     // var_dump($key);
                     // var_dump($val);
                     // var_dump($k);

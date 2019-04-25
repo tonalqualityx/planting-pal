@@ -918,28 +918,34 @@ function indppl_get_pot_apprates_ajax(){
         $store_id = $_POST['store_id'];
     }
     $app_rates = indppl_apprates($store_id);
+    $get_apps = false;
     $num = 0;
-    foreach($app_rates['pots']['filler'] as $key => $value){
-        // if(isset($value['filler'])){
-            $num++;
-        // }
-    }
-    $ind = floor(100 / $num);
-    $count = 100 - ($ind * $num);
     $percent_array = array();
-    while($num > 0){
-        if($count > 0){
-            $temp = $ind + 1;
-            $count--;
-        }else{
-            $temp = $ind;
+    foreach($app_rates['pots']['filler'] as $key => $value){
+        if(isset($value['amount'])){
+            $get_apps = true;
+            $percent_array[] = $value['amount'];
+            // var_dump($value['amount']);
         }
-        $percent_array[] = $temp;
-        $num--;
+        $num++;
     }
-
+    if($get_apps == false){
+        $ind = floor(100 / $num);
+        $count = 100 - ($ind * $num);
+        
+        while($num > 0){
+            if($count > 0){
+                $temp = $ind + 1;
+                $count--;
+            }else{
+                $temp = $ind;
+            }
+            $percent_array[] = $temp;
+            $num--;
+        }
+    }
     ob_start();
-    // var_dump($app_rates);
+    var_dump($get_apps);
     ?>
     <div class='pots-apprates-container'>
         <a href='#' class='modal-close'>X</a>
@@ -961,6 +967,11 @@ function indppl_get_pot_apprates_ajax(){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
+                    $primary = '';
+                    $default = $app_rates['pots']['filler'][$key]['primary'];
+                    if($default == "true"){
+                        $primary = 'checked';
+                    }
                     // var_dump($brand);
                     ?>
                     <tr class='pots-apprates-filler-inside-container'>
@@ -981,7 +992,7 @@ function indppl_get_pot_apprates_ajax(){
 
                         </td>
                         <td class=''>
-                            <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio'>
+                            <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio' <?php echo $primary; ?>>
                         </td>
                     </tr>
                     <?php
@@ -1019,7 +1030,7 @@ function indppl_get_pot_apprates_ajax(){
             ?>
         </table>
         
-        <h4>Additives Blended in with Potting Soil</h4>
+        <h4 class='margin-top-30'>Additives Blended in with Potting Soil</h4>
         <table>
             <?php
             foreach($app_rates['pots']['blended'] as $key => $value){
@@ -1029,16 +1040,39 @@ function indppl_get_pot_apprates_ajax(){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
+                    // defaults
+                    $dilution = get_post_meta($key, 'wpcf-blended-additive-dilution', true);
+                    $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
+                    // apprates_array
+                    if($get_apps == true){
+                        $dilution = $app_rates['pots']['blended'][$key]['amount'];
+                        $unit = $app_rates['pots']['blended'][$key]['unit'];
+                        
+                    }
+
+                    $select_array = array(
+                        'cup' => 'Cups',
+                        'tbls' => 'Tablespoons',
+                        'tsp' => 'Teaspoons',
+                    );
                     ?>
                     <tr>
                         <td class='pots-apprates-blended-cell'>
-                            <input type="number" min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' class='blended-num'>
+                            <input type="number" min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='blended-num'>
                         </td>
                         <td class='pots-apprates-blended-cell'>
                             <select name='blended-select-<?php echo $key; ?>' class='blended-select'>
-                                <option value='cup'>Cups</option>
-                                <option value='tbls'>Tablespoons</option>
-                                <option value='tsp'>Teaspoons</option>
+                                <?php
+                                foreach($select_array as $k => $v){
+                                    $selected='';
+                                    if($unit == $k){
+                                        $selected = 'selected';
+                                    }
+                                    ?>
+                                    <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
+                                    <?php
+                                }
+                                ?>
                             </select>
                         </td>
                         <td class='pots-apprates-blended-cell'>
@@ -1073,7 +1107,7 @@ function indppl_get_pot_apprates_ajax(){
         <p>Chemical Fertilizer - 1 tbs per cuft of soil</p>
         <p>Microbe Products - .25 tsp per cuft of soil</p>
 
-        <h4>Additives Surface Applied after planting</h4>
+        <h4 class='margin-top-30'>Additives Surface Applied after planting</h4>
         <table>
             <?php
             foreach($app_rates['pots']['surface'] as $key => $value){
@@ -1081,23 +1115,60 @@ function indppl_get_pot_apprates_ajax(){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
+                    // defaults
+                    $dilution = get_post_meta($key, 'wpcf-surface-dilution', true);
+                    $units = get_post_meta($key, 'wpcf-surface-units', true);
+                    $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
+                    // apprates_array
+                    if($get_apps == true){
+                        $dilution = $app_rates['pots']['surface'][$key]['amount'];
+                        $units = $app_rates['pots']['surface'][$key]['unit'];
+                        $per_unit = $app_rates['pots']['surface'][$key]['per-sqft'];
+                    }
+
+                    $select_unit = array(
+                        'cup' => 'Cups',
+                        'tbls' => 'Tablespoons',
+                        'tsp' => 'Teaspoons',
+                    );
+                    $select_sqft = array(
+                        '1' => 'Per 1 sqft',
+                        '10' => 'Per 10 sqft',
+                        '100' => 'Per 100 sqft',
+                    );
                     ?>
                     <tr>
                         <td class='pots-apprates-surface-cell'>
-                            <input type='number' min='0' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' class='surface-num'>
+                            <input type='number' min='0' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='surface-num'>
                         </td>
                         <td class='pots-apprates-surface-cell'>
-                        <select name='surface-select-<?php echo $key; ?>' class='surface-select'>
-                                    <option value='cup'>Cups</option>
-                                    <option value='tbls'>Tablespoons</option>
-                                    <option value='tsp'>Teaspoons</option>
-                                </select>
+                            <select name='surface-select-<?php echo $key; ?>' class='surface-select'>
+                                <?php
+                                foreach($select_unit as $k => $v){
+                                    $selected='';
+                                    if($units == $k){
+                                        $selected = 'selected';
+                                    }
+                                    ?>
+                                    <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
+                                    <?php
+                                }
+                                ?>
+                            </select>
                         </td>
                         <td class='pots-apprates-surface-cell'>
                             <select name='surface-select-sqft-<?php echo $key; ?>' class='surface-select-sqft'>
-                                <option value='1'>Per 1 sqft</option>
-                                <option value='10'>Per 10 sqft</option>
-                                <option value='100'>Per 100 sqft</option>
+                                <?php
+                                foreach($select_sqft as $k => $v){
+                                    $selected='';
+                                    if($per_unit == $k){
+                                        $selected = 'selected';
+                                    }
+                                    ?>
+                                    <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
+                                    <?php
+                                }
+                                ?>
                             </select>
                         </td>
                         <td class='pots-apprates-surface-cell'>
@@ -1122,8 +1193,12 @@ function indppl_get_pot_apprates_ajax(){
             }
             ?>
         </table>
+        <p>Typical Application Rates:</p>
+        <p>Organic Fertilizer - 1 cup per 10 sqft</p>
+        <p>Chemical Fertilizer - 1 tsp per 10 sqft</p>
+        <p>Microbe Products - .25 tsp per 10 sqft</p>
 
-        <h4>Products used as 'Eaches'</h4>
+        <h4 class='margin-top-30'>Products used as 'Eaches'</h4>
         <p>These products will be recommended based on the width of your customer's pot/container:</p>
         <table>
             <tr>
@@ -1136,16 +1211,28 @@ function indppl_get_pot_apprates_ajax(){
                 $title = get_the_title($key);
                 $brand = get_the_terms($key, 'brand', true);
                 $brand = $brand[0]->name;
+                // defaults
+                $each_small = get_post_meta($key, 'wpcf-each-small', true);
+                $each_medium = get_post_meta($key, 'wpcf-each-medium', true);
+                $each_large = get_post_meta($key, 'wpcf-each-large', true);
+                // apprates_array
+                if($get_apps == true){
+                    $each_small = $app_rates['pots']['each'][$key]['small'];
+                    $each_medium = $app_rates['pots']['each'][$key]['medium'];
+                    $each_large = $app_rates['pots']['each'][$key]['large'];
+                }
+
+
                 ?>
                 <tr>
                     <td class='pots-apprates-each-cell'>
-                        <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' placeholder='#eaches'>
+                        <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' value='<?php echo $each_small; ?>' placeholder='#eaches'>
                     </td>
                     <td class='pots-apprates-each-cell'>
-                        <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' placeholder='#eaches'>
+                        <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' value='<?php echo $each_medium; ?>' placeholder='#eaches'>
                     </td>
                     <td class='pots-apprates-each-cell'>
-                        <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' placeholder='#eaches'>
+                        <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
                     </td>
                     <td class='pots-apprates-each-cell'>
                         <img class='height-50' src="https://via.placeholder.com/100.png">
@@ -1172,3 +1259,32 @@ function indppl_get_pot_apprates_ajax(){
 }
 add_action( 'wp_ajax_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_ajax' );
 add_action('wp_ajax_nopriv_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_ajax');
+
+function indppl_save_pot_apprates_ajax(){
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['fill_array'])){
+        $fill_array = $_POST['fill_array'];
+    }
+    if(isset($_POST['blend_array'])){
+        $blend_array = $_POST['blend_array'];
+    }
+    if(isset($_POST['surface_array'])){
+        $surface_array = $_POST['surface_array'];
+    }
+    if(isset($_POST['each_array'])){
+        $each_array = $_POST['each_array'];
+    }
+    $args = array(
+        'filler' => $fill_array,
+        'blended' => $blend_array,
+        'surface' => $surface_array,
+        'each' => $each_array,
+    );
+    $save = indppl_apprates($store_id, 'pots', $args);
+    var_dump($save);
+    die();
+}
+add_action( 'wp_ajax_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax' );
+add_action('wp_ajax_nopriv_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax');
