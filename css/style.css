@@ -742,5 +742,7 @@ input.blended-num, input.surface-num{
 }
 .max-width-100{
   max-width: 100px;
-
+}
+.margin-top-30{
+  margin-top: 30px;
 }

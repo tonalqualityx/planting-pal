@@ -811,11 +811,14 @@ function get100Percent(){
 
     jQuery('body').on('click', '.pots-apprates-save-btn', function(e){
         e.preventDefault();
+        var store_id = $('#store-id').val();
         var fill_array = {};
-        jQuery('.pots-apprates-filler').each(function(){
-            fill_array[jQuery(this).data('product')] = {'amount': jQuery(this).val()};
-            if(jQuery(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
-                fill_array[jQuery(this).data('product')]['primary'] = true;
+        $('.pots-apprates-filler').each(function(){
+            fill_array[$(this).data('product')] = {'amount': $(this).val()};
+            if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
+                fill_array[$(this).data('product')]['primary'] = true;
+            }else{
+                fill_array[$(this).data('product')]['primary'] = false;
             }
         });
         var blend_array = {};
@@ -824,21 +827,38 @@ function get100Percent(){
             blend_array[jQuery(this).data('product')]['unit'] = jQuery(this).parent().parent().find('.blended-select').val();
         });
         var surface_array = {}
-        jQuery('.surface-num').each(function(){
-            surface_array[jQuery(this).data('product')] = {'amount': jQuery(this).val()};
-            surface_array[jQuery(this).data('product')]['unit'] = jQuery(this).parent().parent().find('.surface-select').val();
-            surface_array[jQuery(this).data('product')]['per-sqft'] = jQuery(this).parent().parent().find('.surface-select-sqft').val();
-        })
+        $('.surface-num').each(function(){
+            surface_array[$(this).data('product')] = {'amount': $(this).val()};
+            surface_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.surface-select').val();
+            surface_array[$(this).data('product')]['per-sqft'] = $(this).parent().parent().find('.surface-select-sqft').val();
+        });
         var each_array = {};
-        jQuery('.pots-apprates-each-num-8').each(function(){
-            var product = jQuery(this).data('product');
-            each_array[product] = {'small': jQuery(this).val()};
-            each_array[product]['medium'] = jQuery(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
-            each_array[product]['large'] = jQuery(this).parent().parent().find('.pots-apprates-each-num-24').val();
-        })
-        console.log(each_array);
+        $('.pots-apprates-each-num-8').each(function(){
+            var product = $(this).data('product');
+            each_array[product] = {'small': $(this).val()};
+            each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
+            each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
+        });
 
-    });
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_save_pot_apprates_ajax',
+                store_id: store_id,
+                fill_array: fill_array,
+                blend_array: blend_array,
+                surface_array: surface_array,
+                each_array: each_array,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                
+            }
+        });
+    })
 
 
 };
