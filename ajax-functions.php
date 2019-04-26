@@ -1299,3 +1299,14 @@ function indppl_save_pot_apprates_ajax(){
 }
 add_action( 'wp_ajax_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax');
+
+function indppl_guide_products_ajax(){
+    $products = $_POST['products'];
+    foreach($products as $product){
+        echo "<div class='inddppl-flex'><div class='product-guide-image'>Image</div><div class='product-guide-step-instructions'><span class='strong'>{$product["label"]}</span> {$product["instructions"]}</div></div>";
+    }
+    die();
+}
+
+add_action('wp_ajax_indppl_guide_products_ajax', 'indppl_guide_products_ajax');
+add_action('wp_ajax_nopriv_indppl_guide_products_ajax', 'indppl_guide_products_ajax');

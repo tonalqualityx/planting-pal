@@ -46,7 +46,8 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
             <?php foreach($sections as $section => $options){
                 echo "<h3 class='orange-text'>$section</h3>";
                 $format_section = str_replace(array(' ',':'), array('-',''), $section);
-                echo "<div id='$format_section'></div>";
+                echo "<div id='$format_section' class='guide-step-instructions'></div>";
+                echo "<div id='{$format_section}-products' class='guide-product-instructions'></div>";
             } ?>
         </div>
     </div>
@@ -88,9 +89,9 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
                     $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);?>
                     
                     <div class="indppl-flex planting-guide-products indppl-align-center">
-                        <input type='checkbox' name="use-<?php echo $key; ?>" id="use-<?php echo $key; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>">
+                        <input type='checkbox' name="use-<?php echo $key; ?>" id="use-<?php echo $key; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>">
                         <label for="use-<?php echo $key; ?>"><?php echo $product->post_title; ?></label>
-                        <textarea name="instructions-<?php echo $key; ?>" ><?php echo $product_instructions; ?></textarea>
+                        <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" ><?php echo $product_instructions; ?></textarea>
                     </div>
 
                 <?php } ?>

@@ -7,6 +7,10 @@ body {
     min-height: 100vh;
 }
 
+.strong {
+  font-weight: 800;
+}
+
 .indppl-flex {
   display: flex;
 }
@@ -728,6 +732,10 @@ GUIDES STYLES
 
 .planting-guide-products textarea {
   flex-grow: 999;
+}
+
+.product-guide-image {
+  max-width: 75px;
 }
 
 input.blended-num, input.surface-num{

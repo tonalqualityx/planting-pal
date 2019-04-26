@@ -782,15 +782,34 @@ jQuery(document).ready(function( $ ) {
             scrollTop: scrollTo.offset().top - myContainer.offset().top + myContainer.scrollTop()
         });
 
-        var productsThisStep = '';
+        var productsThisStep = new Array();
         var section = '';
+        var product = '';
+        var productStepInstructions = '';
         var products = $(this).parents('ul').data('products');
         $("#" + products + " input:checkbox:checked").each(function(e) {
-            var product = $(this).data('product');
+            product = $(this).data('product');
             section = $(this).data('target');
-            productsThisStep += "<div>" + product + "</div>";
+            label = $(this).next('label').text();
+            productStepInstructions = $("#" + $(this).data('instructions')).val();
+            productsThisStep.push({product : product, instructions: productStepInstructions, label: label });
         });
-        console.log(productsThisStep);
+        
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_guide_products_ajax',
+                products : productsThisStep,
+            },
+            type: 'POST',
+            success: function (results) {
+                console.log(results);
+                $('#' + section + '-products').html(results);
+            }
+        });
+
         $('#' + section).append(productsThisStep);
     });
 
