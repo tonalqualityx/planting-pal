@@ -765,7 +765,7 @@ jQuery(document).ready(function( $ ) {
     $("body").on('click', '.planting-guide-sections .indppl-button', function(e){
         e.preventDefault();
         var target = $(this).data('target');
-        console.log(target);
+        // console.log(target);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
     });
@@ -781,6 +781,17 @@ jQuery(document).ready(function( $ ) {
         myContainer.animate({
             scrollTop: scrollTo.offset().top - myContainer.offset().top + myContainer.scrollTop()
         });
+
+        var productsThisStep = '';
+        var section = '';
+        var products = $(this).parents('ul').data('products');
+        $("#" + products + " input:checkbox:checked").each(function(e) {
+            var product = $(this).data('product');
+            section = $(this).data('target');
+            productsThisStep += "<div>" + product + "</div>";
+        });
+        console.log(productsThisStep);
+        $('#' + section).append(productsThisStep);
     });
 
     $('body').on('click', '.pots-apprates-save-btn', function(e){

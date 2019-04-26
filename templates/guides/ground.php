@@ -61,7 +61,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
         <h3 style="display:none;"><?php echo $section; ?></h3>
         <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" >
             <p>Customize this step by selection an option below:</p>
-            <ul class="style-free">
+            <ul class="style-free" data-products="products-<?php echo $i; ?>">
 
                 <li class="planting-guide-instructions indppl-flex indppl-align-center">
                     <div class="planting-guide-option-input indppl-flex">
@@ -82,17 +82,19 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
                 </li>
             </ul>
             <p>Products used in this step:</p>
-            <?php foreach($apprates['ground'] as $key => $value){
-                $product = get_post($key);
-                $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);?>
-                
-                <div class="indppl-flex planting-guide-products indppl-align-center">
-                    <input type='checkbox' name="use-<?php echo $key; ?>" id="use-<?php echo $key; ?>">
-                    <label for="use-<?php echo $key; ?>"><?php echo $product->post_title; ?></label>
-                    <textarea name="instructions-<?php echo $key; ?>" ><?php echo $product_instructions; ?></textarea>
-                </div>
+            <div id="products-<?php echo $i; ?>">
+                <?php foreach($apprates['ground'] as $key => $value){
+                    $product = get_post($key);
+                    $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);?>
+                    
+                    <div class="indppl-flex planting-guide-products indppl-align-center">
+                        <input type='checkbox' name="use-<?php echo $key; ?>" id="use-<?php echo $key; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>">
+                        <label for="use-<?php echo $key; ?>"><?php echo $product->post_title; ?></label>
+                        <textarea name="instructions-<?php echo $key; ?>" ><?php echo $product_instructions; ?></textarea>
+                    </div>
 
-            <?php } ?>
+                <?php } ?>
+            </div>
             <?php
             $i++;
             if($i < $count){ ?>
