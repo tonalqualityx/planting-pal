@@ -253,6 +253,7 @@ function indppl_import() {
 // add_shortcode('import-products', 'indppl_import');
 
 function pp_store_management(){
+    // var_dump(home_url());
     $store_id = '';
     if(isset($_GET['store-id'])){
         $store_id = intval(htmlspecialchars($_GET['store-id']));
@@ -263,6 +264,7 @@ function pp_store_management(){
             $store_id = $_POST['store-id'];
         }
         $store_id = indppl_save_post($store_id);
+        $_GET['store-id'] = $store_id;
     }
 	// if(is_int($store_id)){
 	// 	$store_name = get_the_title($store_id);

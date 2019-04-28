@@ -49,6 +49,11 @@ jQuery(document).ready(function( $ ) {
         var active = $(this).children().attr('href');
         $(active).addClass('indppl-active');
         $(this).addClass('indppl-active');
+        $store_id = $('#store-id').val();
+        var url = window.location.href;
+        url = url + "?store-id=" + $store_id;
+        console.log(url);
+        window.location.href = url;
     })
 
     $('body').on('click', '.store-go-live-btn', function(e){
@@ -320,14 +325,15 @@ jQuery(document).ready(function( $ ) {
                 if(array['usage_type']){
                     $('.product-create-usage-type').append(array['usage_type']);
                 }
-                // console.log(array['fraction']);
-                if(array['fraction']){
-                    $('.product-create-fraction-bag').append(array['fraction']);
-                }
                 if(array['default']){
                     if(array['default'] == 1){
                         $('.product-create-fraction-bag').hide();
                     }
+                }else{
+                    $('.product-create-fraction-bag').show();
+                }
+                if(array['fraction']){
+                    $('.product-create-fraction-bag').append(array['fraction']);
                 }
                 indpplDelLoading();
             }
@@ -397,6 +403,13 @@ jQuery(document).ready(function( $ ) {
         if(!$(this).is('#product-create-next')){
             var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
             var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
+            var container_id = [];
+            $('.bag-apprates-container-title').each(function(){
+                container_id.push($(this).data('id'));
+            });
+            var first_package = {}
+            first_package['num'] = $('.bag-apprates-title').data('num');
+            first_package['unit'] = $('.bag-apprates-title').data('unit');
         }else{
             var cups_num = $('.indppl-product-create-cups-num').val();
             var cups_unit = $('.product-create-5-cups').val();
@@ -430,7 +443,7 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
-        // console.log(fraction);
+        console.log(package_remove);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -451,11 +464,13 @@ jQuery(document).ready(function( $ ) {
                 cups_num: cups_num,
                 cups_unit: cups_unit,
                 fraction: fraction,
+                container_id: container_id,
+                first_package: first_package,
                 product_name: product_name,
             },
             type: 'POST',
             success: function(e){
-                console.log(type);
+                // console.log(type);
                 if(type == 'pots'){
                     getProductInfo();
                     $('.slide-in-products-container').removeClass('left-0');
@@ -467,7 +482,7 @@ jQuery(document).ready(function( $ ) {
                     // console.log(e);
                     array = JSON.parse(e);
                     // console.log(array);
-                    // console.log(array['console']);
+                    console.log(array['console']);
                     if(product_id == 'new'){
                         $('.product-create-product').children().last().attr('value', array['product_id']);
                     }
@@ -493,7 +508,7 @@ jQuery(document).ready(function( $ ) {
                     $('.indppl-product-create-chart-bag-unit').each(function(){
                         var select = $(this).data('unit');
                         var elem = $(this);
-                        console.log(select);
+                        // console.log(select);
                         $.each(bagunits, function(index, value){
                             if(select == index || (select == 'tbl' && index == 'tbls')){
                                 selected = `selected`;
@@ -507,7 +522,9 @@ jQuery(document).ready(function( $ ) {
                     if($(elem).is('#product-create-next')){
                         $('.product-create-app-rates-chart-container').slideToggle();
                         $('.product-create-first-part-container').slideToggle();
-                        
+                        $('.product-create-first-part-container').hide();
+                        $('.product-create-product').hide();
+                        $('.product-create-brand').hide();
                     }
                     if($(elem).is('#product-create-submit-exit')){
                         // getProductInfo();
@@ -575,7 +592,11 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('change', '.some-kind-of-wonderful', function(){
-        updateAppRates($(this));
+        if($('#product-create-fraction-bag').is(':checked')){
+            updateBagAppRates($(this));
+        }else{
+            updateAppRates($(this));
+        }
     })
 
     $('body').on('click', '.indppl-add-product-pots-btn', function(e){
@@ -601,7 +622,7 @@ jQuery(document).ready(function( $ ) {
         var elem = $(this);
         var fraction = false;
         if($('#product-create-fraction-bag').is(':checked')){
-            $fraction = true;
+            fraction = true;
         }
         var filler = false;
         if($('#indppl-add-product-bulk-filler').is(":checked")){
@@ -835,6 +856,7 @@ jQuery(document).ready(function( $ ) {
             }
         });
     })
+    
 });
 
 function get100Percent(){
@@ -900,7 +922,7 @@ function indppl_get_units($type = 'dry'){
     if($type == 'dry'){
         return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each', 'Bag': 'Bag'};
     }else if($type == 'bag'){
-        return {'ppb': 'plants per bag / contianer', 'bpp': 'bags / containers per plant'};
+        return {'ppc': 'plants per bag / contianer', 'cpp': 'bags / containers per plant'};
     }else{
         return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
     }  
@@ -1000,7 +1022,7 @@ function indpplEditProduct(type, store_id, product_id){
         type: 'POST',
         success: function(e){
             array = JSON.parse(e);
-            // console.log(array);
+            console.log(array['console']);
             $('.product-create-brand-cut-off').children().each(function(){
                 $(this).empty();
             })
@@ -1071,6 +1093,9 @@ function indpplEditProduct(type, store_id, product_id){
                 if(array['default'] == 1){
                     $('.product-create-fraction-bag').hide();
                 }
+            }
+            if(array['usage_type']){
+                $('.product-create-usage-type').append(array['usage_type']);
             }
             
             indpplDelLoading();
@@ -1157,4 +1182,60 @@ function updateAppRates(elem){
         }
     });
     
+}
+
+function updateBagAppRates(elem){
+    var elem = elem;
+    var load = indpplAddSmallLoading();
+    $(elem).parent().parent().append(load);
+    var store_id = $('#store-id').val();
+    var type = $('#indppl-modal-product-type').val();
+    var product_id = $('#product-create-product').val();
+    var val = $(elem).parent().children().val();
+    var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
+    var product_num = $('.bag-apprates-title').first().data('num');
+    var product_unit = $('.bag-apprates-title').first().data('unit');
+    var cont_id = $(elem).parent().prev().data('id');
+    console.log(product_num);
+    console.log(val);
+    jQuery.ajax({
+        url:indppl_ajax.ajaxurl,
+        dataType: 'text',
+        method: 'POST',
+        data: {
+            action: 'indppl_update_bag_app_rates_ajax',
+            type: type,
+            store_id: store_id,
+            product_id: product_id,
+            val: val,
+            ppc: ppc,
+            product_num: product_num,
+            product_unit: product_unit,
+            cont_id: cont_id,
+        },
+        type: 'POST',
+        success: function(e){
+            // console.log(e);
+            $('.product-create-app-rates-chart-container').empty();
+            $('.product-create-app-rates-chart-container').html(e);
+            var bagunits = indppl_get_units('bag');
+            $('.indppl-product-create-chart-bag-unit').each(function(){
+                var select = $(this).data('unit');
+                var elem = $(this);
+                // console.log(select);
+                if($(elem).children().length == 0){
+                    $.each(bagunits, function(index, value){
+                        if(select == index || (select == 'tbl' && index == 'tbls')){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                    });
+                }
+                // console.log(unit);
+            });
+            indpplDelSmallLoading();
+        }
+    });
 }

@@ -730,8 +730,10 @@ function indppl_save_post($store_id = 0){
         }
         $store_id = wp_insert_post($store);
         return $store_id;
+        
     }
 }
+
 
 function indppl_create_container($new_array, $container_id = 0){
     $container = array(
@@ -1247,7 +1249,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         krsort($order_array);
         foreach($order_array as $key => $value){
             ?>
-            <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
+            <th class='bag-apprates-title' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
             <?php
         }
         ?>
@@ -1273,7 +1275,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         // $app_qty_array = [];
         ?>
         <tr>
-            <td>
+            <td class='bag-apprates-container-title' data-id='<?php echo $id; ?>'>
                 <?php echo $title; ?>
             </td>
                 <?php
@@ -1294,20 +1296,24 @@ function update_bag_package_table($store_id, $product_id, $type){
 
                             $qty = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-qty', true);
                             $unit = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-unit-holdover', true);
+                            if(isset($app_rates[$type][$product_id]['bag'][$id])){
+                                $qty = $app_rates[$type][$product_id]['bag'][$id]['amount'];
+                                $unit = $app_rates[$type][$product_id]['bag'][$id]['unit'];
+                            }
                             // var_dump(get_post_meta($pack_id, 'wpcf-size', true));
                             $package_size = get_post_meta($pack_id, 'wpcf-size', true);
                             $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
                             // var_dump($package_size);
                             $cups = get_post_meta($product_id, 'wpcf-5cups', true);
-                            $pp_dilema = 'ppb';
+                            $pp_dilema = 'ppc';
                             if($package_unit == 'cuft'){
                                 $conversion = getVolume($qty, $unit, $package_unit);
-                                if($conversion > $package_size){
+                                if($conversion >= $package_size){
                                     $final = $conversion / $package_size;
-                                    $pp_dilema = 'bpp';
+                                    $pp_dilema = 'cpp';
                                 }else{
                                     $final = $package_size / $conversion;
-                                    $pp_dilema = 'ppb';
+                                    $pp_dilema = 'ppc';
                                 }
                                 // var_dump($conversion);
                             }else{
@@ -1317,13 +1323,13 @@ function update_bag_package_table($store_id, $product_id, $type){
                             }
                             $app_qty = round($final, 2);
                             if($knife != $first_key){
-                                if($pp_dilema == 'ppb'){
-                                    $ppb_text = "plants per bag / container";
+                                if($pp_dilema == 'ppc'){
+                                    $ppc_text = "plants per bag / container";
                                 }else{
-                                    $ppb_text = 'bags / containers per plant';
+                                    $ppc_text = 'bags / containers per plant';
                                 }
                                 ?>
-                                <p><?php echo $app_qty . "  " . $ppb_text; ?></p>
+                                <p data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty . "  " . $ppc_text; ?></p>
                                 <?php
                             }else{
                                 if($app_qty){
