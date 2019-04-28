@@ -1337,3 +1337,53 @@ function indppl_save_pot_apprates_ajax(){
 }
 add_action( 'wp_ajax_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax');
+
+function indppl_update_bag_app_rates_ajax(){
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['val'])){
+        $val = $_POST['val'];
+    }
+    if(isset($_POST['ppc'])){
+        $ppc = $_POST['ppc'];
+    }
+    if(isset($_POST['product_num'])){
+        $product_num = $_POST['product_num'];
+    }
+    if(isset($_POST['product_unit'])){
+        $product_unit = $_POST['product_unit'];
+    }
+    if(isset($_POST['cont_id'])){
+        $cont_id = $_POST['cont_id'];
+    }
+
+    $args = array(
+        $product_id => array(
+            'bag' => array(),
+        ),
+    );
+    if($ppc == 'cpp'){
+        $app_rate = $val * $product_num;
+    }else{
+        $app_rate = $product_num / $val;
+    }
+    $args[$product_id]['bag'][$cont_id] = array(
+        'amount' => $app_rate,
+        'unit' => $product_unit,
+    );
+    // var_dump($args);
+    $save = indppl_apprates($store_id, $type, $args);
+    // var_dump($save);
+    $return = update_bag_package_table($store_id, $product_id, $type);
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax' );
+add_action('wp_ajax_nopriv_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax');

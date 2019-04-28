@@ -49,6 +49,11 @@ jQuery(document).ready(function( $ ) {
         var active = $(this).children().attr('href');
         $(active).addClass('indppl-active');
         $(this).addClass('indppl-active');
+        $store_id = $('#store-id').val();
+        var url = window.location.href;
+        url = url + "?store-id=" + $store_id;
+        console.log(url);
+        window.location.href = url;
     })
 
     $('body').on('click', '.store-go-live-btn', function(e){
@@ -438,7 +443,7 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
-        // console.log(fraction);
+        console.log(package_remove);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -587,7 +592,11 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('change', '.some-kind-of-wonderful', function(){
-        updateAppRates($(this));
+        if($('#product-create-fraction-bag').is(':checked')){
+            updateBagAppRates($(this));
+        }else{
+            updateAppRates($(this));
+        }
     })
 
     $('body').on('click', '.indppl-add-product-pots-btn', function(e){
@@ -847,6 +856,7 @@ jQuery(document).ready(function( $ ) {
             }
         });
     })
+    
 });
 
 function get100Percent(){
@@ -1172,4 +1182,60 @@ function updateAppRates(elem){
         }
     });
     
+}
+
+function updateBagAppRates(elem){
+    var elem = elem;
+    var load = indpplAddSmallLoading();
+    $(elem).parent().parent().append(load);
+    var store_id = $('#store-id').val();
+    var type = $('#indppl-modal-product-type').val();
+    var product_id = $('#product-create-product').val();
+    var val = $(elem).parent().children().val();
+    var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
+    var product_num = $('.bag-apprates-title').first().data('num');
+    var product_unit = $('.bag-apprates-title').first().data('unit');
+    var cont_id = $(elem).parent().prev().data('id');
+    console.log(product_num);
+    console.log(val);
+    jQuery.ajax({
+        url:indppl_ajax.ajaxurl,
+        dataType: 'text',
+        method: 'POST',
+        data: {
+            action: 'indppl_update_bag_app_rates_ajax',
+            type: type,
+            store_id: store_id,
+            product_id: product_id,
+            val: val,
+            ppc: ppc,
+            product_num: product_num,
+            product_unit: product_unit,
+            cont_id: cont_id,
+        },
+        type: 'POST',
+        success: function(e){
+            // console.log(e);
+            $('.product-create-app-rates-chart-container').empty();
+            $('.product-create-app-rates-chart-container').html(e);
+            var bagunits = indppl_get_units('bag');
+            $('.indppl-product-create-chart-bag-unit').each(function(){
+                var select = $(this).data('unit');
+                var elem = $(this);
+                // console.log(select);
+                if($(elem).children().length == 0){
+                    $.each(bagunits, function(index, value){
+                        if(select == index || (select == 'tbl' && index == 'tbls')){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                    });
+                }
+                // console.log(unit);
+            });
+            indpplDelSmallLoading();
+        }
+    });
 }

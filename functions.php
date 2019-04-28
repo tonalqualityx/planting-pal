@@ -730,8 +730,10 @@ function indppl_save_post($store_id = 0){
         }
         $store_id = wp_insert_post($store);
         return $store_id;
+        
     }
 }
+
 
 function indppl_create_container($new_array, $container_id = 0){
     $container = array(
@@ -1327,7 +1329,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                                     $ppc_text = 'bags / containers per plant';
                                 }
                                 ?>
-                                <p><?php echo $app_qty . "  " . $ppc_text; ?></p>
+                                <p data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty . "  " . $ppc_text; ?></p>
                                 <?php
                             }else{
                                 if($app_qty){
