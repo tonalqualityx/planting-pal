@@ -31,7 +31,7 @@ jQuery(document).ready(function( $ ) {
                     indpplDelLoading();
                     $('.store-list-container').replaceWith(e);
                 }
-            })
+            });
         }, 200);
     })
 
@@ -77,7 +77,7 @@ jQuery(document).ready(function( $ ) {
                     $(elem).html("Make Private");
                 }
             }
-        })
+        });
     });
     $('body').on('focus', '.container-date', function(e){
         $(this).datepicker({ dateFormat: 'm/d' });
@@ -237,7 +237,7 @@ jQuery(document).ready(function( $ ) {
                 }
                 indpplDelLoading();
             }
-        })
+        });
     });
     $('body').on('change', '#product-create-product', function(e){
         indpplAddLoading();
@@ -331,7 +331,7 @@ jQuery(document).ready(function( $ ) {
                 }
                 indpplDelLoading();
             }
-        })
+        });
     });
     $('body').on('click', '.product-create-dry-wet', function(){
         var type = $(this).val();
@@ -761,32 +761,48 @@ jQuery(document).ready(function( $ ) {
     });
 
 
+
+    jQuery.fn.scrollTo = function (elem, speed) {
+        console.log('scroll');
+        $(this).animate({
+            scrollTop: $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
+        }, speed == undefined ? 1000 : speed);
+        return this;
+    };
+
+
     // Toggle planting guide sections
     $("body").on('click', '.planting-guide-sections .indppl-button', function(e){
         e.preventDefault();
         var target = $(this).data('target');
+        var header = $(this).data('header');
         // console.log(target);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
+        $('.planting-guide-preview').scrollTop($('.planting-guide-preview').scrollTop() + $('#' + header).position().top);
+
+        $('#planting-guide').scrollTo('#' + header, 400);
+
+        
     });
 
     $("body").on('click', '.planting-guide-instructions input[type=radio]', function() {
         var content = $("#" + $(this).data('content')).text();
         var target = $(this).data('target');
         $("#" + target).html(content);
-        var myContainer = $('.planting-guide-preview')
+        var products = $(this).parents('ul').data('products');
+        productsToStep(products);
+    });
 
-        var scrollTo = $("#" + target);
-        console.log(scrollTo);
-        myContainer.animate({
-            scrollTop: scrollTo.offset().top - myContainer.offset().top + myContainer.scrollTop()
-        });
+    $('body').on('change', '.planting-guide-options input[type=checkbox]', function() {
+        var products = $(this).parents('.step-product-select').data('')
+    });
 
+    function productsToStep(products){
         var productsThisStep = new Array();
         var section = '';
         var product = '';
         var productStepInstructions = '';
-        var products = $(this).parents('ul').data('products');
         $("#" + products + " input:checkbox:checked").each(function(e) {
             product = $(this).data('product');
             section = $(this).data('target');
@@ -805,12 +821,29 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (results) {
-                console.log(results);
                 $('#' + section + '-products').html(results);
             }
         });
 
         $('#' + section).append(productsThisStep);
+    }
+
+    $('body').on('click', '.sponsor-link', function(e){
+        e.preventDefault();
+        console.log('triggered');
+        var content = $(this).next('.sponsor-copy').html();
+        var brand = $(this).siblings('.product-name').find('.brand').text();
+        var product = $(this).siblings('.product-name').find('.product').text();
+        var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
+        console.log(content);
+        $('body').prepend("<div class='sponsored-modal'>" + image + "<p class='brand'>" + brand + "</p><h4>" + product + "</h4><p>" + content + "</p></div>");
+    });
+
+    $(document).click(function (event) {
+        //if you click on anything except the modal itself or the "open modal" link, close the modal
+        if (!$(event.target).closest(".sponsored-modal, .sponsor-link").length) {
+            $(".sponsored-modal").remove();
+        }
     });
 
     $('body').on('click', '.pots-apprates-save-btn', function(e){

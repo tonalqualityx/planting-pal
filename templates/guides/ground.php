@@ -12,7 +12,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
 
 
 <h2>In Ground Planting Guide</h2>
-<div class="planting-guide-preview planting-guide">
+<div id="planting-guide" class="planting-guide-preview planting-guide">
     <div class="overflow">
         <div class="store-info">
             <div class="indppl-flex align-center">
@@ -44,8 +44,8 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
         </div>
         <div class="planting-guide-content">
             <?php foreach($sections as $section => $options){
-                echo "<h3 class='orange-text'>$section</h3>";
                 $format_section = str_replace(array(' ',':'), array('-',''), $section);
+                echo "<h3 class='orange-text' id='{$format_section}-header'>$section</h3>";
                 echo "<div id='$format_section' class='guide-step-instructions'></div>";
                 echo "<div id='{$format_section}-products' class='guide-product-instructions'></div>";
             } ?>
@@ -83,7 +83,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
                 </li>
             </ul>
             <p>Products used in this step:</p>
-            <div id="products-<?php echo $i; ?>">
+            <div id="products-<?php echo $i; ?>" class="step-product-select">
                 <?php foreach($apprates['ground'] as $key => $value){
                     $product = get_post($key);
                     $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
@@ -97,7 +97,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
                     <div class="indppl-flex planting-guide-products indppl-align-center">
                         <input type='checkbox' name="use-<?php echo $key; ?>" id="use-<?php echo $key; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
                         <label for="use-<?php echo $key; ?>"><?php echo $product->post_title; ?></label>
-                        <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" ><?php echo $product_instructions; ?></textarea>
+                        <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
                     </div>
 
                 <?php } ?>
@@ -105,10 +105,10 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
             <?php
             $i++;
             if($i > 1){ ?>
-                <a href="#" class="indppl-button" data-target="section-<?php echo prev($sections)['id']; next($sections); ?>">Back</a> 
+                <a href="#" id="guide-back" class="indppl-button" data-target="section-<?php echo prev($sections)['id']; next($sections); ?>" data-header="<?php echo $format_section; ?>-header">Back</a> 
             <?php }
             if($i < $count){ ?>
-                <a href="#" class="indppl-button" data-target="section-<?php echo next($sections)['id']; ?>">Next</a>
+                <a href="#" id="guide-next" class="indppl-button" data-target="section-<?php echo next($sections)['id']; ?>" data-header="<?php echo $format_section; ?>-header">Next</a>
             <?php } else { ?>
                 <a href="#" id="guide-save" class="indppl-button" >Save</a>
 
