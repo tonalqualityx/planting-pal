@@ -416,7 +416,7 @@ function indppl_get_product_info_ajax(){
     }
 
     ob_start();
-    if($type == 'pots'){
+    if($type == 'pots' || $type == 'beds'){
         ?>
         <input type="submit" name="product-create-pots-next" data-exit="true" id="product-create-pots-next" class="product-create-pots-submit" value="Next">
         <?php
@@ -642,7 +642,7 @@ function indppl_save_product_ajax(){
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
         // $console = $updated_app_rates;
     }
-    $ajax_array =[];
+    $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
     $ajax_array['dryliquid'] = $product_dryliquid;
@@ -917,7 +917,7 @@ function indppl_save_pots_product_ajax(){
         // var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
 
-        // var_dump($save);
+        var_dump($save);
     }
     // var_dump($package_array);
     // var_dump($new_pack);
@@ -965,6 +965,9 @@ add_action('wp_ajax_nopriv_indppl_save_pots_product_ajax', 'indppl_save_pots_pro
 function indppl_get_pot_apprates_ajax(){
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
     }
     $app_rates = indppl_apprates($store_id);
     $get_apps = false;
