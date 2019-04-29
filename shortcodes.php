@@ -360,7 +360,7 @@ function pp_my_stores(){
                     $address1 = get_post_meta($id, 'wpcf-address1', true);
                     $city = get_post_meta($id, 'wpcf-city', true);
                     $state = get_post_meta($id, 'wpcf-state', true);
-                    $link = home_url() . '/test2?store-id=' . $id;
+                    $link = home_url() . '/store-profile?store-id=' . $id;
                     // var_dump($img);
                     ?>
                     <div class='indppl-single-store-container'>
