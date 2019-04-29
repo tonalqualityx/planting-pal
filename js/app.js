@@ -53,7 +53,7 @@ jQuery(document).ready(function( $ ) {
         var url = window.location.href;
         url = url + "?store-id=" + $store_id;
         console.log(url);
-        window.location.href = url;
+        // window.location.href = url;
     })
 
     $('body').on('click', '.store-go-live-btn', function(e){
