@@ -194,11 +194,15 @@ jQuery(document).ready(function( $ ) {
     })
     $('body').on('click', '.modal-close', function(e){
         $(this).hide();
+        closeModal();
+    });
+
+    function closeModal(){
         $('.slide-in-products-container').removeClass('left-0');
         setTimeout(function(){
             $('.slide-in-products-container').remove();
         }, 1000);
-    });
+    }
     // $('body').on('click', '.slide-in-products-container', function(e){
     //     $('.slide-in-products-container').remove();
     // })
@@ -844,8 +848,7 @@ jQuery(document).ready(function( $ ) {
                 type : $('#planting-guide').data('type')
             },
             success: function (results){
-                console.log(results);
-                console.log('something')
+                closeModal();
             }
         });
     });
