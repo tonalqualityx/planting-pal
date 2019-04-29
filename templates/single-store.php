@@ -8,6 +8,10 @@ $storeid = get_the_ID(  );
 $user_plants = array();
 $display = 'plants_form';
 
+if(isset($_POST['next-step'])){
+    $display = $_POST['next-step'];
+}
+
 if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
 
     $display = htmlspecialchars($_POST['next-step']);
@@ -172,4 +176,5 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     </div> -->
     <div class="container"><img src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/general-logo-x2.png" id="logo-header"></div>
     <?php include(INDPPL_ROOT_PATH . "/templates/template_parts/" . $display . ".php"); ?>
+    <?php echo wp_footer(); ?>
 </body>

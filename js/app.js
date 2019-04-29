@@ -764,22 +764,22 @@ jQuery(document).ready(function( $ ) {
 
     jQuery.fn.scrollTo = function (elem, speed) {
         console.log('scroll');
-        $(this).animate({
-            scrollTop: $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
-        }, speed == undefined ? 1000 : speed);
-        return this;
+        // $(this).animate({
+        //     scrollTop: $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
+        // }, speed == undefined ? 1000 : speed);
+        // return this;
     };
 
 
     // Toggle planting guide sections
-    $("body").on('click', '.planting-guide-sections .indppl-button', function(e){
+    $("body").on('click', '.planting-guide-sections .guide-controls', function(e){
         e.preventDefault();
         var target = $(this).data('target');
         var header = $(this).data('header');
         // console.log(target);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
-        $('.planting-guide-preview').scrollTop($('.planting-guide-preview').scrollTop() + $('#' + header).position().top);
+        // $('.planting-guide-preview').scrollTop($('.planting-guide-preview').scrollTop() + $('#' + header).position().top);
 
         $('#planting-guide').scrollTo('#' + header, 400);
 
@@ -794,8 +794,60 @@ jQuery(document).ready(function( $ ) {
         productsToStep(products);
     });
 
-    $('body').on('change', '.planting-guide-options input[type=checkbox]', function() {
-        var products = $(this).parents('.step-product-select').data('')
+    $('body').on('change', '.planting-guide-options input[type=checkbox], .planting-guide-options textarea', function() {
+        var products = $(this).parents('.step-product-select').attr('id');
+        productsToStep(products);
+    });
+
+    // Save planting guide content
+    $('body').on('click', '#guide-save', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var type = $('#planting-guide').data('type');
+        var steps = new Array();
+        var step = '';
+        var content = '';
+        var description = '';
+        var title = '';
+        $('.planting-guide-options').each(function(){
+            content = '';
+            step = $(this).data('step');
+            title = $(this).data('title');
+            title = $('#' + title).text();
+            $(this).find('.guide-step-description').each(function(){
+                if($(this).is(':checked')){
+                    content =  $(this).data('content');
+                }
+            });
+            var products = new Array();
+            var id = '';
+            var instructions = '';
+            $(this).find('input[type=checkbox]').each(function() {
+                if($(this).is(':checked')){
+                    id = $(this).data('product');
+                    instructions = $('#' + $(this).data('instructions')).val();
+                    products.push({id : id, instructions : instructions});
+                }
+            });
+            description = $('#' + content + ' p').text();
+            steps.push({title: title, step : step, description : description, products : products });
+        });
+        
+        $.ajax({
+            url : indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data : {
+                action : 'indppl_save_guide_ajax',
+                steps : steps,
+                store : $('#planting-guide').data('store'),
+                type : $('#planting-guide').data('type')
+            },
+            success: function (results){
+                console.log(results);
+                console.log('something')
+            }
+        });
     });
 
     function productsToStep(products){
@@ -827,6 +879,32 @@ jQuery(document).ready(function( $ ) {
 
         $('#' + section).append(productsThisStep);
     }
+
+    $('body').on('click', '#get-planting-guide', function(e){
+        e.preventDefault();
+        var store = $(this).data('store');
+        var plants = $(this).data('plants');
+        var list = $(this).data('list');
+        var email = $('input[name=email]').val();
+
+        $.ajax({
+            url : indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data : {
+                action : 'indppl_build_guide_ajax',
+                nonce : indppl_ajax.guide_nonce,
+                store : store,
+                plants : plants,
+                list : list,
+                email : email
+            }, 
+            success : function(response) {
+                $('#list-container').html(response);
+            }
+        });
+
+    })
 
     $('body').on('click', '.sponsor-link', function(e){
         e.preventDefault();

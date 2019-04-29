@@ -673,6 +673,13 @@ span.padding-right-5{
 GUIDES STYLES
 **************/
 
+.planting-guide {
+  max-width: 1000px;
+  display: block;
+  margin: auto;
+  padding: 25px;
+}
+
 .planting-guide-options .planting-guide-instructions .planting-guide-option-input{
   width: 15%;
   min-width: 15%;
@@ -691,9 +698,16 @@ GUIDES STYLES
 .planting-guide-preview {
   border: 2px solid #333;
   width: 100%;
-  min-height: 500px;
-  max-height: 500px;
+  min-height: 400px;
+  max-height: 400px;
   overflow: hidden;
+  padding: 15px;
+  padding-right: 0;
+}
+
+
+.planting-guide-preview .planting-guide-content {
+  padding-bottom: 350px;
 }
 
 .planting-guide .store-info img {
@@ -729,7 +743,7 @@ GUIDES STYLES
 .planting-guide-products label {
   flex-basis: 15%;
 }
-
+inddpl-
 .planting-guide-products textarea {
   flex-grow: 999;
 }
@@ -738,6 +752,7 @@ GUIDES STYLES
   max-width: 75px;
   width: 75px;
   margin-top: 15px;
+  margin-right: 5px;
 }
 
 .product-guide-image img {
@@ -788,6 +803,12 @@ GUIDES STYLES
   margin-top: 10px;
 }
 
+/* SINGLE GUIDE TEMPLATE */
+
+.single-guide {
+  background: white;
+}
+
 /*********************
 POTS & BEDS APPRATES
 *********************/
@@ -808,3 +829,4 @@ input.blended-num, input.surface-num{
 .margin-top-30{
   margin-top: 30px;
 }
+

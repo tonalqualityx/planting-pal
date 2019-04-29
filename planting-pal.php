@@ -28,6 +28,7 @@ function indppl_enqueue(){
       array(
          'ajaxurl' => admin_url( 'admin-ajax.php' ),
          'pluginDirectory' => plugins_url(),
+         'guide_nonce' => wp_create_nonce(),
       )
    );
    wp_enqueue_script('indppl-js');
@@ -65,6 +66,10 @@ function indppl_single_store_template($single) {
         return plugin_dir_path(__FILE__) . "/templates/single-store.php";
     }
 
+    //set guides template...
+    if($post->post_type == 'guide'){
+        return plugin_dir_path(__FILE__) . "/templates/single-guide.php";
+    }
     
     return $template;
     

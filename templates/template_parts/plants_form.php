@@ -1,3 +1,5 @@
+<?php defined('ABSPATH') or die('No script kiddies please!'); //For security ?>
+
 <div class="row guide-top" style="margin-top: -15px;">
         <div class="col">
             <p class="text-uppercase text-center text-white d-flex justify-content-center align-items-center" style="font-size: 9px;margin-top: 7px;margin-bottom: 10px;"><strong>AMENDMENT CALCULATOR &amp; PLANTING GUIDE</strong><br></p>

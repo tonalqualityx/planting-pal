@@ -2,6 +2,7 @@
 
 // Inherits $sections from ajax functions
 
+$store_title = get_the_title($store);
 $address1 = get_post_meta($store, 'wpcf-address1', TRUE);
 $address2 = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone = get_post_meta($store, 'wpcf-phone', TRUE);
@@ -12,13 +13,14 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
 
 
 <h2>In Ground Planting Guide</h2>
-<div id="planting-guide" class="planting-guide-preview planting-guide">
+<div id="planting-guide" class="planting-guide-preview planting-guide" data-type="ground" data-store="<?php echo $store ; ?>">
     <div class="overflow">
         <div class="store-info">
-            <div class="indppl-flex align-center">
+            <div class="indppl-flex indppl-align-center">
                 <img src="<?php echo get_post_meta($store, 'wpcf-logo', TRUE);?>">
                 <div class="store-address">
                     <?php 
+                    echo "<p>$store_title</p>";
                     if($address1 && $address1 != ''){
                         echo "<p>$address1</p>";
                     }
@@ -60,13 +62,13 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
     foreach($sections as $section => $options){ 
         $format_section = str_replace(array(' ',':'), array('-',''), $section); ?>
         <h3 style="display:none;"><?php echo $section; ?></h3>
-        <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" >
+        <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >
             <p>Customize this step by selection an option below:</p>
             <ul class="style-free" data-products="products-<?php echo $i; ?>">
 
                 <li class="planting-guide-instructions indppl-flex indppl-align-center">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php $options['id']; ?>" id="radio-<?php echo $options['id']; ?>-a" data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>"> <label for="radio-<?php echo $options['id']; ?>-a" >Option A</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>"> <label for="radio-<?php echo $options['id']; ?>-a" >Option A</label>
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-a">
                         <?php echo $options['a-instructions']; ?>
@@ -75,7 +77,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
 
                 <li class="planting-guide-instructions  indppl-flex indppl-align-center">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php $options['id']; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>"> <label for="radio-<?php echo $options['id']; ?>-b" >Option B</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description'> <label for="radio-<?php echo $options['id']; ?>-b" >Option B</label>
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-b">
                         <?php echo $options['b-instructions']; ?>
@@ -95,8 +97,8 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
                     ?>
                     
                     <div class="indppl-flex planting-guide-products indppl-align-center">
-                        <input type='checkbox' name="use-<?php echo $key; ?>" id="use-<?php echo $key; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
-                        <label for="use-<?php echo $key; ?>"><?php echo $product->post_title; ?></label>
+                        <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
+                        <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $product->post_title; ?></label>
                         <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
                     </div>
 
@@ -105,10 +107,10 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
             <?php
             $i++;
             if($i > 1){ ?>
-                <a href="#" id="guide-back" class="indppl-button" data-target="section-<?php echo prev($sections)['id']; next($sections); ?>" data-header="<?php echo $format_section; ?>-header">Back</a> 
+                <a href="#" id="guide-back" class="indppl-button guide-controls" data-target="section-<?php echo prev($sections)['id']; next($sections); ?>" data-header="<?php echo $format_section; ?>-header">Back</a> 
             <?php }
             if($i < $count){ ?>
-                <a href="#" id="guide-next" class="indppl-button" data-target="section-<?php echo next($sections)['id']; ?>" data-header="<?php echo $format_section; ?>-header">Next</a>
+                <a href="#" id="guide-next" class="indppl-button guide-controls" data-target="section-<?php echo next($sections)['id']; ?>" data-header="<?php echo $format_section; ?>-header">Next</a>
             <?php } else { ?>
                 <a href="#" id="guide-save" class="indppl-button" >Save</a>
 

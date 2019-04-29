@@ -1302,33 +1302,75 @@ add_action('wp_ajax_nopriv_indppl_save_pot_apprates_ajax', 'indppl_save_pot_appr
 
 function indppl_guide_products_ajax(){
     $products = $_POST['products'];
-    foreach($products as $product){
-        $brands = get_the_terms($product['product'], 'brand');
-        $brand = $brands[0];
-        $sponsorship = toolset_get_related_post($product['product'], 'sponsorship-product');
-        $image = get_post_meta($product['product'], 'wpcf-product-image', TRUE);
-        $sponsor_copy = ''; ?>
-        <div class='indppl-flex guide-product-template'>
-            <?php if($sponsorship){ 
-                $sponsor_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
-                $sponsor_copy = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
-                $sponsor_link = get_post_meta($sponsorship, 'wpcf-sponsor-url', TRUE); 
-                $image = $sponsor_image;
-                ?>
-            <?php } 
-            if($image && $image != ''){ ?>
-                <div class='product-guide-image'><img src="<?php echo $image; ?>" alt="<?php echo $product['label']; ?>"></div>
-            <?php } ?>
-            <div class='product-guide-step-instructions'>
-                <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $product["label"]; ?></span></span> <?php echo $product["instructions"]; ?>
-                <?php if($sponsorship){ ?>
-                    <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a><div class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_url; ?>' target="_blank">Learn More...</a></div>
-                <?php } ?>
-            </div>
-        </div>
-    <?php }
+    indppl_guide_products($products);
     die();
 }
 
 add_action('wp_ajax_indppl_guide_products_ajax', 'indppl_guide_products_ajax');
 add_action('wp_ajax_nopriv_indppl_guide_products_ajax', 'indppl_guide_products_ajax');
+
+function indppl_save_guide_ajax(){
+    $steps = json_encode( $_POST['steps']);
+    $store = $_POST['store'];
+    $type = $_POST['type'];
+
+    $results = update_post_meta( $store, 'wpcf-planting-guide-' . $type . '-options', $steps );
+
+    var_dump($results);
+    die();
+
+}
+
+add_action('wp_ajax_indppl_save_guide_ajax', 'indppl_save_guide_ajax');
+add_action('wp_ajax_nopriv_indppl_save_guide_ajax', 'indppl_save_guide_ajax');
+
+function indppl_build_guide_ajax() {
+
+    // Check nonce
+    if(true){ // This should be the nonce later
+
+        // Set the variables
+        $store = htmlspecialchars($_POST['store']);
+        $plants =  $_POST['plants'];
+        $list =  $_POST['list']; 
+        $email = htmlspecialchars( $_POST['email'] );
+        $guides = array(); // set the array so we can fill it up and create multiple guides
+
+        // Stash the shopping list, email address, and store in the DB for later marketing
+    
+        // Use the type & product list to build planting guide
+        foreach($plants as $type => $plant){
+            $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
+            $guide_options = str_replace("\\", '' ,$guide_options);
+            $guide_options = json_decode($guide_options, true);
+            ob_start();
+                include(INDPPL_ROOT_PATH . '/templates/template_parts/planting-guide.php');
+            $guide = ob_get_clean();
+            $args = array(
+                'post_type' => 'guide',
+                'post_content' => $guide, 
+            );
+            $new_guide = wp_insert_post( $args ); ?>
+            
+            <div class="container" style="padding-bottom: 300px;">
+                <h2>Success!</h2>
+                <p>The link for your planting guide has been emailed to you. Your guide is good for 30 days, then we'll need to ask you to complete the process again.</p>
+                <a href="<?php echo get_permalink($new_guide); ?>" target="_blank">Check out your <?php echo $type; ?> planting guide here!</a>
+            </div>
+        <?php }
+    
+        // Email user the link
+    
+        // Generate the page
+
+    } else {
+        echo json_encode("Hacker!");
+    }
+
+    // End the script
+    die();
+
+}
+
+add_action('wp_ajax_indppl_build_guide_ajax', 'indppl_build_guide_ajax');
+add_action('wp_ajax_nopriv_indppl_build_guide_ajax', 'indppl_build_guide_ajax');
