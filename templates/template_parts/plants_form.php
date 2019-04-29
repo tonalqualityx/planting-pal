@@ -41,7 +41,7 @@
             <p><strong>In-Ground Plantings</strong><br></p>
         </div>
     </div>
-    <div class="ig-select">
+    <div class="ig-select" style="padding-bottom: 25px;">
         <div class="container">
             <div class="row qty-plant-header">
                 <div class="col-3 offset-2">
