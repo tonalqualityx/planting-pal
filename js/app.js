@@ -722,7 +722,7 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.indppl-application-rates-pots-btn', function(e){
         e.preventDefault();
-        var type = $('this').data('type');
+        var type = $(this).data('type');
         $('body').prepend("<div class='slide-in-products-container'></div>");
         setTimeout(function(){
             $('.slide-in-products-container').addClass('left-0');
@@ -932,11 +932,11 @@ function greyOutAllUnchecked(){
 
 function indppl_get_units($type = 'dry'){
     if($type == 'dry'){
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each', 'Bag': 'Bag'};
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each', 'Bag': 'Bag'};
     }else if($type == 'bag'){
         return {'ppc': 'plants per bag / contianer', 'cpp': 'bags / containers per plant'};
     }else{
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt-l': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
     }  
 }
 
@@ -1234,16 +1234,15 @@ function updateBagAppRates(elem){
                 var select = $(this).data('unit');
                 var elem = $(this);
                 // console.log(select);
-                if($(elem).children().length == 0){
-                    $.each(bagunits, function(index, value){
-                        if(select == index || (select == 'tbl' && index == 'tbls')){
-                            selected = `selected`;
-                        }else{
-                            selected = ``;
-                        }
-                        $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
-                    });
-                }
+                
+                $.each(bagunits, function(index, value){
+                    if(select == index || (select == 'tbl' && index == 'tbls')){
+                        selected = `selected`;
+                    }else{
+                        selected = ``;
+                    }
+                    $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                });
                 // console.log(unit);
             });
             indpplDelSmallLoading();

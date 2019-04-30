@@ -982,7 +982,7 @@ function indppl_get_pot_apprates_ajax(){
     $get_apps = false;
     $num = 0;
     $percent_array = array();
-    foreach($app_rates['pots']['filler'] as $key => $value){
+    foreach($app_rates[$type]['filler'] as $key => $value){
         if(isset($value['amount'])){
             $get_apps = true;
             $percent_array[] = $value['amount'];
@@ -1006,7 +1006,6 @@ function indppl_get_pot_apprates_ajax(){
         }
     }
     ob_start();
-    // var_dump($get_apps);
     ?>
     <div class='pots-apprates-container'>
         <a href='#' class='modal-close'>X</a>
@@ -1023,13 +1022,13 @@ function indppl_get_pot_apprates_ajax(){
             </tr>
             <?php
             $counter = 0;
-            foreach($app_rates['pots']['filler'] as $key => $value){
+            foreach($app_rates[$type]['filler'] as $key => $value){
                 // if(isset($value['filler'])){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
                     $primary = '';
-                    $default = $app_rates['pots']['filler'][$key]['primary'];
+                    $default = $app_rates[$type]['filler'][$key]['primary'];
                     if($default == "true"){
                         $primary = 'checked';
                     }
@@ -1061,7 +1060,7 @@ function indppl_get_pot_apprates_ajax(){
                 // }
 
             }
-            if(empty($app_rates['pots']['filler'])){
+            if(empty($app_rates[$type]['filler'])){
                 ?>
                 <tr>
                     <th class='color-red'>There are no Products Setup for This section.</th>
@@ -1094,7 +1093,7 @@ function indppl_get_pot_apprates_ajax(){
         <h4 class='margin-top-30'>Additives Blended in with Potting Soil</h4>
         <table>
             <?php
-            foreach($app_rates['pots']['blended'] as $key => $value){
+            foreach($app_rates[$type]['blended'] as $key => $value){
                 // var_dump($value);
                 // var_dump("<br /><br />");
                 // if(isset($value['blended'])){
@@ -1106,8 +1105,8 @@ function indppl_get_pot_apprates_ajax(){
                     $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
                     // apprates_array
                     if($get_apps == true){
-                        $dilution = $app_rates['pots']['blended'][$key]['amount'];
-                        $unit = $app_rates['pots']['blended'][$key]['unit'];
+                        $dilution = $app_rates[$type]['blended'][$key]['amount'];
+                        $unit = $app_rates[$type]['blended'][$key]['unit'];
                         
                     }
 
@@ -1154,7 +1153,7 @@ function indppl_get_pot_apprates_ajax(){
                     <?php
                 // }
             }
-            if(empty($app_rates['pots']['blended'])){
+            if(empty($app_rates[$type]['blended'])){
                 ?>
                 <tr>
                     <th class='color-red'>There are no Products Setup for This section.</th>
@@ -1171,7 +1170,7 @@ function indppl_get_pot_apprates_ajax(){
         <h4 class='margin-top-30'>Additives Surface Applied after planting</h4>
         <table>
             <?php
-            foreach($app_rates['pots']['surface'] as $key => $value){
+            foreach($app_rates[$type]['surface'] as $key => $value){
                 // if(isset($value['surface'])){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
@@ -1182,9 +1181,9 @@ function indppl_get_pot_apprates_ajax(){
                     $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
                     // apprates_array
                     if($get_apps == true){
-                        $dilution = $app_rates['pots']['surface'][$key]['amount'];
-                        $units = $app_rates['pots']['surface'][$key]['unit'];
-                        $per_unit = $app_rates['pots']['surface'][$key]['per-sqft'];
+                        $dilution = $app_rates[$type]['surface'][$key]['amount'];
+                        $units = $app_rates[$type]['surface'][$key]['unit'];
+                        $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
                     }
 
                     $select_unit = array(
@@ -1245,7 +1244,7 @@ function indppl_get_pot_apprates_ajax(){
                     <?php
                 // }
             }
-            if(empty($app_rates['pots']['surface'])){
+            if(empty($app_rates[$type]['surface'])){
                 ?>
                 <tr>
                     <th class='color-red'>There are no Products Setup for This section.</th>
@@ -1262,12 +1261,22 @@ function indppl_get_pot_apprates_ajax(){
         <h4 class='margin-top-30'>Products used as 'Eaches'</h4>
         <p>These products will be recommended based on the width of your customer's pot/container:</p>
         <table>
-            <tr>
-                <th style="text-align: center">&lt;8" wide</th>
-                <th style="text-align: center">8-24" wide</th>
-                <th style="text-align: center">&gt;24" wide</th>
-            </tr>
             <?php
+            if(!empty($app_rates[$type]['each'])){
+                ?>
+                <tr>
+                    <th style="text-align: center">&lt;8" wide</th>
+                    <th style="text-align: center">8-24" wide</th>
+                    <th style="text-align: center">&gt;24" wide</th>
+                </tr>
+                <?php
+            }else{
+                ?>
+                <tr class='margin-bottom-20 display-block'>
+                    <th class='color-red'>There are no Products Setup for This section.</th>
+                </tr> 
+                <?php
+            }
             foreach($app_rates[$type]['each'] as $key => $value){
                 $title = get_the_title($key);
                 $brand = get_the_terms($key, 'brand', true);
@@ -1278,9 +1287,9 @@ function indppl_get_pot_apprates_ajax(){
                 $each_large = get_post_meta($key, 'wpcf-each-large', true);
                 // apprates_array
                 if($get_apps == true){
-                    $each_small = $app_rates['pots']['each'][$key]['small'];
-                    $each_medium = $app_rates['pots']['each'][$key]['medium'];
-                    $each_large = $app_rates['pots']['each'][$key]['large'];
+                    $each_small = $app_rates[$type]['each'][$key]['small'];
+                    $each_medium = $app_rates[$type]['each'][$key]['medium'];
+                    $each_large = $app_rates[$type]['each'][$key]['large'];
                 }
 
 
@@ -1378,7 +1387,6 @@ function indppl_update_bag_app_rates_ajax(){
     if(isset($_POST['cont_id'])){
         $cont_id = $_POST['cont_id'];
     }
-
     $args = array(
         $product_id => array(
             'bag' => array(),
@@ -1394,7 +1402,7 @@ function indppl_update_bag_app_rates_ajax(){
         'unit' => $product_unit,
     );
     // var_dump($args);
-    $save = indppl_apprates($store_id, $type, $args);
+    $save = indppl_apprates($store_id, $type, $args, true);
     // var_dump($save);
     $return = update_bag_package_table($store_id, $product_id, $type);
     echo $return;
