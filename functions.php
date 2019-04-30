@@ -376,14 +376,6 @@ function indppl_apprates($store_id, $type = null, $args = null) {
             // var_dump($apprates);
 
             break;
-        // case 'beds':
-
-        //     foreach($args as $key => $val) {
-                
-        //         $apprates[$type][$key][key($val)] = $val[key($val)];
-        //     }
-    
-        //     break;
         default:
             return 'Something wrong...';
             break;
@@ -947,7 +939,7 @@ function indppl_get_current_products($type){
         $no_duplicates = array();
         if(is_array($product_array)){
             foreach($product_array as $key => $value){
-                if($type == 'pots'){
+                if($type == 'pots' || $type == 'beds'){
                     foreach($value as $k => $v){
                         if($k != 0 && !in_array($k, $no_duplicates)){
                             $no_duplicates[] = $k;

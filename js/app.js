@@ -818,6 +818,7 @@ jQuery(document).ready(function( $ ) {
         console.log('something');
         var store_id = $('#store-id').val();
         var fill_array = {};
+        var type = $('#indppl-modal-product-type').val();
         $('.pots-apprates-filler').each(function(){
             fill_array[$(this).data('product')] = {'amount': $(this).val()};
             if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
@@ -856,6 +857,7 @@ jQuery(document).ready(function( $ ) {
                 blend_array: blend_array,
                 surface_array: surface_array,
                 each_array: each_array,
+                type: type,
             },
             type: 'POST',
             success: function(e){
