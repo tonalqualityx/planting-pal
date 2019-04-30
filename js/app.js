@@ -60,6 +60,7 @@ jQuery(document).ready(function( $ ) {
             $(this).addClass('indppl-active');
         }
 
+
     })
 
     $('body').on('click', '.store-go-live-btn', function(e){
