@@ -45,15 +45,22 @@ jQuery(document).ready(function( $ ) {
     // tabs
     $('body').on('click', '.indppl-nav li', function(e){
         e.preventDefault();
-        $('.indppl-tab-pane, .indppl-nav li').removeClass('indppl-active');
-        var active = $(this).children().attr('href');
-        $(active).addClass('indppl-active');
-        $(this).addClass('indppl-active');
+        var split = location.search.replace('?', '').split('=')
         $store_id = $('#store-id').val();
         var url = window.location.href;
         url = url + "?store-id=" + $store_id;
-        console.log(url);
-        // window.location.href = url;
+        console.log(split);
+        if(split[0] != 'store-id'){
+            window.location.href = url;
+        }else{
+
+            $('.indppl-tab-pane, .indppl-nav li').removeClass('indppl-active');
+            var active = $(this).children().attr('href');
+            $(active).addClass('indppl-active');
+            $(this).addClass('indppl-active');
+        }
+
+
     })
 
     $('body').on('click', '.store-go-live-btn', function(e){
@@ -715,6 +722,7 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.indppl-application-rates-pots-btn', function(e){
         e.preventDefault();
+        var type = $('this').data('type');
         $('body').prepend("<div class='slide-in-products-container'></div>");
         setTimeout(function(){
             $('.slide-in-products-container').addClass('left-0');
@@ -728,6 +736,7 @@ jQuery(document).ready(function( $ ) {
             data: {
                 action: 'indppl_get_pot_apprates_ajax',
                 store_id: store_id,
+                type: type,
             },
             type: 'POST',
             success: function(e){
@@ -810,6 +819,7 @@ jQuery(document).ready(function( $ ) {
         console.log('something');
         var store_id = $('#store-id').val();
         var fill_array = {};
+        var type = $('#indppl-modal-product-type').val();
         $('.pots-apprates-filler').each(function(){
             fill_array[$(this).data('product')] = {'amount': $(this).val()};
             if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
@@ -848,6 +858,7 @@ jQuery(document).ready(function( $ ) {
                 blend_array: blend_array,
                 surface_array: surface_array,
                 each_array: each_array,
+                type: type,
             },
             type: 'POST',
             success: function(e){
@@ -856,6 +867,7 @@ jQuery(document).ready(function( $ ) {
             }
         });
     })
+
     
 });
 
@@ -943,7 +955,6 @@ function check_on_load_and_click(){
             $('.add-container-btn').remove();
     
         }
-
     })(jQuery);
     
 }

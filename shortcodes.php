@@ -263,24 +263,12 @@ function pp_store_management(){
         if(!empty($_POST['store-id'])){
             $store_id = $_POST['store-id'];
         }
-        $store_id = indppl_save_post($store_id);
-        $_GET['store-id'] = $store_id;
+        indppl_save_post($store_id);
+        // $_GET['store-id'] = $store_id;
     }
-	// if(is_int($store_id)){
-	// 	$store_name = get_the_title($store_id);
-	// 	$address1 = get_post_meta($store_id, 'wpcf-address1', true);
-	// 	$address2 = get_post_meta($store_id, 'wpcf-address2', true);
-	// 	$city = get_post_meta($store_id, 'wpcf-city', true);
-	// 	$state = get_post_meta($store_id, 'wpcf-state', true);
-	// 	$zip = get_post_meta($store_id, 'wpcf-zip', true);
-	// 	$weburl = get_post_meta($store_id, 'wpcf-weburl', true);
-	// 	$phone = get_post_meta($store_id, 'wpcf-phone', true);
-	// 	$email = get_post_meta($store_id, 'wpcf-email', true);
-	// 	$logo = get_post_meta($store_id, 'wpcf-logo', true);
-    // }
     
     
-    if(is_int($store_id)){
+    if($store_id > 0){
         ob_start();
         $setup = get_post_meta($store_id, 'wpcf-issetup', true);
         if($setup){
@@ -332,7 +320,11 @@ function pp_store_management(){
         <?php
         $return = ob_get_clean();
     }else{
-        $return = indppl_store_info($store_id);
+        $return = do_shortcode('[pp-my-stores]');
+        // var_dump($return);
+        if(!$return){
+            $return = indppl_store_info($store_id);
+        }
     }
     
     
@@ -343,7 +335,7 @@ add_shortcode('pp-store-management', 'pp_store_management');
 function pp_my_stores(){
     ob_start();
     ?>
-    <div class='indppl-my-stores-container'>
+    
         <?php
             $user_id = get_current_user_id();
             $args = array(
@@ -362,9 +354,10 @@ function pp_my_stores(){
                     $address1 = get_post_meta($id, 'wpcf-address1', true);
                     $city = get_post_meta($id, 'wpcf-city', true);
                     $state = get_post_meta($id, 'wpcf-state', true);
-                    $link = home_url() . '/test2?store-id=' . $id;
+                    $link = home_url() . '/store-profile?store-id=' . $id;
                     // var_dump($img);
                     ?>
+                    <div class='indppl-my-stores-container'>
                     <div class='indppl-single-store-container'>
                         <div class='flex-half'>
                             <div class='indppl-store-thumb'>
@@ -384,7 +377,9 @@ function pp_my_stores(){
                 // remove else to allow the add store link to always be active.
             }else{
                 ?>
-                <div class='indppl-add-store-container'>
+                <!-- save for later -->
+                <!-- <div class='indppl-my-stores-container'> -->
+                <!-- <div class='indppl-add-store-container'>
                     <a class='indppl-add-store-link' href='<?php echo home_url() . "/test2/"; ?>'>
                         <div class='indppl-add-store-centered'>
                             <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -393,8 +388,9 @@ function pp_my_stores(){
                         </div>
                         <h4 class='indppl-add-store-text'>Add Store</h4>
                     </a>
-                </div>
-                <?php 
+                </div> -->
+                <?php
+                return null;
             }
         ?>
     </div>
@@ -616,7 +612,8 @@ function pp_store_products(){
                 <?php echo indppl_get_current_products("pots"); ?>
             </div>
             <h3 class='indppl-products-title'>Raised beds</h3>
-            <a href="#" class='indppl-add-product-btn' data-type='beds'>Add Product</a>
+            <a href="#" class='indppl-add-product-pots-btn' data-type='beds'>Add Product</a>
+            <a href="#" class='indppl-application-rates-pots-btn' data-type='beds'>Application rates</a>
             <div class='indppl-product-list'>
                 <?php echo indppl_get_current_products("beds"); ?>
             </div>

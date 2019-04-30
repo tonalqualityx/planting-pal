@@ -416,7 +416,7 @@ function indppl_get_product_info_ajax(){
     }
 
     ob_start();
-    if($type == 'pots'){
+    if($type == 'pots' || $type == 'beds'){
         ?>
         <input type="submit" name="product-create-pots-next" data-exit="true" id="product-create-pots-next" class="product-create-pots-submit" value="Next">
         <?php
@@ -435,7 +435,7 @@ function indppl_get_product_info_ajax(){
         <?php
         $add_product = ob_get_clean();
     }
-    if($type == 'pots'){
+    if($type == 'pots' || $type == 'beds'){
         ob_start();
         $filler = get_post_meta($product_id, 'wpcf-use-blended-filler');
         $additive = get_post_meta($product_id, 'wpcf-use-blended-additive');
@@ -491,7 +491,7 @@ function indppl_get_product_info_ajax(){
     if($product_id == 'new'){
         $send_array['new_product'] = $add_product;
     }
-    if($type == 'pots'){
+    if($type == 'pots' || $type == 'beds'){
         $send_array['usage_type'] = $usage_type;
     }
     echo json_encode($send_array);
@@ -642,7 +642,7 @@ function indppl_save_product_ajax(){
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
         // $console = $updated_app_rates;
     }
-    $ajax_array =[];
+    $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
     $ajax_array['dryliquid'] = $product_dryliquid;
@@ -884,40 +884,49 @@ function indppl_save_pots_product_ajax(){
         wp_set_object_terms($product_id, $brand, 'brand');
     }
 
-
+    var_dump($product_id);
+    var_dump($surface);
     $send_array = array($product_id => array());
     // foreach($product_rate as $key => $value){
     $temp = array();
     if($filler == 'true'){
         $temp['filler'] = array(
-            $product_id['bag'] = $fraction,
+            $product_id => array(
+                'bag' => '',
+            ),
         );
     }
     if($blend == 'true'){
         $temp['blended'] = array(
-            $product_id['bag'] = $fraction,
+            $product_id => array(
+                'bag' => '',
+            ),
         );
 
     }
     if($surface == 'true'){
         $temp['surface'] = array(
-            $product_id['bag'] = $fraction,
+            $product_id => array(
+                'bag' => '',
+            ),
         );
     }
     var_dump($fraction);
     if($new_pack[count($new_pack)-1]['unit'] == 'each'){
         $temp['each'] = array(
-            $product_id['bag'] = $fraction,
+            $product_id => array(
+                'bag' => '',
+            ),
         );
     }
     $send_array = $temp;
     // }
     if($product_id != 'new'){
-        // var_dump($type);
-        // var_dump($send_array);
+        var_dump($type);
+        var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
 
-        // var_dump($save);
+        var_dump($save);
     }
     // var_dump($package_array);
     // var_dump($new_pack);
@@ -965,6 +974,9 @@ add_action('wp_ajax_nopriv_indppl_save_pots_product_ajax', 'indppl_save_pots_pro
 function indppl_get_pot_apprates_ajax(){
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
     }
     $app_rates = indppl_apprates($store_id);
     $get_apps = false;
@@ -1256,7 +1268,7 @@ function indppl_get_pot_apprates_ajax(){
                 <th style="text-align: center">&gt;24" wide</th>
             </tr>
             <?php
-            foreach($app_rates['pots']['each'] as $key => $value){
+            foreach($app_rates[$type]['each'] as $key => $value){
                 $title = get_the_title($key);
                 $brand = get_the_terms($key, 'brand', true);
                 $brand = $brand[0]->name;
@@ -1325,13 +1337,16 @@ function indppl_save_pot_apprates_ajax(){
     if(isset($_POST['each_array'])){
         $each_array = $_POST['each_array'];
     }
+    if(isset($_POST['type'])){
+        $type = $_POTS['type'];
+    }
     $args = array(
         'filler' => $fill_array,
         'blended' => $blend_array,
         'surface' => $surface_array,
         'each' => $each_array,
     );
-    $save = indppl_apprates($store_id, 'pots', $args);
+    $save = indppl_apprates($store_id, $type, $args);
     var_dump($save);
     die();
 }

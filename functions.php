@@ -361,6 +361,7 @@ function indppl_apprates($store_id, $type = null, $args = null) {
 
             break;
         case 'pots':
+        case 'beds':
             foreach($args as $key => $val) {
                 foreach($val as $k => $v){
                     if(is_array($v)){
@@ -374,14 +375,6 @@ function indppl_apprates($store_id, $type = null, $args = null) {
             }
             // var_dump($apprates);
 
-            break;
-        case 'beds':
-
-            foreach($args as $key => $val) {
-                
-                $apprates[$type][$key][key($val)] = $val[key($val)];
-            }
-    
             break;
         default:
             return 'Something wrong...';
@@ -946,7 +939,7 @@ function indppl_get_current_products($type){
         $no_duplicates = array();
         if(is_array($product_array)){
             foreach($product_array as $key => $value){
-                if($type == 'pots'){
+                if($type == 'pots' || $type == 'beds'){
                     foreach($value as $k => $v){
                         if($k != 0 && !in_array($k, $no_duplicates)){
                             $no_duplicates[] = $k;
@@ -1532,7 +1525,7 @@ function indppl_get_products($store_id, $key, $type){
         <tr class='indppl-table-color-offset'>
             <td>
                 <?php
-                if($type == 'pots'){
+                if($type == 'pots' || $type == 'beds'){
                     ?>
                     <a href="#" class="indppl-product-pots-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
                     <?php
