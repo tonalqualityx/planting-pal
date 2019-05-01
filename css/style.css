@@ -830,3 +830,22 @@ input.blended-num, input.surface-num{
   margin-top: 30px;
 }
 
+input.rounded-input {
+  border: 1px solid #ABACB2 !important;
+  box-shadow: inset 2px 2px 3px 0 rgba(0,0,0,0.50)!important;
+  border-radius: 18px !important;
+  text-align: center;
+  max-width: 61px;
+  display: block;
+  margin-top: 5px;
+}
+
+.rounded-input2 {
+    border: 1px solid #ABACB2 !important;
+    box-shadow: inset 2px 2px 3px 0 rgba(0,0,0,0.50) !important;
+    border-radius: 18px !important;
+    max-width: 41px !important;
+    margin-top: 5px;
+    text-align: center;
+    display: inline;
+}

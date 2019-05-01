@@ -74,8 +74,8 @@
     </div>
 
     <?php 
-    
-    $stati = indppl_user_status(2);
+    $author = $post->post_author;
+    $stati = indppl_user_status($author);
     if(in_array('paidaccount', $stati)){ ?>
 
 
