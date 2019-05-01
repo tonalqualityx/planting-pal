@@ -41,6 +41,8 @@ $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
             <?php foreach($guide_options as $step){
                 echo "<h3 class='orange-text'>{$step['title']}</h3>";
                 echo "<div class='guide-step-instructions'>{$step['description']}</div>";
+
+                // THIS PART SHOULD BE A SHORTCODE THAT GETS CALLED EVERY TIME
                 foreach($step['products'] as $product){
                     $prod_name = get_the_title($product['id']);
                     $brands       = get_the_terms($product['id'], 'brand');
