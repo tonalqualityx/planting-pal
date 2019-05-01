@@ -16,6 +16,15 @@ add_action( 'wp_ajax_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_a
 add_action('wp_ajax_nopriv_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_ajax');
 
 function indppl_switch_live_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['id'])){
         $store_id = $_POST['id'];
         $status = get_post_meta($store_id, 'wpcf-issetup', true);
@@ -33,6 +42,15 @@ add_action( 'wp_ajax_indppl_switch_live_ajax', 'indppl_switch_live_ajax' );
 add_action('wp_ajax_nopriv_indppl_switch_live_ajax', 'indppl_switch_live_ajax');
 
 function indppl_save_container_data_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
@@ -189,6 +207,15 @@ add_action('wp_ajax_nopriv_indppl_save_container_data_ajax', 'indppl_save_contai
 
 
 function indppl_add_new_product_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     $return = indppl_get_product_info();
     echo $return;
     die();
@@ -197,6 +224,15 @@ add_action( 'wp_ajax_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax'
 add_action('wp_ajax_nopriv_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax');
 
 function indppl_get_products_by_brand_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['brand'])){
         $brand = $_POST['brand'];
     }
@@ -246,6 +282,15 @@ add_action( 'wp_ajax_indppl_get_products_by_brand_ajax', 'indppl_get_products_by
 add_action('wp_ajax_nopriv_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax');
 
 function indppl_get_product_info_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['product_id'])){
         $product_id = $_POST['product_id'];
     }
@@ -501,6 +546,15 @@ add_action( 'wp_ajax_indppl_get_product_info_ajax', 'indppl_get_product_info_aja
 add_action('wp_ajax_nopriv_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax');
 
 function indppl_save_product_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['product_id'])){
         $product_id = $_POST['product_id'];
     }
@@ -654,6 +708,15 @@ add_action( 'wp_ajax_indppl_save_product_ajax', 'indppl_save_product_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_product_ajax', 'indppl_save_product_ajax');
 
 function indppl_product_save_exit_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     echo do_shortcode('[pp-store-products]');
     die();
 }
@@ -662,6 +725,15 @@ add_action('wp_ajax_nopriv_indppl_product_save_exit_ajax', 'indppl_product_save_
 
 
 function indppl_remove_package_from_store_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
@@ -716,7 +788,15 @@ add_action('wp_ajax_nopriv_indppl_remove_package_from_store_ajax', 'indppl_remov
 
 // Setup the guide form 
 function indppl_setup_guide_forms_ajax(){
-
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     $form = $_POST['form'];
     $defaults = get_posts(array("post_type" => "guide-defaults", 'meta_key' => 'wpcf-guide-type', 'meta_value' => $form));
     $default = $defaults[0];
@@ -761,6 +841,15 @@ add_action('wp_ajax_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_aj
 add_action('wp_ajax_nopriv_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_ajax');
 
 function indppl_update_app_rates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['type'])){
         $type = $_POST['type'];
     }
@@ -813,6 +902,15 @@ add_action( 'wp_ajax_indppl_update_app_rates_ajax', 'indppl_update_app_rates_aja
 add_action('wp_ajax_nopriv_indppl_update_app_rates_ajax', 'indppl_update_app_rates_ajax');
 
 function indppl_save_pots_product_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['product_id'])){
         $product_id = $_POST['product_id'];
     }
@@ -972,6 +1070,15 @@ add_action( 'wp_ajax_indppl_save_pots_product_ajax', 'indppl_save_pots_product_a
 add_action('wp_ajax_nopriv_indppl_save_pots_product_ajax', 'indppl_save_pots_product_ajax');
 
 function indppl_get_pot_apprates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
@@ -982,13 +1089,15 @@ function indppl_get_pot_apprates_ajax(){
     $get_apps = false;
     $num = 0;
     $percent_array = array();
-    foreach($app_rates[$type]['filler'] as $key => $value){
-        if(isset($value['amount'])){
-            $get_apps = true;
-            $percent_array[] = $value['amount'];
-            // var_dump($value['amount']);
+    foreach($app_rates[$type] as $k => $v){
+        foreach($v as $key => $value){
+            if(isset($value['amount'])){
+                $get_apps = true;
+                $percent_array[] = $value['amount'];
+                // var_dump($value['amount']);
+            }
+            $num++;
         }
-        $num++;
     }
     if($get_apps == false){
         $ind = floor(100 / $num);
@@ -1005,9 +1114,11 @@ function indppl_get_pot_apprates_ajax(){
             $num--;
         }
     }
+    var_dump($get_apps);
     ob_start();
     ?>
     <div class='pots-apprates-container'>
+        <div id='pots-and-beds-type' data-type='<?php echo $type; ?>'></div>
         <a href='#' class='modal-close'>X</a>
         <h2>Pots / Containers Application Rates</h2>
         <p>Bulk Filler / Substrate(ie Potting Soil)</p>
@@ -1331,6 +1442,15 @@ add_action( 'wp_ajax_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_aja
 add_action('wp_ajax_nopriv_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_ajax');
 
 function indppl_save_pot_apprates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
@@ -1347,7 +1467,7 @@ function indppl_save_pot_apprates_ajax(){
         $each_array = $_POST['each_array'];
     }
     if(isset($_POST['type'])){
-        $type = $_POTS['type'];
+        $type = $_POST['type'];
     }
     $args = array(
         'filler' => $fill_array,
@@ -1356,13 +1476,22 @@ function indppl_save_pot_apprates_ajax(){
         'each' => $each_array,
     );
     $save = indppl_apprates($store_id, $type, $args);
-    var_dump($save);
+    var_dump($type);
     die();
 }
 add_action( 'wp_ajax_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax');
 
 function indppl_update_bag_app_rates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
