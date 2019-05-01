@@ -28,6 +28,7 @@ function indppl_enqueue(){
       array(
          'ajaxurl' => admin_url( 'admin-ajax.php' ),
          'pluginDirectory' => plugins_url(),
+         'guide_nonce' => wp_create_nonce(),
       )
    );
    wp_enqueue_script('indppl-js');
@@ -48,6 +49,14 @@ function page_template_enqueue(){
 }
 add_action('wp_enqueue_scripts', 'page_template_enqueue');
 
+//Add support for attaching author to stores, products, and packages
+function indppl_cpt_author() {
+    add_post_type_support('store', 'author');
+    add_post_type_support('product', 'author');
+    add_post_type_support('package', 'author');
+}
+add_action('init', 'indppl_cpt_author');
+
 //Add support for a custom single-store page
 function indppl_single_store_template($single) {
     
@@ -57,6 +66,10 @@ function indppl_single_store_template($single) {
         return plugin_dir_path(__FILE__) . "/templates/single-store.php";
     }
 
+    //set guides template...
+    if($post->post_type == 'guide'){
+        return plugin_dir_path(__FILE__) . "/templates/single-guide.php";
+    }
     
     return $template;
     

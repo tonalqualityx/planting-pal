@@ -31,7 +31,7 @@ jQuery(document).ready(function( $ ) {
                     indpplDelLoading();
                     $('.store-list-container').replaceWith(e);
                 }
-            })
+            });
         }, 200);
     })
 
@@ -91,7 +91,7 @@ jQuery(document).ready(function( $ ) {
                     $(elem).html("Make Private");
                 }
             }
-        })
+        });
     });
     $('body').on('focus', '.container-date', function(e){
         $(this).datepicker({ dateFormat: 'm/d' });
@@ -210,11 +210,15 @@ jQuery(document).ready(function( $ ) {
     })
     $('body').on('click', '.modal-close', function(e){
         $(this).hide();
+        closeModal();
+    });
+
+    function closeModal(){
         $('.slide-in-products-container').removeClass('left-0');
         setTimeout(function(){
             $('.slide-in-products-container').remove();
         }, 1000);
-    });
+    }
     // $('body').on('click', '.slide-in-products-container', function(e){
     //     $('.slide-in-products-container').remove();
     // })
@@ -255,7 +259,7 @@ jQuery(document).ready(function( $ ) {
                 }
                 indpplDelLoading();
             }
-        })
+        });
     });
     $('body').on('change', '#product-create-product', function(e){
         indpplAddLoading();
@@ -351,7 +355,7 @@ jQuery(document).ready(function( $ ) {
                 }
                 indpplDelLoading();
             }
-        })
+        });
     });
     $('body').on('click', '.product-create-dry-wet', function(){
         var type = $(this).val();
@@ -807,26 +811,166 @@ jQuery(document).ready(function( $ ) {
     });
 
 
+
+    jQuery.fn.scrollTo = function (elem, speed) {
+        console.log('scroll');
+        // $(this).animate({
+        //     scrollTop: $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
+        // }, speed == undefined ? 1000 : speed);
+        // return this;
+    };
+
+
     // Toggle planting guide sections
-    $("body").on('click', '.planting-guide-sections .indppl-button', function(e){
+    $("body").on('click', '.planting-guide-sections .guide-controls', function(e){
         e.preventDefault();
         var target = $(this).data('target');
-        console.log(target);
+        var header = $(this).data('header');
+        // console.log(target);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
+        // $('.planting-guide-preview').scrollTop($('.planting-guide-preview').scrollTop() + $('#' + header).position().top);
+
+        $('#planting-guide').scrollTo('#' + header, 400);
+
+        
     });
 
     $("body").on('click', '.planting-guide-instructions input[type=radio]', function() {
         var content = $("#" + $(this).data('content')).text();
         var target = $(this).data('target');
         $("#" + target).html(content);
-        var myContainer = $('.planting-guide-preview')
+        var products = $(this).parents('ul').data('products');
+        productsToStep(products);
+    });
 
-        var scrollTo = $("#" + target);
-        console.log(scrollTo);
-        myContainer.animate({
-            scrollTop: scrollTo.offset().top - myContainer.offset().top + myContainer.scrollTop()
+    $('body').on('change', '.planting-guide-options input[type=checkbox], .planting-guide-options textarea', function() {
+        var products = $(this).parents('.step-product-select').attr('id');
+        productsToStep(products);
+    });
+
+    // Save planting guide content
+    $('body').on('click', '#guide-save', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var type = $('#planting-guide').data('type');
+        var steps = new Array();
+        var step = '';
+        var content = '';
+        var description = '';
+        var title = '';
+        $('.planting-guide-options').each(function(){
+            content = '';
+            step = $(this).data('step');
+            title = $(this).data('title');
+            title = $('#' + title).text();
+            $(this).find('.guide-step-description').each(function(){
+                if($(this).is(':checked')){
+                    content =  $(this).data('content');
+                }
+            });
+            var products = new Array();
+            var id = '';
+            var instructions = '';
+            $(this).find('input[type=checkbox]').each(function() {
+                if($(this).is(':checked')){
+                    id = $(this).data('product');
+                    instructions = $('#' + $(this).data('instructions')).val();
+                    products.push({id : id, instructions : instructions});
+                }
+            });
+            description = $('#' + content + ' p').text();
+            steps.push({title: title, step : step, description : description, products : products });
         });
+        
+        $.ajax({
+            url : indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data : {
+                action : 'indppl_save_guide_ajax',
+                steps : steps,
+                store : $('#planting-guide').data('store'),
+                type : $('#planting-guide').data('type')
+            },
+            success: function (results){
+                closeModal();
+            }
+        });
+    });
+
+    function productsToStep(products){
+        var productsThisStep = new Array();
+        var section = '';
+        var product = '';
+        var productStepInstructions = '';
+        $("#" + products + " input:checkbox:checked").each(function(e) {
+            product = $(this).data('product');
+            section = $(this).data('target');
+            label = $(this).next('label').text();
+            productStepInstructions = $("#" + $(this).data('instructions')).val();
+            productsThisStep.push({product : product, instructions: productStepInstructions, label: label });
+        });
+        
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_guide_products_ajax',
+                products : productsThisStep,
+            },
+            type: 'POST',
+            success: function (results) {
+                $('#' + section + '-products').html(results);
+            }
+        });
+
+        $('#' + section).append(productsThisStep);
+    }
+
+    $('body').on('click', '#get-planting-guide', function(e){
+        e.preventDefault();
+        var store = $(this).data('store');
+        var plants = $(this).data('plants');
+        var list = $(this).data('list');
+        var email = $('input[name=email]').val();
+
+        $.ajax({
+            url : indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data : {
+                action : 'indppl_build_guide_ajax',
+                nonce : indppl_ajax.guide_nonce,
+                store : store,
+                plants : plants,
+                list : list,
+                email : email
+            }, 
+            success : function(response) {
+                $('#list-container').html(response);
+            }
+        });
+
+    })
+
+    $('body').on('click', '.sponsor-link', function(e){
+        e.preventDefault();
+        console.log('triggered');
+        var content = $(this).next('.sponsor-copy').html();
+        var brand = $(this).siblings('.product-name').find('.brand').text();
+        var product = $(this).siblings('.product-name').find('.product').text();
+        var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
+        console.log(content);
+        $('body').prepend("<div class='sponsored-modal'>" + image + "<p class='brand'>" + brand + "</p><h4>" + product + "</h4><p>" + content + "</p></div>");
+    });
+
+    $(document).click(function (event) {
+        //if you click on anything except the modal itself or the "open modal" link, close the modal
+        if (!$(event.target).closest(".sponsored-modal, .sponsor-link").length) {
+            $(".sponsored-modal").remove();
+        }
     });
 
     $('body').on('click', '.pots-apprates-save-btn', function(e){
