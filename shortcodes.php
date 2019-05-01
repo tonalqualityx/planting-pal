@@ -253,10 +253,17 @@ function indppl_import() {
 // add_shortcode('import-products', 'indppl_import');
 
 function pp_store_management(){
-    // var_dump(home_url());
     $store_id = '';
     if(isset($_GET['store-id'])){
-        $store_id = intval(htmlspecialchars($_GET['store-id']));
+        $user_id = get_current_user_id();
+        $author_id = get_post_field('post_author', intval($_GET['store-id']));
+        if($user_id == $author_id || current_user_can('administrator')){
+            $store_id = intval(htmlspecialchars($_GET['store-id']));
+        }else{
+            ?>
+            <h3 class='color-red'>Sorry, but you must be logged in to access this store. Further Options below.</h3>
+            <?php
+        }
     }
     if(isset($_POST['submit'])){
         if($store_id == null){$store_id = 0;}
