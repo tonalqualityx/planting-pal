@@ -652,6 +652,7 @@ span.padding-right-5{
   font-size: 1.4em;
   margin-top: 0;
 }
+
 .pots-apprates-filler-total{
   font-size: 2em;
   font-weight: 600;
@@ -828,5 +829,12 @@ input.blended-num, input.surface-num{
 }
 .margin-top-30{
   margin-top: 30px;
+}
+
+.margin-bottom-20{
+  margin-bottom: 20px;
+}
+.display-block{
+  display:block;
 }
 

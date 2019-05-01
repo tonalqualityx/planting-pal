@@ -340,7 +340,7 @@ function indppl_user_status($id){
     return $account_array;
 }
 
-function indppl_apprates($store_id, $type = null, $args = null) {
+function indppl_apprates($store_id, $type = null, $args = null, $bag = null) {
 
     // Start with the apprates from the store meta. Does it have data? If no, start fresh.
     $meta = get_post_meta($store_id, 'wpcf-apprates', true);
@@ -357,10 +357,25 @@ function indppl_apprates($store_id, $type = null, $args = null) {
         switch ($type) { // Which type of product is getting added?
     
         case 'ground':
-            $apprates['ground'][key($args)] = $args[key($args)];
+            if($bag){
+                foreach($args as $key => $val) {
+                    foreach($val as $k => $v){
+                        if(is_array($v)){
+                            foreach($v as $item => $value){
+                                $apprates[$type][$key][$k][$item] = $value;
+                            }
+                        }else{
+                            $apprates[$type][$key][$k][key($v)] = $v[key($v)];
+                        }
+                    }
+                }
+            }else{
+                $apprates['ground'][key($args)] = $args[key($args)];
+            }
 
             break;
         case 'pots':
+        case 'beds':
             foreach($args as $key => $val) {
                 foreach($val as $k => $v){
                     if(is_array($v)){
@@ -374,14 +389,6 @@ function indppl_apprates($store_id, $type = null, $args = null) {
             }
             // var_dump($apprates);
 
-            break;
-        case 'beds':
-
-            foreach($args as $key => $val) {
-                
-                $apprates[$type][$key][key($val)] = $val[key($val)];
-            }
-    
             break;
         default:
             return 'Something wrong...';
@@ -730,8 +737,10 @@ function indppl_save_post($store_id = 0){
         }
         $store_id = wp_insert_post($store);
         return $store_id;
+        
     }
 }
+
 
 function indppl_create_container($new_array, $container_id = 0){
     $container = array(
@@ -944,7 +953,7 @@ function indppl_get_current_products($type){
         $no_duplicates = array();
         if(is_array($product_array)){
             foreach($product_array as $key => $value){
-                if($type == 'pots'){
+                if($type == 'pots' || $type == 'beds'){
                     foreach($value as $k => $v){
                         if($k != 0 && !in_array($k, $no_duplicates)){
                             $no_duplicates[] = $k;
@@ -1247,7 +1256,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         krsort($order_array);
         foreach($order_array as $key => $value){
             ?>
-            <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
+            <th class='bag-apprates-title' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
             <?php
         }
         ?>
@@ -1273,7 +1282,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         // $app_qty_array = [];
         ?>
         <tr>
-            <td>
+            <td class='bag-apprates-container-title' data-id='<?php echo $id; ?>'>
                 <?php echo $title; ?>
             </td>
                 <?php
@@ -1290,40 +1299,44 @@ function update_bag_package_table($store_id, $product_id, $type){
                             );
 
                         if($id == $v['child']){
-                            // var_dump($pack_id);
+                            
 
                             $qty = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-qty', true);
                             $unit = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-unit-holdover', true);
+                            if(isset($app_rates[$type][$product_id]['bag'][$id])){
+                                $qty = $app_rates[$type][$product_id]['bag'][$id]['amount'];
+                                $unit = $app_rates[$type][$product_id]['bag'][$id]['unit'];
+                            }
                             // var_dump(get_post_meta($pack_id, 'wpcf-size', true));
                             $package_size = get_post_meta($pack_id, 'wpcf-size', true);
                             $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
                             // var_dump($package_size);
                             $cups = get_post_meta($product_id, 'wpcf-5cups', true);
-                            $pp_dilema = 'ppb';
-                            if($package_unit == 'cuft'){
+                            $pp_dilema = 'ppc';
+                            // if($package_unit == 'cuft'){
                                 $conversion = getVolume($qty, $unit, $package_unit);
-                                if($conversion > $package_size){
+                                if($conversion >= $package_size){
                                     $final = $conversion / $package_size;
-                                    $pp_dilema = 'bpp';
+                                    $pp_dilema = 'cpp';
                                 }else{
                                     $final = $package_size / $conversion;
-                                    $pp_dilema = 'ppb';
+                                    $pp_dilema = 'ppc';
                                 }
                                 // var_dump($conversion);
-                            }else{
-                                $conversion = indppl_normalize($items, $package_unit, intval($cups));
-                                $conversion = $conversion[0]['standard-amount'];
-                                $final = $package_size / $conversion;
-                            }
+                            // }else{
+                            //     $conversion = indppl_normalize($items, $package_unit, intval($cups));
+                            //     $conversion = $conversion[0]['standard-amount'];
+                            //     $final = $package_size / $conversion;
+                            // }
                             $app_qty = round($final, 2);
                             if($knife != $first_key){
-                                if($pp_dilema == 'ppb'){
-                                    $ppb_text = "plants per bag / container";
+                                if($pp_dilema == 'ppc'){
+                                    $ppc_text = "plants per bag / container";
                                 }else{
-                                    $ppb_text = 'bags / containers per plant';
+                                    $ppc_text = 'bags / containers per plant';
                                 }
                                 ?>
-                                <p><?php echo $app_qty . "  " . $ppb_text; ?></p>
+                                <p data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty . "  " . $ppc_text; ?></p>
                                 <?php
                             }else{
                                 if($app_qty){
@@ -1350,10 +1363,10 @@ function update_bag_package_table($store_id, $product_id, $type){
                     <?php
                 }
                 if(!$pro_container){
-                    $val = $product_related[0];
-                            
+                    $val = $product_related[0];   
                     $package_size = get_post_meta($val, 'wpcf-size', true);
                     $package_unit = get_post_meta($val, 'wpcf-unit', true);
+                
                     $cups = get_post_meta($product_id, 'wpcf-5cups', true);
                     // var_dump($cups);
                     $conversion = indppl_normalize($items, $package_unit, intval($cups));
@@ -1371,51 +1384,9 @@ function update_bag_package_table($store_id, $product_id, $type){
                         
                     </select>
                     <?php
-                    // if(!empty($app_rates[$type][$product_id]['containers'])){
-                    //     $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
-                    // }
-                    // if(!empty($app_rates[$type][$product_id]['containers'])){
-                    //     $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
-                    // }
-                    
                 }
                 ?>
-            <!-- </td> -->
-            <?php
-            // $items = array(
-            //     array(
-            //         'unit' => $app_unit,
-            //         'amount' => $app_qty,
-            //     )
-            // );
-            // $iterator = 0;
-            // foreach($order_array as $k => $val){
-            //     if(in_array($val, $store_related)){
-            //         if($iterator == 0){
-            //             $iterator++;
-            //         }else{
-            //             $package_size = get_post_meta($val, 'wpcf-size', true);
-            //             $package_unit = get_post_meta($val, 'wpcf-unit', true);
-            //             $cups = get_post_meta($product_id, 'wpcf-5cups', true);
-            //             // var_dump($cups);
-            //             $conversion = indppl_normalize($items, $package_unit, intval($cups));
-            //             // var_dump($conversion);
-            //             // $conversion = getVolume($app_qty, $app_unit, $package_unit);
-            //             $final = $package_size / $conversion[0]['standard-amount'];
-            //             // echo $;
-                        
-                        ?>
-                        <!-- <td> -->
-                            <?php 
-                            // echo round($final, 2) . " Plants ";  
-                            ?>
-                        <!-- </td> -->
-                        <?php
-            //         }
-            //     }
-            // }
-
-            ?>
+            
         </tr>
         <?php
     }
@@ -1526,7 +1497,7 @@ function indppl_get_products($store_id, $key, $type){
         <tr class='indppl-table-color-offset'>
             <td>
                 <?php
-                if($type == 'pots'){
+                if($type == 'pots' || $type == 'beds'){
                     ?>
                     <a href="#" class="indppl-product-pots-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
                     <?php

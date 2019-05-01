@@ -16,6 +16,15 @@ add_action( 'wp_ajax_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_a
 add_action('wp_ajax_nopriv_indppl_planting_pal_home_ajax', 'indppl_planting_pal_home_ajax');
 
 function indppl_switch_live_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['id'])){
         $store_id = $_POST['id'];
         $status = get_post_meta($store_id, 'wpcf-issetup', true);
@@ -33,6 +42,15 @@ add_action( 'wp_ajax_indppl_switch_live_ajax', 'indppl_switch_live_ajax' );
 add_action('wp_ajax_nopriv_indppl_switch_live_ajax', 'indppl_switch_live_ajax');
 
 function indppl_save_container_data_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
@@ -189,6 +207,15 @@ add_action('wp_ajax_nopriv_indppl_save_container_data_ajax', 'indppl_save_contai
 
 
 function indppl_add_new_product_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     $return = indppl_get_product_info();
     echo $return;
     die();
@@ -197,6 +224,15 @@ add_action( 'wp_ajax_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax'
 add_action('wp_ajax_nopriv_indppl_add_new_product_ajax', 'indppl_add_new_product_ajax');
 
 function indppl_get_products_by_brand_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['brand'])){
         $brand = $_POST['brand'];
     }
@@ -246,6 +282,15 @@ add_action( 'wp_ajax_indppl_get_products_by_brand_ajax', 'indppl_get_products_by
 add_action('wp_ajax_nopriv_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax');
 
 function indppl_get_product_info_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['product_id'])){
         $product_id = $_POST['product_id'];
     }
@@ -258,6 +303,7 @@ function indppl_get_product_info_ajax(){
     if(isset($_POST['edit'])){
         $container = indppl_get_product_info();
     }
+    
     
     if($product_id == 'new'){
         $default = 0;
@@ -415,7 +461,7 @@ function indppl_get_product_info_ajax(){
     }
 
     ob_start();
-    if($type == 'pots'){
+    if($type == 'pots' || $type == 'beds'){
         ?>
         <input type="submit" name="product-create-pots-next" data-exit="true" id="product-create-pots-next" class="product-create-pots-submit" value="Next">
         <?php
@@ -434,7 +480,7 @@ function indppl_get_product_info_ajax(){
         <?php
         $add_product = ob_get_clean();
     }
-    if($type == 'pots'){
+    if($type == 'pots' || $type == 'beds'){
         ob_start();
         $filler = get_post_meta($product_id, 'wpcf-use-blended-filler');
         $additive = get_post_meta($product_id, 'wpcf-use-blended-additive');
@@ -458,16 +504,18 @@ function indppl_get_product_info_ajax(){
         <?php
         $usage_type = ob_get_clean();
     }
+
     ob_start();
-    $fraction = get_post_meta($product_id, 'wpcf-fraction', true);
-    ?>
-    <div class='indppl-add-product-fraction-bag'>
-    <h3 class='product-create-fraction-bag-title'>When you recommend apply this product, is it by:</h3>
-        <input type='checkbox' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag
-    </div>
-    <?php
+        $fraction = get_post_meta($product_id, 'wpcf-fraction', true);
+        ?>
+        <div class='indppl-add-product-fraction-bag'>
+        <h3 class='product-create-fraction-bag-title'>When you recommend apply this product, is it by:</h3>
+            <input type='checkbox' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag
+        </div>
+        <?php
     $fraction_bag = ob_get_clean();
-    
+
+    $console = $usage_type;
     $send_array['standard_unit'] = $standard_unit;
     $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
     $send_array['size'] = $sizes;
@@ -488,7 +536,7 @@ function indppl_get_product_info_ajax(){
     if($product_id == 'new'){
         $send_array['new_product'] = $add_product;
     }
-    if($type == 'pots'){
+    if($type == 'pots' || $type == 'beds'){
         $send_array['usage_type'] = $usage_type;
     }
     echo json_encode($send_array);
@@ -498,6 +546,15 @@ add_action( 'wp_ajax_indppl_get_product_info_ajax', 'indppl_get_product_info_aja
 add_action('wp_ajax_nopriv_indppl_get_product_info_ajax', 'indppl_get_product_info_ajax');
 
 function indppl_save_product_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['product_id'])){
         $product_id = $_POST['product_id'];
     }
@@ -540,7 +597,13 @@ function indppl_save_product_ajax(){
     if(isset($_POST['fraction'])){
         $fraction = $_POST['fraction'];
     }
-    $console = $cups_num;
+    if(isset($_POST['container_id'])){
+        $container_id = $_POST['container_id'];
+    }
+    if(isset($_POST['first_package'])){
+        $first_package = $_POST['first_package'];
+    }
+    // $console = $cups_num;
     if($product_id == 'new'){
         $new_product_args = array(
             'post_type' => 'product',
@@ -557,20 +620,49 @@ function indppl_save_product_ajax(){
         $product_id = wp_insert_post($new_product_args);
         wp_set_object_terms($product_id, $brand, 'brand');
     }
-
-
-    $send_array = array($product_id => array());
-    foreach($product_rate as $key => $value){
-        $temp = array(
-                'unit' => $product_unit[$key]['value'],
-                'amount' => $value['value'],
+    // $console = $product_rate;
+    // $app_rates = indppl_apprates($store_id);
+    $console;
+    if($fraction && $product_rate){
+        $args = array(
+            $product_id => array(
+                'bag' => array(),
+            ),
         );
-        $send_array[$product_id]['containers'][$value['name']] = $temp;
-    }
-    if($product_rate){
-        // $console = $send_array;
-        $save = indppl_apprates($store_id, $type, $send_array);
-        
+        foreach($product_rate as $key => $value){
+            // $value['name'] = container id
+            // $value['value'] = input value
+            // $product_unit[$key]['value'] = cpp
+            // $first_package['num'] = number of first pack
+            // $first_package['unit'] = unit of first package
+            // $console = $product_unit;
+            if($product_unit[$key]['value'] == 'cpp'){
+                $app_rate = $value['value'] * $first_package['num'];
+            }else{
+                $app_rate = $first_package['num'] / $value['value'];
+            }
+            $args[$product_id]['bag'][$value['name']] = array(
+                'amount' => $app_rate,
+                'unit' => $first_package['unit'],
+            );
+
+        }
+        // $console = $args;
+        indppl_apprates($store_id, $type, $args);
+    }else{
+        $send_array = array($product_id => array());
+        foreach($product_rate as $key => $value){
+            $temp = array(
+                    'unit' => $product_unit[$key]['value'],
+                    'amount' => $value['value'],
+            );
+            $send_array[$product_id]['containers'][$value['name']] = $temp;
+        }
+        if($product_rate){
+            // $console = $send_array;
+            $save = indppl_apprates($store_id, $type, $send_array);
+            
+        }
     }
     // var_dump($package_array);
     // var_dump($new_pack);
@@ -595,16 +687,16 @@ function indppl_save_product_ajax(){
             $remove = toolset_disconnect_posts('store-package', $store_id, $pack_id);
         }
     }
-    $console = $fraction;
+    // $console = $fraction;
     if($fraction == 'true'){
         update_post_meta($product_id, 'wpcf-fraction', 1);
         $updated_app_rates = update_bag_package_table($store_id, $product_id, $type);
     }else{
         delete_post_meta($product_id, 'wpcf-fraction');
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
-        $console = $updated_app_rates;
+        // $console = $updated_app_rates;
     }
-    $ajax_array =[];
+    $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
     $ajax_array['dryliquid'] = $product_dryliquid;
@@ -616,6 +708,15 @@ add_action( 'wp_ajax_indppl_save_product_ajax', 'indppl_save_product_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_product_ajax', 'indppl_save_product_ajax');
 
 function indppl_product_save_exit_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     echo do_shortcode('[pp-store-products]');
     die();
 }
@@ -624,6 +725,15 @@ add_action('wp_ajax_nopriv_indppl_product_save_exit_ajax', 'indppl_product_save_
 
 
 function indppl_remove_package_from_store_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
@@ -678,7 +788,15 @@ add_action('wp_ajax_nopriv_indppl_remove_package_from_store_ajax', 'indppl_remov
 
 // Setup the guide form 
 function indppl_setup_guide_forms_ajax(){
-
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     $form = $_POST['form'];
     $defaults = get_posts(array("post_type" => "guide-defaults", 'meta_key' => 'wpcf-guide-type', 'meta_value' => $form));
     $default = $defaults[0];
@@ -723,6 +841,15 @@ add_action('wp_ajax_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_aj
 add_action('wp_ajax_nopriv_indppl_setup_guide_forms_ajax', 'indppl_setup_guide_forms_ajax');
 
 function indppl_update_app_rates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['type'])){
         $type = $_POST['type'];
     }
@@ -775,6 +902,15 @@ add_action( 'wp_ajax_indppl_update_app_rates_ajax', 'indppl_update_app_rates_aja
 add_action('wp_ajax_nopriv_indppl_update_app_rates_ajax', 'indppl_update_app_rates_ajax');
 
 function indppl_save_pots_product_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['product_id'])){
         $product_id = $_POST['product_id'];
     }
@@ -846,40 +982,49 @@ function indppl_save_pots_product_ajax(){
         wp_set_object_terms($product_id, $brand, 'brand');
     }
 
-
+    var_dump($product_id);
+    var_dump($surface);
     $send_array = array($product_id => array());
     // foreach($product_rate as $key => $value){
     $temp = array();
     if($filler == 'true'){
         $temp['filler'] = array(
-            $product_id => array(),
+            $product_id => array(
+                'bag' => '',
+            ),
         );
     }
     if($blend == 'true'){
         $temp['blended'] = array(
-            $product_id => array(),
+            $product_id => array(
+                'bag' => '',
+            ),
         );
 
     }
     if($surface == 'true'){
         $temp['surface'] = array(
-            $product_id => array(),
+            $product_id => array(
+                'bag' => '',
+            ),
         );
     }
-    var_dump($new_pack);
+    var_dump($fraction);
     if($new_pack[count($new_pack)-1]['unit'] == 'each'){
         $temp['each'] = array(
-            $product_id => array(),
+            $product_id => array(
+                'bag' => '',
+            ),
         );
     }
     $send_array = $temp;
     // }
     if($product_id != 'new'){
-        // var_dump($type);
-        // var_dump($send_array);
+        var_dump($type);
+        var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
 
-        // var_dump($save);
+        var_dump($save);
     }
     // var_dump($package_array);
     // var_dump($new_pack);
@@ -925,20 +1070,34 @@ add_action( 'wp_ajax_indppl_save_pots_product_ajax', 'indppl_save_pots_product_a
 add_action('wp_ajax_nopriv_indppl_save_pots_product_ajax', 'indppl_save_pots_product_ajax');
 
 function indppl_get_pot_apprates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
     }
     $app_rates = indppl_apprates($store_id);
     $get_apps = false;
     $num = 0;
     $percent_array = array();
-    foreach($app_rates['pots']['filler'] as $key => $value){
-        if(isset($value['amount'])){
-            $get_apps = true;
-            $percent_array[] = $value['amount'];
-            // var_dump($value['amount']);
+    foreach($app_rates[$type] as $k => $v){
+        foreach($v as $key => $value){
+            if(isset($value['amount'])){
+                $get_apps = true;
+                $percent_array[] = $value['amount'];
+                // var_dump($value['amount']);
+            }
+            $num++;
         }
-        $num++;
     }
     if($get_apps == false){
         $ind = floor(100 / $num);
@@ -955,10 +1114,11 @@ function indppl_get_pot_apprates_ajax(){
             $num--;
         }
     }
+    var_dump($get_apps);
     ob_start();
-    // var_dump($get_apps);
     ?>
     <div class='pots-apprates-container'>
+        <div id='pots-and-beds-type' data-type='<?php echo $type; ?>'></div>
         <a href='#' class='modal-close'>X</a>
         <h2>Pots / Containers Application Rates</h2>
         <p>Bulk Filler / Substrate(ie Potting Soil)</p>
@@ -973,13 +1133,13 @@ function indppl_get_pot_apprates_ajax(){
             </tr>
             <?php
             $counter = 0;
-            foreach($app_rates['pots']['filler'] as $key => $value){
+            foreach($app_rates[$type]['filler'] as $key => $value){
                 // if(isset($value['filler'])){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
                     $primary = '';
-                    $default = $app_rates['pots']['filler'][$key]['primary'];
+                    $default = $app_rates[$type]['filler'][$key]['primary'];
                     if($default == "true"){
                         $primary = 'checked';
                     }
@@ -1011,7 +1171,7 @@ function indppl_get_pot_apprates_ajax(){
                 // }
 
             }
-            if(empty($app_rates['pots']['filler'])){
+            if(empty($app_rates[$type]['filler'])){
                 ?>
                 <tr>
                     <th class='color-red'>There are no Products Setup for This section.</th>
@@ -1044,7 +1204,7 @@ function indppl_get_pot_apprates_ajax(){
         <h4 class='margin-top-30'>Additives Blended in with Potting Soil</h4>
         <table>
             <?php
-            foreach($app_rates['pots']['blended'] as $key => $value){
+            foreach($app_rates[$type]['blended'] as $key => $value){
                 // var_dump($value);
                 // var_dump("<br /><br />");
                 // if(isset($value['blended'])){
@@ -1056,8 +1216,8 @@ function indppl_get_pot_apprates_ajax(){
                     $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
                     // apprates_array
                     if($get_apps == true){
-                        $dilution = $app_rates['pots']['blended'][$key]['amount'];
-                        $unit = $app_rates['pots']['blended'][$key]['unit'];
+                        $dilution = $app_rates[$type]['blended'][$key]['amount'];
+                        $unit = $app_rates[$type]['blended'][$key]['unit'];
                         
                     }
 
@@ -1104,7 +1264,7 @@ function indppl_get_pot_apprates_ajax(){
                     <?php
                 // }
             }
-            if(empty($app_rates['pots']['blended'])){
+            if(empty($app_rates[$type]['blended'])){
                 ?>
                 <tr>
                     <th class='color-red'>There are no Products Setup for This section.</th>
@@ -1121,7 +1281,7 @@ function indppl_get_pot_apprates_ajax(){
         <h4 class='margin-top-30'>Additives Surface Applied after planting</h4>
         <table>
             <?php
-            foreach($app_rates['pots']['surface'] as $key => $value){
+            foreach($app_rates[$type]['surface'] as $key => $value){
                 // if(isset($value['surface'])){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
@@ -1132,9 +1292,9 @@ function indppl_get_pot_apprates_ajax(){
                     $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
                     // apprates_array
                     if($get_apps == true){
-                        $dilution = $app_rates['pots']['surface'][$key]['amount'];
-                        $units = $app_rates['pots']['surface'][$key]['unit'];
-                        $per_unit = $app_rates['pots']['surface'][$key]['per-sqft'];
+                        $dilution = $app_rates[$type]['surface'][$key]['amount'];
+                        $units = $app_rates[$type]['surface'][$key]['unit'];
+                        $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
                     }
 
                     $select_unit = array(
@@ -1195,7 +1355,7 @@ function indppl_get_pot_apprates_ajax(){
                     <?php
                 // }
             }
-            if(empty($app_rates['pots']['surface'])){
+            if(empty($app_rates[$type]['surface'])){
                 ?>
                 <tr>
                     <th class='color-red'>There are no Products Setup for This section.</th>
@@ -1212,13 +1372,23 @@ function indppl_get_pot_apprates_ajax(){
         <h4 class='margin-top-30'>Products used as 'Eaches'</h4>
         <p>These products will be recommended based on the width of your customer's pot/container:</p>
         <table>
-            <tr>
-                <th style="text-align: center">&lt;8" wide</th>
-                <th style="text-align: center">8-24" wide</th>
-                <th style="text-align: center">&gt;24" wide</th>
-            </tr>
             <?php
-            foreach($app_rates['pots']['each'] as $key => $value){
+            if(!empty($app_rates[$type]['each'])){
+                ?>
+                <tr>
+                    <th style="text-align: center">&lt;8" wide</th>
+                    <th style="text-align: center">8-24" wide</th>
+                    <th style="text-align: center">&gt;24" wide</th>
+                </tr>
+                <?php
+            }else{
+                ?>
+                <tr class='margin-bottom-20 display-block'>
+                    <th class='color-red'>There are no Products Setup for This section.</th>
+                </tr> 
+                <?php
+            }
+            foreach($app_rates[$type]['each'] as $key => $value){
                 $title = get_the_title($key);
                 $brand = get_the_terms($key, 'brand', true);
                 $brand = $brand[0]->name;
@@ -1228,9 +1398,9 @@ function indppl_get_pot_apprates_ajax(){
                 $each_large = get_post_meta($key, 'wpcf-each-large', true);
                 // apprates_array
                 if($get_apps == true){
-                    $each_small = $app_rates['pots']['each'][$key]['small'];
-                    $each_medium = $app_rates['pots']['each'][$key]['medium'];
-                    $each_large = $app_rates['pots']['each'][$key]['large'];
+                    $each_small = $app_rates[$type]['each'][$key]['small'];
+                    $each_medium = $app_rates[$type]['each'][$key]['medium'];
+                    $each_large = $app_rates[$type]['each'][$key]['large'];
                 }
 
 
@@ -1272,6 +1442,15 @@ add_action( 'wp_ajax_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_aja
 add_action('wp_ajax_nopriv_indppl_get_pot_apprates_ajax', 'indppl_get_pot_apprates_ajax');
 
 function indppl_save_pot_apprates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
     if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
@@ -1287,14 +1466,17 @@ function indppl_save_pot_apprates_ajax(){
     if(isset($_POST['each_array'])){
         $each_array = $_POST['each_array'];
     }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
     $args = array(
         'filler' => $fill_array,
         'blended' => $blend_array,
         'surface' => $surface_array,
         'each' => $each_array,
     );
-    $save = indppl_apprates($store_id, 'pots', $args);
-    var_dump($save);
+    $save = indppl_apprates($store_id, $type, $args);
+    var_dump($type);
     die();
 }
 add_action( 'wp_ajax_indppl_save_pot_apprates_ajax', 'indppl_save_pot_apprates_ajax' );
@@ -1374,3 +1556,62 @@ function indppl_build_guide_ajax() {
 
 add_action('wp_ajax_indppl_build_guide_ajax', 'indppl_build_guide_ajax');
 add_action('wp_ajax_nopriv_indppl_build_guide_ajax', 'indppl_build_guide_ajax');
+
+function indppl_update_bag_app_rates_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['val'])){
+        $val = $_POST['val'];
+    }
+    if(isset($_POST['ppc'])){
+        $ppc = $_POST['ppc'];
+    }
+    if(isset($_POST['product_num'])){
+        $product_num = $_POST['product_num'];
+    }
+    if(isset($_POST['product_unit'])){
+        $product_unit = $_POST['product_unit'];
+    }
+    if(isset($_POST['cont_id'])){
+        $cont_id = $_POST['cont_id'];
+    }
+    $args = array(
+        $product_id => array(
+            'bag' => array(),
+        ),
+    );
+    if($ppc == 'cpp'){
+        $app_rate = $val * $product_num;
+    }else{
+        $app_rate = $product_num / $val;
+    }
+    $args[$product_id]['bag'][$cont_id] = array(
+        'amount' => $app_rate,
+        'unit' => $product_unit,
+    );
+    // var_dump($args);
+    $save = indppl_apprates($store_id, $type, $args, true);
+    // var_dump($save);
+    $return = update_bag_package_table($store_id, $product_id, $type);
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax' );
+add_action('wp_ajax_nopriv_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax');
+
