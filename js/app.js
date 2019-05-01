@@ -67,6 +67,7 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var store_id = $(this).data('id');
         var elem = $(this);
+        var version_check = 1.0;
         // console.log(store_id);
         indpplAddLoading();
         $.ajax({
@@ -76,11 +77,12 @@ jQuery(document).ready(function( $ ) {
             data: {
                 action: 'indppl_switch_live_ajax',
                 id: store_id,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
                 indpplDelLoading();
-                // console.log(e);
+                console.log(e);
                 if(e == 0){
                     $(elem).prev('p').text("Your store is not live. If you have filled out all the information below you can make your store live with this button.");
                     $(elem).html("Make Public");
@@ -128,6 +130,7 @@ jQuery(document).ready(function( $ ) {
         var remove_dot = [];
         var new_array = {};
         var array_num = 0;
+        var version_check = 1.0;
         $(".indppl-checked").each(function(){
             available.push($(this).find('input').data('container'));
         });
@@ -168,6 +171,7 @@ jQuery(document).ready(function( $ ) {
                 not_available: not_available,
                 new_array: new_array,
                 remove_dot: remove_dot,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -225,6 +229,7 @@ jQuery(document).ready(function( $ ) {
         indpplAddLoading();
         var brand = $(this).val();
         var type = $('#indppl-modal-product-type').val();
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -233,6 +238,7 @@ jQuery(document).ready(function( $ ) {
                 action: 'indppl_get_products_by_brand_ajax',
                 brand: brand,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -256,7 +262,7 @@ jQuery(document).ready(function( $ ) {
         var product_id = $(this).val();
         var store_id = $('#store-id').val();
         var type = $('#indppl-modal-product-type').val();
-        
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -266,6 +272,7 @@ jQuery(document).ready(function( $ ) {
                 product_id: product_id,
                 store_id: store_id,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -427,6 +434,7 @@ jQuery(document).ready(function( $ ) {
         var package_remove = [];
         var new_pack = {};
         var i = 0;
+        var version_check = 1.0;
         // console.log(product_input);
         // console.log(product_select);
         if($(this).is('#product-create-next')){
@@ -474,6 +482,7 @@ jQuery(document).ready(function( $ ) {
                 container_id: container_id,
                 first_package: first_package,
                 product_name: product_name,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -579,6 +588,7 @@ jQuery(document).ready(function( $ ) {
         var type = $(this).data('type');
         var product_id = $(this).data('product');
         var elem = $(this);
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -588,6 +598,7 @@ jQuery(document).ready(function( $ ) {
                 product_id: product_id,
                 store_id: store_id,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -648,6 +659,7 @@ jQuery(document).ready(function( $ ) {
         var new_pack = {};
         // console.log(type);
         var i = 0;
+        var version_check = 1.0;
         if($(this).is('#product-create-pots-next')){
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-background-green')){
@@ -696,6 +708,7 @@ jQuery(document).ready(function( $ ) {
                 cups_unit: cups_unit,
                 fraction: fraction,
                 product_name: product_name,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -729,6 +742,7 @@ jQuery(document).ready(function( $ ) {
             indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
         }, 20);
         var store_id = $('#store-id').val();
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -737,6 +751,7 @@ jQuery(document).ready(function( $ ) {
                 action: 'indppl_get_pot_apprates_ajax',
                 store_id: store_id,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -772,7 +787,7 @@ jQuery(document).ready(function( $ ) {
 
         var target = $(this).data('target');
         var storeid = $(this).data('storeid');
-
+        var version_check = 1.0;
         $.ajax({
             url: indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -781,6 +796,7 @@ jQuery(document).ready(function( $ ) {
                 action: 'indppl_setup_guide_forms_ajax',
                 form: target,
                 store: storeid,
+                version_check: version_check,
             },
             type: 'POST',
             success: function (response) {
@@ -819,7 +835,8 @@ jQuery(document).ready(function( $ ) {
         console.log('something');
         var store_id = $('#store-id').val();
         var fill_array = {};
-        var type = $('#indppl-modal-product-type').val();
+        var version_check = 1.0;
+        var type = $('#pots-and-beds-type').data('type');
         $('.pots-apprates-filler').each(function(){
             fill_array[$(this).data('product')] = {'amount': $(this).val()};
             if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
@@ -846,7 +863,7 @@ jQuery(document).ready(function( $ ) {
             each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
             each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
         });
-
+        console.log(type);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -859,6 +876,7 @@ jQuery(document).ready(function( $ ) {
                 surface_array: surface_array,
                 each_array: each_array,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -898,6 +916,7 @@ function get100Percent(){
 };
 
 function getProductInfo(){
+    var version_check = 1.0;
     (function($){
 
         var store_id = $('#store-id').val();
@@ -908,6 +927,7 @@ function getProductInfo(){
             data: {
                 action: 'indppl_product_save_exit_ajax',
                 store_id: store_id,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -987,6 +1007,7 @@ function indpplDelLoading(){
     jQuery('.indppl-loading-background').remove();
 }
 function indpplAddProduct(type){
+    var version_check = 1.0;
     (function($){
 
         $('body').prepend("<div class='slide-in-products-container'></div>");
@@ -1001,6 +1022,7 @@ function indpplAddProduct(type){
             data: {
                 action: 'indppl_add_new_product_ajax',
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -1019,6 +1041,7 @@ function indpplEditProduct(type, store_id, product_id){
         $('.slide-in-products-container').addClass('left-0');
         indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
     }, 20)
+    var version_check = 1.0;
     $.ajax({
         url:indppl_ajax.ajaxurl,
         dataType: 'text',
@@ -1028,6 +1051,7 @@ function indpplEditProduct(type, store_id, product_id){
             type: type,
             store_id: store_id,
             product_id: product_id,
+            version_check: version_check,
             edit: true,
         },
         type: 'POST',
@@ -1155,6 +1179,7 @@ function updateAppRates(elem){
     var store_id = jQuery('#store-id').val();
     var current_pack = {};
     var i = 0;
+    var version_check = 1.0;
     jQuery('.indppl-product-create-size-btn').each(function(){
         if(jQuery(this).hasClass('indppl-background-green')){
             current_pack[i] = {};
@@ -1178,6 +1203,7 @@ function updateAppRates(elem){
             container_id: cont_id,
             container_num: num,
             container_unit: unit,
+            version_check: version_check,
         },
         type: 'POST',
         success: function(e){
@@ -1207,6 +1233,7 @@ function updateBagAppRates(elem){
     var product_num = $('.bag-apprates-title').first().data('num');
     var product_unit = $('.bag-apprates-title').first().data('unit');
     var cont_id = $(elem).parent().prev().data('id');
+    var version_check = 1.0;
     console.log(product_num);
     console.log(val);
     jQuery.ajax({
@@ -1223,6 +1250,7 @@ function updateBagAppRates(elem){
             product_num: product_num,
             product_unit: product_unit,
             cont_id: cont_id,
+            version_check: version_check,
         },
         type: 'POST',
         success: function(e){
