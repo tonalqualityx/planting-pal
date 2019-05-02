@@ -1,3 +1,5 @@
+<?php defined('ABSPATH') or die('No script kiddies please!'); //For security ?>
+
 <div class="row guide-top" style="margin-top: -15px;">
         <div class="col">
             <p class="text-uppercase text-center text-white d-flex justify-content-center align-items-center" style="font-size: 9px;margin-top: 7px;margin-bottom: 10px;"><strong>AMENDMENT CALCULATOR &amp; PLANTING GUIDE</strong><br></p>
@@ -39,7 +41,7 @@
             <p><strong>In-Ground Plantings</strong><br></p>
         </div>
     </div>
-    <div class="ig-select">
+    <div class="ig-select" style="padding-bottom: 25px;">
         <div class="container">
             <div class="row qty-plant-header">
                 <div class="col-3 offset-2">

@@ -1531,6 +1531,7 @@ function indppl_get_products($store_id, $key, $type){
     
 }
 
+
 function image_upload(){
 
     /* Getting file name */
@@ -1559,3 +1560,37 @@ function image_upload(){
         }
     }
 }
+
+function indppl_encodeURIComponent($str) {
+    $revert = array('%21' => '!', '%2A' => '*', '%27' => "'", '%28' => '(', '%29' => ')');
+    return strtr(rawurlencode($str), $revert);
+}
+
+function indppl_guide_products($products){
+    foreach ($products as $product) {
+    $brands       = get_the_terms($product['product'], 'brand');
+    $brand        = $brands[0];
+    $sponsorship  = toolset_get_related_post($product['product'], 'sponsorship-product');
+    $image        = get_post_meta($product['product'], 'wpcf-product-image', TRUE);
+    $sponsor_copy = '';?>
+        <div class='indppl-flex indppl-align-center guide-product-template'>
+            <?php if ($sponsorship) {
+        $sponsor_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
+        $sponsor_copy  = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
+        $sponsor_link  = get_post_meta($sponsorship, 'wpcf-sponsor-url', TRUE);
+        $image         = $sponsor_image;
+        ?>
+            <?php }
+    if ($image && $image != '') {?>
+                <div class='product-guide-image'><img src="<?php echo $image; ?>" alt="<?php echo $product['label']; ?>"></div>
+            <?php }?>
+            <div class='product-guide-step-instructions'>
+                <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $product["label"]; ?></span></span> <?php echo $product["instructions"]; ?>
+                <?php if ($sponsorship) {?>
+                    <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a><div class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></div>
+                <?php }?>
+            </div>
+        </div>
+    <?php }
+}
+
