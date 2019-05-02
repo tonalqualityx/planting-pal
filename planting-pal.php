@@ -86,3 +86,9 @@ function indppl_set_app_template($template){
     return $template;
 }
 add_filter( 'template_include', 'indppl_set_app_template' );
+
+function indppl_meta_tags(){
+    echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+}
+
+add_action('wp_head', 'indppl_meta_tags');
