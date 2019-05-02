@@ -1,0 +1,19 @@
+#is-sponsor{
+    font-weight: 600;
+    padding-right: 10px;
+    font-size: 1.2em;
+}
+.sponsor-wrap{
+    margin-bottom: 30px;
+}
+.sponsor-hidden{
+    display:none;
+}
+.sponsor-brand-container{
+    -webkit-column-count: 3; /* Chrome, Safari, Opera */
+    -moz-column-count: 3; /* Firefox */
+    column-count: 3;
+}
+#sponsor_count{
+    margin-top: 20px;
+}

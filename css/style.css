@@ -268,13 +268,17 @@ ul.style-free {
   height: 100%;
   width: 100px;
 }
-.indppl-add-store-centered{
+.indppl-add-store-centered, .indppl-add-sponsor-centered{
   border: #4b79b5 3px solid;
   width: 100px;
   height: 100px;
   transition: background 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
 }
-.indppl-add-store-centered:hover, .icon--plus:hover{
+.indppl-add-sponsor-centered{
+  width: 100%;
+  height: 100%;
+}
+.indppl-add-store-centered:hover, .icon--plus:hover, .indppl-add-sponsor-centered:hover{
   background: #a4c2f4;
   color: white;
 }
@@ -287,10 +291,10 @@ ul.style-free {
   transition: fill 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
   fill: #4b79b5;
 }
-.indppl-add-store-centered:hover svg path{
+.indppl-add-store-centered:hover svg path, .indppl-add-sponsor-centered:hover svg path{
   fill:white;
 }
-.indppl-add-store-text{
+.indppl-add-store-text, .indppl-add-sponsor-text{
   color: #4b79b5;
   font-weight: 600;
   text-align: center;
@@ -475,7 +479,7 @@ span.padding-right-5{
 .product-list-width{
   min-width: 8em;
 }
-.slide-in-products-container{
+.slide-in-products-container, .slide-in-sponsor-container{
   position: fixed;
   height: 100vh;
   max-height: 100vh;
@@ -503,7 +507,7 @@ span.padding-right-5{
   padding: 15px;
   overflow-y: auto;
 }
-.modal-close{
+.modal-close, .sponsor-modal-close{
   position: fixed;
   left: 86%;
   width: 24px;
@@ -516,7 +520,7 @@ span.padding-right-5{
   color: black;
   
 }
-.modal-close:hover{
+.modal-close:hover, .sponsor-modal-close:hover{
   background: rgba(0, 0, 0, 0.49);
   color: white;
   text-decoration: none;
@@ -752,4 +756,13 @@ input.blended-num, input.surface-num{
 }
 .display-block{
   display:block;
+}
+.indppl-store-management-container, .indppl-sponsor-management-container{
+  padding-bottom: 30px;
+}
+.add-sponsor-container{
+  width: 150px;
+}
+.indppl-add-sponsor-container{
+  margin-left: 10px;
 }

@@ -215,6 +215,13 @@ jQuery(document).ready(function( $ ) {
             $('.slide-in-products-container').remove();
         }, 1000);
     });
+    $('body').on('click', '.sponsor-modal-close', function(e){
+        $(this).hide();
+        $('.slide-in-sponsor-container').removeClass('left-0');
+        setTimeout(function(){
+            $('.slide-in-sponsor-container').remove();
+        }, 1000);
+    });
     // $('body').on('click', '.slide-in-products-container', function(e){
     //     $('.slide-in-products-container').remove();
     // })
@@ -885,9 +892,42 @@ jQuery(document).ready(function( $ ) {
             }
         });
     })
+    $('body').on('click', '.indppl-add-sponsor-link', function(e){
+        $('body').prepend("<div class='slide-in-sponsor-container'><div class='container pad-top-3'><a href='#' class='sponsor-modal-close'>X</a></div></div>");
+        setTimeout(function () {
+            $('.slide-in-sponsor-container').addClass('left-0');
+            indpplAddLoading('.slide-in-sponsor-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+        var version_check = 1.0;
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_save_sponsorship',
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                $('.slide-in-sponsor-container .container').append(e); 
+                indpplDelLoading();
+            }
+        });
+    })
+    $('body').on('click', '#sponsor-save', function(){
+        var fd = new FormData();
+        var files = $('#add-sponsor-img-file')[0].files[0];
+        
+        console.log(fd);
+        console.log(files);
+    })
 
     
 });
+
+// start of functions
+
 
 function get100Percent(){
     
@@ -1137,6 +1177,7 @@ function indpplEditProduct(type, store_id, product_id){
         }
 
     })
+    
 }
 
 function indpplAddSmallLoading(){
