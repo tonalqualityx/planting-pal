@@ -4,6 +4,10 @@
 
 wp_head();
 
+var_dump($_POST);
+
+echo "<br /><br />";
+
 $storeid = get_the_ID(  );
 $user_plants = array();
 $display = 'plants_form';
@@ -20,6 +24,8 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     $ground = array_filter($ground);
 
     $apprates = indppl_apprates($storeid);
+
+    var_dump($apprates);
 
     $products = array();
 
@@ -69,6 +75,14 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
         }
     }
 
+    // Check for pots
+
+    // Add pots products to product list
+    
+    // Check for beds
+
+    // Add beds products to product list
+
     // Calculate the shopping list!
     $shopping_list = array();
     foreach($products as $key => $val) {
@@ -99,8 +113,6 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
         uasort($normalized_packs, function($b, $a) {
             return $a['standard-amount'] <=> $b['standard-amount'];
         });
-
-
 
         // Find the largest package that the needed amount is larger than
         $ref = &$normalized_packs;
