@@ -20,7 +20,7 @@
     };
     ?>
     <div id="buttons" style="width: 100%;"></div>
-    <div class="container types">
+    <div id="app-header" class="types">
         <div class="row no-gutters">
             <div class="col-4 selections"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/inground.png" id="type">
                 <p><strong>In-Ground</strong><br><strong>Plantings</strong><br></p>
@@ -34,170 +34,193 @@
         </div>
     </div>
     <form action="" method="post">
-      <input type="hidden" name="storeid" value="<?=$storeid?>">
-      <input type="hidden" name="next-step" value="shopping_list">
-    <div class="row type-header">
-        <div class="col">
-            <p><strong>In-Ground Plantings</strong><br></p>
-        </div>
-    </div>
-    <div class="ig-select" style="padding-bottom: 25px;">
-        <div class="container">
-            <div class="row qty-plant-header">
-                <div class="col-3 offset-2">
-                    <p>QTY</p>
-                </div>
-                <div class="col-4">
-                    <p>Plant Size</p>
-                </div>
+
+        <input type="hidden" name="storeid" value="<?=$storeid?>">
+        <input type="hidden" name="next-step" value="shopping_list">
+
+        <div class="row type-header">
+            <div class="col">
+                <p><strong>In-Ground Plantings</strong><br></p>
             </div>
         </div>
-        <hr class="light-rule">
-
-        <div class="container">
-            <?php 
-            //Get the containers!
-            $containers = toolset_get_related_posts($storeid, 'store-container', ['query_by_role' => 'parent', 'role_to_return' => 'other', 'return' => 'post_object']);
-            foreach($containers as $container){ ?>
-
-                <div class="row">
-                    <div class="col-3 offset-2" id="qty">
-                        <input type="number" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0">
+        <div class="ig-select" style="padding-bottom: 25px;">
+            <div class="container">
+                <div class="indppl-app-split indppl-flex qty-plant-header">
+                    <div class="">
+                        <p>QTY</p>
                     </div>
-                    <div class="col-4" id="plant-size">
-                        <p class="plant-size-format"><?php echo $container->post_title; ?></p>
+                    <div class="">
+                        <p>Plant Size</p>
+                    </div>
+                </div>
+            </div>
+            <hr class="light-rule">
+
+            <div class="container">
+                <?php 
+                //Get the containers!
+                $containers = toolset_get_related_posts($storeid, 'store-container', ['query_by_role' => 'parent', 'role_to_return' => 'other', 'return' => 'post_object']);
+                foreach($containers as $container){ ?>
+
+                    <div class="indppl-app-split indppl-flex">
+                        <div class="" id="qty">
+                            <input type="number" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0">
+                        </div>
+                        <div class="" id="plant-size">
+                            <p class="plant-size-format"><?php echo $container->post_title; ?></p>
+                        </div>
+                    </div>
+                    
+                <?php } ?>
+            </div>
+        </div>
+
+        <?php 
+        $author = $post->post_author;
+        $stati = indppl_user_status($author);
+        if(in_array('paidaccount', $stati)){ ?>
+
+
+            <div class="indppl-flex indpl-app-split row type-header">
+                <div class="col">
+                    <p id="pots"><strong>Pot Plantings</strong><br></p>
+                </div>
+            </div>
+            <div class="ig-select">
+                <div class="container">
+                    <div class="indppl-app-split indppl-flex qty-plant-header">
+                        <div class="">
+                            <p>QTY</p>
+                        </div>
+                        <div class="">
+                            <p>Pot Size (inches)</p>
+                        </div>
+                    </div>
+                </div>
+                <hr class="light-rule">
+
+                <div class="container">
+                    <div class="pots-form">
+                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
+                            <div class="">
+                                <input type="number" name="pqty[]" id="qty_1" class="rounded-input pots margin-auto">
+                            </div>
+                            <div class=" tacos">
+                                <div class="indppl-flex">
+                                    <div>
+                                        <input type="number" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots">
+                                        <label>Length</label>
+                                    </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <input type="number" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth">
+                                        <label>Width</label>
+                                    </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <input type="number" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="rounded-input2 pots">
+                                        <label>Height</label>
+                                    </div>                            
+                                </div>
+                                <div class="indppl-flex ">
+                                    <div class=" empty-filled indppl-flex margin-right-0">
+                                        <input class=" pots" type="radio" id="pstatus_1" name="pstatus_1" checked value="empty">
+                                        <label class="form-check-label" for="formCheck-1">Empty</label>
+                                    </div>
+                                    <div class=" empty-filled indppl-flex margin-right-0">
+                                        <input class=" pots" type="radio" id="pstatus_1" name="pstatus_1" value="partial">
+                                        <label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                    </div>
+                                </div>
+                                <div class="hide inches-needed" style="margin-top:15px;">
+                                    <input type="number" id="pneed_1" name="pots[need][]" class="rounded-input3 pots">
+                                    <label class="soil-need">Inches of soil needed</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="indppl-flex indppl-justify-center max-600">
+                                
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <p id="pot_add">+ Add More</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row type-header">
+                <div class="col">
+                    <p id="bed"><strong>Raised bed Plantings</strong><br></p>
+                </div>
+            </div>
+            <div class=" ig-select">
+                <div class="container">
+                    <div class="row qty-plant-header">
+                        <div class="col-3 offset-1">
+                            <p>QTY</p>
+                        </div>
+                        <div class="col-8">
+                            <p>Raised Bed Size</p>
+                        </div>
                     </div>
                 </div>
                 
+                <hr class="light-rule">
+
+                <div class="container">
+                    <div class="rb-form">
+                        <div class="row pot-plant ">
+                            <div class="col-3 offset-1" id="qty">
+                                <input type="number" name="rbqty[]" class="rounded-input">
+                            </div>
+                            <div class="col-8">
+                                <input type="number" name="rbl[]" placeholder="L" class="rounded-input2">
+                                <p class="by-the-by">x</p>
+                                <input type="number" name="rbw[]" placeholder="W" class="rounded-input2">
+                                <p class="by-the-by">x</p>
+                                <input type="number" name="rbh[]" placeholder="H" class="rounded-input2">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col offset-1">
+                                <div class="form-check empty-filled">
+                                    <input class="form-check-input empty-filled" type="radio" name="rbstatus_1" checked value="empty">
+                                    <label class="form-check-label" for="formCheck-1">Empty</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input empty-filled" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                </div>
+                                <div>
+                                    <input type="number" id="rbneed_1" name="rbneed[]" class="rounded-input3"><label class="soil-need">Inches of soil needed</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+
+            <div class="rbedBox_add"></div>
+
+            <div class="row">
+                    <div class="col">
+                        <p id="rb_add">+ Add More</p>
+                    </div>
+                </div>
+            </div>
+
             <?php } ?>
-        </div>
-    </div>
-
-    <?php 
-    
-    $stati = indppl_user_status(2);
-    if(in_array('paidaccount', $stati)){ ?>
-
-
-        <div class="row type-header">
-            <div class="col">
-                <p id="pots"><strong>Pot Plantings</strong><br></p>
-            </div>
-        </div>
-        <div class="ig-select">
-            <div class="container">
-                <div class="row qty-plant-header">
-                    <div class="col-3 offset-1">
-                        <p>QTY</p>
-                    </div>
-                    <div class="col-8">
-                        <p>Pot Size</p>
-                    </div>
-                </div>
-            </div>
-            <hr class="light-rule">
-
-            <div class="container">
-                <div class="pots-form">
-                    <div class="row pot-plant">
-                        <div class="col-3 offset-1"><input type="number" name="pqty[]" id="qty_1" class="rounded-input pots margin-auto"></div>
-                        <div class="col-8 tacos">
-                            <input type="number" id="plength_1" name="plength[]" placeholder="L" class="rounded-input2 pots">
-                            <p class="by-the-by">x</p><input type="number" id="pwidth_1" name="pwidth[]" placeholder="W" class="rounded-input2 pwidth">
-                            <p class="by-the-by">x</p><input type="number" id="pheight_1" name="pheight[]" placeholder="H" class="rounded-input2 pots">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col offset-1">
-                            <div class="form-check empty-filled">
-                                <input class="form-check-input empty-filled pots" type="radio" id="pstatus_1" name="pstatus_1" checked value="empty">
-                                <label class="form-check-label" for="formCheck-1">Empty</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input empty-filled pots" type="radio" id="pstatus_1" name="pstatus_1" value="partial">
-                                <label class="form-check-label" for="formCheck-2">Partially Filled</label>
-                            </div>
-                            <div>
-                                <input type="number" id="pneed_1" name="pneed[]" class="rounded-input3 pots"><label class="soil-need">Inches of soil needed</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <p id="pot_add">+ Add More</p>
-                </div>
-            </div>
-        </div>
-        <div class="row type-header">
-            <div class="col">
-                <p id="bed"><strong>Raised bed Plantings</strong><br></p>
-            </div>
-        </div>
-        <div class=" ig-select">
-            <div class="container">
-                <div class="row qty-plant-header">
-                    <div class="col-3 offset-1">
-                        <p>QTY</p>
-                    </div>
-                    <div class="col-8">
-                        <p>Raised Bed Size</p>
-                    </div>
-                </div>
-            </div>
-            
-            <hr class="light-rule">
-
-            <div class="container">
-                <div class="rb-form">
-                    <div class="row pot-plant ">
-                        <div class="col-3 offset-1" id="qty">
-                            <input type="number" name="rbqty[]" class="rounded-input">
-                        </div>
-                        <div class="col-8">
-                            <input type="number" name="rbl[]" placeholder="L" class="rounded-input2">
-                            <p class="by-the-by">x</p>
-                            <input type="number" name="rbw[]" placeholder="W" class="rounded-input2">
-                            <p class="by-the-by">x</p>
-                            <input type="number" name="rbh[]" placeholder="H" class="rounded-input2">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col offset-1">
-                            <div class="form-check empty-filled">
-                                <input class="form-check-input empty-filled" type="radio" name="rbstatus_1" checked value="empty">
-                                <label class="form-check-label" for="formCheck-1">Empty</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input empty-filled" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
-                            </div>
-                            <div>
-                                <input type="number" id="rbneed_1" name="rbneed[]" class="rounded-input3"><label class="soil-need">Inches of soil needed</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>  
-            </div>
-        </div>
-
-        <div class="rbedBox_add"></div>
-
-        <div class="row">
-                <div class="col">
-                    <p id="rb_add">+ Add More</p>
-                </div>
-            </div>
-        </div>
-
-    <?php } ?>
-        <div class="container footer">
-            <div class="row">
-                <div class="col"><input type="image"  border="0" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/next-button.png" class="next-button"></form>
+            <div class="container footer">
+                <div class="row">
+                    <div class="col"><input type="image"  border="0" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/next-button.png" class="next-button">
                     <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p>
                 </div>
             </div>
         </div>
+    </form>
     <script type="text/javascript">
 
 $(document).ready(function(){
