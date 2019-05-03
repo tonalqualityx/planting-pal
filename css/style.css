@@ -737,7 +737,7 @@ GUIDES STYLES
   padding: 5px 15px;
 }
 
-.planting-guide-products {
+.planting-guide-products, .margin-bottom-15{
   margin-bottom: 15px;
 }
 
@@ -842,13 +842,14 @@ input.blended-num, input.surface-num{
   display:block;
 }
 
-.indppl-store-management-container, .indppl-sponsor-management-container{
+.indppl-store-management-container, .indppl-sponsor-management-container, .padding-bottom-30{
   padding-bottom: 30px;
 }
-.add-sponsor-container{
+.add-sponsor-container, .width-150{
   width: 150px;
 }
 .indppl-add-sponsor-container{
   margin-left: 10px;
 }
+
 

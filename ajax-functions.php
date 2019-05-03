@@ -1707,12 +1707,12 @@ function indppl_save_sponsorship(){
     }
     ?>
     </select>
-    <label for='add-sponsor-url'>URL:</label>
-    <input type='text' name='add-sponsor-url' id='add-sponsor-url' value='' placeholder='URL'>
+    <p><label for='add-sponsor-url'>URL:</label></p>
+    <input type='text' name='add-sponsor-url' id='add-sponsor-url' class='margin-bottom-15 max-width-300' value='' placeholder='URL'>
     <label for='add-sponsor-copy'>Copy:</label>
-    <textarea rows='4' cols='100' name='add-sponsor-copy' placeholder='Enter Text Here' id='add-sponsor-copy'></textarea>
-    <img id='add-sponsor-img' src="https://via.placeholder.com/100.png">
-    <input type='file' id='add-sponsor-img-file' name='add-sponsor-img-file'/>
+    <textarea rows='4' cols='100' class='margin-bottom-15 max-width-300' name='add-sponsor-copy' placeholder='Enter Text Here' id='add-sponsor-copy'></textarea>
+    <img id='add-sponsor-img' class="margin-bottom-15" src="https://via.placeholder.com/100.png">
+    <input type='file' class="margin-bottom-15" id='add-sponsor-img-file' name='add-sponsor-img-file'/>
     <input type="button" class="button" value="Save" id="sponsor-save">
     <?php
 
