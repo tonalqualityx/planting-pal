@@ -255,30 +255,26 @@ function indppl_import() {
 function pp_store_management(){
     $store_id = '';
     if(isset($_GET['store-id'])){
-        $store_id = intval(htmlspecialchars($_GET['store-id']));
+        $user_id = get_current_user_id();
+        $author_id = get_post_field('post_author', intval($_GET['store-id']));
+        if($user_id == $author_id || current_user_can('administrator')){
+            $store_id = intval(htmlspecialchars($_GET['store-id']));
+        }else{
+            ?>
+            <h3 class='color-red'>Sorry, but you must be logged in to access this store. Further Options below.</h3>
+            <?php
+        }
     }
     if(isset($_POST['submit'])){
         if($store_id == null){$store_id = 0;}
         if(!empty($_POST['store-id'])){
             $store_id = $_POST['store-id'];
         }
-        $store_id = indppl_save_post($store_id);
+        indppl_save_post($store_id);
     }
-	// if(is_int($store_id)){
-	// 	$store_name = get_the_title($store_id);
-	// 	$address1 = get_post_meta($store_id, 'wpcf-address1', true);
-	// 	$address2 = get_post_meta($store_id, 'wpcf-address2', true);
-	// 	$city = get_post_meta($store_id, 'wpcf-city', true);
-	// 	$state = get_post_meta($store_id, 'wpcf-state', true);
-	// 	$zip = get_post_meta($store_id, 'wpcf-zip', true);
-	// 	$weburl = get_post_meta($store_id, 'wpcf-weburl', true);
-	// 	$phone = get_post_meta($store_id, 'wpcf-phone', true);
-	// 	$email = get_post_meta($store_id, 'wpcf-email', true);
-	// 	$logo = get_post_meta($store_id, 'wpcf-logo', true);
-    // }
     
     
-    if(is_int($store_id)){
+    if($store_id > 0){
         ob_start();
         $setup = get_post_meta($store_id, 'wpcf-issetup', true);
         if($setup){
@@ -301,10 +297,12 @@ function pp_store_management(){
         
         <div class='indppl-tab-content'>
             <div id='indppl-tab-1' class='indppl-tab-pane indppl-active'>
-                <?php
-                $store_info  = indppl_store_info($store_id);
-                echo $store_info;
-                ?>
+                <div class='indppl-store-management-container'>
+                    <?php
+                    $store_info  = indppl_store_info($store_id);
+                    echo $store_info;
+                    ?>
+                </div>
             </div>
             <div id='indppl-tab-2' class='indppl-tab-pane'>
                 
@@ -330,7 +328,20 @@ function pp_store_management(){
         <?php
         $return = ob_get_clean();
     }else{
-        $return = indppl_store_info($store_id);
+       
+        ob_start();
+        ?>
+        <div class='indppl-store-management-container'>
+            <?php
+            $store_info  = do_shortcode('[pp-my-stores]');
+            echo $store_info;
+            ?>
+        </div>
+        <?php
+        $return = ob_get_clean();
+        if(!$return){
+            $return = indppl_store_info($store_id);
+        }
     }
     
     
@@ -341,7 +352,7 @@ add_shortcode('pp-store-management', 'pp_store_management');
 function pp_my_stores(){
     ob_start();
     ?>
-    <div class='indppl-my-stores-container'>
+    
         <?php
             $user_id = get_current_user_id();
             $args = array(
@@ -363,6 +374,7 @@ function pp_my_stores(){
                     $link = home_url() . '/store-profile?store-id=' . $id;
                     // var_dump($img);
                     ?>
+                    <div class='indppl-my-stores-container'>
                     <div class='indppl-single-store-container'>
                         <div class='flex-half'>
                             <div class='indppl-store-thumb'>
@@ -382,8 +394,12 @@ function pp_my_stores(){
                 // remove else to allow the add store link to always be active.
             }else{
                 ?>
-                <div class='indppl-add-store-container'>
-                    <a class='indppl-add-store-link' href='<?php echo home_url() . "/test2/"; ?>'>
+                <!-- save for later -->
+                <!-- <div class='indppl-my-stores-container'> -->
+                <!-- <div class='indppl-add-store-container'>
+                    <a class='indppl-add-store-link' href='<?php
+                    //  echo home_url() . "/test2/"; 
+                     ?>'>
                         <div class='indppl-add-store-centered'>
                             <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
@@ -391,8 +407,9 @@ function pp_my_stores(){
                         </div>
                         <h4 class='indppl-add-store-text'>Add Store</h4>
                     </a>
-                </div>
-                <?php 
+                </div> -->
+                <?php
+                return null;
             }
         ?>
     </div>
@@ -614,7 +631,8 @@ function pp_store_products(){
                 <?php echo indppl_get_current_products("pots"); ?>
             </div>
             <h3 class='indppl-products-title'>Raised beds</h3>
-            <a href="#" class='indppl-add-product-btn' data-type='beds'>Add Product</a>
+            <a href="#" class='indppl-add-product-pots-btn' data-type='beds'>Add Product</a>
+            <a href="#" class='indppl-application-rates-pots-btn' data-type='beds'>Application rates</a>
             <div class='indppl-product-list'>
                 <?php echo indppl_get_current_products("beds"); ?>
             </div>
@@ -652,3 +670,31 @@ function indppl_store_guides(){
 }
 
 add_shortcode( 'pp-store-guides', 'indppl_store_guides' );
+
+function pp_sponsor_management(){
+    ob_start();
+    $user_id = get_current_user_id();
+    $sponsor_status = get_user_meta($user_id, 'is_sponsor', true);
+    $sponsor_count = get_user_meta($user_id, 'sponsor_count', true);
+    if($sponsor_status == 1){
+        ?>
+        <div class='indppl-add-sponsor-container'>
+            <p>0/<?php echo $sponsor_count; ?></p>
+            <a class='indppl-add-sponsor-link' href='#'>
+                <div class='add-sponsor-container'>
+
+                    <div class='indppl-add-sponsor-centered'>
+                        <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
+                    </svg>
+                    </div>
+                    <h4 class='indppl-add-sponsor-text'>Add Sponsorship</h4>
+                </div>
+            </a>
+        </div>
+        <?php
+    }
+    $return = ob_get_clean();
+    return $return;
+}
+add_shortcode('pp-sponsor-management', 'pp_sponsor_management');

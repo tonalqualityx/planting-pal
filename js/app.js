@@ -45,16 +45,29 @@ jQuery(document).ready(function( $ ) {
     // tabs
     $('body').on('click', '.indppl-nav li', function(e){
         e.preventDefault();
-        $('.indppl-tab-pane, .indppl-nav li').removeClass('indppl-active');
-        var active = $(this).children().attr('href');
-        $(active).addClass('indppl-active');
-        $(this).addClass('indppl-active');
+        var split = location.search.replace('?', '').split('=')
+        $store_id = $('#store-id').val();
+        var url = window.location.href;
+        url = url + "?store-id=" + $store_id;
+        console.log(split);
+        if(split[0] != 'store-id'){
+            window.location.href = url;
+        }else{
+
+            $('.indppl-tab-pane, .indppl-nav li').removeClass('indppl-active');
+            var active = $(this).children().attr('href');
+            $(active).addClass('indppl-active');
+            $(this).addClass('indppl-active');
+        }
+
+
     })
 
     $('body').on('click', '.store-go-live-btn', function(e){
         e.preventDefault();
         var store_id = $(this).data('id');
         var elem = $(this);
+        var version_check = 1.0;
         // console.log(store_id);
         indpplAddLoading();
         $.ajax({
@@ -64,11 +77,12 @@ jQuery(document).ready(function( $ ) {
             data: {
                 action: 'indppl_switch_live_ajax',
                 id: store_id,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
                 indpplDelLoading();
-                // console.log(e);
+                console.log(e);
                 if(e == 0){
                     $(elem).prev('p').text("Your store is not live. If you have filled out all the information below you can make your store live with this button.");
                     $(elem).html("Make Public");
@@ -116,6 +130,7 @@ jQuery(document).ready(function( $ ) {
         var remove_dot = [];
         var new_array = {};
         var array_num = 0;
+        var version_check = 1.0;
         $(".indppl-checked").each(function(){
             available.push($(this).find('input').data('container'));
         });
@@ -156,6 +171,7 @@ jQuery(document).ready(function( $ ) {
                 not_available: not_available,
                 new_array: new_array,
                 remove_dot: remove_dot,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -203,6 +219,13 @@ jQuery(document).ready(function( $ ) {
             $('.slide-in-products-container').remove();
         }, 1000);
     }
+    $('body').on('click', '.sponsor-modal-close', function(e){
+        $(this).hide();
+        $('.slide-in-sponsor-container').removeClass('left-0');
+        setTimeout(function(){
+            $('.slide-in-sponsor-container').remove();
+        }, 1000);
+    });
     // $('body').on('click', '.slide-in-products-container', function(e){
     //     $('.slide-in-products-container').remove();
     // })
@@ -217,6 +240,7 @@ jQuery(document).ready(function( $ ) {
         indpplAddLoading();
         var brand = $(this).val();
         var type = $('#indppl-modal-product-type').val();
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -225,6 +249,7 @@ jQuery(document).ready(function( $ ) {
                 action: 'indppl_get_products_by_brand_ajax',
                 brand: brand,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -248,7 +273,7 @@ jQuery(document).ready(function( $ ) {
         var product_id = $(this).val();
         var store_id = $('#store-id').val();
         var type = $('#indppl-modal-product-type').val();
-        
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -258,6 +283,7 @@ jQuery(document).ready(function( $ ) {
                 product_id: product_id,
                 store_id: store_id,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -324,14 +350,15 @@ jQuery(document).ready(function( $ ) {
                 if(array['usage_type']){
                     $('.product-create-usage-type').append(array['usage_type']);
                 }
-                // console.log(array['fraction']);
-                if(array['fraction']){
-                    $('.product-create-fraction-bag').append(array['fraction']);
-                }
                 if(array['default']){
                     if(array['default'] == 1){
                         $('.product-create-fraction-bag').hide();
                     }
+                }else{
+                    $('.product-create-fraction-bag').show();
+                }
+                if(array['fraction']){
+                    $('.product-create-fraction-bag').append(array['fraction']);
                 }
                 indpplDelLoading();
             }
@@ -402,6 +429,13 @@ jQuery(document).ready(function( $ ) {
         if(!$(this).is('#product-create-next')){
             var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
             var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
+            var container_id = [];
+            $('.bag-apprates-container-title').each(function(){
+                container_id.push($(this).data('id'));
+            });
+            var first_package = {}
+            first_package['num'] = $('.bag-apprates-title').data('num');
+            first_package['unit'] = $('.bag-apprates-title').data('unit');
         }else{
             var cups_num = $('.indppl-product-create-cups-num').val();
             var cups_unit = $('.product-create-5-cups').val();
@@ -412,6 +446,7 @@ jQuery(document).ready(function( $ ) {
         var package_remove = [];
         var new_pack = {};
         var i = 0;
+        var version_check = 1.0;
         // console.log(product_input);
         // console.log(product_select);
         if($(this).is('#product-create-next')){
@@ -435,7 +470,7 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
-        // console.log(fraction);
+        console.log(package_remove);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -456,11 +491,14 @@ jQuery(document).ready(function( $ ) {
                 cups_num: cups_num,
                 cups_unit: cups_unit,
                 fraction: fraction,
+                container_id: container_id,
+                first_package: first_package,
                 product_name: product_name,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
-                console.log(type);
+                // console.log(type);
                 if(type == 'pots'){
                     getProductInfo();
                     $('.slide-in-products-container').removeClass('left-0');
@@ -472,7 +510,7 @@ jQuery(document).ready(function( $ ) {
                     // console.log(e);
                     array = JSON.parse(e);
                     // console.log(array);
-                    // console.log(array['console']);
+                    console.log(array['console']);
                     if(product_id == 'new'){
                         $('.product-create-product').children().last().attr('value', array['product_id']);
                     }
@@ -498,7 +536,7 @@ jQuery(document).ready(function( $ ) {
                     $('.indppl-product-create-chart-bag-unit').each(function(){
                         var select = $(this).data('unit');
                         var elem = $(this);
-                        console.log(select);
+                        // console.log(select);
                         $.each(bagunits, function(index, value){
                             if(select == index || (select == 'tbl' && index == 'tbls')){
                                 selected = `selected`;
@@ -512,7 +550,9 @@ jQuery(document).ready(function( $ ) {
                     if($(elem).is('#product-create-next')){
                         $('.product-create-app-rates-chart-container').slideToggle();
                         $('.product-create-first-part-container').slideToggle();
-                        
+                        $('.product-create-first-part-container').hide();
+                        $('.product-create-product').hide();
+                        $('.product-create-brand').hide();
                     }
                     if($(elem).is('#product-create-submit-exit')){
                         // getProductInfo();
@@ -561,6 +601,7 @@ jQuery(document).ready(function( $ ) {
         var type = $(this).data('type');
         var product_id = $(this).data('product');
         var elem = $(this);
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -570,6 +611,7 @@ jQuery(document).ready(function( $ ) {
                 product_id: product_id,
                 store_id: store_id,
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -581,7 +623,11 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('change', '.some-kind-of-wonderful', function(){
-        updateAppRates($(this));
+        if($('#product-create-fraction-bag').is(':checked')){
+            updateBagAppRates($(this));
+        }else{
+            updateAppRates($(this));
+        }
     })
 
     $('body').on('click', '.indppl-add-product-pots-btn', function(e){
@@ -607,7 +653,7 @@ jQuery(document).ready(function( $ ) {
         var elem = $(this);
         var fraction = false;
         if($('#product-create-fraction-bag').is(':checked')){
-            $fraction = true;
+            fraction = true;
         }
         var filler = false;
         if($('#indppl-add-product-bulk-filler').is(":checked")){
@@ -626,6 +672,7 @@ jQuery(document).ready(function( $ ) {
         var new_pack = {};
         // console.log(type);
         var i = 0;
+        var version_check = 1.0;
         if($(this).is('#product-create-pots-next')){
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-background-green')){
@@ -674,6 +721,7 @@ jQuery(document).ready(function( $ ) {
                 cups_unit: cups_unit,
                 fraction: fraction,
                 product_name: product_name,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -700,12 +748,14 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.indppl-application-rates-pots-btn', function(e){
         e.preventDefault();
+        var type = $(this).data('type');
         $('body').prepend("<div class='slide-in-products-container'></div>");
         setTimeout(function(){
             $('.slide-in-products-container').addClass('left-0');
             indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
         }, 20);
         var store_id = $('#store-id').val();
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -713,6 +763,8 @@ jQuery(document).ready(function( $ ) {
             data: {
                 action: 'indppl_get_pot_apprates_ajax',
                 store_id: store_id,
+                type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -748,7 +800,7 @@ jQuery(document).ready(function( $ ) {
 
         var target = $(this).data('target');
         var storeid = $(this).data('storeid');
-
+        var version_check = 1.0;
         $.ajax({
             url: indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -757,6 +809,7 @@ jQuery(document).ready(function( $ ) {
                 action: 'indppl_setup_guide_forms_ajax',
                 form: target,
                 store: storeid,
+                version_check: version_check,
             },
             type: 'POST',
             success: function (response) {
@@ -935,6 +988,8 @@ jQuery(document).ready(function( $ ) {
         console.log('something');
         var store_id = $('#store-id').val();
         var fill_array = {};
+        var version_check = 1.0;
+        var type = $('#pots-and-beds-type').data('type');
         $('.pots-apprates-filler').each(function(){
             fill_array[$(this).data('product')] = {'amount': $(this).val()};
             if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
@@ -961,7 +1016,7 @@ jQuery(document).ready(function( $ ) {
             each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
             each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
         });
-
+        console.log(type);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -973,6 +1028,8 @@ jQuery(document).ready(function( $ ) {
                 blend_array: blend_array,
                 surface_array: surface_array,
                 each_array: each_array,
+                type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -980,6 +1037,30 @@ jQuery(document).ready(function( $ ) {
                 indpplDelLoading();
             }
         });
+    })
+    $('body').on('click', '.indppl-add-sponsor-link', function(e){
+        $('body').prepend("<div class='slide-in-sponsor-container'><div class='container pad-top-3'><a href='#' class='sponsor-modal-close'>X</a></div></div>");
+        setTimeout(function () {
+            $('.slide-in-sponsor-container').addClass('left-0');
+            indpplAddLoading('.slide-in-sponsor-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+        var version_check = 1.0;
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_save_sponsorship',
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                $('.slide-in-sponsor-container .container').append(e); 
+                indpplDelLoading();
+            }
+        });
+
     });
 
     $('body').on('click', '.empty-filled .pots', function(){
@@ -991,7 +1072,20 @@ jQuery(document).ready(function( $ ) {
             $(this).parents('.indppl-flex').next('.inches-needed').addClass('hide');
         }
     });
+
+    $('body').on('click', '#sponsor-save', function(){
+        var fd = new FormData();
+        var files = $('#add-sponsor-img-file')[0].files[0];
+        
+        console.log(fd);
+        console.log(files);
+    })
+
+
 });
+
+// start of functions
+
 
 function get100Percent(){
     
@@ -1020,6 +1114,7 @@ function get100Percent(){
 };
 
 function getProductInfo(){
+    var version_check = 1.0;
     (function($){
 
         var store_id = $('#store-id').val();
@@ -1030,6 +1125,7 @@ function getProductInfo(){
             data: {
                 action: 'indppl_product_save_exit_ajax',
                 store_id: store_id,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -1054,11 +1150,11 @@ function greyOutAllUnchecked(){
 
 function indppl_get_units($type = 'dry'){
     if($type == 'dry'){
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each', 'Bag': 'Bag'};
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each', 'Bag': 'Bag'};
     }else if($type == 'bag'){
-        return {'ppb': 'plants per bag / contianer', 'bpp': 'bags / containers per plant'};
+        return {'ppc': 'plants per bag / contianer', 'cpp': 'bags / containers per plant'};
     }else{
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt-l': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
     }  
 }
 
@@ -1077,7 +1173,6 @@ function check_on_load_and_click(){
             $('.add-container-btn').remove();
     
         }
-
     })(jQuery);
     
 }
@@ -1110,6 +1205,7 @@ function indpplDelLoading(){
     jQuery('.indppl-loading-background').remove();
 }
 function indpplAddProduct(type){
+    var version_check = 1.0;
     (function($){
 
         $('body').prepend("<div class='slide-in-products-container'></div>");
@@ -1124,6 +1220,7 @@ function indpplAddProduct(type){
             data: {
                 action: 'indppl_add_new_product_ajax',
                 type: type,
+                version_check: version_check,
             },
             type: 'POST',
             success: function(e){
@@ -1142,6 +1239,7 @@ function indpplEditProduct(type, store_id, product_id){
         $('.slide-in-products-container').addClass('left-0');
         indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
     }, 20)
+    var version_check = 1.0;
     $.ajax({
         url:indppl_ajax.ajaxurl,
         dataType: 'text',
@@ -1151,12 +1249,13 @@ function indpplEditProduct(type, store_id, product_id){
             type: type,
             store_id: store_id,
             product_id: product_id,
+            version_check: version_check,
             edit: true,
         },
         type: 'POST',
         success: function(e){
             array = JSON.parse(e);
-            // console.log(array);
+            console.log(array['console']);
             $('.product-create-brand-cut-off').children().each(function(){
                 $(this).empty();
             })
@@ -1228,11 +1327,15 @@ function indpplEditProduct(type, store_id, product_id){
                     $('.product-create-fraction-bag').hide();
                 }
             }
+            if(array['usage_type']){
+                $('.product-create-usage-type').append(array['usage_type']);
+            }
             
             indpplDelLoading();
         }
 
     })
+    
 }
 
 function indpplAddSmallLoading(){
@@ -1275,6 +1378,7 @@ function updateAppRates(elem){
     var store_id = jQuery('#store-id').val();
     var current_pack = {};
     var i = 0;
+    var version_check = 1.0;
     jQuery('.indppl-product-create-size-btn').each(function(){
         if(jQuery(this).hasClass('indppl-background-green')){
             current_pack[i] = {};
@@ -1298,6 +1402,7 @@ function updateAppRates(elem){
             container_id: cont_id,
             container_num: num,
             container_unit: unit,
+            version_check: version_check,
         },
         type: 'POST',
         success: function(e){
@@ -1313,4 +1418,61 @@ function updateAppRates(elem){
         }
     });
     
+}
+
+function updateBagAppRates(elem){
+    var elem = elem;
+    var load = indpplAddSmallLoading();
+    $(elem).parent().parent().append(load);
+    var store_id = $('#store-id').val();
+    var type = $('#indppl-modal-product-type').val();
+    var product_id = $('#product-create-product').val();
+    var val = $(elem).parent().children().val();
+    var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
+    var product_num = $('.bag-apprates-title').first().data('num');
+    var product_unit = $('.bag-apprates-title').first().data('unit');
+    var cont_id = $(elem).parent().prev().data('id');
+    var version_check = 1.0;
+    console.log(product_num);
+    console.log(val);
+    jQuery.ajax({
+        url:indppl_ajax.ajaxurl,
+        dataType: 'text',
+        method: 'POST',
+        data: {
+            action: 'indppl_update_bag_app_rates_ajax',
+            type: type,
+            store_id: store_id,
+            product_id: product_id,
+            val: val,
+            ppc: ppc,
+            product_num: product_num,
+            product_unit: product_unit,
+            cont_id: cont_id,
+            version_check: version_check,
+        },
+        type: 'POST',
+        success: function(e){
+            // console.log(e);
+            $('.product-create-app-rates-chart-container').empty();
+            $('.product-create-app-rates-chart-container').html(e);
+            var bagunits = indppl_get_units('bag');
+            $('.indppl-product-create-chart-bag-unit').each(function(){
+                var select = $(this).data('unit');
+                var elem = $(this);
+                // console.log(select);
+                
+                $.each(bagunits, function(index, value){
+                    if(select == index || (select == 'tbl' && index == 'tbls')){
+                        selected = `selected`;
+                    }else{
+                        selected = ``;
+                    }
+                    $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                });
+                // console.log(unit);
+            });
+            indpplDelSmallLoading();
+        }
+    });
 }
