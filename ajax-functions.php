@@ -936,8 +936,8 @@ function indppl_save_pots_product_ajax(){
     if(isset($_POST['product_input'])){
         $product_rate = $_POST['product_input'];
     }
-    if(isset($_POST['product_select'])){
-        $product_unit = $_POST['product_select'];
+    if(isset($_POST['product_unit'])){
+        $product_unit = $_POST['product_unit'];
     }
     if(isset($_POST['package_array'])){
         $package_array = $_POST['package_array'];
@@ -992,8 +992,8 @@ function indppl_save_pots_product_ajax(){
         wp_set_object_terms($product_id, $brand, 'brand');
     }
 
-    var_dump($product_id);
-    var_dump($surface);
+    // var_dump($product_id);
+    // var_dump($surface);
     $send_array = array($product_id => array());
     // foreach($product_rate as $key => $value){
     $temp = array();
@@ -1019,8 +1019,9 @@ function indppl_save_pots_product_ajax(){
             ),
         );
     }
-    var_dump($fraction);
-    if($new_pack[count($new_pack)-1]['unit'] == 'each'){
+    var_dump($new_pack);
+    var_dump($product_unit);
+    if($new_pack[count($new_pack)-1]['unit'] == 'each' || $product_unit == 'each'){
         $temp['each'] = array(
             $product_id => array(
                 'bag' => '',
@@ -1030,11 +1031,11 @@ function indppl_save_pots_product_ajax(){
     $send_array = $temp;
     // }
     if($product_id != 'new'){
-        var_dump($type);
-        var_dump($send_array);
+        // var_dump($type);
+        // var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
 
-        var_dump($save);
+        // var_dump($save);
     }
     // var_dump($package_array);
     // var_dump($new_pack);
@@ -1298,6 +1299,7 @@ function indppl_get_pot_apprates_ajax(){
                     $brand = $brand[0]->name;
                     // defaults
                     $dilution = get_post_meta($key, 'wpcf-surface-dilution', true);
+
                     $units = get_post_meta($key, 'wpcf-surface-units', true);
                     $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
                     // apprates_array
@@ -1379,66 +1381,72 @@ function indppl_get_pot_apprates_ajax(){
         <p>Chemical Fertilizer - 1 tsp per 10 sqft</p>
         <p>Microbe Products - .25 tsp per 10 sqft</p>
 
-        <h4 class='margin-top-30'>Products used as 'Eaches'</h4>
-        <p>These products will be recommended based on the width of your customer's pot/container:</p>
-        <table>
-            <?php
-            if(!empty($app_rates[$type]['each'])){
-                ?>
-                <tr>
-                    <th style="text-align: center">&lt;8" wide</th>
-                    <th style="text-align: center">8-24" wide</th>
-                    <th style="text-align: center">&gt;24" wide</th>
-                </tr>
-                <?php
-            }else{
-                ?>
-                <tr class='margin-bottom-20 display-block'>
-                    <th class='color-red'>There are no Products Setup for This section.</th>
-                </tr> 
-                <?php
-            }
-            foreach($app_rates[$type]['each'] as $key => $value){
-                $title = get_the_title($key);
-                $brand = get_the_terms($key, 'brand', true);
-                $brand = $brand[0]->name;
-                // defaults
-                $each_small = get_post_meta($key, 'wpcf-each-small', true);
-                $each_medium = get_post_meta($key, 'wpcf-each-medium', true);
-                $each_large = get_post_meta($key, 'wpcf-each-large', true);
-                // apprates_array
-                if($get_apps == true){
-                    $each_small = $app_rates[$type]['each'][$key]['small'];
-                    $each_medium = $app_rates[$type]['each'][$key]['medium'];
-                    $each_large = $app_rates[$type]['each'][$key]['large'];
-                }
-
-
-                ?>
-                <tr>
-                    <td class='pots-apprates-each-cell'>
-                        <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' value='<?php echo $each_small; ?>' placeholder='#eaches'>
-                    </td>
-                    <td class='pots-apprates-each-cell'>
-                        <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' value='<?php echo $each_medium; ?>' placeholder='#eaches'>
-                    </td>
-                    <td class='pots-apprates-each-cell'>
-                        <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
-                    </td>
-                    <td class='pots-apprates-each-cell'>
-                        <img class='height-50' src="https://via.placeholder.com/100.png">
-                    </td>
-                    <td class='pots-apprates-each-cell'>
-                        <div class='pots-apprates-brand-title'>
-                            <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
-                            <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
-                        </div>
-                    </td>
-                </tr>
-                <?php
-            }
+        <?php
+        if($type == 'pots'){
             ?>
-        </table>
+            <h4 class='margin-top-30'>Products used as 'Eaches'</h4>
+            <p>These products will be recommended based on the width of your customer's pot/container:</p>
+            <table>
+                <?php
+                if(!empty($app_rates[$type]['each'])){
+                    ?>
+                    <tr>
+                        <th style="text-align: center">&lt;8" wide</th>
+                        <th style="text-align: center">8-24" wide</th>
+                        <th style="text-align: center">&gt;24" wide</th>
+                    </tr>
+                    <?php
+                }else{
+                    ?>
+                    <tr class='margin-bottom-20 display-block'>
+                        <th class='color-red'>There are no Products Setup for This section.</th>
+                    </tr> 
+                    <?php
+                }
+                foreach($app_rates[$type]['each'] as $key => $value){
+                    $title = get_the_title($key);
+                    $brand = get_the_terms($key, 'brand', true);
+                    $brand = $brand[0]->name;
+                    // defaults
+                    $each_small = get_post_meta($key, 'wpcf-each-small', true);
+                    $each_medium = get_post_meta($key, 'wpcf-each-medium', true);
+                    $each_large = get_post_meta($key, 'wpcf-each-large', true);
+                    // apprates_array
+                    if($get_apps == true){
+                        $each_small = $app_rates[$type]['each'][$key]['small'];
+                        $each_medium = $app_rates[$type]['each'][$key]['medium'];
+                        $each_large = $app_rates[$type]['each'][$key]['large'];
+                    }
+
+
+                    ?>
+                    <tr>
+                        <td class='pots-apprates-each-cell'>
+                            <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' value='<?php echo $each_small; ?>' placeholder='#eaches'>
+                        </td>
+                        <td class='pots-apprates-each-cell'>
+                            <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' value='<?php echo $each_medium; ?>' placeholder='#eaches'>
+                        </td>
+                        <td class='pots-apprates-each-cell'>
+                            <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
+                        </td>
+                        <td class='pots-apprates-each-cell'>
+                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                        </td>
+                        <td class='pots-apprates-each-cell'>
+                            <div class='pots-apprates-brand-title'>
+                                <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                                <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
+            <?php
+        }
+        ?>
         <div class='pots-apprates-save-container'>
             <a href='#' class='pots-apprates-save-btn indppl-button'>SAVE</a>
         </div>
