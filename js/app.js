@@ -643,10 +643,10 @@ jQuery(document).ready(function( $ ) {
         var type = $('#indppl-modal-product-type').val();
         var brand = $('#product-create-brand').val();
         var product_id = $('#product-create-product').val();
-        var product_unit = $('.indppl-new-package').last().data('unit');
+        var product_unit = $('#product-create-standard-unit').data('unit');
         var product_dryliquid = $('.product-create-dry-wet').val();
         var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
-        var product_select = $("#product-create-form").find('sel ect').filter('.some-kind-of-wonderful').serializeArray();
+        // var product_select = $("#product-create-form").find('sel ect').filter('.some-kind-of-wonderful').serializeArray();
         var product_name = $('.indppl-add-product-name').val();
         var cups_num = $('.indppl-product-create-cups-num').val();
         var cups_unit = $('.product-create-5-cups').val();
@@ -670,7 +670,7 @@ jQuery(document).ready(function( $ ) {
         var package_array = [];
         var package_remove = [];
         var new_pack = {};
-        // console.log(type);
+        console.log(product_unit);
         var i = 0;
         var version_check = 1.0;
         if($(this).is('#product-create-pots-next')){
@@ -709,9 +709,8 @@ jQuery(document).ready(function( $ ) {
                 brand: brand,
                 package_array: package_array,
                 package_remove: package_remove,
-                prodcut_unit: product_unit,
+                product_unit: product_unit,
                 product_input: product_input,
-                product_select: product_select,
                 product_dryliquid: product_dryliquid,
                 new_pack: new_pack,
                 cups_num: cups_num,

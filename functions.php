@@ -957,7 +957,7 @@ function indppl_get_current_products($type){
                     foreach($value as $k => $v){
                         if($k != 0 && !in_array($k, $no_duplicates)){
                             $no_duplicates[] = $k;
-                            indppl_get_products($store_id, $k, 'pots');
+                            indppl_get_products($store_id, $k, $type);
                         }
                     }
                 }else{
