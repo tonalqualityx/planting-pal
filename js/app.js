@@ -1064,13 +1064,15 @@ jQuery(document).ready(function( $ ) {
     });
 
     $('body').on('click', '.empty-filled .pots', function(){
+
         var check = $(this).val();
-        console.log(check);
         if(check == 'partial'){
             $(this).parents('.indppl-flex').next('.inches-needed').removeClass('hide');
         } else {
             $(this).parents('.indppl-flex').next('.inches-needed').addClass('hide');
+            $(this).parents('.indppl-flex').next('.inches-needed').children('input').val('0');
         }
+
     });
 
     $('body').on('click', '#sponsor-save', function(){

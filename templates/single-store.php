@@ -4,10 +4,6 @@
 
 wp_head();
 
-var_dump($_POST);
-
-echo "<br /><br />";
-
 $storeid = get_the_ID(  );
 $user_plants = array();
 $display = 'plants_form';
@@ -25,8 +21,6 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
 
     $apprates = indppl_apprates($storeid);
 
-    var_dump($apprates);
-
     $products = array();
 
     foreach($ground as $container => $count){
@@ -34,12 +28,13 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
             if(array_key_exists($container, $apprates['ground'][$key]['containers'])){
                 $product = get_the_title($key);
                 $standard = get_post_meta($key, 'wpcf-unit', TRUE);
-                // echo "<h2>STANDARD L1 $standard</h2>";
+                echo "<h2>STANDARD L1 $standard</h2>";
                 $brand = get_the_terms($key, 'brand');
                 $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
                 $brand = $brand[0];
                 $plant = get_the_title($container);
                 $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
+                echo "<h1>$amount</h1>";
                 $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
                 $unit_args = array(array('unit' => $unit, 'amount' => $amount));
                 
@@ -56,19 +51,20 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     // echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
                 }
                 
-                
-                $need = 0;
-                foreach($normalized as $k => $v) {
-                    $need += $v['standard-amount']; 
-                }
-
-                if(isset($products[$key])){
-                    $products[$key]['need'] += $need;
-                    // echo "true";
-                } else {
-                    $products[$key]['name'] = $brand->name . " " . $product;
-                    $products[$key]['need'] = $need;
-                    $products[$key]['unit'] = $standard;
+                if($amount > 0){
+                    $need = 0;
+                    foreach($normalized as $k => $v) {
+                        $need += $v['standard-amount']; 
+                    }
+    
+                    if(isset($products[$key])){
+                        $products[$key]['need'] += $need;
+                        // echo "true";
+                    } else {
+                        $products[$key]['name'] = $brand->name . " " . $product;
+                        $products[$key]['need'] = $need;
+                        $products[$key]['unit'] = $standard;
+                    }
                 }
 
             }
@@ -76,9 +72,85 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     }
 
     // Check for pots
+    if(isset($_POST['pots']) && isset($apprates['pots'])){
+        echo "<h1>RATES</h1>";
+        var_dump($apprates['pots']);
 
-    // Add pots products to product list
+        $pots = $_POST['pots'];
+        echo "<h1>POTS</h1>";
+        var_dump($pots);
+
+        // Loop through however many rows of pots were added, then each type of apprate
+        $i = 0;
+        foreach($pots['length'] as $pot){
+            foreach($apprates['pots'] as $type => $prods){
+
+                // On refactor turn this into a function that returns an array - it's used elsewhere
+                foreach($prods as $prod => $rates){
+
+                    $product  = get_the_title($prod);
+                    $standard = get_post_meta($prod, 'wpcf-unit', TRUE);
+                    $brand = get_the_terms($prod, 'brand');
+                    $cups  = get_post_meta($prod, 'wpcf-5cups', TRUE);
+                    $brand = $brand[0];
+                    
+                    // Check if it's full height or just some
+                    if($pots['need'][$i] > 0){
+                        $pots['height'][$i] = $pots['need'][$i];
+                    }
+                    
+                    // Convert capacity to cups because that's what Chuck did...
+                    $cuft = $pots['qty'][$i] * $pots['length'][$i] * $pots['width'][$i] * $pots['height'][$i] * 0.069264069;
+                    echo "<h2>{$prod}: $cuft</h2>";
+                    var_dump($rates['']);
     
+                    switch($type){
+                        
+                        case 'filler':
+                            $fill_rate = intval($rates['amount'])/100;
+                            $need = getVolume($cuft, 'cup', $standard) * $fill_rate;
+                            echo "<h3>FILL RATE : $fill_rate | {$rates['amount']}</h3>";
+                            break;
+                            
+                        case 'blended' :
+                            // Calculate the blended rates
+                            
+                            
+                            break;
+                            
+                        case 'surface':
+                            
+                            // Calculate the surface rates
+                            
+                            break;
+                            
+                        case 'each':
+                            
+                            // Multiply the eaches
+                            
+                            break;
+                    }
+                        
+                    // Check if product is in list, if so add standard units
+                    if(in_array($products[$prod])){
+                        $products[$prod]['need'] += $need;
+                    } else {
+                        // If not, just add it and set the unit
+                        $products[$prod]['name'] = $brand->name . " " . $product;
+                        $products[$prod]['need'] = $need;
+                        $products[$prod]['unit'] = $standard;
+                    }
+                }
+            } 
+
+            $i++;
+        }
+
+
+    }
+
+    echo "<h1>PRODUCTS</h1>";
+    var_dump($products);
     // Check for beds
 
     // Add beds products to product list

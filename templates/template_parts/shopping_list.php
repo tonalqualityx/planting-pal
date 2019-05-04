@@ -30,15 +30,7 @@
     <!-- /Standard Product -->
     <!-- Standard Product -->
     <?php } ?>
-        <div class="row products">
-            <div class="col-3 align-self-center border1">
-                <p class="qty-bag">1</p>
-            </div>
-            <div class="col product-details">
-                <p><strong>Dr. Earth</strong></p>
-                <p class="bigger"><strong>All Purpose Fertilizer<br>4.00 lbs</strong></p>
-            </div>
-        </div>
+        
     <!-- /Standard Product -->
     </div>
 </div>

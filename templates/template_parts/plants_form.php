@@ -103,7 +103,7 @@
                     <div class="pots-form">
                         <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                             <div class="">
-                                <input type="number" name="pqty[]" id="qty_1" class="rounded-input pots margin-auto">
+                                <input type="number" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto">
                             </div>
                             <div class=" tacos">
                                 <div class="indppl-flex">
