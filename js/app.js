@@ -1073,7 +1073,7 @@ jQuery(document).ready(function( $ ) {
         }
     });
 
-      $('body').on('submit', '#add-sponsor-form', function(e){
+    $('body').on('submit', '#add-sponsor-form', function(e){
         e.preventDefault();
         indpplAddLoading();
         var fd = new FormData();
