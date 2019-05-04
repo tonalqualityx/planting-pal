@@ -103,7 +103,7 @@
                     <div class="pots-form">
                         <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                             <div class="">
-                                <input type="number" name="pqty[]" id="qty_1" class="rounded-input pots margin-auto">
+                                <input type="number" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto">
                             </div>
                             <div class=" tacos">
                                 <div class="indppl-flex">
@@ -148,7 +148,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <p id="pot_add">+ Add More</p>
+                        <p id="pot_add" class="cursor">+ Add More</p>
                     </div>
                 </div>
             </div>
@@ -175,14 +175,14 @@
                     <div class="rb-form">
                         <div class="row pot-plant ">
                             <div class="col-3 offset-1" id="qty">
-                                <input type="number" name="rbqty[]" class="rounded-input">
+                                <input type="number" name="beds[qty][]" class="rounded-input">
                             </div>
                             <div class="col-8">
-                                <input type="number" name="rbl[]" placeholder="L" class="rounded-input2">
+                                <input type="number" name="beds[length][]" placeholder="L" class="rounded-input2">
                                 <p class="by-the-by">x</p>
-                                <input type="number" name="rbw[]" placeholder="W" class="rounded-input2">
+                                <input type="number" name="beds[width][]" placeholder="W" class="rounded-input2">
                                 <p class="by-the-by">x</p>
-                                <input type="number" name="rbh[]" placeholder="H" class="rounded-input2">
+                                <input type="number" name="beds[height][]" placeholder="H" class="rounded-input2">
                             </div>
                         </div>
                         <div class="row">
@@ -195,7 +195,7 @@
                                     <input class="form-check-input empty-filled" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
                                 </div>
                                 <div>
-                                    <input type="number" id="rbneed_1" name="rbneed[]" class="rounded-input3"><label class="soil-need">Inches of soil needed</label>
+                                    <input type="number" id="rbneed_1" name="beds[need][]" class="rounded-input3"><label class="soil-need">Inches of soil needed</label>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +207,7 @@
 
             <div class="row">
                     <div class="col">
-                        <p id="rb_add">+ Add More</p>
+                        <p id="rb_add" class="cursor">+ Add More</p>
                     </div>
                 </div>
             </div>
