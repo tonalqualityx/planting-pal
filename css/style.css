@@ -50,6 +50,10 @@ ul.style-free {
   padding-left: 0;
 }
 
+.cursor:hover {
+  cursor:pointer;
+}
+
 .gradient-button {
     color: white;
     font-size: 1.35em;

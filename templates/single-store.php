@@ -15,26 +15,25 @@ if(isset($_POST['next-step'])){
 if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
 
     $display = htmlspecialchars($_POST['next-step']);
+    $apprates = indppl_apprates($storeid);
+    $products = array();
+    
     $ground = $_POST['ground'];
     $user_plants['ground'] = $ground;
     $ground = array_filter($ground);
-
-    $apprates = indppl_apprates($storeid);
-
-    $products = array();
 
     foreach($ground as $container => $count){
         foreach($apprates['ground'] as $key => $val) {
             if(array_key_exists($container, $apprates['ground'][$key]['containers'])){
                 $product = get_the_title($key);
                 $standard = get_post_meta($key, 'wpcf-unit', TRUE);
-                echo "<h2>STANDARD L1 $standard</h2>";
+                // echo "<h2>STANDARD L1 $standard</h2>";
                 $brand = get_the_terms($key, 'brand');
                 $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
                 $brand = $brand[0];
                 $plant = get_the_title($container);
                 $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
-                echo "<h1>$amount</h1>";
+                // echo "<h1>$amount</h1>";
                 $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
                 $unit_args = array(array('unit' => $unit, 'amount' => $amount));
                 
@@ -73,12 +72,8 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
 
     // Check for pots
     if(isset($_POST['pots']) && isset($apprates['pots'])){
-        echo "<h1>RATES</h1>";
-        var_dump($apprates['pots']);
 
         $pots = $_POST['pots'];
-        echo "<h1>POTS</h1>";
-        var_dump($pots);
 
         // Loop through however many rows of pots were added, then each type of apprate
         $i = 0;
@@ -100,27 +95,38 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     }
                     
                     // Convert capacity to cups because that's what Chuck did...
-                    $cuft = $pots['qty'][$i] * $pots['length'][$i] * $pots['width'][$i] * $pots['height'][$i] * 0.069264069;
-                    echo "<h2>{$prod}: $cuft</h2>";
-                    var_dump($rates['']);
+                    $ci = $pots['qty'][$i] * $pots['length'][$i] * $pots['width'][$i] * $pots['height'][$i];
+
+                    $cuft = getVolume($ci, 'ci', 'cuft');
+
+                    $sqft = ($pots['qty'][$i] * $pots['length'][$i] * $pots['width'][$i])/144;
     
                     switch($type){
                         
                         case 'filler':
                             $fill_rate = intval($rates['amount'])/100;
-                            $need = getVolume($cuft, 'cup', $standard) * $fill_rate;
-                            echo "<h3>FILL RATE : $fill_rate | {$rates['amount']}</h3>";
+                            $amount = $cuft * $fill_rate;
+                            $unit_args = array(array('unit' => 'cuft', 'amount' => $amount));
+                            $normalized = indppl_normalize($unit_args, $standard, $cups);
+                            $need = $normalized[0]['standard-amount'];
                             break;
                             
                         case 'blended' :
                             // Calculate the blended rates
-                            
+                            $fill_rate = $rates['amount'] * $cuft;
+                            $unit_args = array(array('unit' => $rates['unit'], 'amount' => $fill_rate));
+                            $normalized = indppl_normalize($unit_args, $standard, $cups);
+                            $need = $normalized[0]['standard-amount'];
                             
                             break;
                             
-                        case 'surface':
+                            case 'surface':
                             
                             // Calculate the surface rates
+                            $fill_rate = ($rates['amount'] * $sqft)/$rates['per-sqft'];
+                            $unit_args = array(array('unit' => $rates['unit'], 'amount' => $fill_rate));
+                            $normalized = indppl_normalize($unit_args, $standard, $cups);
+                            $need = $normalized[0]['standard-amount'];
                             
                             break;
                             
@@ -132,13 +138,18 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     }
                         
                     // Check if product is in list, if so add standard units
-                    if(in_array($products[$prod])){
-                        $products[$prod]['need'] += $need;
-                    } else {
-                        // If not, just add it and set the unit
-                        $products[$prod]['name'] = $brand->name . " " . $product;
-                        $products[$prod]['need'] = $need;
-                        $products[$prod]['unit'] = $standard;
+                    if($need > 0){
+
+                        if(array_key_exists($prod, $products)){
+                            $products[$prod]['need'] += $need;
+                        } else {
+                            // If not, just add it and set the unit
+                            $products[$prod]['name'] = $brand->name . " " . $product;
+                            $products[$prod]['need'] = $need;
+                            $products[$prod]['unit'] = $standard;
+
+                        }
+
                     }
                 }
             } 
@@ -149,8 +160,96 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
 
     }
 
-    echo "<h1>PRODUCTS</h1>";
-    var_dump($products);
+    if (isset($_POST['beds']) && isset($apprates['beds'])) {
+
+        $beds = $_POST['beds'];
+        // Loop through however many rows of beds were added, then each type of apprate
+        // THE NEXT MAJOR SECTION SHOULD BE REFACTORED TO MERGE WITH THE POTS SECTION
+        $i = 0;
+        foreach ($beds['length'] as $pot) {
+            foreach ($apprates['beds'] as $type => $prods) {
+                // On refactor turn this into a function that returns an array - it's used elsewhere
+                foreach ($prods as $prod => $rates) {
+
+                    $product  = get_the_title($prod);
+                    $standard = get_post_meta($prod, 'wpcf-unit', TRUE);
+                    $brand    = get_the_terms($prod, 'brand');
+                    $cups     = get_post_meta($prod, 'wpcf-5cups', TRUE);
+                    $brand    = $brand[0];
+
+                    // Check if it's full height or just some
+                    if ($beds['need'][$i] > 0) {
+                        $beds['height'][$i] = $beds['need'][$i];
+                    }
+
+                    // Convert capacity to cups because that's what Chuck did...
+                    $ci = $beds['qty'][$i] * $beds['length'][$i] * $beds['width'][$i] * $beds['height'][$i];
+
+                    $cuft = getVolume($ci, 'ci', 'cuft');
+
+                    $sqft = ($beds['qty'][$i] * $beds['length'][$i] * $beds['width'][$i]) / 144;
+
+                    switch ($type) {
+
+                    case 'filler':
+                        $fill_rate  = intval($rates['amount']) / 100;
+                        $amount     = $cuft * $fill_rate;
+                        $unit_args  = array(array('unit' => 'cuft', 'amount' => $amount));
+                        $normalized = indppl_normalize($unit_args, $standard, $cups);
+                        $need       = $normalized[0]['standard-amount'];
+                        break;
+
+                    case 'blended':
+                        // Calculate the blended rates
+                        $fill_rate  = $rates['amount'] * $cuft;
+                        $unit_args  = array(array('unit' => $rates['unit'], 'amount' => $fill_rate));
+                        $normalized = indppl_normalize($unit_args, $standard, $cups);
+                        $need       = $normalized[0]['standard-amount'];
+
+                        break;
+
+                    case 'surface':
+
+                        // Calculate the surface rates
+                        $fill_rate  = ($rates['amount'] * $sqft) / $rates['per-sqft'];
+                        $unit_args  = array(array('unit' => $rates['unit'], 'amount' => $fill_rate));
+                        $normalized = indppl_normalize($unit_args, $standard, $cups);
+                        $need       = $normalized[0]['standard-amount'];
+
+                        break;
+
+                    case 'each':
+
+                        // Multiply the eaches
+
+                        break;
+                    }
+
+                    if($need > 0){
+
+                        // Check if product is in list, if so add standard units
+                        if (array_key_exists($prod,$products)) {
+                            $products[$prod]['need'] += $need;
+                        } else {
+                            // If not, just add it and set the unit
+                            $products[$prod]['name'] = $brand->name . " " . $product;
+                            $products[$prod]['need'] = $need;
+                            $products[$prod]['unit'] = $standard;
+
+                        }
+
+                    }
+
+                }
+            }
+
+            $i++;
+        }
+
+    }
+
+    // echo "<h1>PRODUCTS</h1>";
+    // var_dump($products);
     // Check for beds
 
     // Add beds products to product list
