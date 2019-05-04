@@ -676,24 +676,67 @@ function pp_sponsor_management(){
     $user_id = get_current_user_id();
     $sponsor_status = get_user_meta($user_id, 'is_sponsor', true);
     $sponsor_count = get_user_meta($user_id, 'sponsor_count', true);
-    if($sponsor_status == 1){
-        ?>
+    $args = array(
+        'author' => $user_id,
+        'post_type' => 'sponsorship',
+        'meta_key' => 'wpcf-sponsorship-active',
+        'meta_value' => 1,
+    );
+    $sponsors = get_posts($args);
+    $count = count($sponsors);
+    // var_dump($sponsors);
+    ?>
+    <div class='indppl-add-sponsor-main-container'>
+        <p><?php echo $count; ?>/<?php echo $sponsor_count; ?></p>
         <div class='indppl-add-sponsor-container'>
-            <p>0/<?php echo $sponsor_count; ?></p>
-            <a class='indppl-add-sponsor-link' href='#'>
-                <div class='add-sponsor-container'>
-
-                    <div class='indppl-add-sponsor-centered'>
-                        <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
-                    </svg>
-                    </div>
-                    <h4 class='indppl-add-sponsor-text'>Add Sponsorship</h4>
-                </div>
-            </a>
-        </div>
         <?php
-    }
+        foreach($sponsors as $key => $value){
+            $id = $value->ID;
+            $img = get_post_meta($id, 'wpcf-sponsorship-image', true);
+            $active = get_post_meta($id, 'wpcf-sponsorship-active', true);
+            $brand_id = get_post_meta($id, 'brand_id', true);
+            $product_id = get_post_meta($id, 'product_id', true);
+            $title = $value->post_title;
+
+            // var_dump($value);
+            // var_dump("<br /><br />");
+            if($active){
+
+                ?>
+            
+                <a class='indppl-edit-sponsor-link flex-25' href='#' data-id='<?php echo $id; ?>' data-brand='<?php echo $brand_id; ?>' data-product='<?php echo $product_id; ?>'>
+                    <div class='add-sponsor-container'>
+                        <div class='indppl-add-sponsor-centered'>
+                            <img clas='indppl-add-sponsor-image' src='<?php echo $img; ?>'>
+                        </div>
+                        <h4 class='indppl-add-sponsor-text'><?php echo $title; ?></h4>
+                    </div>
+                </a>
+                
+                <?php
+            }
+        }
+        if($sponsor_status == 1 && $count < $sponsor_count){
+            ?>
+                
+                <a class='indppl-add-sponsor-link flex-25' href='#'>
+                    <div class='add-sponsor-container'>
+
+                        <div class='indppl-add-sponsor-centered'>
+                            <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
+                        </svg>
+                        </div>
+                        <h4 class='indppl-add-sponsor-text'>Add Sponsorship</h4>
+                    </div>
+                </a>
+
+            <?php
+        }
+        ?>
+        </div>
+    </div>
+    <?php
     $return = ob_get_clean();
     return $return;
 }

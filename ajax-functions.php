@@ -270,9 +270,19 @@ function indppl_get_products_by_brand_ajax(){
             $products->the_post();
             $title = get_the_title();
             $id = get_the_id();
-            ?>
-            <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
-            <?php
+            $do_it = true;
+            $each_test = get_post_meta($id, 'wpcf-unit', true);
+            if($each_test == 'each'){
+                if($type != 'pots'){
+                    $do_it = false;
+                }
+
+            }
+            if($do_it){
+                ?>
+                <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
+                <?php
+            }
         }
     }
     echo ob_get_clean();
@@ -1089,15 +1099,15 @@ function indppl_get_pot_apprates_ajax(){
     $get_apps = false;
     $num = 0;
     $percent_array = array();
-    foreach($app_rates[$type] as $k => $v){
-        foreach($v as $key => $value){
+    foreach($app_rates[$type]['filler'] as $key => $value){
+        // foreach($v as $key => $value){
             if(isset($value['amount'])){
                 $get_apps = true;
                 $percent_array[] = $value['amount'];
                 // var_dump($value['amount']);
             }
             $num++;
-        }
+        // }
     }
     if($get_apps == false){
         $ind = floor(100 / $num);
@@ -1114,7 +1124,7 @@ function indppl_get_pot_apprates_ajax(){
             $num--;
         }
     }
-    var_dump($get_apps);
+
     ob_start();
     ?>
     <div class='pots-apprates-container'>
@@ -1615,7 +1625,7 @@ function indppl_update_bag_app_rates_ajax(){
 add_action( 'wp_ajax_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax' );
 add_action('wp_ajax_nopriv_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax');
 
-function indppl_save_sponsorship(){
+function indppl_get_sponsorship(){
     if(isset($_POST['version_check'])){
         if($_POST['version_check'] != 1.0){
             exit;
@@ -1624,6 +1634,16 @@ function indppl_save_sponsorship(){
     }else{
         exit;
         die();
+    }
+    if(isset($_POST['id'])){
+        $set_id = $_POST['id'];
+        $hide = ' display-none ';
+    }
+    if(isset($_POST['brand_id'])){
+        $set_brand_id = $_POST['brand_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $set_product_id = $_POST['product_id'];
     }
     ob_start();
     $user_id = get_current_user_id();
@@ -1648,72 +1668,84 @@ function indppl_save_sponsorship(){
         }
     }
     ?>
-    <label for='indppl-add-sponsor-brand-select'>Select your Brand</label>
-    <select class='indppl-add-sponsor-brand-select' name='indppl-add-sponsor-brand-select' id='indppl-add-sponsor-brand-select'>
-    <?php
-
-    foreach($brands as $key => $value){
-        $brand_id = $value['id'];
-        $brand_name = $value['name'];
-        $brand_slug = $value['slug'];
-        $brand_save = $brand_slug . "-" . $brand_id;
-        $selected = '';
-        if($key == 0){
-            $selected = 'selected';
-        }
-        ?>
-        <option id='<?php echo $brand_save; ?>' value='<?php echo $brand_id; ?>' <?php echo $selected; ?>><?php echo $brand_name; ?></option>
+    <form method="post" action="" enctype="multipart/form-data" id="add-sponsor-form">
+        <label for='indppl-add-sponsor-brand-select' class='<?php echo $hide; ?>'>Select your Brand</label>
+        <select class='indppl-add-sponsor-brand-select <?php echo $hide; ?>' name='indppl-add-sponsor-brand-select' id='indppl-add-sponsor-brand-select'>
         <?php
-    }
-    ?>
-    </select>
-    <?php
-    $init_brand = $brands[0];
-    ?>
-    <label for='indppl-add-sponsor-product-select'>Select your Product</label>
-    <select class='indppl-add-sponsor-product-select' name='indppl-add-sponsor-product-select' id='indppl-add-sponsor-product-select'>
-    <?php
-    $args = array(
-        'post_type' => 'product',
-        'tax_query' => array(
-            array(
-                'taxonomy' => 'brand',
-                'field'    => 'slug',
-                'terms'    => $init_brand['slug'],
-            ),
-        ),
-        'relation' => 'OR',
-        array(
-            'author' => get_current_user_id(),
-            'meta_query' => array(
-                array(
-                    'key' => 'wpcf-default',
-                    'value' => 1,
-                    'compare' => '=',
-                ),
-            ),
-        ),
-    );
-    $products = new WP_Query($args);
-    if($products->have_posts()){
-        while($products->have_posts()){
-            $products->the_post();
-            $title = get_the_title();
-            $id = get_the_id();
+
+        foreach($brands as $key => $value){
+            $brand_id = $value['id'];
+            $brand_name = $value['name'];
+            $brand_slug = $value['slug'];
+            $brand_save = $brand_slug . "-" . $brand_id;
+            $selected = '';
+            if($key == 0 || $brand_id == $set_brand_id){
+                $selected = 'selected';
+            }
             ?>
-            <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
+            <option id='<?php echo $brand_save; ?>' value='<?php echo $brand_id; ?>' <?php echo $selected; ?>><?php echo $brand_name; ?></option>
             <?php
         }
-    }
-    ?>
-    </select>
-    <p><label for='add-sponsor-url'>URL:</label></p>
-    <input type='text' name='add-sponsor-url' id='add-sponsor-url' class='margin-bottom-15 max-width-300' value='' placeholder='URL'>
-    <label for='add-sponsor-copy'>Copy:</label>
-    <textarea rows='4' cols='100' class='margin-bottom-15 max-width-300' name='add-sponsor-copy' placeholder='Enter Text Here' id='add-sponsor-copy'></textarea>
-    <img id='add-sponsor-img' class="margin-bottom-15" src="https://via.placeholder.com/100.png">
-    <input type='file' class="margin-bottom-15" id='add-sponsor-img-file' name='add-sponsor-img-file'/>
-    <input type="button" class="button" value="Save" id="sponsor-save">
+        ?>
+        </select>
+        <?php
+        $init_brand = $brands[0];
+        ?>
+        <label for='indppl-add-sponsor-product-select' class='<?php echo $hide; ?>'>Select your Product</label>
+        <select class='indppl-add-sponsor-product-select <?php echo $hide; ?>' name='indppl-add-sponsor-product-select' id='indppl-add-sponsor-product-select'>
+        <?php
+        $args = array(
+            'post_type' => 'product',
+            'tax_query' => array(
+                array(
+                    'taxonomy' => 'brand',
+                    'field'    => 'slug',
+                    'terms'    => $init_brand['slug'],
+                ),
+            ),
+            'relation' => 'OR',
+            array(
+                'author' => get_current_user_id(),
+                'meta_query' => array(
+                    array(
+                        'key' => 'wpcf-default',
+                        'value' => 1,
+                        'compare' => '=',
+                    ),
+                ),
+            ),
+        );
+        $products = new WP_Query($args);
+        if($products->have_posts()){
+            while($products->have_posts()){
+                $products->the_post();
+                $title = get_the_title();
+                $id = get_the_id();
+                $selected = '';
+                if($id == 0 || $id == $set_product_id){
+                    $selected = 'selected';
+                }
+                ?>
+                
+                <option value="<?php echo $id; ?>" <?php echo $selected; ?>><?php echo $title; ?></option>
+                <?php
+            }
+        }
+        $img = 'https://via.placeholder.com/100.png';
+        if($set_id){
+            $img = get_post_meta($set_id, "wpcf-sponsorship-image", true);
+        }
+        ?>
+        </select>
+        <p><label for='add-sponsor-url'>URL:</label></p>
+        <input type='text' name='add-sponsor-url' id='add-sponsor-url' class='margin-bottom-15 max-width-300' value='<?php echo get_post_meta($set_id, "wpcf-sponsor-url", true); ?>' placeholder='URL'>
+        <label for='add-sponsor-copy'>Copy:</label>
+        <textarea rows='4' cols='100' class='margin-bottom-15 max-width-300' name='add-sponsor-copy' placeholder='Enter Text Here' id='add-sponsor-copy'><?php echo get_post_meta($set_id, "wpcf-sponsorship-copy", true); ?></textarea>
+        <img id='add-sponsor-img' class="margin-bottom-15" src="<?php echo $img; ?>">
+        <input type='file' class="margin-bottom-15" id='add-sponsor-img-file' name='add-sponsor-img-file' value='<?php echo get_post_meta($set_id, "wpcf-sponsorship-image", true); ?>'/>
+        <input type="submit" class="button" value="Save" id="sponsor-save" data-id='<?php echo $set_id; ?>'>
+        <a href='#' id='indppl-delete-sponsor-btn' class='indppl-button' data-id='<?php echo $set_id; ?>'>Delete</a>
+    </form>
     <?php
 
 
@@ -1721,6 +1753,96 @@ function indppl_save_sponsorship(){
     echo $return;
     die();
 }
+add_action( 'wp_ajax_indppl_get_sponsorship', 'indppl_get_sponsorship' );
+add_action('wp_ajax_nopriv_indppl_get_sponsorship', 'indppl_get_sponsorship');
+
+function indppl_save_sponsorship(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['brand_id'])){
+        $brand_id = $_POST['brand_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['url'])){
+        $url = $_POST['url'];
+    }
+    if(isset($_POST['copy'])){
+        $copy = $_POST['copy'];
+    }
+    if(isset($_POST['id'])){
+        $set_id = $_POST['id'];
+    }
+    if(isset($_POST['img'])){
+        $old_img = $_POST['img'];
+    }
+    $brand_tax = get_term_by('id', $brand_id, 'brand');
+    $brand = $brand_tax->name;
+    $product = get_the_title($product_id);
+    // var_dump($product);
+    // var_dump($_FILES['file']);
+
+    $img_url = indppl_image_upload();
+    $postarr = array(
+        "ID" => $set_id,
+        "post_author" => get_current_user_id(),
+        "post_title" => $brand . " " . $product . " sponsorship",
+        'post_type' => 'sponsorship',
+        'post_status' => "publish",
+        'meta_input' => array(
+            'wpcf-sponsorship-image' => $img_url,
+            'wpcf-sponsorship-copy' => $copy,
+            'wpcf-sponsorship-active' => 1,
+            'wpcf-sponsor-url' => $url,
+            'brand_id' => $brand_id,
+            'product_id' => $product_id,
+        ),
+    );
+    if(!$img_url && $old_img){
+        $postarr['meta_input']['wpcf-sponsorship-image'] = $old_img;
+    }
+    $sponsorship_id = wp_insert_post($postarr);    
+    $connection = toolset_connect_posts('sponsorship-product', $sponsorship_id, $product_id);
+    $refresh = pp_sponsor_management();
+    $return_array = [];
+    $return_array['refresh'] = $refresh;
+    $return_array['img'] = $img_url;
+    echo json_encode($return_array);
+    die();
+}
 add_action( 'wp_ajax_indppl_save_sponsorship', 'indppl_save_sponsorship' );
 add_action('wp_ajax_nopriv_indppl_save_sponsorship', 'indppl_save_sponsorship');
 
+function indppl_delete_sponsorship(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['id'])){
+        $id = $_POST['id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    delete_post_meta($id, 'wpcf-sponsorship-active');
+    $refresh = pp_sponsor_management();
+    $return_array = [];
+    $return_array['refresh'] = $refresh;
+    echo $refresh;
+    die();
+}
+add_action( 'wp_ajax_indppl_delete_sponsorship', 'indppl_delete_sponsorship' );
+add_action('wp_ajax_nopriv_indppl_delete_sponsorship', 'indppl_delete_sponsorship');

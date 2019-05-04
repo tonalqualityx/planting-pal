@@ -1532,33 +1532,12 @@ function indppl_get_products($store_id, $key, $type){
 }
 
 
-function image_upload(){
-
-    /* Getting file name */
-    $filename = $_FILES['file']['name'];
-
-    /* Location */
-    $location = "upload/".$filename;
-    $uploadOk = 1;
-    $imageFileType = pathinfo($location,PATHINFO_EXTENSION);
-
-    /* Valid Extensions */
-    $valid_extensions = array("jpg","jpeg","png");
-    /* Check file extension */
-    if( !in_array(strtolower($imageFileType),$valid_extensions) ) {
-        $uploadOk = 0;
-    }
-
-    if($uploadOk == 0){
-        echo 0;
-    }else{
-        /* Upload file */
-        if(move_uploaded_file($_FILES['file']['tmp_name'],$location)){
-            echo $location;
-        }else{
-            echo 0;
-        }
-    }
+function indppl_image_upload(){
+    $filename = $_FILES['file'];
+    $wp_upload_dir = wp_upload_dir();
+    $upload_overrides = array( 'test_form' => false );
+    $return = wp_handle_upload($filename, $upload_overrides);
+    return $return['url'];
 }
 
 function indppl_encodeURIComponent($str) {
