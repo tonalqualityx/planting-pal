@@ -364,6 +364,7 @@ jQuery(document).ready(function( $ ) {
             }
         });
     });
+
     $('body').on('click', '.product-create-dry-wet', function(){
         var type = $(this).val();
         array = indppl_get_units(type);
@@ -575,6 +576,7 @@ jQuery(document).ready(function( $ ) {
         });
 
     });
+
     $('body').on('click', '.product-create-submit-back', function(e){
         e.preventDefault();
         $('.product-create-app-rates-chart-container').slideToggle();
@@ -1058,8 +1060,20 @@ jQuery(document).ready(function( $ ) {
                 indpplDelLoading();
             }
         });
-    })
-    $('body').on('submit', '#add-sponsor-form', function(e){
+    
+    });
+
+    $('body').on('click', '.empty-filled .pots', function(){
+        var check = $(this).val();
+        console.log(check);
+        if(check == 'partial'){
+            $(this).parents('.indppl-flex').next('.inches-needed').removeClass('hide');
+        } else {
+            $(this).parents('.indppl-flex').next('.inches-needed').addClass('hide');
+        }
+    });
+
+      $('body').on('submit', '#add-sponsor-form', function(e){
         e.preventDefault();
         indpplAddLoading();
         var fd = new FormData();
@@ -1157,7 +1171,7 @@ jQuery(document).ready(function( $ ) {
         });
     })
 
-    
+
 });
 
 // start of functions
