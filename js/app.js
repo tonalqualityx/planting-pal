@@ -1048,7 +1048,7 @@ jQuery(document).ready(function( $ ) {
             dataType: 'text',
             method: 'POST',
             data: {
-                action: 'indppl_save_sponsorship',
+                action: 'indppl_get_sponsorship',
                 version_check: version_check,
             },
             type: 'POST',
@@ -1059,12 +1059,102 @@ jQuery(document).ready(function( $ ) {
             }
         });
     })
-    $('body').on('click', '#sponsor-save', function(){
+    $('body').on('submit', '#add-sponsor-form', function(e){
+        e.preventDefault();
+        indpplAddLoading();
         var fd = new FormData();
-        var files = $('#add-sponsor-img-file')[0].files[0];
-        
-        console.log(fd);
-        console.log(files);
+        var file = $('#add-sponsor-img-file').prop('files')[0];
+        fd.append('file', file);
+        fd.append('brand_id', $('#indppl-add-sponsor-brand-select').val());
+        fd.append('product_id', $('#indppl-add-sponsor-product-select').val());
+        fd.append('url', $('#add-sponsor-url').val());
+        fd.append('copy', $('#add-sponsor-copy').val());
+        fd.append('action', 'indppl_save_sponsorship');
+        fd.append('form', $(this).serializeArray());
+        fd.append('id', $('#sponsor-save').data('id'));
+        fd.append('img', $('#add-sponsor-img').attr('src'));
+        fd.append('version_check', 1.0);
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            // dataType: 'json',
+            method: 'POST',
+            contentType: false,
+            processData: false,
+            data: fd,
+            // processData: true,
+            type: 'POST',
+            success: function(e){
+                array = JSON.parse(e);
+                console.log(array['refresh']);
+                $('.indppl-add-sponsor-main-container').html(array['refresh']);
+                $('#add-sponsor-img').attr('src', array['img']);
+                indpplDelLoading();
+                $('.sponsor-modal-close').hide();
+                $('.slide-in-sponsor-container').removeClass('left-0');
+                setTimeout(function(){
+                    $('.slide-in-sponsor-container').remove();
+                }, 1000);
+            }
+        });
+    })
+    $('body').on('click', '.indppl-edit-sponsor-link', function(e){
+        e.preventDefault();
+        $('body').prepend("<div class='slide-in-sponsor-container'><div class='container pad-top-3'><a href='#' class='sponsor-modal-close'>X</a></div></div>");
+        setTimeout(function () {
+            $('.slide-in-sponsor-container').addClass('left-0');
+            indpplAddLoading('.slide-in-sponsor-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+        var id = $(this).data('id');
+        var brand_id = $(this).data('brand');
+        var product_id = $(this).data('product');
+        var version_check = 1.0;
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_get_sponsorship',
+                version_check: version_check,
+                id: id,
+                brand_id: brand_id,
+                product_id: product_id,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                $('.slide-in-sponsor-container .container').append(e); 
+                indpplDelLoading();
+            }
+        });
+    })
+    $('body').on('click', '#indppl-delete-sponsor-btn', function(e){
+        e.preventDefault();
+        indpplAddLoading();
+        var id = $(this).data('id');
+        var product_id = $('#indppl-add-sponsor-product-select').val();
+        var version_check = 1.0;
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_delete_sponsorship',
+                version_check: version_check,
+                id: id,
+                product_id: product_id,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                $('.indppl-add-sponsor-main-container').html(e);
+                indpplDelLoading();
+                $('.sponsor-modal-close').hide();
+                $('.slide-in-sponsor-container').removeClass('left-0');
+                setTimeout(function(){
+                    $('.slide-in-sponsor-container').remove();
+                }, 1000);
+            }
+        });
     })
 
     

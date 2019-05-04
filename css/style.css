@@ -458,7 +458,7 @@ span.padding-right-5{
   color: #fff;
   font-size: 14px;
   line-height: 20px;
-  padding: 6px 12px;
+  padding: 8px 12px;
   font-weight: normal;
   text-shadow: none;
   border: 1px solid #2d6ca2;
@@ -851,5 +851,13 @@ input.blended-num, input.surface-num{
 .indppl-add-sponsor-container{
   margin-left: 10px;
 }
-
-
+#add-sponsor-img{
+  max-width: 150px;
+}
+.indppl-add-sponsor-container{
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-25{
+  flex-basis: 25%;
+}
