@@ -22,6 +22,17 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     $user_plants['ground'] = $ground;
     $ground = array_filter($ground);
 
+    // Quick fix - REFACTOR
+    foreach($apprates['ground'] as $prod => $data){
+        if(key($data) == 'bag'){
+            $apprates['ground'][$prod]['containers'] = $data['bag'];
+        }
+    }
+
+    // var_dump($apprates);
+
+    // $ground_rates = array_merge($apprates['ground']['containers']);
+
     foreach($ground as $container => $count){
         foreach($apprates['ground'] as $key => $val) {
             if(array_key_exists($container, $apprates['ground'][$key]['containers'])){
@@ -133,8 +144,13 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         case 'each':
                             
                             // Multiply the eaches
-                            var_dump($rates);
-                            
+                            if($pots['width'][$i] < 8){
+                                $need = $pots['qty'][$i] * $rates['small']; 
+                            } elseif($pots['width'][$i] >= 8 && $pots['width'][$i] < 24){
+                                $need = $pots['qty'][$i] * $rates['medium'];
+                            } elseif($pots['width'][$i] >= 24){
+                                $need = $pots['qty'][$i] * $rates['large'];
+                            }
                             break;
                     }
                         
@@ -216,12 +232,6 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         $unit_args  = array(array('unit' => $rates['unit'], 'amount' => $fill_rate));
                         $normalized = indppl_normalize($unit_args, $standard, $cups);
                         $need       = $normalized[0]['standard-amount'];
-
-                        break;
-
-                    case 'each':
-
-                        // Multiply the eaches
 
                         break;
                     }
