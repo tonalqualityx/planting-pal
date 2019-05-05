@@ -174,51 +174,53 @@
                 <div class="container">
                     <div class="rb-form">
                         <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                            <div class="" id="qty">
+                            <div class="" >
                                 <input type="number" name="beds[qty][]" class="rounded-input pots margin-auto">
                             </div>
                             <div class="tacos">
-                                <div>
-                                    <input type="number" name="beds[length][]" placeholder="L&quot;" class="rounded-input2">
-                                    <label>Length</label>
+                                <div class="indppl-flex">
+                                    <div>
+                                        <input type="number" name="beds[length][]" placeholder="L&quot;" class="rounded-input2">
+                                        <label>Length</label>
+                                    </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <input type="number" name="beds[width][]" placeholder="W&quot;" class="rounded-input2">
+                                        <label>Width</label>
+                                    </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <input type="number" name="beds[height][]" placeholder="H&quot;" class="rounded-input2">
+                                        <label>Height</label>
+                                    </div>
                                 </div>
-                                <p class="by-the-by">x</p>
-                                <div>
-                                    <input type="number" name="beds[width][]" placeholder="W&quot;" class="rounded-input2">
-                                    <label>Width</label>
+                                <div class="indppl-flex ">
+                                    <div class="empty-filled indppl-flex margin-right-0">
+                                        <input class="pots" type="radio" name="rbstatus_1" checked value="empty">
+                                        <label class="form-check-label" for="formCheck-1">Empty</label>
+                                    </div>
+                                    <div class="empty-filled indppl-flex margin-right-0">
+                                        <input class="pots" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                    </div>
                                 </div>
-                                <p class="by-the-by">x</p>
-                                <div>
-                                    <input type="number" name="beds[height][]" placeholder="H&quot;" class="rounded-input2">
-                                    <label>Height</label>
+                                <div class="hide inches-needed">
+                                    <input type="number" id="rbneed_1" name="beds[need][]" class="rounded-input3">
+                                    <label class="soil-need">Inches of soil needed</label>
                                 </div>
-                            </div>
-                            <div class="indppl-flex ">
-                                <div class="empty-filled indppl-flex margin-right-0">
-                                    <input class="pots" type="radio" name="rbstatus_1" checked value="empty">
-                                    <label class="form-check-label" for="formCheck-1">Empty</label>
-                                </div>
-                                <div class="empty-filled indppl-flex margin-right-0">
-                                    <input class="pots" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
-                                </div>
-                            </div>
-                            <div>
-                                <input type="number" id="rbneed_1" name="beds[need][]" class="rounded-input3">
-                                <label class="soil-need">Inches of soil needed</label>
                             </div>
                         </div>
                     </div>  
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <p id="rb_add" class="cursor">+ Add More</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="rbedBox_add"></div>
 
-            <div class="row">
-                    <div class="col">
-                        <p id="rb_add" class="cursor">+ Add More</p>
-                    </div>
-                </div>
-            </div>
 
             <?php } ?>
             <div class="container footer">
