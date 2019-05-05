@@ -1142,7 +1142,7 @@ function update_package_table($store_id, $product_id, $type){
                     // echo $app_unit;
                     // echo $app_qty;
                     // echo $package_unit;
-                    $conversion = indppl_normalize($items, $package_unit, intval($cups));
+                    // $conversion = indppl_normalize($items, $package_unit, intval($cups));
                     // var_dump($conversion);
                     // $conversion = getVolume($app_qty, $app_unit, $package_unit);
                     $final = $package_size / $conversion[0]['standard-amount'];
@@ -1262,7 +1262,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         ?>
     </tr>
     <?php
-    $console = $pro_container;
+    // $console = $pro_container;
     // var_dump($containers); used for sorting
     // var_dump($containers);
     // var_dump("<br /><br />");
@@ -1273,7 +1273,7 @@ function update_bag_package_table($store_id, $product_id, $type){
     // var_dump($order_array);
     // var_dump("<br /><br />");
     // var_dump($pro_container);
-    $first_key = array_key_first($order_array);
+    $first_key = key($order_array);
     foreach($containers as $key => $id){
         // echo 'inside';
         $title = get_the_title($id);

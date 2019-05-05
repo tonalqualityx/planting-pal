@@ -632,7 +632,7 @@ function indppl_save_product_ajax(){
     }
     // $console = $product_rate;
     // $app_rates = indppl_apprates($store_id);
-    $console;
+    // $console;
     if($fraction && $product_rate){
         $args = array(
             $product_id => array(
@@ -653,7 +653,7 @@ function indppl_save_product_ajax(){
             }
             $args[$product_id]['bag'][$value['name']] = array(
                 'amount' => $app_rate,
-                'unit' => $first_package['unit'],
+                'unit' => $firpotsst_package['unit'],
             );
 
         }
@@ -683,7 +683,7 @@ function indppl_save_product_ajax(){
         // var_dump($new_package);
     }
     foreach($package_array as $package_id){
-        if(!$package_id == 0){
+        if($package_id != 0){
             $new_package = toolset_connect_posts('store-package', $store_id, $package_id);
         }
         // var_dump($new_package);

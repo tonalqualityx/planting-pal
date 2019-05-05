@@ -133,6 +133,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         case 'each':
                             
                             // Multiply the eaches
+                            var_dump($rates);
                             
                             break;
                     }
