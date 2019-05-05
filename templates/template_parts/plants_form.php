@@ -83,7 +83,7 @@
 
             <div class="indppl-flex indpl-app-split row type-header">
                 <div class="col">
-                    <p id="pots"><strong>Pot Plantings</strong><br></p>
+                    <p id="pot"><strong>Pot Plantings</strong><br></p>
                 </div>
             </div>
             <div class="ig-select">
