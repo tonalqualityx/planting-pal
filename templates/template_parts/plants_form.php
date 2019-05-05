@@ -159,11 +159,11 @@
             </div>
             <div class=" ig-select">
                 <div class="container">
-                    <div class="row qty-plant-header">
-                        <div class="col-3 offset-1">
+                    <div class="indppl-app-split indppl-flex qty-plant-header">
+                        <div class="">
                             <p>QTY</p>
                         </div>
-                        <div class="col-8">
+                        <div class="">
                             <p>Raised Bed Size</p>
                         </div>
                     </div>
@@ -173,30 +173,38 @@
 
                 <div class="container">
                     <div class="rb-form">
-                        <div class="row pot-plant ">
-                            <div class="col-3 offset-1" id="qty">
-                                <input type="number" name="beds[qty][]" class="rounded-input">
+                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
+                            <div class="" id="qty">
+                                <input type="number" name="beds[qty][]" class="rounded-input pots margin-auto">
                             </div>
-                            <div class="col-8">
-                                <input type="number" name="beds[length][]" placeholder="L" class="rounded-input2">
+                            <div class="tacos">
+                                <div>
+                                    <input type="number" name="beds[length][]" placeholder="L&quot;" class="rounded-input2">
+                                    <label>Length</label>
+                                </div>
                                 <p class="by-the-by">x</p>
-                                <input type="number" name="beds[width][]" placeholder="W" class="rounded-input2">
+                                <div>
+                                    <input type="number" name="beds[width][]" placeholder="W&quot;" class="rounded-input2">
+                                    <label>Width</label>
+                                </div>
                                 <p class="by-the-by">x</p>
-                                <input type="number" name="beds[height][]" placeholder="H" class="rounded-input2">
+                                <div>
+                                    <input type="number" name="beds[height][]" placeholder="H&quot;" class="rounded-input2">
+                                    <label>Height</label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col offset-1">
-                                <div class="form-check empty-filled">
-                                    <input class="form-check-input empty-filled" type="radio" name="rbstatus_1" checked value="empty">
+                            <div class="indppl-flex ">
+                                <div class="empty-filled indppl-flex margin-right-0">
+                                    <input class="pots" type="radio" name="rbstatus_1" checked value="empty">
                                     <label class="form-check-label" for="formCheck-1">Empty</label>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input empty-filled" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                <div class="empty-filled indppl-flex margin-right-0">
+                                    <input class="pots" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
                                 </div>
-                                <div>
-                                    <input type="number" id="rbneed_1" name="beds[need][]" class="rounded-input3"><label class="soil-need">Inches of soil needed</label>
-                                </div>
+                            </div>
+                            <div>
+                                <input type="number" id="rbneed_1" name="beds[need][]" class="rounded-input3">
+                                <label class="soil-need">Inches of soil needed</label>
                             </div>
                         </div>
                     </div>  
