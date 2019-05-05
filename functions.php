@@ -1062,9 +1062,7 @@ function update_package_table($store_id, $product_id, $type){
         $title = get_the_title($id);
         $pack_id = $store_related[$key];
         $package = get_post_meta($pack_id, 'wpcf-unit', true);
-        // $app_qty_array = [];
-        $app_unit;
-        $app_qty;
+
         ?>
         <tr>
             <td>
@@ -1114,6 +1112,7 @@ function update_package_table($store_id, $product_id, $type){
                     if(!empty($app_rates[$type][$product_id]['containers'][$id]['unit'])){
                         $app_unit = $app_rates[$type][$product_id]['containers'][$id]['unit'];
                     }
+                    
                     ?>
                     <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?>>
                     <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
@@ -1142,7 +1141,7 @@ function update_package_table($store_id, $product_id, $type){
                     // echo $app_unit;
                     // echo $app_qty;
                     // echo $package_unit;
-                    // $conversion = indppl_normalize($items, $package_unit, intval($cups));
+                    $conversion = indppl_normalize($items, $package_unit, intval($cups));
                     // var_dump($conversion);
                     // $conversion = getVolume($app_qty, $app_unit, $package_unit);
                     $final = $package_size / $conversion[0]['standard-amount'];
