@@ -633,7 +633,7 @@ function indppl_save_product_ajax(){
     // $console = $product_rate;
     // $app_rates = indppl_apprates($store_id);
     // $console;
-    if($fraction && $product_rate){
+    if($fraction == 'true' && $product_rate){
         $args = array(
             $product_id => array(
                 'bag' => array(),
@@ -653,7 +653,7 @@ function indppl_save_product_ajax(){
             }
             $args[$product_id]['bag'][$value['name']] = array(
                 'amount' => $app_rate,
-                'unit' => $firpotsst_package['unit'],
+                'unit' => $first_package['unit'],
             );
 
         }
