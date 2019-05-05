@@ -613,6 +613,15 @@ function indppl_save_product_ajax(){
     if(isset($_POST['first_package'])){
         $first_package = $_POST['first_package'];
     }
+    $default = get_post_meta($product_id, 'wpcf-default', true);
+    if($default){
+        ob_start();
+        ?>
+        <div id='indppl-ground-default-product' data-default='1'></div>
+        <?php
+        $set_default = ob_get_clean();
+    }
+    $console = $default;
     // $console = $cups_num;
     if($product_id == 'new'){
         $new_product_args = array(
@@ -710,6 +719,9 @@ function indppl_save_product_ajax(){
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
     $ajax_array['dryliquid'] = $product_dryliquid;
+    if($default){
+        $ajax_array['default'] = $set_default;
+    }
     $ajax_array['console'] = $console;
     echo json_encode($ajax_array);
     die();
@@ -1019,7 +1031,7 @@ function indppl_save_pots_product_ajax(){
             ),
         );
     }
-    var_dump($new_pack);
+    var_dump($product_id);
     var_dump($product_unit);
     if($new_pack[count($new_pack)-1]['unit'] == 'each' || $product_unit == 'each'){
         $temp['each'] = array(

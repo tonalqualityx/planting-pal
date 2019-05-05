@@ -570,6 +570,9 @@ jQuery(document).ready(function( $ ) {
                             getProductInfo();
                         // }, 10000);
                     }
+                    if(array['default']){
+                        $('.slide-in-products-inside-container').append(array['default']);
+                    }
                     indpplDelLoading();
                 }
             }
@@ -582,6 +585,10 @@ jQuery(document).ready(function( $ ) {
         $('.product-create-app-rates-chart-container').slideToggle();
         $('.product-create-first-part-container').slideToggle();
         $('.indppl-background-green').removeClass('indppl-new-package');
+        var is_default = $('#indppl-ground-default-product').data('default');
+        if(is_default == 1){
+            $('.indppl-add-product-fraction-bag').hide();
+        }
     })
 
     $('body').on('click', '.indppl-product-edit', function(e){
@@ -644,6 +651,9 @@ jQuery(document).ready(function( $ ) {
         var brand = $('#product-create-brand').val();
         var product_id = $('#product-create-product').val();
         var product_unit = $('#product-create-standard-unit').data('unit');
+        if(!product_unit){
+            product_unit = $('.indppl-background-green').data('unit');
+        }
         var product_dryliquid = $('.product-create-dry-wet').val();
         var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
         // var product_select = $("#product-create-form").find('sel ect').filter('.some-kind-of-wonderful').serializeArray();
@@ -1241,7 +1251,7 @@ function greyOutAllUnchecked(){
 
 function indppl_get_units($type = 'dry'){
     if($type == 'dry'){
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each', 'Bag': 'Bag'};
+        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
     }else if($type == 'bag'){
         return {'ppc': 'plants per bag / contianer', 'cpp': 'bags / containers per plant'};
     }else{
