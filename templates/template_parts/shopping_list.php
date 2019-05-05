@@ -22,9 +22,36 @@
             <div class="col-3 align-self-center border1">
                 <p class="qty-bag"><?php echo $item['count']; ?></p>
             </div>
-            <div class="col product-details">
-                <p><strong><?php echo $item['brand']; ?></strong></p>
-                <p class="bigger"><strong><?php echo str_replace($item['brand'] . " ", '', $item['product']); ?><br><?php echo $item['name'];?></strong></p>
+            <div class=" indppl-flex indppl-align-center product">
+
+                <?php 
+
+                // check for a sponsorship
+                $sponsorship = toolset_get_related_post($key, 'sponsorship-product');
+
+                // If there is a sponsorship, print it up all happy
+                if($sponsorship){ 
+                    $sponsored_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
+                    $sponsor_copy = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
+                    $sponsor_count = get_post_meta($sponsorship, 'wpcf-view-count', TRUE);
+                    if($sponsor_count){
+                        $sponsor_count++;
+                    } else {
+                        $sponsor_count = 1;
+                    }
+                    update_post_meta( $sponsorship, 'wpcf-view-count', $sponsor_count );
+                    echo "<div class='sponsorship'>";
+                    echo "<div><img src='{$sponsored_image}' class='sponsor-image'></div>";
+                        echo "<a href='#' class='sponsor-link'>Learn More</a>";
+                        echo "<div class='hide sponsor-copy'>{$sponsor_copy}</div>";
+                    echo "</div>";
+                }
+                ?>
+                <div class='product-name'>
+                    <p><strong><?php echo $item['brand']; ?></strong></p>
+                    <p class="bigger"><strong><?php echo str_replace($item['brand'] . " ", '', $item['product']); ?><br><?php echo $item['name'];?></strong></p>
+
+                </div>
             </div>
         </div>
     <!-- /Standard Product -->

@@ -1550,10 +1550,13 @@ function indppl_build_guide_ajax() {
 
         // Stash the shopping list, email address, and store in the DB for later marketing
     
+        // Load this array so you can build the email
+        $guide_links = array();
+
         // Use the type & product list to build planting guide
         foreach($plants as $type => $plant){
             $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
-            $guide_options = str_replace("\\", '' ,$guide_options);
+            $guide_options = str_replace('\\', '' ,$guide_options);
             $guide_options = json_decode($guide_options, true);
             ob_start();
                 include(INDPPL_ROOT_PATH . '/templates/template_parts/planting-guide.php');
@@ -1562,7 +1565,12 @@ function indppl_build_guide_ajax() {
                 'post_type' => 'guide',
                 'post_content' => $guide, 
             );
-            $new_guide = wp_insert_post( $args ); ?>
+            $new_guide = wp_insert_post( $args ); 
+            
+            $guide_links[] = array(
+                'link' => get_permalink($new_guide),
+                'type' => $type,
+            ); ?>
             
             <div class="container" style="padding-bottom: 300px;">
                 <h2>Success!</h2>
@@ -1572,7 +1580,16 @@ function indppl_build_guide_ajax() {
         <?php }
     
         // Email user the link
-    
+        $email_content = "<p>Hey there! Thanks for using the <a href='http://plantingpal.com'>Planting Pal</a> app to calculate your needs. Here are the guide(s) you've generated!</p><ul>";
+        foreach($guide_links as $link){
+            $email_content .= "<li><a href='{$link['link']}'>Guide for {$link['type']}</a></li>";
+        }
+        $email_content .= "</ul>";
+        $subject = "Your Custom Planting Guide";
+        $headers = array();
+        $headers[] = 'From: Planting Pal <hello@plantingpal.com>';
+        wp_mail($email, $subject, $email_content, $headers);
+
         // Generate the page
 
     } else {
