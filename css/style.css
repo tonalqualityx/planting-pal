@@ -905,7 +905,7 @@ APP PAGES
   text-align: center;
 }
 
-.indppl-app-split > * > * {
+.indppl-app-split > * > *, .ind-centered{
   margin: auto;
 }
 
@@ -931,8 +931,14 @@ APP PAGES
   max-width: 75px;
 }
 
-.empty-filled input {
+.empty-filled input, .ind-centered{
   display: block;
+}
+.indppl-product-create-img{
+  max-width: 250px;
+  width: auto;
+  max-height: 250px;
+  height: auto;
 }
 
 .margin-right-20 {

@@ -1162,6 +1162,10 @@ function indppl_get_pot_apprates_ajax(){
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
                     $primary = '';
+                    $img = get_post_meta($key, 'wpcf-product-image', true);
+                    if(!$img){
+                        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                    }
                     $default = $app_rates[$type]['filler'][$key]['primary'];
                     if($default == "true"){
                         $primary = 'checked';
@@ -1176,7 +1180,7 @@ function indppl_get_pot_apprates_ajax(){
                             <span class='pots-apprates-filler-percent'>%</span>
                         </td>
                         <td class='pots-apprates-filler-cell'>
-                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                            <img class='height-50 ind-centered' src="<?php echo $img; ?>">
                         </td>
                         <td class='pots-apprates-filler-cell'>
                             <div class='pots-apprates-brand-title'>
@@ -1235,6 +1239,10 @@ function indppl_get_pot_apprates_ajax(){
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
                     // defaults
+                    $img = get_post_meta($key, 'wpcf-product-image', true);
+                    if(!$img){
+                        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                    }
                     $dilution = get_post_meta($key, 'wpcf-blended-additive-dilution', true);
                     $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
                     // apprates_array
@@ -1273,7 +1281,7 @@ function indppl_get_pot_apprates_ajax(){
                             per cuft of soil
                         </td>
                         <td class='pots-apprates-blended-cell'>
-                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                            <img class='height-50 ind-centered' src="<?php echo $img; ?>">
                         </td>
                         <td class='pots-apprates-blended-cell'>
                             <div class='pots-apprates-brand-title'>
@@ -1311,7 +1319,10 @@ function indppl_get_pot_apprates_ajax(){
                     $brand = $brand[0]->name;
                     // defaults
                     $dilution = get_post_meta($key, 'wpcf-surface-dilution', true);
-
+                    $img = get_post_meta($key, 'wpcf-product-image', true);
+                    if(!$img){
+                        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                    }
                     $units = get_post_meta($key, 'wpcf-surface-units', true);
                     $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
                     // apprates_array
@@ -1367,7 +1378,7 @@ function indppl_get_pot_apprates_ajax(){
                             </select>
                         </td>
                         <td class='pots-apprates-surface-cell'>
-                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                            <img class='height-50 ind-centered' src="<?php echo $img; ?>">
                         </td>
                         <td class='pots-apprates-surface-cell'>
                             <div class='pots-apprates-brand-title'>
@@ -1424,6 +1435,10 @@ function indppl_get_pot_apprates_ajax(){
                     $each_medium = get_post_meta($key, 'wpcf-each-medium', true);
                     $each_large = get_post_meta($key, 'wpcf-each-large', true);
                     // apprates_array
+                    $img = get_post_meta($key, 'wpcf-product-image', true);
+                    if(!$img){
+                        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                    }
                     if($get_apps == true){
                         $each_small = $app_rates[$type]['each'][$key]['small'];
                         $each_medium = $app_rates[$type]['each'][$key]['medium'];
@@ -1443,7 +1458,7 @@ function indppl_get_pot_apprates_ajax(){
                             <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
                         </td>
                         <td class='pots-apprates-each-cell'>
-                            <img class='height-50' src="https://via.placeholder.com/100.png">
+                            <img class='height-50 ind-centered' src="<?php echo $img; ?>">
                         </td>
                         <td class='pots-apprates-each-cell'>
                             <div class='pots-apprates-brand-title'>
@@ -1751,7 +1766,8 @@ function indppl_get_sponsorship(){
                 <?php
             }
         }
-        $img = 'https://via.placeholder.com/100.png';
+        // $img = 'https://via.placeholder.com/100.png';
+        $img = "<?php echo home_url(); ?>/wp-content/uploads/2019/03/big-carrot.png";
         if($set_id){
             $img = get_post_meta($set_id, "wpcf-sponsorship-image", true);
         }

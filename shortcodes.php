@@ -328,7 +328,7 @@ function pp_store_management(){
         <?php
         $return = ob_get_clean();
     }else{
-       
+    //    var_dump($store_id);
         ob_start();
         ?>
         <div class='indppl-store-management-container'>
@@ -339,7 +339,7 @@ function pp_store_management(){
         </div>
         <?php
         $return = ob_get_clean();
-        if(!$return){
+        if(!$store_info){
             $return = indppl_store_info($store_id);
         }
     }
@@ -675,6 +675,9 @@ function pp_sponsor_management(){
     ob_start();
     $user_id = get_current_user_id();
     $sponsor_status = get_user_meta($user_id, 'is_sponsor', true);
+    if($sponsor_status != 1){
+        return null;
+    }
     $sponsor_count = get_user_meta($user_id, 'sponsor_count', true);
     $args = array(
         'author' => $user_id,

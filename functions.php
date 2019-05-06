@@ -442,6 +442,12 @@ function indppl_delete_apprate($store_id, $args = null) {
 
                     }
                 }
+                if($k == 'beds'){
+                    foreach($fill_type as $val){
+                        unset($apprates[$k][$val][$v]);
+
+                    }
+                }
             }
             $newapprates = json_encode($apprates);
             $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
@@ -1020,12 +1026,15 @@ function update_package_table($store_id, $product_id, $type){
     if($type == 'ground'){
         $header = 'In-Ground';
     }
-
+    $img = get_post_meta($product_id, 'wpcf-product-image', true);
+    if(!$img){
+        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+    }
     ?>
     <div class='product-create-chart-header-container'>
         <h3><?php echo $header; ?> Planting Application Rates For:</h3>
         <div class='product-create-chart-title-container'>
-            <img src="https://via.placeholder.com/100.png">
+            <img class='indppl-product-create-img' src="<?php echo $img; ?>">
             <div style='margin-left: 10px'>
                 <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
                 <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
@@ -1221,12 +1230,15 @@ function update_bag_package_table($store_id, $product_id, $type){
     if($type == 'ground'){
         $header = 'In-Ground';
     }
-
+    $img = get_post_meta($product_id, 'wpcf-product-image', true);
+    if(!$img){
+        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+    }
     ?>
     <div class='product-create-chart-header-container'>
         <h3><?php echo $header; ?> Planting Application Rates For:</h3>
         <div class='product-create-chart-title-container'>
-            <img src="https://via.placeholder.com/100.png">
+            <img class='indppl-product-create-img' src="<?php echo $img; ?>">
             <div style='margin-left: 10px'>
                 <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
                 <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
