@@ -325,7 +325,10 @@ print_r(getProduct($pot_blends[$i]['productid']));
     return $ea_totals;
 }
 
-function indppl_user_status($id){
+function indppl_user_status($id = null){
+    if($id == null){
+        $id = get_current_user_id();
+    }
     $meta = get_user_meta($id, 'wpnr_capabilities', true);
     $account_array = array();
     if(isset($meta['paidaccountpro'])){
@@ -758,7 +761,6 @@ function indppl_create_container($new_array, $container_id = 0){
     );
     $return_id = wp_insert_post($container);
     return $return_id;
-
 }
 
 function indppl_create_package($new_array, $package_id = 0){
@@ -775,7 +777,6 @@ function indppl_create_package($new_array, $package_id = 0){
     );
     $return_id = wp_insert_post($package);
     return $return_id;
-
 }
 
 function indppl_build_container_relation_output($id, $title, $relation_array, $int_array, $meta){
@@ -887,7 +888,6 @@ function indppl_add_relation($default, $store_container_relations){
         $name = explode("-", $value['name']);
         $id = $name[0];
         $season ='';
-        // var_dump(get_post_meta($id));
         if($name[1] == 'spring'){
             $season = 'wpcf-available-in-spring';
         }
@@ -907,19 +907,13 @@ function indppl_add_relation($default, $store_container_relations){
             $cont_id = $name_array[count($name_array)-1];
             if($id == $cont_id){
                 $test = update_post_meta((int)$rel_val, (string)$season, "1");
-                
-                // var_dump($cont_id . " : " . $rel_val . " : ". $season . " = " . (bool)$test);
             }
         } 
     }
-
 }
 
 function indppl_get_current_products($type){
     $id = get_current_user_id();
-    // foreach($type as $key => $value){
-    //     var_dump($value[0]);
-    // }
     if(isset($_GET['store-id'])){
         $store_id = $_GET['store-id'];
     }else if(isset($_POST['store_id'])){
@@ -941,11 +935,8 @@ function indppl_get_current_products($type){
     );
 
     $products = new WP_Query($args);
-    // var_dump(get_post_meta(165, 'wpcf-type')[0]);
     ob_start();
     $app_rates = indppl_apprates($store_id);
-    // var_dump($app_rates);
-    // var_dump($type);
     ?>
     <table>
         <th class='product-list-width'></th>
@@ -955,7 +946,6 @@ function indppl_get_current_products($type){
 
         <?php
         $product_array = $app_rates[$type];
-        // var_dump($product_array);
         $no_duplicates = array();
         if(is_array($product_array)){
             foreach($product_array as $key => $value){

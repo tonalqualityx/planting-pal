@@ -44,48 +44,48 @@ function planting_pal_home($lat=NULL, $lon=NULL){
                     'value'   => $zip_array,
                     'compare' => 'IN',
 					
-					)
-					)
-				);
-				$the_query = new WP_Query( $args );
-				// The Loop
-				if ( $the_query->have_posts() ) {
-					?>
-            <div class='flex-left-justify'><?php
-            $i =0;
-            while ( $the_query->have_posts() ) {
-				// var_dump('special');
-                $the_query->the_post();
-				$id = get_the_ID();
-				// var_dump(get_post_meta($id));
+                )
+            )
+        );
+        $the_query = new WP_Query( $args );
+        // The Loop
+        if ( $the_query->have_posts() ) {
+            ?>
+        <div class='flex-left-justify'><?php
+        $i =0;
+        while ( $the_query->have_posts() ) {
+            // var_dump('special');
+            $the_query->the_post();
+            $id = get_the_ID();
+            // var_dump(get_post_meta($id));
 
-                $add = get_post_meta($id, 'wpcf-address1');
-                $city = get_post_meta($id, 'wpcf-city');
-                $state = get_post_meta($id, 'wpcf-state');
-                $zip = get_post_meta($id, 'wpcf-zip');
-                $phone = get_post_meta($id, 'wpcf-phone');
-                $url = get_post_meta($id, 'wpcf-weburl');
-                $is_pro = get_post_meta($id, 'wpcf-ispro');
-                $title = get_the_title();
+            $add = get_post_meta($id, 'wpcf-address1');
+            $city = get_post_meta($id, 'wpcf-city');
+            $state = get_post_meta($id, 'wpcf-state');
+            $zip = get_post_meta($id, 'wpcf-zip');
+            $phone = get_post_meta($id, 'wpcf-phone');
+            $url = get_post_meta($id, 'wpcf-weburl');
+            $is_pro = get_post_meta($id, 'wpcf-ispro');
+            $title = get_the_title();
+            ?>
+            <h3 class='results-store'><a href='<?php echo get_permalink($id); ?>'><?php echo $title; ?></a></h3>
+            <p class='store-list-text'><?php echo $add[0]; ?></p>
+            <p class='store-list-text'><?php echo $city[0] . ", " . $state[0] . " " . $zip[0]; ?></p>
+            <?php
+
+            if($is_pro[0] == 1){
                 ?>
-                <h3 class='results-store'><a href='<?php echo get_permalink($id); ?>'><?php echo $title; ?></a></h3>
-                <p class='store-list-text'><?php echo $add[0]; ?></p>
-                <p class='store-list-text'><?php echo $city[0] . ", " . $state[0] . " " . $zip[0]; ?></p>
+                <p class='store-list-text'><a href=tel:<?php echo $phone[0]; ?>><?php echo phone_number_format($phone[0]); ?></a> <a href='<?php echo $url[0]; ?>' target='_blank'>Website</a></p>
                 <?php
-
-                if($is_pro[0] == 1){
-					?>
-                    <p class='store-list-text'><a href=tel:<?php echo $phone[0]; ?>><?php echo phone_number_format($phone[0]); ?></a> <a href='<?php echo $url[0]; ?>' target='_blank'>Website</a></p>
-                    <?php
-                }
             }
-            ?></div><?php
-			
-            /* Restore original Post Data */
-            wp_reset_postdata();
-        } else {
-			?><p>No Stores in your area</p><?php
         }
+        ?></div><?php
+        
+        /* Restore original Post Data */
+        wp_reset_postdata();
+    } else {
+        ?><p>No Stores in your area</p><?php
+    }
         
     }
     ?></div><?php
