@@ -362,6 +362,9 @@ function pp_my_stores(){
             );
             $stores = new WP_Query($args);
             if($stores->have_posts()){
+                ?>
+                <div class='indppl-my-stores-container'>
+                <?php
                 while($stores->have_posts()){
                     $stores->the_post();
                     
@@ -374,7 +377,7 @@ function pp_my_stores(){
                     $link = home_url() . '/store-profile?store-id=' . $id;
                     // var_dump($img);
                     ?>
-                    <div class='indppl-my-stores-container'>
+                    
                     <div class='indppl-single-store-container'>
                         <div class='flex-half'>
                             <div class='indppl-store-thumb'>
@@ -391,6 +394,9 @@ function pp_my_stores(){
                     <?php
                 }
                 wp_reset_postdata();
+                ?>
+                </div>
+                <?php
                 // remove else to allow the add store link to always be active.
             }else{
                 ?>
@@ -412,7 +418,7 @@ function pp_my_stores(){
                 return null;
             }
         ?>
-    </div>
+    <!-- </div> -->
     <?php
     $return = ob_get_clean();
     return $return;
