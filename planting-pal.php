@@ -108,3 +108,8 @@ function indppl_meta_tags(){
 }
 
 add_action('wp_head', 'indppl_meta_tags');
+
+function indppl_set_content_type() {
+    return "text/html";
+}
+add_filter('wp_mail_content_type', 'indppl_set_content_type');
