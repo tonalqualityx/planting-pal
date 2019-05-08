@@ -175,7 +175,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                // console.log(e);
+                console.log(e);
                 var new_array = jQuery.parseJSON(e);
                 // console.log(new_array);
                 var i = 0;
@@ -1534,7 +1534,10 @@ function updateBagAppRates(elem){
     var product_unit = $('.bag-apprates-title').first().data('unit');
     var cont_id = $(elem).parent().prev().data('id');
     var version_check = 1.0;
+    console.log('--------');
+    console.log(cont_id);
     console.log(product_num);
+    console.log(product_unit);
     console.log(val);
     jQuery.ajax({
         url:indppl_ajax.ajaxurl,

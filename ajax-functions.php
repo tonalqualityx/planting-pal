@@ -89,7 +89,7 @@ function indppl_save_container_data_ajax(){
             // var_dump($new_array);
             foreach($new_array as $key => $value){
                 $container_id = indppl_create_container($new_array[$key]);
-                $send_back_arrary[$key] = $container_id;
+                $send_back_array[$key] = $container_id;
                 $cont_avail = toolset_connect_posts('store-container', $store_id, $container_id);
                 // var_dump($cont_avail);
                 $build_array = array(0 => array());
@@ -125,6 +125,7 @@ function indppl_save_container_data_ajax(){
             'post_id',
             'intermediary'
         );
+        $available_and_new = array_merge($available, );
 
         
         // foreach ($default as $key => $value) {
@@ -198,7 +199,7 @@ function indppl_save_container_data_ajax(){
         //     // }
         //     var_dump($v);
         // }
-        // echo json_encode($send_back_array);
+        echo json_encode($send_back_array);
     // }
     die();
 }
@@ -1650,10 +1651,11 @@ function indppl_update_bag_app_rates_ajax(){
         'amount' => $app_rate,
         'unit' => $product_unit,
     );
-    // var_dump($args);
+    var_dump($args);
     $save = indppl_apprates($store_id, $type, $args, true);
     // var_dump($save);
     $return = update_bag_package_table($store_id, $product_id, $type);
+    // var_dump($save);
     echo $return;
     die();
 }
@@ -1767,7 +1769,7 @@ function indppl_get_sponsorship(){
             }
         }
         // $img = 'https://via.placeholder.com/100.png';
-        $img = "<?php echo home_url(); ?>/wp-content/uploads/2019/03/big-carrot.png";
+        $img = home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
         if($set_id){
             $img = get_post_meta($set_id, "wpcf-sponsorship-image", true);
         }
