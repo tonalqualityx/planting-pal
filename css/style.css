@@ -834,7 +834,7 @@ input.blended-num, input.surface-num{
 .blended-select, .surface-select-sqft, .surface-select{
   height: 35px;
 }
-.pots-apprates-blended-cell, .pots-apprates-surface-cell, .pots-apprates-each-cell{
+.pots-apprates-blended-cell, .pots-apprates-surface-cell, .pots-apprates-each-cell, .padding-right-10{
   padding-right: 10px;
 }
 .max-width-100{
@@ -1021,4 +1021,24 @@ body #logo-header {
 
 img.keep-going {
   margin: auto;
+}
+
+/* sponsorships */
+.sponsor-stats-sub-container{
+  max-height: 50vh;
+  overflow-y: auto;
+  min-width: 300px;
+}
+.sponsorship-main-container{
+  display: flex;
+  justify-content: space-between;
+}
+.sponsor-stats-table{
+  width: 100%;
+}
+.padding-left-10{
+  padding-left: 10px;
+}
+.ind-bold{
+  font-weight: 600;
 }

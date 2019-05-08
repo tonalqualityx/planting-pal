@@ -976,11 +976,19 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.sponsor-link', function(e){
         e.preventDefault();
         console.log('triggered');
-        var content = $(this).next('.sponsor-copy').html();
+        var content = $(this).parent().find('.sponsor-copy').html();
         var brand = $(this).siblings('.product-name').find('.brand').text();
         var product = $(this).siblings('.product-name').find('.product').text();
         var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
-        console.log(content);
+        if(!image){
+            content = $(this).next('.sponsor-copy').html();
+            image_url = $(this).parent().find('img').attr('src');
+            image = "<img src='" + image_url + "'>";
+            brand = $(this).parents('.sponsorship').next().children().first().html();
+            product = $(this).parents('.sponsorship').next().children().last().html();
+        }
+        console.log(brand);
+        console.log(product);
         $('body').prepend("<div class='sponsored-modal'>" + image + "<p class='brand'>" + brand + "</p><h4>" + product + "</h4><p>" + content + "</p></div>");
     });
 
