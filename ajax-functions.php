@@ -1722,85 +1722,136 @@ function indppl_get_sponsorship(){
         }
     }
     ?>
-    <form method="post" action="" enctype="multipart/form-data" id="add-sponsor-form">
-        <label for='indppl-add-sponsor-brand-select' class='<?php echo $hide; ?>'>Select your Brand</label>
-        <select class='indppl-add-sponsor-brand-select <?php echo $hide; ?>' name='indppl-add-sponsor-brand-select' id='indppl-add-sponsor-brand-select'>
-        <?php
-
-        foreach($brands as $key => $value){
-            $brand_id = $value['id'];
-            $brand_name = $value['name'];
-            $brand_slug = $value['slug'];
-            $brand_save = $brand_slug . "-" . $brand_id;
-            $selected = '';
-            if($key == 0 || $brand_id == $set_brand_id){
-                $selected = 'selected';
-            }
-            ?>
-            <option id='<?php echo $brand_save; ?>' value='<?php echo $brand_id; ?>' <?php echo $selected; ?>><?php echo $brand_name; ?></option>
+    <div class='sponsorship-main-container'>
+        <form method="post" action="" enctype="multipart/form-data" id="add-sponsor-form">
+            <label for='indppl-add-sponsor-brand-select' class='<?php echo $hide; ?>'>Select your Brand</label>
+            <select class='indppl-add-sponsor-brand-select <?php echo $hide; ?>' name='indppl-add-sponsor-brand-select' id='indppl-add-sponsor-brand-select'>
             <?php
-        }
-        ?>
-        </select>
-        <?php
-        $init_brand = $brands[0];
-        ?>
-        <label for='indppl-add-sponsor-product-select' class='<?php echo $hide; ?>'>Select your Product</label>
-        <select class='indppl-add-sponsor-product-select <?php echo $hide; ?>' name='indppl-add-sponsor-product-select' id='indppl-add-sponsor-product-select'>
-        <?php
-        $args = array(
-            'post_type' => 'product',
-            'tax_query' => array(
-                array(
-                    'taxonomy' => 'brand',
-                    'field'    => 'slug',
-                    'terms'    => $init_brand['slug'],
-                ),
-            ),
-            'relation' => 'OR',
-            array(
-                'author' => get_current_user_id(),
-                'meta_query' => array(
-                    array(
-                        'key' => 'wpcf-default',
-                        'value' => 1,
-                        'compare' => '=',
-                    ),
-                ),
-            ),
-        );
-        $products = new WP_Query($args);
-        if($products->have_posts()){
-            while($products->have_posts()){
-                $products->the_post();
-                $title = get_the_title();
-                $id = get_the_id();
+
+            foreach($brands as $key => $value){
+                $brand_id = $value['id'];
+                $brand_name = $value['name'];
+                $brand_slug = $value['slug'];
+                $brand_save = $brand_slug . "-" . $brand_id;
                 $selected = '';
-                if($id == 0 || $id == $set_product_id){
+                if($key == 0 || $brand_id == $set_brand_id){
                     $selected = 'selected';
                 }
                 ?>
-                
-                <option value="<?php echo $id; ?>" <?php echo $selected; ?>><?php echo $title; ?></option>
+                <option id='<?php echo $brand_save; ?>' value='<?php echo $brand_id; ?>' <?php echo $selected; ?>><?php echo $brand_name; ?></option>
                 <?php
             }
-        }
-        // $img = 'https://via.placeholder.com/100.png';
-        $img = home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
-        if($set_id){
-            $img = get_post_meta($set_id, "wpcf-sponsorship-image", true);
-        }
+            ?>
+            </select>
+            <?php
+            $init_brand = $brands[0];
+            ?>
+            <label for='indppl-add-sponsor-product-select' class='<?php echo $hide; ?>'>Select your Product</label>
+            <select class='indppl-add-sponsor-product-select <?php echo $hide; ?>' name='indppl-add-sponsor-product-select' id='indppl-add-sponsor-product-select'>
+            <?php
+            $args = array(
+                'post_type' => 'product',
+                'tax_query' => array(
+                    array(
+                        'taxonomy' => 'brand',
+                        'field'    => 'slug',
+                        'terms'    => $init_brand['slug'],
+                    ),
+                ),
+                'relation' => 'OR',
+                array(
+                    'author' => get_current_user_id(),
+                    'meta_query' => array(
+                        array(
+                            'key' => 'wpcf-default',
+                            'value' => 1,
+                            'compare' => '=',
+                        ),
+                    ),
+                ),
+            );
+            $products = new WP_Query($args);
+            if($products->have_posts()){
+                while($products->have_posts()){
+                    $products->the_post();
+                    $title = get_the_title();
+                    $id = get_the_id();
+                    $selected = '';
+                    if($id == 0 || $id == $set_product_id){
+                        $selected = 'selected';
+                    }
+                    ?>
+                    
+                    <option value="<?php echo $id; ?>" <?php echo $selected; ?>><?php echo $title; ?></option>
+                    <?php
+                }
+            }
+            // $img = 'https://via.placeholder.com/100.png';
+            $img = home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+            if($set_id){
+                $img = get_post_meta($set_id, "wpcf-sponsorship-image", true);
+            }
+            ?>
+            </select>
+            <p><label for='add-sponsor-url'>URL:</label></p>
+            <input type='text' name='add-sponsor-url' id='add-sponsor-url' class='margin-bottom-15 max-width-300' value='<?php echo get_post_meta($set_id, "wpcf-sponsor-url", true); ?>' placeholder='URL'>
+            <label for='add-sponsor-copy'>Copy:</label>
+            <textarea rows='4' cols='100' class='margin-bottom-15 max-width-300' name='add-sponsor-copy' placeholder='Enter Text Here' id='add-sponsor-copy'><?php echo get_post_meta($set_id, "wpcf-sponsorship-copy", true); ?></textarea>
+            <img id='add-sponsor-img' class="margin-bottom-15" src="<?php echo $img; ?>">
+            <input type='file' class="margin-bottom-15" id='add-sponsor-img-file' name='add-sponsor-img-file' value='<?php echo get_post_meta($set_id, "wpcf-sponsorship-image", true); ?>'/>
+            <input type="submit" class="button" value="Save" id="sponsor-save" data-id='<?php echo $set_id; ?>'>
+            <a href='#' id='indppl-delete-sponsor-btn' class='indppl-button' data-id='<?php echo $set_id; ?>'>Delete</a>
+        </form>
+
+        <?php
+        $sponsor_count_array = json_decode(get_post_meta($set_id, 'wpcf-view-count', true), true);
         ?>
-        </select>
-        <p><label for='add-sponsor-url'>URL:</label></p>
-        <input type='text' name='add-sponsor-url' id='add-sponsor-url' class='margin-bottom-15 max-width-300' value='<?php echo get_post_meta($set_id, "wpcf-sponsor-url", true); ?>' placeholder='URL'>
-        <label for='add-sponsor-copy'>Copy:</label>
-        <textarea rows='4' cols='100' class='margin-bottom-15 max-width-300' name='add-sponsor-copy' placeholder='Enter Text Here' id='add-sponsor-copy'><?php echo get_post_meta($set_id, "wpcf-sponsorship-copy", true); ?></textarea>
-        <img id='add-sponsor-img' class="margin-bottom-15" src="<?php echo $img; ?>">
-        <input type='file' class="margin-bottom-15" id='add-sponsor-img-file' name='add-sponsor-img-file' value='<?php echo get_post_meta($set_id, "wpcf-sponsorship-image", true); ?>'/>
-        <input type="submit" class="button" value="Save" id="sponsor-save" data-id='<?php echo $set_id; ?>'>
-        <a href='#' id='indppl-delete-sponsor-btn' class='indppl-button' data-id='<?php echo $set_id; ?>'>Delete</a>
-    </form>
+        <div class='sponsor-stats-container'>
+            <h3>STATS</h3>
+            <div class='sponsor-stats-sub-container'>
+                <table class='sponsor-stats-table'>
+                    <tr>
+                        <th class='padding-right-10 padding-left-10'>Store Name</th>
+                        <th class='padding-left-10'>Views</th>
+                    </tr>
+                    <?php
+                    $total = 0;
+                    if(is_array($sponsor_count_array)){
+                        foreach($sponsor_count_array as $key => $value){
+                            $title = get_the_title($key);
+                            ?>
+                            <tr class="indppl-table-color-offset">
+                                <td class='padding-left-10'>
+                                    <?php echo $title . ":"; ?>
+                                </td>
+                                <td class='padding-left-10'>
+                                    <?php echo $value; ?>
+                                </td>
+                            </tr>
+                            <?php
+                            $total += $value;
+                        }
+                    }else{
+                        ?>
+                        <tr class='indppl-table-color-offset'>
+                            <td class='padding-left-10'>
+                                No Views
+                            </td>
+                            <td class='padding-left-10'>
+                                
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                    <tr class="indppl-table-color-offset">
+                        <td class='ind-bold padding-left-10'>Total: </td>
+                        <td class='padding-left-10'><?php echo $total; ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
     <?php
 
 

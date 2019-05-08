@@ -1603,3 +1603,20 @@ function indppl_guide_products($products){
     <?php }
 }
 
+function get_sponsorship_view_count($store_id, $sponsor_id){
+    $sponsor_count = get_post_meta($sponsor_id, 'wpcf-view-count', TRUE);
+    $sponsor_count = json_decode($sponsor_count, true);
+    if(is_array($sponsor_count)){
+        if(array_key_exists($store_id, $sponsor_count)){
+            $sponsor_count[$store_id]++;
+        }else{
+            $sponsor_count[$store_id] = 1;
+        }
+        update_post_meta( $sponsor_id, 'wpcf-view-count', json_encode($sponsor_count));
+    }else{
+        $array = array(
+            $store_id => 1,
+        );
+        update_post_meta( $sponsor_id, 'wpcf-view-count', json_encode($array));
+    }
+}

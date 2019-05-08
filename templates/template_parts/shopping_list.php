@@ -33,17 +33,16 @@
                 if($sponsorship){ 
                     $sponsored_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
                     $sponsor_copy = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
-                    $sponsor_count = get_post_meta($sponsorship, 'wpcf-view-count', TRUE);
-                    if($sponsor_count){
-                        $sponsor_count++;
-                    } else {
-                        $sponsor_count = 1;
-                    }
-                    update_post_meta( $sponsorship, 'wpcf-view-count', $sponsor_count );
+                    $sponsor_link = get_post_meta($sponsorship, 'wpcf-sponsor-url', true);
+                    get_sponsorship_view_count($storeid, $sponsorship);
                     echo "<div class='sponsorship'>";
                     echo "<div><img src='{$sponsored_image}' class='sponsor-image'></div>";
                         echo "<a href='#' class='sponsor-link'>Learn More</a>";
-                        echo "<div class='hide sponsor-copy'>{$sponsor_copy}</div>";
+                        echo "<div class='hide sponsor-copy'>
+                            {$sponsor_copy}
+                            <br />
+                            <a href='{$sponsor_link}' target='_blank' rel='noopener noreferrer'>Learn More...</a>
+                            </div>";
                     echo "</div>";
                 }
                 ?>
