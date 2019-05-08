@@ -7,6 +7,10 @@ body {
     min-height: 100vh;
 }
 
+img{
+  max-width: 100%;
+}
+
 .strong {
   font-weight: 800;
 }
@@ -720,7 +724,7 @@ GUIDES STYLES
   padding-bottom: 350px;
 }
 
-.planting-guide .store-info img {
+.planting-guide .store-info img, .sponsor-image {
   max-height: 100px;
 }
 
@@ -972,3 +976,49 @@ APP PAGES
   flex-basis: 25%;
 }
 
+/***********
+SHOPPING LIST
+************/
+
+#list-container .product-name {
+  color: #254921;
+  line-height: 1;
+  padding: 1em 15px;
+}
+
+.product-name p {
+  line-height: 0;
+}
+
+.product-name .bigger {
+  line-height: 19px;
+  margin-bottom: 0;
+}
+
+.sponsorship {
+  padding: 1em 0 1em 15px;
+}
+
+#list-container .sponsor-image {
+  display: block;
+  margin: auto;
+}
+
+#list-container .product {
+  border-style: solid;
+  border-width: 0 0 0 1px;
+  border-color: #D8D8D8;
+}
+
+body #logo-header {
+  margin-bottom: -15px;
+}
+
+.row.type-header-2, #list-container .row, #buttons.row {
+  max-width: 1020px;
+  margin: auto;
+}
+
+img.keep-going {
+  margin: auto;
+}
