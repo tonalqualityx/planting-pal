@@ -125,7 +125,7 @@ function indppl_save_container_data_ajax(){
             'post_id',
             'intermediary'
         );
-        $available_and_new = array_merge($available, );
+        // $available_and_new = array_merge($available, );
 
         
         // foreach ($default as $key => $value) {
