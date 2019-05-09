@@ -283,8 +283,8 @@ ul.style-free {
 }
 .indppl-add-store-centered, .indppl-add-sponsor-centered{
   border: #4b79b5 3px solid;
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: auto;
   transition: background 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
 }
 .indppl-add-sponsor-centered{
@@ -313,7 +313,7 @@ ul.style-free {
   text-align: center;
 }
 .indppl-add-store-link{
-  width:100px;
+  width:150px;
 }
 .indppl-containers-table{
   width:100%;
