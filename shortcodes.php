@@ -267,7 +267,7 @@ function pp_store_management(){
     }
     if(isset($_POST['submit'])){
         if($store_id == null){$store_id = 0;}
-        if(!empty($_POST['store-id'])){
+        if(isset($_POST['store-id'])){
             $store_id = intval($_POST['store-id']);
         }
         indppl_save_post($store_id);
@@ -374,7 +374,6 @@ function pp_my_stores(){
                     $city = get_post_meta($id, 'wpcf-city', true);
                     $state = get_post_meta($id, 'wpcf-state', true);
                     $link = home_url() . '/store-profile?store-id=' . $id;
-                    // var_dump($img);
                     ?>
                     
                     <div class='indppl-single-store-container'>
@@ -400,13 +399,11 @@ function pp_my_stores(){
                 ?>
                 </div>
                 <?php
-                // remove else to allow the add store link to always be active.
             }else{
                 $add_button = get_add_store_button();
                 echo $add_button;
             }
         ?>
-    <!-- </div> -->
     <?php
     $return = ob_get_clean();
     return $return;
