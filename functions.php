@@ -547,7 +547,7 @@ function indppl_store_info($store_id = NULL){
     }
     // var_dump($logo);
     // wp_handle_upload( $file, $overrides, $time );
-    $top_url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $top_url = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $top_url = explode('?new=true', $top_url);
     ob_start();
 	if(is_int($store_id)){ ?>
