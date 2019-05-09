@@ -647,8 +647,8 @@ function indppl_store_guides(){
 
 
     if(in_array('paidaccountpro', $stati)){
-        $pots = "<a href='#' class='edit-guides pots-guide' data-target='pots'>{$pots_text}</a>";
-        $beds = "<a href='#' class='edit-guides pots-guide' data-target='beds'>{$beds_text}</a>";
+        $pots = "<a href='#' class='edit-guides pots-guide' data-target='pots' data-storeid='{$store}'>{$pots_text}</a>";
+        $beds = "<a href='#' class='edit-guides pots-guide' data-target='beds' data-storeid='{$store}'>{$beds_text}</a>";
     }
     
     ob_start(); ?>

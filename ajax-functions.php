@@ -846,11 +846,11 @@ function indppl_setup_guide_forms_ajax(){
                 include(INDPPL_ROOT_PATH . '/templates/guides/ground.php');
                 break;
             case 'pots':
-
+                include(INDPPL_ROOT_PATH . '/templates/guides/pots.php');
                 break;
 
             case 'beds':
-
+                include INDPPL_ROOT_PATH . '/templates/guides/beds.php';
                 break;
 
         } ?>
@@ -1571,30 +1571,35 @@ function indppl_build_guide_ajax() {
 
         // Use the type & product list to build planting guide
         foreach($plants as $type => $plant){
-            $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
-            $guide_options = str_replace('\\', '' ,$guide_options);
-            $guide_options = json_decode($guide_options, true);
-            ob_start();
-                include(INDPPL_ROOT_PATH . '/templates/template_parts/planting-guide.php');
-            $guide = ob_get_clean();
-            $args = array(
-                'post_type' => 'guide',
-                'post_content' => $guide, 
-            );
-            $new_guide = wp_insert_post( $args ); 
-            
-            $guide_links[] = array(
-                'link' => get_permalink($new_guide),
-                'type' => $type,
-            ); ?>
-            
-            <div class="container" style="padding-bottom: 300px;">
-                <h2>Success!</h2>
-                <p>The link for your planting guide has been emailed to you. Your guide is good for 30 days, then we'll need to ask you to complete the process again.</p>
-                <a href="<?php echo get_permalink($new_guide); ?>" target="_blank">Check out your <?php echo $type; ?> planting guide here!</a>
-            </div>
-        <?php }
-    
+            if(($type == 'ground' && count($plant) > 0) || $plant['qty'] > 0){
+
+                $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
+                $guide_options = str_replace('\\', '' ,$guide_options);
+                $guide_options = json_decode($guide_options, true);
+                ob_start();
+                    include(INDPPL_ROOT_PATH . '/templates/template_parts/planting-guide.php');
+                $guide = ob_get_clean();
+                $args = array(
+                    'post_type' => 'guide',
+                    'post_content' => $guide, 
+                    'post_status' => 'publish',
+                );
+                $new_guide = wp_insert_post( $args ); 
+                
+                $guide_links[] = array(
+                    'link' => get_permalink($new_guide),
+                    'type' => $type,
+                );
+            }
+        } ?>
+        <div class="container" style="padding-bottom: 300px;">
+            <h2>Success!</h2>
+            <p>The link for your planting guide has been emailed to you. Your guide is good for 30 days, then we'll need to ask you to complete the process again.</p>
+            <?php foreach($guide_links as $guides){ ?>
+                <a href="<?php echo $guides['link']; ?>" target="_blank">Check out your <?php echo $guides['type']; ?> planting guide here!</a><br />
+            <?php } ?>
+        </div>
+        <?php
         // Email user the link
         $email_content = "<p>Hey there! Thanks for using the <a href='http://plantingpal.com'>Planting Pal</a> app to calculate your needs. Here are the guide(s) you've generated!</p><ul>";
         foreach($guide_links as $link){

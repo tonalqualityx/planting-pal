@@ -19,21 +19,21 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     $products = array();
     
     $ground = $_POST['ground'];
-    $user_plants['ground'] = $ground;
     $ground = array_filter($ground);
-
+    
     // Quick fix - REFACTOR
     foreach($apprates['ground'] as $prod => $data){
         if(key($data) == 'bag'){
             $apprates['ground'][$prod]['containers'] = $data['bag'];
         }
     }
-
+    
     // var_dump($apprates);
-
+    
     // $ground_rates = array_merge($apprates['ground']['containers']);
-
+    
     foreach($ground as $container => $count){
+        $user_plants['ground'][] = $count;
         foreach($apprates['ground'] as $key => $val) {
             if(array_key_exists($container, $apprates['ground'][$key]['containers'])){
                 $product = get_the_title($key);
@@ -85,6 +85,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     if(isset($_POST['pots']) && isset($apprates['pots'])){
 
         $pots = $_POST['pots'];
+        $user_plants['pots'] = $pots;
 
         // Loop through however many rows of pots were added, then each type of apprate
         $i = 0;
@@ -180,6 +181,8 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     if (isset($_POST['beds']) && isset($apprates['beds'])) {
 
         $beds = $_POST['beds'];
+        $user_plants['beds'] = $pots;
+
         // Loop through however many rows of beds were added, then each type of apprate
         // THE NEXT MAJOR SECTION SHOULD BE REFACTORED TO MERGE WITH THE POTS SECTION
         $i = 0;
