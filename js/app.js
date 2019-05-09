@@ -106,17 +106,47 @@ jQuery(document).ready(function( $ ) {
         $(this).replaceWith('<div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>Sorry, your browser does not support inline SVG.</svg></div>');
     });
     $('body').on('click', '.container-available-in-store', function(){
+        $(this).parents('.indppl-table-color-offset').find('.indppl-dot-container').each(function(){
+            // if($(this).find('.indppl-no-dot-container')){
+                console.log('out');
+                $(this).html('<svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg>')
+            // }
+            if(!$(this).parent().prev().hasClass('indppl-remove-dot')){
+                $(this).parent().prev().addClass('indppl-remove-dot');
+            }
+            if($(this).parent().prev().is(':checked')){
+                $(this).parent().prev().prop('checked', false);
+            }
+            $(this).addClass('indppl-no-dot-container');
+            $(this).removeClass('indppl-dot-container');
+
+        })
         $(this).parent().parent().parent().parent().prepend("<div class='greyed-out-section'></div>");
         $(this).parent().parent().removeClass('indppl-checked');
         $(this).parent().parent().addClass('indppl-unchecked');
         $(this).replaceWith('<div class="container-not-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg></div>');
-        
     });
     $('body').on('click', '.container-not-available-in-store', function(){
+        $(this).parents('.indppl-table-color-offset').find('.indppl-no-dot-container').each(function(){
+            if($(this).find('.indppl-dot-container')){
+                $(this).html('<svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>Sorry, your browser does not support inline SVG.</svg>')
+            }
+            if($(this).parent().prev().hasClass('indppl-remove-dot')){
+                $(this).parent().prev().removeClass('indppl-remove-dot');
+            }
+            if(!$(this).parent().prev().is(':checked')){
+                $(this).parent().prev().prop('checked', true);
+            }
+            $(this).addClass('indppl-dot-container');
+            $(this).removeClass('indppl-no-dot-container');
+            
+
+        })
         $(this).parent().parent().parent().prev().remove();
         $(this).parent().parent().addClass('indppl-checked');
         $(this).parent().parent().removeClass('indppl-unchecked');
         $(this).replaceWith('<div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div>');
+
     });
     $('body').on('click', '#container-submit', function(e){
         e.preventDefault();
@@ -1189,7 +1219,9 @@ jQuery(document).ready(function( $ ) {
             }
         });
     })
-
+    $('body').on('click', '.sponsor-view-count-btn', function(){
+        $(this).parent().next().slideToggle();
+    })
 
 });
 

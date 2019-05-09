@@ -1604,19 +1604,27 @@ function indppl_guide_products($products){
     <?php }
 }
 
-function get_sponsorship_view_count($store_id, $sponsor_id){
+function update_sponsorship_view_count($store_id, $sponsor_id){
     $sponsor_count = get_post_meta($sponsor_id, 'wpcf-view-count', TRUE);
     $sponsor_count = json_decode($sponsor_count, true);
+    // $month = date('F, Y', strtotime("+3 month", strtotime(date('F, Y'))));
+    $month = date('F, Y');
     if(is_array($sponsor_count)){
         if(array_key_exists($store_id, $sponsor_count)){
-            $sponsor_count[$store_id]++;
+            if(array_key_exists($month, $sponsor_count[$store_id])){
+                $sponsor_count[$store_id][$month]++;
+            }else{
+                $sponsor_count[$store_id][$month] = 1;
+            }
         }else{
-            $sponsor_count[$store_id] = 1;
+            $sponsor_count[$store_id][$month] = 1;
         }
         update_post_meta( $sponsor_id, 'wpcf-view-count', json_encode($sponsor_count));
     }else{
         $array = array(
-            $store_id => 1,
+            $store_id => array(
+                $month => 1,
+            ),
         );
         update_post_meta( $sponsor_id, 'wpcf-view-count', json_encode($array));
     }

@@ -268,7 +268,7 @@ function pp_store_management(){
     if(isset($_POST['submit'])){
         if($store_id == null){$store_id = 0;}
         if(!empty($_POST['store-id'])){
-            $store_id = $_POST['store-id'];
+            $store_id = intval($_POST['store-id']);
         }
         indppl_save_post($store_id);
     }

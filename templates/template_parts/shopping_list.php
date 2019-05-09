@@ -34,7 +34,7 @@
                     $sponsored_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
                     $sponsor_copy = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
                     $sponsor_link = get_post_meta($sponsorship, 'wpcf-sponsor-url', true);
-                    get_sponsorship_view_count($storeid, $sponsorship);
+                    update_sponsorship_view_count($storeid, $sponsorship);
                     echo "<div class='sponsorship'>";
                     echo "<div><img src='{$sponsored_image}' class='sponsor-image'></div>";
                         echo "<a href='#' class='sponsor-link'>Learn More</a>";

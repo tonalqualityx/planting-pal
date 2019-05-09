@@ -1824,17 +1824,45 @@ function indppl_get_sponsorship(){
                     if(is_array($sponsor_count_array)){
                         foreach($sponsor_count_array as $key => $value){
                             $title = get_the_title($key);
+                            $store_total = 0;
+                            foreach($value as $month => $num){
+                                $store_total += $num;
+                            }
                             ?>
-                            <tr class="indppl-table-color-offset">
+                            <tr class="sponsor-view-count-btn indppl-table-color-offset">
                                 <td class='padding-left-10'>
                                     <?php echo $title . ":"; ?>
                                 </td>
                                 <td class='padding-left-10'>
-                                    <?php echo $value; ?>
+                                    <?php echo $store_total; ?>
                                 </td>
                             </tr>
+                            <tbody class='sponsor-view-count-hidden'>
+                                <?php
+                                $count = 0;
+                                foreach($value as $month2 => $num2){
+                                    $offset = '';
+                                    if($count % 2 == 1){
+                                        $offset = 'offset_background';
+                                    }
+                                    ?>
+                                    <tr class='<?php echo $offset; ?> indppl-table-color-offset'>
+                                        <td class='padding-left-20'>
+                                            <?php echo $month2 . ":"; ?>
+                                        </td>
+                                        <td class='padding-left-20'>
+                                            <?php echo $num2; ?>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                    $count++;
+                                }
+                                
+                                ?>
+                            </tbody>
+                            
                             <?php
-                            $total += $value;
+                            $total += $store_total;
                         }
                     }else{
                         ?>

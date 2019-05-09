@@ -356,7 +356,7 @@ span.padding-right-5{
 .display-none{
   display:none;
 }
-.indppl-table-color-offset:nth-of-type(even){
+.indppl-table-color-offset:nth-of-type(even), .offset-background{
   background: rgba(151, 180, 210, 0.28);
 }
 .margin-0{
@@ -573,7 +573,7 @@ span.padding-right-5{
   margin-right: 5px;
   min-width: 50px;
 }
-.product-create-standard-unit-container{
+.product-create-standard-unit-container, .sponsor-view-count-hidden{
   display: none;
 }
 .product-create-standard-unit-add{
@@ -1039,6 +1039,12 @@ img.keep-going {
 .padding-left-10{
   padding-left: 10px;
 }
+.padding-left-20{
+  padding-left: 20px;
+}
 .ind-bold{
   font-weight: 600;
+}
+.sponsor-view-count-btn{
+  cursor: pointer;
 }
