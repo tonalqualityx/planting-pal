@@ -254,8 +254,8 @@ function indppl_import() {
 
 function pp_store_management(){
     $store_id = '';
+    $user_id = get_current_user_id();
     if(isset($_GET['store-id'])){
-        $user_id = get_current_user_id();
         $author_id = get_post_field('post_author', intval($_GET['store-id']));
         if($user_id == $author_id || current_user_can('administrator')){
             $store_id = intval(htmlspecialchars($_GET['store-id']));
@@ -327,8 +327,9 @@ function pp_store_management(){
         </div>
         <?php
         $return = ob_get_clean();
+    }else if($_GET['new'] == true){
+        $return = indppl_store_info($store_id);
     }else{
-    //    var_dump($store_id);
         ob_start();
         ?>
         <div class='indppl-store-management-container'>
@@ -339,9 +340,6 @@ function pp_store_management(){
         </div>
         <?php
         $return = ob_get_clean();
-        if(!$store_info){
-            $return = indppl_store_info($store_id);
-        }
     }
     
     
@@ -361,6 +359,7 @@ function pp_my_stores(){
                 'orderby' => 'post-date',
             );
             $stores = new WP_Query($args);
+            $status = indppl_user_status($user_id);
             if($stores->have_posts()){
                 ?>
                 <div class='indppl-my-stores-container'>
@@ -394,28 +393,17 @@ function pp_my_stores(){
                     <?php
                 }
                 wp_reset_postdata();
+                if(in_array('paidaccountpro', $status)){
+                    $add_button = get_add_store_button();
+                    echo $add_button;
+                }
                 ?>
                 </div>
                 <?php
                 // remove else to allow the add store link to always be active.
             }else{
-                ?>
-                <!-- save for later -->
-                <!-- <div class='indppl-my-stores-container'> -->
-                <!-- <div class='indppl-add-store-container'>
-                    <a class='indppl-add-store-link' href='<?php
-                    //  echo home_url() . "/test2/"; 
-                     ?>'>
-                        <div class='indppl-add-store-centered'>
-                            <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
-                            </svg>
-                        </div>
-                        <h4 class='indppl-add-store-text'>Add Store</h4>
-                    </a>
-                </div> -->
-                <?php
-                return null;
+                $add_button = get_add_store_button();
+                echo $add_button;
             }
         ?>
     <!-- </div> -->

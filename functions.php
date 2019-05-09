@@ -547,7 +547,8 @@ function indppl_store_info($store_id = NULL){
     }
     // var_dump($logo);
     // wp_handle_upload( $file, $overrides, $time );
-	
+    $top_url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $top_url = explode('?new=true', $top_url);
     ob_start();
 	if(is_int($store_id)){ ?>
 		<h1>Edit Store Information</h1>
@@ -556,7 +557,7 @@ function indppl_store_info($store_id = NULL){
     	<p>We just need to get a few quick details to configure your store then you can begin building out your products and rates.</p>
 	<?php } ?>
 		<!-- <form method="post" action='#' id='store-management-form' class="form-horizontal"> -->
-    <form  method="post" action='#' id='store-management-form' class="form-horizontal" enctype="multipart/form-data">
+    <form  method="post" action='<?php echo $top_url[0]; ?>' id='store-management-form' class="form-horizontal" enctype="multipart/form-data">
 		<fieldset>
 			<!-- Text input-->
 			<div class="form-group">
@@ -1619,4 +1620,26 @@ function get_sponsorship_view_count($store_id, $sponsor_id){
         );
         update_post_meta( $sponsor_id, 'wpcf-view-count', json_encode($array));
     }
+}
+
+function get_add_store_button(){
+    ob_start();
+    ?>
+    <div class='indppl-my-stores-container'>
+        <div class='indppl-add-store-container'>
+            <a class='indppl-add-store-link' href='<?php
+                echo home_url() . "/store-profile/?new=true";
+            ?>'>
+                <div class='indppl-add-store-centered'>
+                    <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
+                    </svg>
+                </div>
+                <h4 class='indppl-add-store-text'>Add Store</h4>
+            </a>
+        </div>
+    </div>
+    <?php
+    $return = ob_get_clean();
+    return $return;
 }
