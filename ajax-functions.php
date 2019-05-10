@@ -1565,6 +1565,16 @@ function indppl_build_guide_ajax() {
         $guides = array(); // set the array so we can fill it up and create multiple guides
 
         // Stash the shopping list, email address, and store in the DB for later marketing
+        $market_args = array(
+            'user_email' => $email,
+            'store_id' => $store,
+            'shopping_list' => json_encode($list),
+            'plants' => json_encode($plants),
+        );
+
+        // var_dump(json_encode($list));
+        // var_dump($market_args);
+        $save_data = indppl_insert_marketing_data($market_args);
     
         // Load this array so you can build the email
         $guide_links = array();

@@ -16,11 +16,18 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 define('INDPPL_ROOT_PATH', plugin_dir_path(__FILE__));
 define('INDPPL_ROOT_URL', plugin_dir_url(__FILE__));
 
+// General Required Files
 require_once(INDPPL_ROOT_PATH . "/functions.php");
 require_once(INDPPL_ROOT_PATH . "/shortcodes.php");
 require_once(INDPPL_ROOT_PATH . "/conversion.php");
 require_once(INDPPL_ROOT_PATH . "/ajax-functions.php");
 require_once(INDPPL_ROOT_PATH . "/admin-functions.php");
+require_once(INDPPL_ROOT_PATH . "/data/db-functions.php");
+
+// Admin Required Files
+if(is_admin()){
+    require_once(INDPPL_ROOT_PATH . "/data/db.php");
+}
 
 function indppl_enqueue(){
     wp_enqueue_style('indppl-style', INDPPL_ROOT_URL . 'css/style.css');
