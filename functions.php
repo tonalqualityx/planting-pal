@@ -550,10 +550,12 @@ function indppl_store_info($store_id = NULL){
     $top_url = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $top_url = explode('?new=true', $top_url);
     ob_start();
+    ?>
+    <?php
 	if(is_int($store_id)){ ?>
-		<h1>Edit Store Information</h1>
+		<h3>Edit Store Information</h3>
 	<?php }else{ ?>
-    	<h1>Welcome to Planting Pal!</h1>
+    	<h3>Welcome to Planting Pal!</h3>
     	<p>We just need to get a few quick details to configure your store then you can begin building out your products and rates.</p>
 	<?php } ?>
 		<!-- <form method="post" action='#' id='store-management-form' class="form-horizontal"> -->

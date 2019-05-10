@@ -12,10 +12,13 @@ function planting_pal_home($lat=NULL, $lon=NULL){
                     <div class="col"><img src="<?php echo INDPPL_ROOT_URL ?>assets/img/wizard-location.png"></div>
                 </div>
                 <div class="row search-form">
-                    <div class="col">
-                    <form action="<?php site_url(); ?>" method="post">
-                    <input class="form-control rounded-input4" id='zip-for-location' type="text" name="zip" placeholder="Zipcode"><i class="material-icons" id="location-icon">my_location</i>
-                    <input type="image" src="<?php echo INDPPL_ROOT_URL ?>assets/img/enter-geo.png" alt="Submit" border="0" class="geo-submit">
+                    <div class="col" id='app-location-submitter'>
+                        <form action="<?php site_url(); ?>" method="post">
+                        <div class='fix-position-geo'>
+                            <input class="form-control rounded-input4" id='zip-for-location' type="text" name="zip" placeholder="Zipcode">
+                            <img src="<?php echo home_url() . '/wp-content/plugins/planting-pal/assets/img/gps.png'; ?>" id="location-icon">
+                        </div>
+                        <input type="image" src="<?php echo INDPPL_ROOT_URL ?>assets/img/enter-geo.png" alt="Submit" border="0" class="geo-submit">
                     </form>
                 </div>
             </div>
@@ -298,6 +301,8 @@ function pp_store_management(){
         <div class='indppl-tab-content'>
             <div id='indppl-tab-1' class='indppl-tab-pane indppl-active'>
                 <div class='indppl-store-management-container'>
+                <h2>Store Management</h2>
+                <p>This is a place for instructions</p>
                     <?php
                     $store_info  = indppl_store_info($store_id);
                     echo $store_info;
@@ -306,19 +311,22 @@ function pp_store_management(){
             </div>
             <div id='indppl-tab-2' class='indppl-tab-pane'>
                 
-                <p>Sizes</p>
+                <h2>Sizes</h2>
+                <p>This is a place for instructions</p>
                 <?php
                 $containers = do_shortcode('[pp-store-containers]');
                 echo $containers;
                 ?>
             </div>
             <div id='indppl-tab-3' class='indppl-tab-pane'>
-                
+                <h2>Products</h2>
+                <p>This is a place for instructions</p>
                 <?php echo do_shortcode('[pp-store-products]'); ?>
             </div>
             <div id='indppl-tab-4' class='indppl-tab-pane'>
                 
-                <p>Guides</p>
+                <h2>Guides</h2>
+                <p>This is a place for instructions</p>
                 <?php 
                 $guides = do_shortcode('[pp-store-guides]');
                 echo $guides; 
@@ -328,11 +336,20 @@ function pp_store_management(){
         <?php
         $return = ob_get_clean();
     }else if($_GET['new'] == true){
-        $return = indppl_store_info($store_id);
+        ob_start();
+        ?>
+        <h2>Store Management</h2>
+        <p>This is a place for instructions</p>
+        <?php
+        $store_info = indppl_store_info($store_id);
+        echo $store_info;
+        $return = ob_get_clean();
     }else{
         ob_start();
         ?>
         <div class='indppl-store-management-container'>
+            <!-- <h2>My Stores</h2>
+            <p>This is a place for instructions</p> -->
             <?php
             $store_info  = do_shortcode('[pp-my-stores]');
             echo $store_info;
@@ -374,19 +391,26 @@ function pp_my_stores(){
                     $city = get_post_meta($id, 'wpcf-city', true);
                     $state = get_post_meta($id, 'wpcf-state', true);
                     $link = home_url() . '/store-profile?store-id=' . $id;
+                    $permalink = get_the_permalink($id);
                     ?>
-                    
                     <div class='indppl-single-store-container'>
+                        <?php
+                        if($img){
+                            ?>
                         <div class='flex-half'>
                             <div class='indppl-store-thumb'>
-                                <img src='<?php echo $img; ?>'>
+                                    <img src='<?php echo $img; ?>'>
                             </div>
                         </div>
+                            <?php
+                        }
+                        ?>
                         <div class='flex-half flex-half-text'>
                             <h4 class='indppl-small-title'><?php echo $title; ?></h4>
                             <p class='indppl-small-store-text'><?php echo $address1; ?></p>
                             <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
-                            <a id='indppl-small-store-link' class='button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
+                            <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">View</a>
+                            <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
                         </div>
                     </div>
                     <?php

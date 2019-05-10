@@ -107,11 +107,11 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     }
                     
                     // Convert capacity to cups because that's what Chuck did...
-                    $ci = $pots['qty'][$i] * $pots['length'][$i] * $pots['width'][$i] * $pots['height'][$i];
+                    $ci = intval($pots['qty'][$i]) * intval($pots['length'][$i]) * intval($pots['width'][$i]) * intval($pots['height'][$i]);
 
                     $cuft = getVolume($ci, 'ci', 'cuft');
 
-                    $sqft = ($pots['qty'][$i] * $pots['length'][$i] * $pots['width'][$i])/144;
+                    $sqft = (intval($pots['qty'][$i]) * intval($pots['length'][$i]) * intval($pots['width'][$i]))/144;
     
                     switch($type){
                         
@@ -203,11 +203,11 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     }
 
                     // Convert capacity to cups because that's what Chuck did...
-                    $ci = $beds['qty'][$i] * $beds['length'][$i] * $beds['width'][$i] * $beds['height'][$i];
+                    $ci = intval($beds['qty'][$i]) * intval($beds['length'][$i]) * intval($beds['width'][$i]) * intval($beds['height'][$i]);
 
                     $cuft = getVolume($ci, 'ci', 'cuft');
 
-                    $sqft = ($beds['qty'][$i] * $beds['length'][$i] * $beds['width'][$i]) / 144;
+                    $sqft = (intval($beds['qty'][$i]) * intval($beds['length'][$i]) * intval($beds['width'][$i])) / 144;
 
                     switch ($type) {
 

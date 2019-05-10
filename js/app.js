@@ -860,12 +860,16 @@ jQuery(document).ready(function( $ ) {
 
 
 
-    jQuery.fn.scrollTo = function (elem, speed) {
-        console.log('scroll');
-        // $(this).animate({
-        //     scrollTop: $(this).scrollTop() - $(this).offset().top + $(elem).offset().top
+    function scrollTo(elem, speed) {
+        // $('.overflow').animate({
+        //     scrollTop: $(elem).Top
         // }, speed == undefined ? 1000 : speed);
         // return this;
+        var num = $(elem).offset().top;
+        while($(elem).offset().top > 100){
+            $('.overflow').scrollTop(num);
+            num += 25;
+        }
     };
 
 
@@ -874,12 +878,13 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var target = $(this).data('target');
         var header = $(this).data('header');
-        // console.log(target);
+        console.log(header);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
+
         // $('.planting-guide-preview').scrollTop($('.planting-guide-preview').scrollTop() + $('#' + header).position().top);
 
-        $('#planting-guide').scrollTo('#' + header, 400);
+        scrollTo('#' + header, 400);
 
         
     });
@@ -997,7 +1002,10 @@ jQuery(document).ready(function( $ ) {
                 email : email
             }, 
             success : function(response) {
-                $('#list-container').html(response);
+                $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
+                $('.keep-going').hide();
+                $('.email-address-add').hide();
+                $('#get-planting-guide').hide();
             }
         });
 

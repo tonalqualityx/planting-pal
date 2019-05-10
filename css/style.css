@@ -196,13 +196,23 @@ ul.style-free {
 }
 
 #location-icon{
-    position: absolute;
-    right: 20px;
-    top: 5px;
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+  margin-top: 20px;
+}
+.fix-position-geo{
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+#app-location-submitter{
+  display: flex;
+  align-items: start;
 }
 #zip-for-location{
-    margin-left: 0;
-    width: 85%;
+    /* margin-left: 0; */
+    max-width: 200px;
     /* margin: auto; */
     margin-top: 20px;
     border-radius: 8px;
@@ -266,10 +276,13 @@ ul.style-free {
 .indppl-small-title{
   font-weight: 600;
 }
-#indppl-small-store-link{
+.indppl-small-store-link, .indppl-small-store-perma-link{
   padding-top: 0PX;
   Padding-bottom: 0px;
-  width: 80%;
+  width: 40%;
+  height: 30px;
+  padding-top: 4px!important;
+  margin-top: 5px;
   text-align: center;
 }
 .indppl-store-thumb{
@@ -719,9 +732,13 @@ GUIDES STYLES
   padding-right: 0;
 }
 
-
+.planting-guide-sent-text{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
 .planting-guide-preview .planting-guide-content {
-  padding-bottom: 350px;
+  padding-bottom: 1000px;
 }
 
 .planting-guide .store-info img, .sponsor-image {
