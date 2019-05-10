@@ -9,7 +9,7 @@ function indppl_install() {
     if (!$db_version) {
         update_option('indppl_db_version', '1.0');
     }
-
+    // var_dump($db_version);
     if (version_compare($db_version, '1.0') != 0) {
 
         $charset_collate = $wpdb->get_charset_collate();
@@ -17,15 +17,16 @@ function indppl_install() {
 
         $sql = "CREATE TABLE $table_name (
 
-		  remarketing_id bigint(20) NOT NULL AUTO_INCREMENT,
-		  user_email varchar(255) NOT NULL,
-		  store_id bigint(20) NOT NULL,
-		  shopping_list LONGTEXT,
-          plants LONGTEXT,
-          process_date TIMESTAMP,
-		  PRIMARY KEY  (remarketing_id)
+            remarketing_id bigint(20) NOT NULL AUTO_INCREMENT,
+            user_email varchar(255) NOT NULL,
+            store_id bigint(20) NOT NULL,
+            shopping_list longtext,
+            plants longtext,
+            process_date timestamp,
+            PRIMARY KEY  (remarketing_id)
 		) $charset_collate;";
 
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
 
         $table_name = $wpdb->prefix . 'indppl_sponsor_stats';
@@ -34,7 +35,7 @@ function indppl_install() {
 			sponsor_stats_id bigint(20) NOT NULL AUTO_INCREMENT,
 			sponsorship_id bigint(20) NOT NULL,
 			store_id bigint(20) NOT NULL,
-            display_date TIMESTAMP,
+            display_date timestamp,
 			PRIMARY KEY  (sponsor_stats_id)
 		) $charset_collate";
 
