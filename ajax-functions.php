@@ -1567,10 +1567,12 @@ function indppl_build_guide_ajax() {
         // Stash the shopping list, email address, and store in the DB for later marketing
         $market_args = array(
             'user_email' => $email,
-            'store_id' => $store,
-            'shopping_list' => $list,
+            'store_id' => json_encode($store),
+            'shopping_list' => json_encode($list),
             'plants' => $plants,
         );
+
+        // var_dump(json_encode($list));
         // var_dump($market_args);
         $save_data = indppl_insert_marketing_data($market_args);
     
@@ -1602,7 +1604,6 @@ function indppl_build_guide_ajax() {
         } ?>
         <div class="container" style="padding-bottom: 300px;">
             <h2>Success!</h2>
-            <h4><?php var_dump($save_data); ?></h4>
             <p>The link for your planting guide has been emailed to you. Your guide is good for 30 days, then we'll need to ask you to complete the process again.</p>
             <?php foreach($guide_links as $guides){ ?>
                 <a href="<?php echo $guides['link']; ?>" target="_blank">Check out your <?php echo $guides['type']; ?> planting guide here!</a><br />
