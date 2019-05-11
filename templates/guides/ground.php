@@ -8,7 +8,10 @@ $address2 = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone = get_post_meta($store, 'wpcf-phone', TRUE);
 $email = get_post_meta($store, 'wpcf-email', TRUE);
 $website = get_post_meta($store, 'wpcf-weburl', TRUE);
-
+$saved_data = get_post_meta($store, 'wpcf-planting-guide-ground-options', TRUE);
+$saved_data = str_replace(array("\'", "u201d","u2019"), array("'",'\"',"'"), $saved_data);
+$saved_data = json_decode($saved_data);
+var_dump($saved_data);
 ?> 
 
 
@@ -45,11 +48,25 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
             <h1 style="text-align: center;">Planting Guide</h1>
         </div>
         <div class="planting-guide-content">
-            <?php foreach($sections as $section => $options){
+            <?php 
+            $sec = 0;
+            foreach($sections as $section => $options){
                 $format_section = str_replace(array(' ',':'), array('-',''), $section);
                 echo "<h3 class='orange-text' id='{$format_section}-header'>$section</h3>";
-                echo "<div id='$format_section' class='guide-step-instructions'></div>";
-                echo "<div id='{$format_section}-products' class='guide-product-instructions'></div>";
+                echo "<div id='$format_section' class='guide-step-instructions'>";
+                if($saved_data[$sec]){
+                    echo $saved_data[$sec]->description;
+                }
+                echo "</div>";
+                echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
+                if($saved_data[$sec]->products){
+                    // var_dump($saved_data[$sec]->products);
+                    foreach($saved_data[$sec]->products as $saved_prod){
+                        echo $saved_prod->id . " " . $saved_prod->instructions;
+                    }
+                }
+                echo "</div>";
+                $sec++;
             } ?>
         </div>
     </div>
@@ -61,12 +78,12 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
     $i = 0;
     foreach($sections as $section => $options){ 
         $format_section = str_replace(array(' ',':'), array('-',''), $section); ?>
-        <h3 style="display:none;"><?php echo $section; ?></h3>
         <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >
-            <p>Customize this step by selection an option below:</p>
+            <h3><?php echo $section; ?></h3>
+            <p>Customize this step by selecting an option below:</p>
             <ul class="style-free" data-products="products-<?php echo $i; ?>">
 
-                <li class="planting-guide-instructions indppl-flex indppl-align-center">
+                <li class="planting-guide-instructions indppl-flex indppl-align-center indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>"> <label for="radio-<?php echo $options['id']; ?>-a" >Option A</label>
                     </div>
@@ -75,7 +92,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
                     </div>
                 </li>
 
-                <li class="planting-guide-instructions  indppl-flex indppl-align-center">
+                <li class="planting-guide-instructions  indppl-flex indppl-align-center indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description'> <label for="radio-<?php echo $options['id']; ?>-b" >Option B</label>
                     </div>
@@ -96,7 +113,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
                     }
                     ?>
                     
-                    <div class="indppl-flex planting-guide-products indppl-align-center">
+                    <div class="indppl-flex planting-guide-products indppl-align-center indppl-no-wrap">
                         <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
                         <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $product->post_title; ?></label>
                         <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>

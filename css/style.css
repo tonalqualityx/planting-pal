@@ -20,6 +20,10 @@ img{
   flex-wrap: wrap;
 }
 
+.indppl-no-wrap {
+  flex-wrap: unset;
+}
+
 .indppl-space-between {
   justify-content: space-between;
 }
@@ -535,6 +539,7 @@ span.padding-right-5{
 }
 .modal-close, .sponsor-modal-close{
   position: fixed;
+  line-height: 1;
   left: 86%;
   width: 24px;
   padding: 1px 5px;
