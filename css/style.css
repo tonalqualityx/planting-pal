@@ -1070,3 +1070,24 @@ img.keep-going {
 .sponsor-view-count-btn{
   cursor: pointer;
 }
+
+/***********
+PROGRESS BAR
+***********/
+
+.indppl-progress {
+  min-height: 40px;
+  border-radius: 15px;
+  background: #efefef;
+}
+
+.indppl-progress-fill {
+  background:#4a8943;
+  min-height: 40px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

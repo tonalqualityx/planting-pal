@@ -282,14 +282,21 @@ function pp_store_management(){
         $setup = get_post_meta($store_id, 'wpcf-issetup', true);
         if($setup){
             ?>
-            <p>Your store is Live. To make your site private hit the button below.</p>
+            <p>Your store is Live. To make your store private hit the button below.</p>
             <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Private</a>
             <?php
         }else{
-            ?>
-            <p>Your store is not live. If you have filled out all the information below you can make your store live with this button.</p>
-            <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
-        <?php } ?>
+            $progress = indppl_store_progress_bar($store_id, TRUE);
+            if($progress['complete'] == 100){ ?>
+                <p>Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready!</p>
+                <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
+
+            <?php } else {
+                echo "<h2>Store Setup Progress</h2>";
+                echo $progress['bar'];
+            }
+        
+        } ?>
 
         <ul class='indppl-nav indppl-nav-tabs'>
             <li class="indppl-active"><a href='#indppl-tab-1'>Store Info</a></li>
