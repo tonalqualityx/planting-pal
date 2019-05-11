@@ -11,7 +11,7 @@ $website = get_post_meta($store, 'wpcf-weburl', TRUE);
 $saved_data = get_post_meta($store, 'wpcf-planting-guide-ground-options', TRUE);
 $saved_data = str_replace(array("\'", "u201d","u2019"), array("'",'\"',"'"), $saved_data);
 $saved_data = json_decode($saved_data);
-var_dump($saved_data);
+// var_dump($saved_data);
 ?> 
 
 
@@ -61,9 +61,15 @@ var_dump($saved_data);
                 echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
                 if($saved_data[$sec]->products){
                     // var_dump($saved_data[$sec]->products);
+                    $saved_prods = array();
                     foreach($saved_data[$sec]->products as $saved_prod){
-                        echo $saved_prod->id . " " . $saved_prod->instructions;
+                        $saved_prods[] = array(
+                            'product' => $saved_prod->id,
+                            'instructions' => $saved_prod->instructions,
+                        );
                     }
+
+                    indppl_guide_products($saved_prods);
                 }
                 echo "</div>";
                 $sec++;

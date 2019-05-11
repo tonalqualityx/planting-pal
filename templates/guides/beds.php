@@ -9,7 +9,7 @@ $phone       = get_post_meta($store, 'wpcf-phone', TRUE);
 $email       = get_post_meta($store, 'wpcf-email', TRUE);
 $website     = get_post_meta($store, 'wpcf-weburl', TRUE);
 $saved_data = get_post_meta($store, 'wpcf-planting-guide-beds-options', TRUE);
-$saved_data = str_replace("\'", "'", $saved_data);
+$saved_data = str_replace(array("\'", "u201d", "u2019"), array("'", '\"', "'"), $saved_data);
 $saved_data = json_decode($saved_data);
 
 ?>
@@ -58,7 +58,20 @@ $saved_data = json_decode($saved_data);
                     echo $saved_data[$sec]->description;
                 }
                 echo "</div>";
-                echo "<div id='{$format_section}-products' class='guide-product-instructions'></div>";
+                echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
+                if($saved_data[$sec]->products){
+                    // var_dump($saved_data[$sec]->products);
+                    $saved_prods = array();
+                    foreach($saved_data[$sec]->products as $saved_prod){
+                        $saved_prods[] = array(
+                            'product' => $saved_prod->id,
+                            'instructions' => $saved_prod->instructions,
+                        );
+                    }
+                    
+                    indppl_guide_products($saved_prods);
+                }
+                echo "</div>";
                 $sec++;
             }?>
         </div>
