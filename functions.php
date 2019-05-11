@@ -1653,3 +1653,171 @@ function get_add_store_button(){
     $return = ob_get_clean();
     return $return;
 }
+
+function indppl_store_progress_bar($store, $next_step = false){
+
+    // Setup the basics
+
+    $meta = get_post_meta($store);
+    $total = 4;
+    $sub = indppl_user_status(get_current_user_id(  ));
+    $pro = FALSE;
+    if(in_array('paidaccountpro', $sub)){
+        $pro = TRUE;
+        $total = 9;
+    }
+    $complete = 0;
+    $containers = toolset_get_related_posts($store, 'store-container', ['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child'] );
+    $apprates = json_decode($meta['wpcf-apprates'][0], TRUE);
+
+    $steps = array();
+
+    // Containers
+    if(count($containers) > 0){
+        $complete++;
+        $steps['containers'] = TRUE;
+    } else {
+        $steps['containers'] = FALSE;
+    }
+
+    // var_dump($meta);
+
+    // In Ground Products
+    if(isset($apprates['ground']) && count($apprates['ground']) > 0){
+        
+        $complete++;
+        $steps['ground'] = TRUE;
+            
+    } else {
+
+        $steps['ground'] = FALSE;
+
+    }
+
+    // IF STORE IS PREMIUM
+    if($pro){
+
+        // Pots Products
+        if(isset($apprates['pots']) && count($apprates['pots']) > 0){
+            $complete++;
+            $steps['pots'] = TRUE;
+        } else {
+            $steps['pots'] = FALSE;
+        }
+    
+        // Pots Apprates
+        if(isset($apprates['pots']['filler']) && count($apprates['pots']['filler']) > 0){
+            $complete++;
+            $steps['pots-rates'] = TRUE;
+        } else {
+            $steps['pots-rates'] = FALSE;
+        }
+
+        // Pots Products
+        if (isset($apprates['beds']) && count($apprates['beds']) > 0) {
+            $complete++;
+            $steps['beds'] = TRUE;
+        } else {
+            $steps['beds'] = FALSE;
+        }
+    
+        // Beds Products
+        if (isset($apprates['beds']['filler']) && count($apprates['beds']['filler']) > 0) {
+            $complete++;
+            $steps['beds-rates'] = TRUE;
+        } else {
+            $steps['beds-rates'] = FALSE;
+        }
+    }
+
+
+    // In Ground Planting Guide
+    if(isset($meta['wpcf-planting-guide-ground-options']) && $meta['wpcf-planting-guide-ground-options'] != ''){
+        $complete++;
+        $steps['guide-ground'] = TRUE;
+    } else {
+        $steps['guide-ground'] = FALSE;
+    }
+
+    // IF STORE IS PREMIUM
+    if($pro){
+
+        // Pots Planting Guide
+        if (isset($meta['wpcf-planting-guide-pots-options']) && $meta['wpcf-planting-guide-pots-options'] != '') {
+            $complete++;
+            $steps['guide-pots'] = TRUE;
+        } else {
+            $steps['guide-pots'] = FALSE;
+        }
+    
+        // Beds Planting Guide
+        if (isset($meta['wpcf-planting-guide-beds-options']) && $meta['wpcf-planting-guide-beds-options'] != '') {
+            $complete++;
+            $steps['guide-beds'] = TRUE;
+        } else {
+            $steps['guide-beds'] = FALSE;
+        }
+    }
+
+    
+    $percentage = round(($complete/$total) * 100, 0);
+    $styles = '';
+    if($percentage == 100){
+        $styles = "border-top-right-radius:15px;border-bottom-right-radius:15px;";
+    }
+    $bar = "<div class='indppl-progress'><div class='indppl-progress-fill' style='width:{$percentage}%;{$styles}'><span>{$percentage}%</span></div></div>";
+
+    if($next_step){
+
+        $next_incomplete = '';
+        foreach($steps as $title => $step){
+            if(!$step){
+                $next_incomplete = $title;
+                break;
+            }
+        }
+        
+        switch($next_incomplete){
+            case '' :
+                $next = "Start by adding some containers under the 'Plant Containers' tab below.";
+                break;
+            case 'containers' :
+                $next = "Next up - select which container sizes you carry. Do this under the 'Plant Containers' tab.";
+                break;
+            case 'ground' :
+                $next = "Great work! Next you'll need to add some in-ground products. Do that under the 'Products' tab below.";
+                break;
+            case 'pots' :
+                $next = "Next you'll need to setup the products you recommend for potted plants. Find this just below the in ground products.";
+                break;
+            case 'pots-rates' :
+                $next = "Great! Now be sure to setup your recommended application rates for potted plants.";
+                break;
+            case 'beds' :
+                $next = "Coming along! Now add your recommended products for raised beds.";
+                break;
+            case 'beds-rates' :
+                $next = "Excellent. Now wrap up your product recommendations by setting up your recommended application rates for raised beds.";
+                break;
+            case 'guide-ground' :
+                $next = "Almost done! Now move to the 'Guides' tab and setup your planting guide for in-ground products";
+                break;
+            case 'guide-pots' :
+                $next = "Making great progress! The planting guide for potted plants is next on your to-do list!";
+                break;
+            case 'guide-beds' :
+                $next = "Just about there. Wrap up your planting guides by setting up your recommendations for raised beds.";
+                break;
+        }
+
+        $bar .= "<div class='next-step'><p>{$next}</p></div>";
+    }
+
+    $response = array(
+        'bar' => $bar,
+        'complete' => $percentage,
+    );
+
+    return $response;
+    
+}

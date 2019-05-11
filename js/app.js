@@ -891,6 +891,9 @@ jQuery(document).ready(function( $ ) {
 
     $("body").on('click', '.planting-guide-instructions input[type=radio]', function() {
         var content = $("#" + $(this).data('content')).text();
+        if(content == ''){
+            content = '<p>' + $('#' + $(this).data('content')).val() + '</p>';
+        }
         var target = $(this).data('target');
         $("#" + target).html(content);
         var products = $(this).parents('ul').data('products');
@@ -912,6 +915,7 @@ jQuery(document).ready(function( $ ) {
         var content = '';
         var description = '';
         var title = '';
+        var custom = '';
         $('.planting-guide-options').each(function(){
             content = '';
             step = $(this).data('step');
@@ -920,6 +924,8 @@ jQuery(document).ready(function( $ ) {
             $(this).find('.guide-step-description').each(function(){
                 if($(this).is(':checked')){
                     content =  $(this).data('content');
+                    // custom = $(this).data('custom');
+                    console.log(custom);
                 }
             });
             var products = new Array();
@@ -932,7 +938,11 @@ jQuery(document).ready(function( $ ) {
                     products.push({id : id, instructions : instructions});
                 }
             });
-            description = $('#' + content + ' p').text();
+            // if(false){
+                description = $('#' + content + ' p').text();
+            // } else {
+                // description = $('#' + content).val();
+            // }
             steps.push({title: title, step : step, description : description, products : products });
         });
         

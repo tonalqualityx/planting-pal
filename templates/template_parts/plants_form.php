@@ -59,8 +59,54 @@
             <div class="container">
                 <?php 
                 //Get the containers!
-                $containers = toolset_get_related_posts($storeid, 'store-container', ['query_by_role' => 'parent', 'role_to_return' => 'other', 'return' => 'post_object']);
-                foreach($containers as $container){ ?>
+                
+                
+                $args = array(
+                    'query_by_role' => 'parent',
+                    'role_to_return' => 'other',
+                    'return' => 'post_id',
+                );
+                
+                $pro = FALSE;
+                $author = $post->post_author;
+                $stati = indppl_user_status($author);
+                if(in_array('paidaccountpro', $stati)){
+                    $pro = TRUE; // Make life easier later...
+                    $now = date('m/d');
+                    $store_meta = get_post_meta($storeid);
+                    $spring_start = date('m/d',strtotime($store_meta['wpcf-spring-start'][0]));
+                    $spring_end = date('m/d', strtotime($store_meta['wpcf-spring-end'][0]));
+                    $summer_start = date('m/d',strtotime($store_meta['wpcf-summer-start'][0]));
+                    $summer_end = date('m/d', strtotime($store_meta['wpcf-summer-end'][0]));
+                    $fall_start = date('m/d',strtotime($store_meta['wpcf-fall-start'][0]));
+                    $fall_end = date('m/d', strtotime($store_meta['wpcf-fall-end'][0]));
+                    $winter_start = date('m/d',strtotime($store_meta['wpcf-winter-start'][0]));
+                    $winter_end = date('m/d', strtotime($store_meta['wpcf-winter-end'][0]));
+                    
+                    $available = 'wpcf-available-in-spring';
+                    if($now >= $spring_start && $now <= $spring_end){
+                        $available = 'wpcf-available-in-spring';
+                    } elseif($now >= $summer_start && $now <= $summer_end){
+                        $available = 'wpcf-available-in-summer';
+                    } elseif($now >= $fall_start && $now <= $fall_end){
+                        $available = 'wpcf-available-in-fall';
+                    } elseif($now >= $winter_start && $now <= $winter_end){
+                        $available = 'wpcf-available-in-winter';
+                    }
+                    $args['role_to_return'] = 'intermediary';
+                    $args['return'] = 'post_object';
+                    $args['args'] = ['meta_key' => $available, 'meta_value' => 1];
+                    $relationships = toolset_get_related_posts($storeid, 'store-container', $args);
+                    $containers = array();
+                    foreach($relationships as $relation){
+                        $cont_id = explode(' - ', $relation->post_title);
+                        $containers[] = $cont_id[1];
+                    }
+                } else {
+                    $containers = toolset_get_related_posts($storeid, 'store-container', $args);
+                }
+
+                foreach($containers as $cont){ $container = get_post($cont); ?>
 
                     <div class="indppl-app-split indppl-flex">
                         <div class="" id="qty">
@@ -76,9 +122,7 @@
         </div>
 
         <?php 
-        $author = $post->post_author;
-        $stati = indppl_user_status($author);
-        if(in_array('paidaccount', $stati)){ ?>
+        if($pro){ ?>
 
 
             <div class="indppl-flex indpl-app-split row type-header">

@@ -20,6 +20,10 @@ img{
   flex-wrap: wrap;
 }
 
+.indppl-no-wrap {
+  flex-wrap: unset;
+}
+
 .indppl-space-between {
   justify-content: space-between;
 }
@@ -535,6 +539,7 @@ span.padding-right-5{
 }
 .modal-close, .sponsor-modal-close{
   position: fixed;
+  line-height: 1;
   left: 86%;
   width: 24px;
   padding: 1px 5px;
@@ -754,7 +759,7 @@ GUIDES STYLES
 }
 
 .overflow {
-  max-height: 500px;
+  max-height: 400px;
   overflow-y: scroll;
   width: calc(100% + 5px);
   padding-right: 8px;
@@ -1064,4 +1069,25 @@ img.keep-going {
 }
 .sponsor-view-count-btn{
   cursor: pointer;
+}
+
+/***********
+PROGRESS BAR
+***********/
+
+.indppl-progress {
+  min-height: 40px;
+  border-radius: 15px;
+  background: #efefef;
+}
+
+.indppl-progress-fill {
+  background:#4a8943;
+  min-height: 40px;
+  border-top-left-radius: 15px;
+  border-bottom-left-radius: 15px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
