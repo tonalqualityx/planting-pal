@@ -759,7 +759,7 @@ GUIDES STYLES
 }
 
 .overflow {
-  max-height: 500px;
+  max-height: 400px;
   overflow-y: scroll;
   width: calc(100% + 5px);
   padding-right: 8px;
