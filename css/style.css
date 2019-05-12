@@ -461,6 +461,14 @@ span.padding-right-5{
   bottom: 0;
   width: 75%;
 }
+.greyed-out-section{
+  width: 91.5%;
+  height: 34px;
+  background: rgba(0, 0, 0, 0);
+  position: absolute;
+  z-index: 99;
+  left: 65px;
+}
 .up-sell-overlay{
   position: relative;
   display: flex;

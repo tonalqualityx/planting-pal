@@ -1301,14 +1301,9 @@ function getProductInfo(){
 }
 
 function greyOutAllUnchecked(){
-    (function($){
-        if(!$(this).find('input').is(":checked")){
-            $('.container-available').each(function(){
-            $(this).parent().parent().prepend("<div class='greyed-out-section'></div>");
-                // console.log('this');
-            })
-        }
-    })(jQuery);
+    jQuery('.container-not-available-in-store').each(function(){
+        jQuery(this).parent().parent().parent().parent().prepend("<div class='greyed-out-section'></div>");
+    })
 }
 
 function indppl_get_units($type = 'dry'){

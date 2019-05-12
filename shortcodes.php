@@ -458,7 +458,7 @@ function pp_store_containers(){
         'parent',
         '100',
         '0',
-        array(),
+        array('limit' => 999),
         'post_id',
         'intermediary'
     );
@@ -622,7 +622,14 @@ function pp_store_containers(){
                     $relation = array();
                     if(in_array($id, $container_array)){
                         $key = array_search($id, $container_array);
+                        // this is because there is some issue with the containers when your logged in as administrator.
+                        if(current_user_can('administrator')){
+                            $key--;
+                        }
+
+                        // var_dump($key . ": " . $id);
                         $relation = get_post_meta($store_container_relations[$key]);
+                        // var_dump($relation);
                     }
                     echo indppl_build_container_relation_output($id, $title, $container_array, $relation, $meta);
                         
