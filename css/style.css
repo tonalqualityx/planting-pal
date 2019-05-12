@@ -1116,3 +1116,8 @@ PROGRESS BAR
   justify-content: center;
   align-items: center;
 }
+
+.planting-guide-instructions .instructions-content {
+  border: 1px solid #afafaf;
+  padding: 5px 25px;
+}

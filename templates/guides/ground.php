@@ -127,10 +127,9 @@ $inst_checked = ' checked="checked" ';
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option A</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-a">
+                    <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content'>
                         <?php echo $options['a-instructions']; ?>
                         <img src="<?php echo $options['a-image']; ?>">
-                        <hr />
                     </div>
                 </li>
 
@@ -138,12 +137,13 @@ $inst_checked = ' checked="checked" ';
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option B</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-b">
+                    <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content'>
                         <?php echo $options['b-instructions']; ?>
                         <img src="<?php echo $options['b-image']; ?>">
                     </div>
                 </li>
                 <?php if(in_array('paidaccountpro',$sub)){ ?>
+
                     <li class="planting-guide-instructions  indppl-flex indppl-align-center indppl-no-wrap">
                         <div class="planting-guide-option-input indppl-flex">
                             <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?>> <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
