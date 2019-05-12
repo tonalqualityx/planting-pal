@@ -831,7 +831,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         <td>
             <?php
             if(is_array($int_array)){
-                if(in_array($id, $relation_array) && key_exists('wpcf-available-in-spring', $int_array)){
+                if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-spring', $int_array)){
                     echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'spring" checked /><label class="margin-0" for="' . $id . '-' . 'spring">' . $available . '</label>';
                 }else{
                     echo '<input type="checkbox" name="' . $id . '-' . 'spring" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'spring"/><label class="margin-0" for="' . $id . '-' . 'spring">' . $not_available . '</label>';
@@ -844,7 +844,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         <td>
             <?php
             if(is_array($int_array)){
-                if(in_array($id, $relation_array) && key_exists('wpcf-available-in-summer', $int_array)){
+                if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-summer', $int_array)){
                     echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'summer" checked /><label class="margin-0" for="' . $id . '-' . 'summer">' . $available . '</label>';
                 }else{
                     echo '<input type="checkbox" name="' . $id . '-' . 'summer" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'summer"/><label class="margin-0" for="' . $id . '-' . 'summer">' . $not_available . '</label>';
@@ -857,7 +857,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         <td>
             <?php
             if(is_array($int_array)){
-                if(in_array($id, $relation_array) && key_exists('wpcf-available-in-fall', $int_array)){
+                if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-fall', $int_array)){
                     echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'fall" checked /><label class="margin-0" for="' . $id . '-' . 'fall">' . $available . '</label>';
                 }else{
                     echo '<input type="checkbox" name="' . $id . '-' . 'fall" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'fall"/><label class="margin-0" for="' . $id . '-' . 'fall">' . $not_available . '</label>';
@@ -870,7 +870,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         <td>
             <?php
             if(is_array($int_array)){
-                if(in_array($id, $relation_array) && key_exists('wpcf-available-in-winter', $int_array)){
+                if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-winter', $int_array)){
                     echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'winter" checked /><label class="margin-0" for="' . $id . '-' . 'winter">' . $available . '</label>';
                 }else{
                     echo '<input type="checkbox" name="' . $id . '-' . 'winter" class="display-none ' . $defualt_or_not_class . '" id="' . $id . '-' . 'winter"/><label class="margin-0" for="' . $id . '-' . 'winter">' . $not_available . '</label>';
