@@ -65,6 +65,7 @@ $inst_checked = ' checked="checked" ';
                 } else {
                     $saved_data[$sec]['description'] = '';
                     echo $options['a-instructions'];
+                    echo "<img src='{$options['a-image']}'>";
                 }
                 echo "</p></div>";
                 echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
@@ -128,6 +129,8 @@ $inst_checked = ' checked="checked" ';
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-a">
                         <?php echo $options['a-instructions']; ?>
+                        <img src="<?php echo $options['a-image']; ?>">
+                        <hr />
                     </div>
                 </li>
 
@@ -137,6 +140,7 @@ $inst_checked = ' checked="checked" ';
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-b">
                         <?php echo $options['b-instructions']; ?>
+                        <img src="<?php echo $options['b-image']; ?>">
                     </div>
                 </li>
                 <?php if(in_array('paidaccountpro',$sub)){ ?>
