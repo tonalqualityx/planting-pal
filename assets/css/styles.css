@@ -41,15 +41,37 @@
   overflow: hidden;
 }
 
-.button {
+.button, body input[type=button], body input[type=submit]{
+  cursor: pointer;
+  /* background: #428bca; */
   color: #fff;
-  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  padding: 8px 12px;
+  font-weight: normal;
+  text-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  background: #f26226;
+  /* border-radius: 4px; */
+  transition: background 0.35s ease-in-out;
+  font-weight: 600;
   text-transform: uppercase;
-  margin: 0;
-  text-align: center;
-  font-size: 13px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  border: 1px solid #e6561a;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.button:hover{
+  background: #f26226;
+  color: black;
+  /* border: 1px solid #2d6ca2; */
+  text-decoration: none;
 }
 
 #buttons {
