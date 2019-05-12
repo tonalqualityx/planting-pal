@@ -466,7 +466,9 @@ function pp_store_containers(){
     // var_dump($store_container_relations);
     // var_dump($container_array);
     $int_args = array(
-        'post_type' => 'store-container'
+        'post_type' => 'store-container',
+
+        'author' => get_current_user_id(),
     );
     $int = new WP_Query($int_args);
     $int_array = [];
@@ -581,52 +583,52 @@ function pp_store_containers(){
                 ),
                 'orderby' => array('title' => 'DESC'),
             );
-            $containers = new WP_Query($args);
-            // var_dump($containers);
+            $user_id = get_current_user_id();
             $user_args = array(
                 'post_type' => 'container',
                 'posts_per_page' => -1,
                 'meta_query' => array(
                     array('key' => 'wpcf-default-container',
-                        'compare' => "NOT EXISTS",
+                    'compare' => "NOT EXISTS",
                     ),
                 ),
-                'post_author' => get_current_user_id(),
+                'author' => $user_id,
+
                 'orderby' => array('title' => 'DESC'),
             );
 
-            $user_query = new WP_Query($user_args);
+            $data1 = get_posts($args);
+            $data2 = get_posts($user_args);
 
-            $obj_merge = new WP_Query();
-            $obj_merge->posts = array_merge($containers->posts, $user_query->posts);
+            $obj_merge = array_merge($data1, $data2);
 
-            foreach($obj_merge->posts as $post):
-                setup_postdata($post);
-                // var_dump($post);
-                // if($obj_merge->have_posts()){
-                    //     while($obj_merge->have_posts()){
+            $postIDs = array_unique(wp_list_pluck($obj_merge, "ID"));
+            
+            $args3 = array(
+                'post_type' => 'container',
+                'post__in' => $postIDs,
+                'nopaging' => true,
+                );
+            $final = get_posts($args3);
+
+            if(isset($final)){
+                foreach($final as $post){
+                    setup_postdata($post);
+                    $id = $post->ID;
+
+                    $title = $post->post_title;
+                    $meta = get_post_meta($id, 'wpcf-default-container', true);
+
+                    $relation = array();
+                    if(in_array($id, $container_array)){
+                        $key = array_search($id, $container_array);
+                        $relation = get_post_meta($store_container_relations[$key]);
+                    }
+                    echo indppl_build_container_relation_output($id, $title, $container_array, $relation, $meta);
                         
-                        
-                        $obj_merge->the_post();
-                        $id = get_the_ID();
-                        $title = get_the_title();
-                        $meta = get_post_meta($id, 'wpcf-default-container', true);
-                        // if()
-                        // var_dump(get_post_meta($id));
-                        // var_dump($meta);
-                        $relation = array();
-                        if(in_array($id, $container_array)){
-                            $key = array_search($id, $container_array);
-                            $relation = get_post_meta($store_container_relations[$key]);
-                        }
-                        // $title = get_the_title($id);
-                        // $meta = get_post_meta($id, 'wpcf-default-container', true);
-                        echo indppl_build_container_relation_output($id, $title, $container_array, $relation, $meta);
-                        
-                        // }
-                    endforeach;
+                }
                 wp_reset_postdata();
-            // }
+            }
             ?>
         </table>
         <a href='#' class='add-container-btn button button-primary'>Add Container</a>

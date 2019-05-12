@@ -1100,6 +1100,10 @@ jQuery(document).ready(function( $ ) {
             success: function(e){
                 console.log(e);
                 indpplDelLoading();
+                $('.slide-in-products-container').removeClass('left-0');
+                setTimeout(function(){
+                    $('.slide-in-products-container').remove();
+                }, 1000)
             }
         });
     })
