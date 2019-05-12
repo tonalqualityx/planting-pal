@@ -148,7 +148,10 @@ $inst_checked = ' checked="checked" ';
                         <div class="planting-guide-option-input indppl-flex">
                             <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?>> <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
                         </div>
-                        <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
+                        <div class='indppl-custom-guide-instructions'>
+                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
+                            <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image">
+                        </div>
                     </li>
                 <?php } ?>
             </ul>

@@ -890,7 +890,7 @@ jQuery(document).ready(function( $ ) {
     });
 
     $("body").on('click', '.planting-guide-instructions input[type=radio]', function() {
-        var content = $("#" + $(this).data('content')).text();
+        var content = $("#" + $(this).data('content')).html();
         if(content == ''){
             content = '<p>' + $('#' + $(this).data('content')).val() + '</p>';
         }

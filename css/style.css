@@ -729,6 +729,19 @@ GUIDES STYLES
   padding: 25px;
 }
 
+.planting-guide-instructions {
+  margin-bottom: 20px;
+}
+
+.planting-guide-instructions .instructions-content {
+  border: 1px solid #afafaf;
+  padding: 5px 25px;
+}
+
+.planting-guide-instructions img {
+  max-height: 200px;
+}
+
 .planting-guide-options .planting-guide-instructions .planting-guide-option-input{
   width: 15%;
   min-width: 15%;
@@ -765,6 +778,10 @@ GUIDES STYLES
 
 .planting-guide .store-info img, .sponsor-image {
   max-height: 100px;
+}
+
+.indppl-custom-guide-instructions {
+  flex-grow: 9999;
 }
 
 .store-address {
@@ -1107,9 +1124,4 @@ PROGRESS BAR
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.planting-guide-instructions .instructions-content {
-  border: 1px solid #afafaf;
-  padding: 5px 25px;
 }
