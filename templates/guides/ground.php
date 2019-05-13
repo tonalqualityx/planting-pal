@@ -99,12 +99,13 @@ $inst_checked = ' checked="checked" ';
         $c_text = $saved_defaults[$i]['description'];
 
         //Determine the default option
-        $a_text = str_replace('<p>', '', $options['a-instructions']);
+        $a_text = str_replace(array('<p>',''), array('','"'), $options['a-instructions']);
         $a_text = str_replace('</p>', '', $a_text);
         $b_text = str_replace('<p>', '', $options['b-instructions']);
         $b_text = str_replace('</p>', '', $b_text);
         $c_text = str_replace('<p>', '', $c_text);
         $c_text = str_replace('</p>', '', $c_text);
+
 
         $a = $inst_checked;
         $b = '';
@@ -118,11 +119,6 @@ $inst_checked = ' checked="checked" ';
             $a = '';
             $c = $inst_checked;
         }
-        var_dump($a_text);
-        echo "<br /><br />";
-        var_dump($b_text);
-        echo "<br /><Br />";
-        var_dump($c_text);
         
         ?>
         <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >

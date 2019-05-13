@@ -957,6 +957,7 @@ jQuery(document).ready(function( $ ) {
             title = $(this).data('title');
             title = $('#' + title).text();
             $(this).find('.guide-step-description').each(function(){
+                custom = false;
                 if($(this).is(':checked')){
                     if ($(this).data('custom') == true) {
                         content = $('#' + $(this).data('content')).val();
