@@ -907,6 +907,18 @@ jQuery(document).ready(function( $ ) {
         productsToStep(products);
     });
 
+    $("body").on('change', 'textarea', function(){
+        var section = $(this).data('target');
+        var container = $(this).parent().prev('.planting-guide-option-input');
+        var content = $(this).val();
+        var img = $('#' + section + '-uploaded img').attr('src');
+        var image = "<img src='" + img + "' class='custom-image'>";
+        container.find('input').prop('checked', true);
+        $("#" + section + " > p").text(content);
+        $("#" + section).find(".custom-image").remove();
+        $("#" + section + " > p").after(image);
+    });
+
     //Upload custom images
     $('body').on('change', '.indppl-custom-guide-instructions input[type=file]', function(e){
         indpplAddLoading();

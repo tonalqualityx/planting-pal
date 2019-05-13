@@ -152,7 +152,7 @@ $inst_checked = ' checked="checked" ';
                             <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true"> <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
                         </div>
                         <div class='indppl-custom-guide-instructions'>
-                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
+                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
                             <label for="<?php echo $format_section; ?>-image">Upload an Image for This Step</label>
                             <div id="<?php echo $format_section; ?>-uploaded"></div>
                             <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-uploaded" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>">
