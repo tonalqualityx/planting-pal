@@ -67,7 +67,12 @@ $inst_checked = ' checked="checked" ';
                     echo $options['a-instructions'];
                     echo "<img src='{$options['a-image']}'>";
                 }
-                echo "</p></div>";
+                echo "</p>";
+                if($saved_data[$sec]->image){
+                    echo "<img src='{$saved_data[$sec]->image}'>";
+                    $saved_defaults[$sec]['image'] = $saved_data[$sec]->image;
+                }
+                echo "</div>";
                 echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
                 if($saved_data[$sec]->products){
                     // var_dump($saved_data[$sec]->products);
@@ -154,7 +159,11 @@ $inst_checked = ' checked="checked" ';
                         <div class='indppl-custom-guide-instructions'>
                             <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
                             <label for="<?php echo $format_section; ?>-image">Upload an Image for This Step</label>
-                            <div id="<?php echo $format_section; ?>-uploaded"></div>
+                            <div id="<?php echo $format_section; ?>-uploaded">
+                                <?php if($c != ''){
+                                    echo "<img src='{$saved_defaults[$i]['image']}'>";
+                                }?>
+                            </div>
                             <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-uploaded" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>">
                         </div>
                     </li>

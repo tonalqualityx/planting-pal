@@ -912,10 +912,14 @@ jQuery(document).ready(function( $ ) {
         var container = $(this).parent().prev('.planting-guide-option-input');
         var content = $(this).val();
         var img = $('#' + section + '-uploaded img').attr('src');
-        var image = "<img src='" + img + "' class='custom-image'>";
+        var image = '';
+        if(img != undefined && img != ''){
+            image = "<img src='" + img + "' class='custom-image'>";
+        }
         container.find('input').prop('checked', true);
-        $("#" + section + " > p").text(content);
-        $("#" + section).find(".custom-image").remove();
+        $("#" + section + " > p").remove();
+        $("#" + section + " ").prepend("<p>" + content + "</p>");
+        $("#" + section).find("img").remove();
         $("#" + section + " > p").after(image);
     });
 
@@ -963,6 +967,7 @@ jQuery(document).ready(function( $ ) {
         var description = '';
         var title = '';
         var custom = false;
+        var image = '';
         $('.planting-guide-options').each(function(){
             content = '';
             step = $(this).data('step');
@@ -972,8 +977,10 @@ jQuery(document).ready(function( $ ) {
                 custom = false;
                 if($(this).is(':checked')){
                     if ($(this).data('custom') == true) {
-                        content = $('#' + $(this).data('content')).val();
                         custom = true;
+                        content = $('#' + $(this).data('content')).val();
+                        image = $("#" + $(this).data('target') + "-uploaded img").attr('src');
+                        console.log(image);
                     } else {
                         content =  $(this).data('content');
                     }
@@ -991,10 +998,11 @@ jQuery(document).ready(function( $ ) {
             });
             if(!custom){
                 description = $('#' + content + " p").text();
+                image = $('#' + content + " img").attr('src');
             } else {
                 description = content;
             }
-            steps.push({title: title, step : step, description : description, products : products });
+            steps.push({title: title, step : step, description : description, products : products, image : image });
         });
         
         $.ajax({
