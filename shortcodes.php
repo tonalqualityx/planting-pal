@@ -444,14 +444,6 @@ add_shortcode('pp-my-stores', 'pp_my_stores');
 function pp_store_containers(){
     $store_id = $_GET['store-id'];
     
-    $args2 = array('post_id' => $store_id);
-    $cons = types_child_posts('container', $args2);
-    // var_dump($cons);
-    $container_array = array();
-    foreach($cons as $key => $value){
-        array_push($container_array, $value->ID);
-    }
-
     $store_container_relations = toolset_get_related_posts(
         $store_id, // get posts related to this one
         'store-container', // relationship between the posts
@@ -461,6 +453,17 @@ function pp_store_containers(){
         array('limit' => 999),
         'post_id',
         'intermediary'
+    );
+
+    $container_array = toolset_get_related_posts(
+        $store_id, // get posts related to this one
+        'store-container', // relationship between the posts
+        'parent',
+        '100',
+        '0',
+        array('limit' => 999),
+        'post_id',
+        'child'
     );
 
     // var_dump($store_container_relations);
@@ -597,8 +600,8 @@ function pp_store_containers(){
                 'orderby' => array('title' => 'DESC'),
             );
 
-            $data1 = get_posts($args);
-            $data2 = get_posts($user_args);
+            $data1 = get_posts($user_args);
+            $data2 = get_posts($args);
 
             $obj_merge = array_merge($data1, $data2);
 
@@ -622,14 +625,7 @@ function pp_store_containers(){
                     $relation = array();
                     if(in_array($id, $container_array)){
                         $key = array_search($id, $container_array);
-                        // this is because there is some issue with the containers when your logged in as administrator.
-                        if(current_user_can('administrator')){
-                            $key--;
-                        }
-
-                        // var_dump($key . ": " . $id);
                         $relation = get_post_meta($store_container_relations[$key]);
-                        // var_dump($relation);
                     }
                     echo indppl_build_container_relation_output($id, $title, $container_array, $relation, $meta);
                         
