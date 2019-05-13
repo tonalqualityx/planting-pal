@@ -106,6 +106,7 @@
                     $containers = toolset_get_related_posts($storeid, 'store-container', $args);
                 }
 
+                // var_dump($containers);
                 foreach($containers as $cont){ $container = get_post($cont); ?>
 
                     <div class="indppl-app-split indppl-flex">
