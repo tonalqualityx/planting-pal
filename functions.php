@@ -1654,7 +1654,7 @@ function get_add_store_button(){
     return $return;
 }
 
-function indppl_store_progress_bar($store, $next_step = false){
+function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE){
 
     // Setup the basics
 
@@ -1669,6 +1669,7 @@ function indppl_store_progress_bar($store, $next_step = false){
     $complete = 0;
     $containers = toolset_get_related_posts($store, 'store-container', ['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child'] );
     $apprates = json_decode($meta['wpcf-apprates'][0], TRUE);
+    $bar = '';
 
     $steps = array();
 
@@ -1765,7 +1766,10 @@ function indppl_store_progress_bar($store, $next_step = false){
     if($percentage == 100){
         $styles = "border-top-right-radius:15px;border-bottom-right-radius:15px;";
     }
-    $bar = "<div class='indppl-progress'><div class='indppl-progress-fill' style='width:{$percentage}%;{$styles}'><span>{$percentage}%</span></div></div>";
+    if($container){
+        $bar = "<div class='indppl-progress-container'>";
+    }
+    $bar .= "<div class='indppl-progress'><div class='indppl-progress-fill' style='width:{$percentage}%;{$styles}'><span>{$percentage}%</span></div></div>";
 
     if($next_step){
 
@@ -1813,6 +1817,9 @@ function indppl_store_progress_bar($store, $next_step = false){
         $bar .= "<div class='next-step'><p>{$next}</p></div>";
     }
 
+    if($container){
+        $bar .= "</div>";
+    }
     $response = array(
         'bar' => $bar,
         'complete' => $percentage,

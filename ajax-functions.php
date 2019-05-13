@@ -2001,3 +2001,13 @@ function indppl_upload_guide_image_ajax(){
     die();
 }
 add_action('wp_ajax_indppl_upload_guide_image_ajax', 'indppl_upload_guide_image_ajax');
+
+function indppl_store_progress_bar_ajax(){
+
+    $store = htmlspecialchars($_POST['store_id']);
+    $response = indppl_store_progress_bar($store, TRUE, FALSE);
+    echo $response['bar'];
+    die();
+}
+
+add_action('wp_ajax_indppl_store_progress_bar_ajax', 'indppl_store_progress_bar_ajax');

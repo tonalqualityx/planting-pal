@@ -262,6 +262,7 @@ function pp_store_management(){
         $author_id = get_post_field('post_author', intval($_GET['store-id']));
         if($user_id == $author_id || current_user_can('administrator')){
             $store_id = intval(htmlspecialchars($_GET['store-id']));
+            echo "<script>monitorProgress({$store_id});</script>";
         }else{
             ?>
             <h3 class='color-red'>Sorry, but you must be logged in to access this store. Further Options below.</h3>
