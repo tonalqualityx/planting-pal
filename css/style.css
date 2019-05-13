@@ -452,6 +452,10 @@ span.padding-right-5{
   z-index: 99;
   left: 65px;
 }
+
+div.ui-datepicker{
+  z-index: 99!important;
+}
 .greyed-out-form{
   /* z-index: 999999; */
   /* height: 85%; */
