@@ -890,9 +890,11 @@ jQuery(document).ready(function( $ ) {
     });
 
     $("body").on('click', '.planting-guide-instructions input[type=radio]', function() {
-        var content = $("#" + $(this).data('content')).text();
+        var content = $("#" + $(this).data('content')).html();
         if(content == ''){
-            content = '<p>' + $('#' + $(this).data('content')).val() + '</p>';
+            image = $("#" + $(this).data('target') + "-uploaded").html();
+            console.log(image);
+            content = '<p>' + $('#' + $(this).data('content')).val() + '</p>' + image;
         }
         var target = $(this).data('target');
         $("#" + target).html(content);
@@ -905,6 +907,55 @@ jQuery(document).ready(function( $ ) {
         productsToStep(products);
     });
 
+    $("body").on('change', 'textarea', function(){
+        var section = $(this).data('target');
+        var container = $(this).parent().prev('.planting-guide-option-input');
+        var content = $(this).val();
+        var img = $('#' + section + '-uploaded img').attr('src');
+        var image = '';
+        if(img != undefined && img != ''){
+            image = "<img src='" + img + "' class='custom-image'>";
+        }
+        container.find('input').prop('checked', true);
+        $("#" + section + " > p").remove();
+        $("#" + section + " ").prepend("<p>" + content + "</p>");
+        $("#" + section).find("img").remove();
+        $("#" + section + " > p").after(image);
+    });
+
+    //Upload custom images
+    $('body').on('change', '.indppl-custom-guide-instructions input[type=file]', function(e){
+        indpplAddLoading();
+        var target = $(this).data('target');
+        var option = $(this).data('option');
+        var section = $(this).data('section');
+        var fd = new FormData();
+        var file = $(this).prop('files')[0];
+        console.log(section);
+        fd.append('file', file);
+        fd.append('version_check', 1.0);
+        fd.append('action', 'indppl_upload_guide_image_ajax');
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            // dataType: 'json',
+            method: 'POST',
+            contentType: false,
+            processData: false,
+            data: fd,
+            // processData: true,
+            type: 'POST',
+            success: function (response) {
+                console.log(response);
+                indpplDelLoading();
+                var image = "<img src='" + response + "' class='custom-image'>";
+                $(target).html(image);
+                $(section).find(".custom-image").remove();
+                $(section + " > p").after(image);
+                $(option).prop('checked', true);
+            }
+        });
+    });
+
     // Save planting guide content
     $('body').on('click', '#guide-save', function(e){
         e.preventDefault();
@@ -915,17 +966,24 @@ jQuery(document).ready(function( $ ) {
         var content = '';
         var description = '';
         var title = '';
-        var custom = '';
+        var custom = false;
+        var image = '';
         $('.planting-guide-options').each(function(){
             content = '';
             step = $(this).data('step');
             title = $(this).data('title');
             title = $('#' + title).text();
             $(this).find('.guide-step-description').each(function(){
+                custom = false;
                 if($(this).is(':checked')){
-                    content =  $(this).data('content');
-                    // custom = $(this).data('custom');
-                    console.log(custom);
+                    if ($(this).data('custom') == true) {
+                        custom = true;
+                        content = $('#' + $(this).data('content')).val();
+                        image = $("#" + $(this).data('target') + "-uploaded img").attr('src');
+                        console.log(image);
+                    } else {
+                        content =  $(this).data('content');
+                    }
                 }
             });
             var products = new Array();
@@ -938,12 +996,13 @@ jQuery(document).ready(function( $ ) {
                     products.push({id : id, instructions : instructions});
                 }
             });
-            // if(false){
-                description = $('#' + content + ' p').text();
-            // } else {
-                // description = $('#' + content).val();
-            // }
-            steps.push({title: title, step : step, description : description, products : products });
+            if(!custom){
+                description = $('#' + content + " p").text();
+                image = $('#' + content + " img").attr('src');
+            } else {
+                description = content;
+            }
+            steps.push({title: title, step : step, description : description, products : products, image : image });
         });
         
         $.ajax({

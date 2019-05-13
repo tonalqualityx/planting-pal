@@ -1995,3 +1995,9 @@ function indppl_delete_sponsorship(){
 }
 add_action( 'wp_ajax_indppl_delete_sponsorship', 'indppl_delete_sponsorship' );
 add_action('wp_ajax_nopriv_indppl_delete_sponsorship', 'indppl_delete_sponsorship');
+
+function indppl_upload_guide_image_ajax(){
+    echo indppl_image_upload();
+    die();
+}
+add_action('wp_ajax_indppl_upload_guide_image_ajax', 'indppl_upload_guide_image_ajax');

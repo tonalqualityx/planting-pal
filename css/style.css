@@ -737,6 +737,19 @@ GUIDES STYLES
   padding: 25px;
 }
 
+.planting-guide-instructions {
+  margin-bottom: 20px;
+}
+
+.planting-guide-instructions .instructions-content {
+  border: 1px solid #afafaf;
+  padding: 5px 25px;
+}
+
+.planting-guide-instructions img {
+  max-height: 200px;
+}
+
 .planting-guide-options .planting-guide-instructions .planting-guide-option-input{
   width: 15%;
   min-width: 15%;
@@ -758,7 +771,7 @@ GUIDES STYLES
   min-height: 400px;
   max-height: 400px;
   overflow: hidden;
-  padding: 15px;
+  padding: 0;
   padding-right: 0;
 }
 
@@ -775,6 +788,10 @@ GUIDES STYLES
   max-height: 100px;
 }
 
+.indppl-custom-guide-instructions {
+  flex-grow: 9999;
+}
+
 .store-address {
   margin-left: 10px;
 }
@@ -786,11 +803,12 @@ GUIDES STYLES
 .overflow {
   max-height: 400px;
   overflow-y: scroll;
-  width: calc(100% + 5px);
-  padding-right: 8px;
+  width: 100%;
+  /* width: calc(100% + 5px); */
+  /* padding-right: 8px; */
   position: relative;
-  right: -8px;
-  padding: 5px 15px;
+  /* right: -8px; */
+  padding: 15px 25px;
 }
 
 .planting-guide-products, .margin-bottom-15{
@@ -1115,9 +1133,4 @@ PROGRESS BAR
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.planting-guide-instructions .instructions-content {
-  border: 1px solid #afafaf;
-  padding: 5px 25px;
 }
