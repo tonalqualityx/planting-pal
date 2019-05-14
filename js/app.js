@@ -1699,21 +1699,29 @@ function updateBagAppRates(elem){
 
 function monitorProgress(store){
     var store = store;
-    $('.body').on('click', function(){
-        console.log(store);
-        jQuery.ajax({
-            url:indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_store_progress_bar_ajax',
-                store_id: store,
-            },
-            type: 'POST',
-            success: function(results){
-                console.log(results);
-                $('.indppl-progress-container').html(results);
-            }
-        });
+
+    $(document).ajaxComplete(function (event, jqxhr, settings){
+        // console.log(settings);
+        // console.log(jqxhr);
+        // console.log(event);
+        var args = settings.data;
+        if(args.search('stopAjaxComplete' ) < 0){
+            $(".log").text("Triggered ajaxComplete handler.");
+            // console.log(store);
+            jQuery.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_store_progress_bar_ajax',
+                    store_id: store,
+                    stopAjaxComplete : true,
+                },
+                type: 'POST',
+                success: function(results){
+                    $('.indppl-progress-container').html(results);
+                }
+            });
+        }
     });
 }
