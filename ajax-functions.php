@@ -496,6 +496,18 @@ function indppl_get_product_info_ajax(){
         $filler = get_post_meta($product_id, 'wpcf-use-blended-filler');
         $additive = get_post_meta($product_id, 'wpcf-use-blended-additive');
         $surface = get_post_meta($product_id, 'wpcf-use-surface');
+
+        $app_rates = indppl_apprates($store_id);
+        if(isset($app_rates[$type]['filler'][$product_id])){
+            $filler = '1';
+        }
+        if(isset($app_rates[$type]['blended'][$product_id])){
+            $additive = '1';
+        }
+        if(isset($app_rates[$type]['surface'][$product_id])){
+            $surface = '1';
+        }
+        $console = $additive;
         ?>
         <div class='indppl-add-product-usage-type'>
             <h3>Select Usage Type (check all that apply)</h3>
@@ -526,7 +538,7 @@ function indppl_get_product_info_ajax(){
         <?php
     $fraction_bag = ob_get_clean();
 
-    $console = $usage_type;
+    // $console = $usage_type;
     $send_array['standard_unit'] = $standard_unit;
     $send_array['dry_wet'] = array(0 => $dry_wet, 1 => $dryliquid, 2=> $unit);
     $send_array['size'] = $sizes;
@@ -1032,8 +1044,8 @@ function indppl_save_pots_product_ajax(){
             ),
         );
     }
+    var_dump($temp);
     var_dump($product_id);
-    var_dump($product_unit);
     if($new_pack[count($new_pack)-1]['unit'] == 'each' || $product_unit == 'each'){
         $temp['each'] = array(
             $product_id => array(
@@ -1042,10 +1054,11 @@ function indppl_save_pots_product_ajax(){
         );
     }
     $send_array = $temp;
+    
     // }
     if($product_id != 'new'){
         // var_dump($type);
-        // var_dump($send_array);
+        var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
 
         // var_dump($save);
@@ -1247,12 +1260,14 @@ function indppl_get_pot_apprates_ajax(){
                     $dilution = get_post_meta($key, 'wpcf-blended-additive-dilution', true);
                     $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
                     // apprates_array
+                    
                     if($get_apps == true){
-                        $dilution = $app_rates[$type]['blended'][$key]['amount'];
-                        $unit = $app_rates[$type]['blended'][$key]['unit'];
-                        
+                        if(isset($app_rates[$type]['blended'][$key]['amount'])){
+                            $dilution = $app_rates[$type]['blended'][$key]['amount'];
+                            $unit = $app_rates[$type]['blended'][$key]['unit'];
+                        }
                     }
-
+                    
                     $select_array = array(
                         'cup' => 'Cups',
                         'tbls' => 'Tablespoons',
@@ -1328,9 +1343,11 @@ function indppl_get_pot_apprates_ajax(){
                     $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
                     // apprates_array
                     if($get_apps == true){
-                        $dilution = $app_rates[$type]['surface'][$key]['amount'];
-                        $units = $app_rates[$type]['surface'][$key]['unit'];
-                        $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
+                        if(isset($app_rates[$type]['surface'][$key]['amount'])){
+                            $dilution = $app_rates[$type]['surface'][$key]['amount'];
+                            $units = $app_rates[$type]['surface'][$key]['unit'];
+                            $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
+                        }
                     }
 
                     $select_unit = array(
