@@ -710,7 +710,9 @@ jQuery(document).ready(function( $ ) {
         var package_array = [];
         var package_remove = [];
         var new_pack = {};
-        console.log(product_unit);
+        console.log("filler: " + filler);
+        console.log("blended: " + blend);
+        console.log("surface: " + surface);
         var i = 0;
         var version_check = 1.0;
         if($(this).is('#product-create-pots-next')){
