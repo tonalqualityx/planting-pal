@@ -610,6 +610,7 @@ function getVolume($in_value, $in_input, $in_output)
                 case "cuft":
                     $pre_calc = 12 ** 3;
                     return $in_value / 4 * 231 / $pre_calc;
+                    // return $in_value * 0.0334201;
                     break;
                 case "cy":
                     $pre_calc = 36 ** 3;
