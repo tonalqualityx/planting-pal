@@ -65,6 +65,11 @@
                     'query_by_role' => 'parent',
                     'role_to_return' => 'other',
                     'return' => 'post_id',
+                    'args' => [
+                        'meta_key' => 'wpcf-display-number',
+                    ],
+                    'orderby' => 'meta_value_num',
+                    'order' => 'ASC',
                 );
                 
                 $pro = FALSE;
@@ -98,13 +103,22 @@
                     $args['args'] = ['meta_key' => $available, 'meta_value' => 1];
                     $relationships = toolset_get_related_posts($storeid, 'store-container', $args);
                     $containers = array();
+                    $i = 1000;
                     foreach($relationships as $relation){
                         $cont_id = explode(' - ', $relation->post_title);
-                        $containers[] = $cont_id[1];
+                        $display_order = get_post_meta($cont_id[1], 'wpcf-display-number', TRUE);
+                        if($display_order && $display_order != ''){
+                            $containers[$display_order] = $cont_id[1];
+                        } else {
+                            $containers[$i] = $cont_id[1];
+                        }
+                        $i++;
                     }
+                    ksort($containers);
                 } else {
                     $containers = toolset_get_related_posts($storeid, 'store-container', $args);
                 }
+                
 
                 // var_dump($containers);
                 foreach($containers as $cont){ $container = get_post($cont); ?>
