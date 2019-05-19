@@ -1353,6 +1353,7 @@ jQuery(document).ready(function( $ ) {
         $(this).parent().next().slideToggle();
     })
 
+
     $('body').on('keypress', function(e) {
         if(e.which == 13 && $('.slide-in-products-inside-container').length > 0){
             e.preventDefault();
@@ -1382,6 +1383,14 @@ jQuery(document).ready(function( $ ) {
             }
             $('#geo-radius-custom').val(radius);
         }
+    });
+
+    $('.indppl-duplicate-store').click(function() {
+        // Provide a form to the user to get the store name
+
+        // Run the Ajax
+
+        // Redirect User to Edit Store
 
     })
 
