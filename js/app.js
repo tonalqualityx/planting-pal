@@ -1306,6 +1306,14 @@ jQuery(document).ready(function( $ ) {
         $(this).parent().next().slideToggle();
     })
 
+    $('.indppl-duplicate-store').click(function() {
+        // Provide a form to the user to get the store name
+
+        // Run the Ajax
+
+        // Redirect User to Edit Store
+    })
+
 });
 
 // start of functions

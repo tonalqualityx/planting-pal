@@ -374,6 +374,7 @@ add_shortcode('pp-store-management', 'pp_store_management');
 
 function pp_my_stores(){
     ob_start();
+
     ?>
     
         <?php
@@ -419,6 +420,7 @@ function pp_my_stores(){
                             <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
                             <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">View</a>
                             <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
+                            <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Copy</a>
                         </div>
                     </div>
                     <?php
