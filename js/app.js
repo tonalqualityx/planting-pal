@@ -1,6 +1,32 @@
 jQuery(document).ready(function( $ ) {
     $('body').on('click', '.geo-submit', function(e){
+        e.preventDefault();
+        var zip = $('#zip-for-location').val();
+        var radius = $('#geo-radius-custom').val();
+        if(parseInt(radius) > 30){
+            radius = 30;
+            $('#geo-radius-custom').val(30);
+        }
+        console.log(zip);
+        console.log(radius);
         indpplAddLoading();
+        setTimeout(function(){
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_planting_pal_home_ajax',
+                    zip: zip,
+                    radius: radius,
+                },
+                type: 'POST',
+                success: function(e){
+                    indpplDelLoading();
+                    $('.store-list-container').replaceWith(e);
+                }
+            });
+        }, 200);
     })
 
     $('body').on('click', '#location-icon', function(e){
@@ -15,6 +41,11 @@ jQuery(document).ready(function( $ ) {
             lon = position.coords.longitude;
             });
         }
+        var radius = $('#geo-radius-custom').val();
+        if(parseInt(radius) > 30){
+            radius = 30;
+            $('#geo-radius-custom').val(30);
+        }
         indpplAddLoading();
         setTimeout(function(){
             $.ajax({
@@ -25,6 +56,7 @@ jQuery(document).ready(function( $ ) {
                     action: 'indppl_planting_pal_home_ajax',
                     lat: lat,
                     lon: lon,
+                    radius: radius,
                 },
                 type: 'POST',
                 success: function(e){
@@ -291,7 +323,7 @@ jQuery(document).ready(function( $ ) {
                 $('.product-create-product').append(e);
                 var status = $('#user-status').val();
                 // console.log(status);
-                if(status != 'paidaccountpro'){
+                if(status == 'paidaccountpro'){
                     $('.product-create-product').append('<option value="new">Add Product</option>');
                 }
                 indpplDelLoading();
@@ -407,7 +439,18 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var size = $('#indpll-product-create-size-num').val();
         var unit = $('#product-create-standard-unit-add').val();
-        $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>');
+        var create_new = true;
+        $('.indppl-product-create-size-btn').each(function(){
+            var this_size = $(this).data('size');
+            var this_unit = $(this).data('unit');
+            if(this_size == size && this_unit == unit){
+                create_new = false;
+            }
+        })
+        console.log(create_new);
+        if(create_new == true){
+            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>');
+        }
 
     })
     $('body').on('mouseenter', '.indppl-background-green', function(){
@@ -454,7 +497,10 @@ jQuery(document).ready(function( $ ) {
         if($('#product-create-fraction-bag').is(':checked')){
             fraction = true;
         }
-        var product_dryliquid = $('.product-create-dry-wet').val();
+        var product_dryliquid = $('.product-create-dry-wet:checked').val();
+        if(!product_dryliquid){
+            product_dryliquid = $('.product-create-dry-wet').val();
+        }
         var product_name = $('.indppl-add-product-name').val();
         if(!$(this).is('#product-create-next')){
             var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
@@ -478,7 +524,7 @@ jQuery(document).ready(function( $ ) {
         var i = 0;
         var version_check = 1.0;
         // console.log(product_input);
-        // console.log(product_select);
+        console.log(product_dryliquid);
         if($(this).is('#product-create-next')){
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-background-green')){
@@ -659,7 +705,8 @@ jQuery(document).ready(function( $ ) {
         })
     })
 
-    $('body').on('change', '.some-kind-of-wonderful', function(){
+    $('body').on('change', '.some-kind-of-wonderful', function(e){
+        e.preventDefault();
         if($('#product-create-fraction-bag').is(':checked')){
             updateBagAppRates($(this));
         }else{
@@ -1306,12 +1353,45 @@ jQuery(document).ready(function( $ ) {
         $(this).parent().next().slideToggle();
     })
 
+
+    $('body').on('keypress', function(e) {
+        if(e.which == 13 && $('.slide-in-products-inside-container').length > 0){
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
+    $('body').on('change', '.product-create-dry-wet-container', function(){
+        var dry_wet = ($('.product-create-dry-wet:checked').val());
+        $('#product-create-standard-unit-add').empty();
+        units = indppl_get_units(dry_wet);
+        // console.log(array['dry_wet'][2]);
+        $.each(units, function(index, value){
+            // console.log(value);
+            $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
+        })
+    });
+
+    // geo radius selector
+    $('body').on('change', '#geo-radius', function(){
+        var radius = $(this).val();
+        if(radius == 'custom'){
+            $('#geo-radius-custom').removeClass('hide');
+        }else{
+            if($('#geo-radius-custom').is(':visible')){
+                $('#geo-radius-custom').addClass('hide');
+            }
+            $('#geo-radius-custom').val(radius);
+        }
+    });
+
     $('.indppl-duplicate-store').click(function() {
         // Provide a form to the user to get the store name
 
         // Run the Ajax
 
         // Redirect User to Edit Store
+
     })
 
 });

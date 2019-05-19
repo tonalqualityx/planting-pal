@@ -566,6 +566,14 @@ div.ui-datepicker{
   padding: 15px;
   overflow-y: auto;
 }
+
+.side-by-side{
+  display: flex;
+}
+#geo-radius{
+  margin-right: 10px;
+}
+
 .modal-close, .sponsor-modal-close{
   position: fixed;
   line-height: 1;
