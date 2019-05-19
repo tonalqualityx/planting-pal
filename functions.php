@@ -1829,3 +1829,58 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
     return $response;
     
 }
+
+function indppl_duplicate_store($store_id, $new_details){
+
+    // Get store meta
+    $meta = get_post_meta($store_id);
+    $args = array(
+        'post_type' => 'store',
+        'post_status' => 'publish',
+        'post_title' => $new_details['title'],
+        'meta_input' => array(
+            'wpcf-logo' => $meta['wpcf-logo'][0],
+            'wpcf-spring-start' => $meta['wpcf-spring-start'][0],
+            'wpcf-spring-end' => $meta['wpcf-spring-end'][0],
+            'wpcf-summer-start' => $meta['wpcf-summer-start'][0],
+            'wpcf-summer-end' => $meta['wpcf-summer-end'][0],
+            'wpcf-fall-start' => $meta['wpcf-fall-start'][0],
+            'wpcf-fall-end' => $meta['wpcf-fall-end'][0],
+            'wpcf-winter-start' => $meta['wpcf-winter-start'][0],
+            'wpcf-winter-end' => $meta['wpcf-winter-end'][0],
+            'wpcf-apprates' => $meta['wpcf-apprates'][0],
+            'wpcf-planting-guide-ground-options' => $meta['planting-guide-ground-options'][0],
+            'wpcf-planting-guide-pots-options' => $meta['planting-guide-pots-options'][0],
+            'wpcf-planting-guide-beds-options' => $meta['planting-guide-beds-options'][0],
+        ),
+    );
+
+    // Create the post
+    $new_store = wp_insert_post($args);
+
+    // Set default toolset args
+    $toolset_args = array(
+        'query_by_role' => 'parent',
+        'limit' => 9999,
+        'return' => 'post_id',
+        'role_to_return' => 'child',
+    );
+
+    // Get related packages
+    $packages = toolset_get_related_posts($store_id, 'store-package', $toolset_args);
+    foreach($packages as $package){
+        toolset_connect_posts('store-package', $new_store, $package);
+    }
+
+    // Get related containers
+    $containers = toolset_get_related_posts($store_id, 'store-container', $toolset_args);
+    foreach ($containers as $container) {
+        toolset_connect_posts('store-container', $new_store, $container);
+    }
+
+    // Get related products
+    $products = toolset_get_related_posts($store_id, 'store-product', $toolset_args);
+    foreach ($products as $product) {
+        toolset_connect_posts('store-product', $new_store, $product);
+    }
+}

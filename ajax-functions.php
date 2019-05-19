@@ -2028,3 +2028,9 @@ function indppl_store_progress_bar_ajax(){
 }
 
 add_action('wp_ajax_indppl_store_progress_bar_ajax', 'indppl_store_progress_bar_ajax');
+
+function indppl_duplicate_store_ajax(){
+    
+}
+
+add_action('wp_ajax_indppl_duplicate_store_ajax', 'indppl_duplicate_store_ajax');
