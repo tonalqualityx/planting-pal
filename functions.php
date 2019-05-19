@@ -4,9 +4,9 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 Collection of functions for the entire site.
  */
 
-function geofind($lat, $lon) {
+function geofind($lat, $lon, $radius) {
 
-    $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
+    $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
     // var_dump($xml);
     $xmlfile = file_get_contents($xml);
     $ob = simplexml_load_string($xmlfile);
@@ -21,9 +21,8 @@ function geofind($lat, $lon) {
     return $allzips;
 } // end Function for Geo
 
-function geozip($zipcode) {
-
-    $xml = 'http://api.geonames.org/findNearbyPostalCodes?postalcode=' . $zipcode . '&country=USA&radius=25&username=mrcbrown&maxRows=15';
+function geozip($zipcode, $radius) {
+    $xml = 'http://api.geonames.org/findNearbyPostalCodes?postalcode=' . $zipcode . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
 
     $xmlfile = file_get_contents($xml);
     $ob = simplexml_load_string($xmlfile);
@@ -1058,7 +1057,7 @@ function update_package_table($store_id, $product_id, $type){
         ?>
     </tr>
     <?php
-    $console = $pro_container;
+    // $console = $pro_container;
     // var_dump($containers); used for sorting
     foreach($containers as $key => $id){
         // echo 'inside';
@@ -1076,6 +1075,7 @@ function update_package_table($store_id, $product_id, $type){
                 foreach($pro_container as $k => $v){
                     // echo 'inside-foreach';
                     if($id == $v['child']){
+                        
                         // echo $v['intermediary'];
                         // $app_qty_array[$k] = get_post_meta($v['intermediary']);
                         if(!empty($app_rates[$type][$product_id]['containers'][$id]['amount'])){
@@ -1107,9 +1107,16 @@ function update_package_table($store_id, $product_id, $type){
                         <?php
                     }
                 }
-                
-                if(!$default){
+                // var_dump($pro_container);
+                if(!$default || empty($pro_contianer)){
                     // echo 'no foreach';
+                    $app_qty = 0;
+                    $wet_dry = get_post_meta($product_id, 'wpcf-dryliquid', true);
+                    if($wet_dry = 'dry'){
+                        $app_unit = 'lb';
+                    }else{
+                        $app_unit = 'gal';
+                    }
                     if(!empty($app_rates[$type][$product_id]['containers'][$id]['amount'])){
                         $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
                     }
@@ -1142,10 +1149,8 @@ function update_package_table($store_id, $product_id, $type){
                     $cups = get_post_meta($product_id, 'wpcf-5cups', true);
                     // var_dump($cups);
                     // echo $cups;
-                    // echo $app_unit;
-                    // echo $app_qty;
-                    // echo $package_unit;
-                    $conversion = indppl_normalize($items, $package_unit, intval($cups));
+                    
+                    $conversion = indppl_normalize($items, $package_unit, $cups);
                     // var_dump($conversion);
                     // $conversion = getVolume($app_qty, $app_unit, $package_unit);
                     $final = $package_size / $conversion[0]['standard-amount'];

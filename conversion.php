@@ -22,6 +22,9 @@ function getArea($in_value, $in_input, $in_output)
 // CONVERSION: VOLUME
 function getVolume($in_value, $in_input, $in_output)
 {
+    // var_dump($in_output);
+    $in_input = strtolower($in_input);
+    $in_output = strtolower($in_output);
     switch ($in_input) {
         case "ci":
             // All inputs for Cubic Inches
@@ -485,6 +488,7 @@ function getVolume($in_value, $in_input, $in_output)
             break;
 
         case "cup":
+        case "cups":
             // All inputs for Cups
             switch ($in_output) {
                 case "cup":
@@ -533,10 +537,12 @@ function getVolume($in_value, $in_input, $in_output)
                 case "ml":
                     $pre_calc = 2.54 ** 3;
                     return $in_value / 16 * 231 * $pre_calc;
+                    // return $in_value * 236.588;
                     break;
                 case "l":
                     $pre_calc = 2.54 ** 3;
                     return $in_value / 16 * 231 * $pre_calc / 1000;
+                    // return $in_value * 0.236588;
                     break;
             }
             break;
@@ -1141,22 +1147,23 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
         }
         
         // echo "<h4>Type</h4>";
-        // var_dump($items[$k]['type']);
-        // var_dump($standard_type);
-        // Compare and run the appropriate function
+        // var_dump($items);
+        // // var_dump($standard_type);
+        // // Compare and run the appropriate function
+        // echo $standard_type;
+        // echo $items[$k]['type'];
+        // var_dump("<br /><br />");
         if($standard_type == $items[$k]['type']){
             if($unit == $item['unit']){
 
                 $items[$k]['standard-amount'] = $item['amount'];
             
             } else {
-
                 $convert = 'get' . ucfirst($standard_type);
                 $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
             
             }
         } else {
-
             $items[$k]['unit-per-standard'] = getDensity($cups, $item['unit']);
             $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
         }
@@ -1197,6 +1204,7 @@ function indppl_get_units($return = 'all'){
     $units = array(
         "volume" => array(
             "l",
+            "L",
             "ci",
             "cuft",
             "cy",
@@ -1207,11 +1215,14 @@ function indppl_get_units($return = 'all'){
             "tbl",
             "floz",
             "cup",
+            "cups",
             "pt-l",
             "qt-l",
             "gal",
             "cc",
             "ml",
+            "mL",
+
         ),
         "mass" => array(
             "lbs",

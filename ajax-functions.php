@@ -3,12 +3,25 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 function indppl_planting_pal_home_ajax(){
     if(isset($_POST['lat'])){
         $lat = $_POST['lat'];
-        $lon = $_POST['lon'];
-
-        // do_shortcode('[planting_pal_home]');
-        $return = planting_pal_home($lat, $lon);
-        echo $return;
     }
+    if(isset($_POST['lon'])){
+        $lon = $_POST['lon'];
+    }
+    if(isset($_POST['radius'])){
+        $radius = $_POST['radius'];
+    }
+    if(isset($_POST['zip'])){
+        $zip = $_POST['zip'];
+    }
+    if(isset($zip)){
+        // echo $radius;
+        $return = planting_pal_home(null, null, $radius, $zip);
+    }else{
+        $return = planting_pal_home($lat, $lon, $radius);
+    }
+
+    // do_shortcode('[planting_pal_home]');
+    echo $return;
     // var_dump($_POST);
     die();
 }
@@ -330,6 +343,11 @@ function indppl_get_product_info_ajax(){
     $send_array = array();
     if($default){
         $standard_unit = "<div id='product-create-standard-unit' data-unit='" . $unit . "'></div>";
+        ob_start();
+        ?>
+            <input type='hidden' class='product-create-dry-wet' value='<?php echo $dryliquid; ?>'>
+        <?php
+        $dry_wet = ob_get_clean();
     }else{
         ob_start();
         ?>
@@ -441,7 +459,7 @@ function indppl_get_product_info_ajax(){
         ob_start();
         $weight_array = ['lb', 'g', 'kg', 'oz'];
         ?>
-        <h3>How much does 5 level coups of this product weigh?</h3>
+        <h3>How much does 5 level cups of this product weigh?</h3>
         <div class='product-create-5-cups-inside-container'>
             <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='<?php echo $fivecups; ?>'>
             <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
@@ -532,7 +550,7 @@ function indppl_get_product_info_ajax(){
         $fraction = get_post_meta($product_id, 'wpcf-fraction', true);
         ?>
         <div class='indppl-add-product-fraction-bag'>
-        <h3 class='product-create-fraction-bag-title'>When you recommend apply this product, is it by:</h3>
+        <h3 class='product-create-fraction-bag-title'>When you recommend applying this product, is it by:</h3>
             <input type='checkbox' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag
         </div>
         <?php
@@ -634,8 +652,9 @@ function indppl_save_product_ajax(){
         <?php
         $set_default = ob_get_clean();
     }
-    $console = $default;
+    // $console = $default;
     // $console = $cups_num;
+    $console = $product_rate;
     if($product_id == 'new'){
         $new_product_args = array(
             'post_type' => 'product',
@@ -728,6 +747,7 @@ function indppl_save_product_ajax(){
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
         // $console = $updated_app_rates;
     }
+    // $console = $product_dryliquid;
     $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;

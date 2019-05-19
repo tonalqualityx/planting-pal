@@ -1,7 +1,7 @@
 <?php
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 
-function planting_pal_home($lat=NULL, $lon=NULL){
+function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
 	ob_start(); ?>
     <body class="location-body ppl-green-bg">
         <!-- <div class="desktopWarning">
@@ -14,6 +14,17 @@ function planting_pal_home($lat=NULL, $lon=NULL){
                 <div class="row search-form">
                     <div class="col" id='app-location-submitter'>
                         <form action="<?php site_url(); ?>" method="post">
+                        <h4 style='color: white;'>Radius Selector</h4>
+                        <div class='side-by-side'>
+                            <select class='form-control' id='geo-radius'>
+                                <option value='5' selected>5 Miles</option>
+                                <option value='10'>10 Miles</option>
+                                <option value='15'>15 Miles</option>
+                                <option value='25'>25 Miles</option>
+                                <option value='custom'>Custom</option>
+                            </select>
+                            <input type='number' class='hide' max='30' id='geo-radius-custom' value='5'>
+                        </div>
                         <div class='fix-position-geo'>
                             <input class="form-control rounded-input4" id='zip-for-location' type="text" name="zip" placeholder="Zipcode">
                             <img src="<?php echo home_url() . '/wp-content/plugins/planting-pal/assets/img/gps.png'; ?>" id="location-icon">
@@ -25,18 +36,19 @@ function planting_pal_home($lat=NULL, $lon=NULL){
         </div>
        
     <?php
-    if(isset($_POST['lat'])){
-		$lat = $_POST['lat'];
-        $lon = $_POST['lon'];
-        $zip_array = geofind($lat, $lon);
-    }else if(isset($_POST['zip'])){
-		$zip_array = geozip($_POST['zip']);
+    if($lat){
+        // $lat = $_POST['lat'];
+        // $lon = $_POST['lon'];
+        // $radius = $_POST['radius'];
+        $zip_array = geofind($lat, $lon, $radius);
+    }else if($zip){
+        // $radius = $_POST['radius'];
+		$zip_array = geozip($zip, $radius);
     }
     $top = ob_get_clean();
     ob_start();
     // var_dump($zip_array);
     ?><div class='store-list-container'> <?php
-  
     if($zip_array){
 		
 		$args = array(
@@ -92,7 +104,7 @@ function planting_pal_home($lat=NULL, $lon=NULL){
         
     }
     ?></div><?php
-    if(isset($_POST['lat'])){
+    if(isset($_POST['radius'])){
 		$get_store = ob_get_clean();
         return $get_store;
     }
