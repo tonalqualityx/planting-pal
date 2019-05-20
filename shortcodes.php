@@ -23,7 +23,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
                                 <option value='25'>25 Miles</option>
                                 <option value='custom'>Custom</option>
                             </select>
-                            <input type='number' class='hide' max='30' id='geo-radius-custom' value='5'>
+                            <input type='number' class='hide' min='0' max='30' id='geo-radius-custom' value='5'>
                         </div>
                         <div class='fix-position-geo'>
                             <input class="form-control rounded-input4" id='zip-for-location' type="text" name="zip" placeholder="Zipcode">

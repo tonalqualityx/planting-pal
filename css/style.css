@@ -566,7 +566,9 @@ div.ui-datepicker{
   padding: 15px;
   overflow-y: auto;
 }
-
+.indppl-add-product-name{
+  margin-top: 20px;
+}
 .side-by-side{
   display: flex;
 }

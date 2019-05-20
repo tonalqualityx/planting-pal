@@ -910,15 +910,13 @@ jQuery(document).ready(function( $ ) {
 
 
     function scrollTo(elem, speed) {
-        // $('.overflow').animate({
-        //     scrollTop: $(elem).Top
-        // }, speed == undefined ? 1000 : speed);
-        // return this;
         var num = $(elem).offset().top;
-        while($(elem).offset().top > 100){
-            $('.overflow').scrollTop(num);
-            num += 25;
-        }
+        console.log($(elem)[0].scrollHeight);
+        console.log(num);
+        // $('.overflow').scrollTop($(elem).offset().top);
+        $('.overflow').animate({ scrollTop: $(elem).offset().top-400}, 500);
+
+        console.log($(elem).offset().top);
     };
 
 
@@ -927,7 +925,7 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var target = $(this).data('target');
         var header = $(this).data('header');
-        console.log(header);
+        // console.log(header);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
 

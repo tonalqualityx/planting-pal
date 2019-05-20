@@ -940,7 +940,7 @@ function indppl_update_app_rates_ajax(){
     // var_dump($cups);
     // var_dump($container_unit);
     foreach($current_pack as $key => $value){
-        $conversion = indppl_normalize($items, $value['unit'], intval($cups));
+        $conversion = indppl_normalize($items, $value['unit'], $cups);
         // var_dump($items);
         // var_dump($value['unit']);
         // var_dump($cups);

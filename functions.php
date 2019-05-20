@@ -1108,7 +1108,7 @@ function update_package_table($store_id, $product_id, $type){
                     }
                 }
                 // var_dump($pro_container);
-                if(!$default || empty($pro_contianer)){
+                if(!$default || empty($pro_container)){
                     // echo 'no foreach';
                     $app_qty = 0;
                     $wet_dry = get_post_meta($product_id, 'wpcf-dryliquid', true);
@@ -1370,7 +1370,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                             }
                         }
                     }
-                    if(!$default){
+                    if(!$default || empty($pro_container)){
                         if(isset($app_rates[$type][$product_id]['bag'][$id])){
                             $qty = $app_rates[$type][$product_id]['bag'][$id]['amount'];
                             $unit = $app_rates[$type][$product_id]['bag'][$id]['unit'];
