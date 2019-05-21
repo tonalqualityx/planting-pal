@@ -908,18 +908,6 @@ jQuery(document).ready(function( $ ) {
     });
 
 
-
-    function scrollTo(elem, speed) {
-        var num = $(elem).offset().top;
-        console.log($(elem)[0].scrollHeight);
-        console.log(num);
-        // $('.overflow').scrollTop($(elem).offset().top);
-        $('.overflow').animate({ scrollTop: $(elem).offset().top-400}, 500);
-
-        console.log($(elem).offset().top);
-    };
-
-
     // Toggle planting guide sections
     $("body").on('click', '.planting-guide-sections .guide-controls', function(e){
         e.preventDefault();
@@ -928,11 +916,15 @@ jQuery(document).ready(function( $ ) {
         // console.log(header);
         $(this).parents('.planting-guide-options').slideToggle();
         $('.' + target).slideToggle();
-
-        // $('.planting-guide-preview').scrollTop($('.planting-guide-preview').scrollTop() + $('#' + header).position().top);
-
-        scrollTo('#' + header, 400);
-
+        var num = 200;
+        $('.planting-guide-content').children().each(function(){
+            if($(this).prev().prev().prev().attr('id') == header){
+                return false;
+            }else{
+                num += $(this).outerHeight(true);
+            }
+        });
+        $('.overflow').scrollTop(num);
         
     });
 
