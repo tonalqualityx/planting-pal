@@ -911,6 +911,7 @@ jQuery(document).ready(function( $ ) {
     // Toggle planting guide sections
     $("body").on('click', '.planting-guide-sections .guide-controls', function(e){
         e.preventDefault();
+        $(window).scrollTop(0);
         var target = $(this).data('target');
         var header = $(this).data('header');
         // console.log(header);
