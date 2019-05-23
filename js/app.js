@@ -1385,6 +1385,74 @@ jQuery(document).ready(function( $ ) {
 
     })
 
+    //Duplicate Store Process
+    $("body").on('click', '.indppl-duplicate-store', function (e) {
+
+        $('body').prepend("<div class='slide-in-products-container'><div class='container pad-top-3'><a href='#' class='modal-close'>X</a></div></div>");
+        setTimeout(function () {
+            $('.slide-in-products-container').addClass('left-0');
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+        var storeid = $(this).data('store');
+        var version_check = 1.0;
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_copy_store_form_ajax',
+                store: storeid,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                $('.indppl-loading-background').remove();
+                $('.slide-in-products-container .container').append(response);
+            }
+        });
+    });
+
+    $("body").on('click', '#store-duplicate', function (e) {
+
+        e.preventDefault();
+        indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        var storeid = $(this).data('store');
+        var storeName = $('#store-duplication-form input[name=store-name]').val();
+        var address1 = $('#store-duplication-form input[name=address1]').val();
+        var address2 = $('#store-duplication-form input[name=address2]').val();
+        var city = $('#store-duplication-form input[name=city]').val();
+        var state = $('#store-duplication-form select[name=state]').val();
+        var zip = $('#store-duplication-form input[name=zip]').val();
+        var webURL = $('#store-duplication-form input[name=weburl]').val();
+        var phone = $('#store-duplication-form input[name=phone]').val();
+        var email = $('#store-duplication-form input[name=store-email]').val();
+        var storeName = $('#store-duplication-form input[name=store-name]').val();
+        var version_check = 1.0;
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_duplicate_store_ajax',
+                store: storeid,
+                storeName: storeName,
+                address1: address1,
+                address2: address2,
+                city: city,
+                state: state,
+                zip: zip,
+                webURL: webURL,
+                phone: phone,
+                email: email,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                location.reload();
+            }
+        });
+    });
+
 });
 
 // start of functions

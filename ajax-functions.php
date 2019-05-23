@@ -2050,7 +2050,195 @@ function indppl_store_progress_bar_ajax(){
 add_action('wp_ajax_indppl_store_progress_bar_ajax', 'indppl_store_progress_bar_ajax');
 
 function indppl_duplicate_store_ajax(){
-    
+
+    // Get all the options...
+    $store = htmlspecialchars($_POST['store']);
+
+    $new_details = array();
+    $new_details['title'] = htmlspecialchars($_POST['storeName']);
+    $new_details['address1'] = htmlspecialchars($_POST['address1']);
+    $new_details['address2'] = htmlspecialchars($_POST['address2']);
+    $new_details['city'] = htmlspecialchars($_POST['city']);
+    $new_details['state'] = htmlspecialchars($_POST['state']);
+    $new_details['zip'] = htmlspecialchars($_POST['zip']);
+    $new_details['url'] = htmlspecialchars($_POST['webURL']);
+    $new_details['phone'] = htmlspecialchars($_POST['phone']);
+    $new_details['email'] = htmlspecialchars($_POST['email']);
+
+    indppl_duplicate_store($store, $new_details);
+
+    echo "done";
+
+    die();
+
 }
 
 add_action('wp_ajax_indppl_duplicate_store_ajax', 'indppl_duplicate_store_ajax');
+
+//Setup the prep form for copying a store...
+function indppl_copy_store_form_ajax(){ 
+    
+    $store = $_POST['store'];
+    $meta = get_post_meta($store);
+    $email = '';
+    if($meta['wpcf-email'][0]){
+        $email = $meta['wpcf-email'][0];
+    }
+    $website = '';
+    if($meta['wpcf-weburl'][0]){
+        $website = $meta['wpcf-weburl'][0];
+    }
+    // var_dump($meta);
+    ?>
+    <h1>Store Duplication</h1>
+    <p>Please enter the address & contact information for this store.</p>
+    <form method="post" action="//localhost/my-account/store-profile/" id="store-duplication-form" class="form-horizontal" enctype="multipart/form-data" _lpchecked="1">
+		<fieldset>
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="store-name">Store Name</label>
+			<div class="col-md-4">
+			<input id="store-name" name="store-name" type="text" placeholder="" class="form-control input-md" required="" value="" style="">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="address1">Address Line 1</label>
+			<div class="col-md-4">
+			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="" value="">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="address2">Address Line 2</label>
+			<div class="col-md-4">
+			<input id="address2" name="address2" type="text" placeholder="" class="form-control input-md" value="">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="city">City</label>
+			<div class="col-md-4">
+			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="">
+                
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="state">State</label>
+			<div class="state-selector">
+			<select id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="">
+                                        <option value="AL">AL</option>
+                                                <option value="AK">AK</option>
+                                                <option value="AZ">AZ</option>
+                                                <option value="AR">AR</option>
+                                                <option value="CA">CA</option>
+                                                <option value="CO">CO</option>
+                                                <option value="CT">CT</option>
+                                                <option value="DE">DE</option>
+                                                <option value="FL">FL</option>
+                                                <option value="GA">GA</option>
+                                                <option value="HI">HI</option>
+                                                <option value="ID">ID</option>
+                                                <option value="IL">IL</option>
+                                                <option value="IN">IN</option>
+                                                <option value="IA">IA</option>
+                                                <option value="KS">KS</option>
+                                                <option value="KY">KY</option>
+                                                <option value="LA">LA</option>
+                                                <option value="ME">ME</option>
+                                                <option value="MD">MD</option>
+                                                <option value="MA">MA</option>
+                                                <option value="MI">MI</option>
+                                                <option value="MN">MN</option>
+                                                <option value="MS">MS</option>
+                                                <option value="MO">MO</option>
+                                                <option value="MT">MT</option>
+                                                <option value="NE">NE</option>
+                                                <option value="NV">NV</option>
+                                                <option value="NH">NH</option>
+                                                <option value="NJ">NJ</option>
+                                                <option value="NM">NM</option>
+                                                <option value="NY">NY</option>
+                                                <option value="NC">NC</option>
+                                                <option value="ND">ND</option>
+                                                <option value="OH">OH</option>
+                                                <option value="OK">OK</option>
+                                                <option value="OR">OR</option>
+                                                <option value="PA">PA</option>
+                                                <option value="RI">RI</option>
+                                                <option value="SC">SC</option>
+                                                <option value="SD">SD</option>
+                                                <option value="TN">TN</option>
+                                                <option value="TX">TX</option>
+                                                <option value="UT">UT</option>
+                                                <option value="VT">VT</option>
+                                                <option value="VA">VA</option>
+                                                <option value="WA">WA</option>
+                                                <option value="WV">WV</option>
+                                                <option value="WI">WI</option>
+                                                <option value="WY">WY</option>
+                                    </select>
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="zip">Zipcode</label>
+			<div class="col-md-2">
+			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="weburl">Store Website</label>
+			<div class="col-md-4">
+			<input id="weburl" name="weburl" type="text" placeholder="" class="form-control input-md" value="<?php echo $website; ?>">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="phone">Phone Number</label>
+			<div class="col-md-4">
+			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="" value="">
+			
+			</div>
+			</div>
+			
+			<!-- Text input-->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="store-email">Email Address</label>
+			<div class="col-md-4">
+			<input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email; ?>">
+			
+			</div>
+			</div>
+
+            			<!-- Button -->
+			<div class="form-group">
+			<label class="col-md-4 control-label" for="submit"></label>
+			<div class="col-md-4">
+				<p class="submit"><input type="submit" name="submit" id="store-duplicate" class="button button-primary" value="Create Store" data-store="<?php echo $store; ?>"></p>
+			</div>
+			</div>
+		</fieldset>
+    </form>
+
+    <?php 
+    
+    die();
+}
+
+
+add_action('wp_ajax_indppl_copy_store_form_ajax', 'indppl_copy_store_form_ajax');
