@@ -305,6 +305,32 @@ function indppl_get_products_by_brand_ajax(){
 add_action( 'wp_ajax_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax' );
 add_action('wp_ajax_nopriv_indppl_get_products_by_brand_ajax', 'indppl_get_products_by_brand_ajax');
 
+function indppl_add_new_brand_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['brand'])){
+        $brand = $_POST['brand'];
+    }
+    $term = wp_insert_term(
+        $brand,
+        'brand',
+    );
+    $slug = get_term($term['term_id']);
+    echo $slug->slug;
+    add_term_meta($term['term_id'], 'wpcf-custom-brand', 1);
+    add_term_meta($term['term_id'], 'wpcf-creator-user-id', get_current_user_id());
+    die();
+}
+add_action( 'wp_ajax_indppl_add_new_brand_ajax', 'indppl_add_new_brand_ajax' );
+add_action('wp_ajax_nopriv_indppl_add_new_brand_ajax', 'indppl_add_new_brand_ajax');
+
 function indppl_get_product_info_ajax(){
     if(isset($_POST['version_check'])){
         if($_POST['version_check'] != 1.0){

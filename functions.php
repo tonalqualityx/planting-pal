@@ -1466,9 +1466,23 @@ function indppl_get_product_info(){
                     <option value='' disabled selected>Select Brand</option>
                     <?php
                     $brands = get_terms('brand');
+                    var_dump($brands);
                     foreach($brands as $key => $value){
-                        ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> <?php
+                        $custom = get_term_meta($value->term_id, 'wpcf-custom-brand', true);
+                        if($custom){
+                            $mine = get_term_meta($value->term_id, 'wpcf-creator-user-id', true);
+                            if($mine == get_current_user_id()){
+                                ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> </option><?php
+                            }
+                        }else{
+                            ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> </option><?php
+                        }
                     }
+                    $get_user_status = indppl_user_status(get_current_user_id());
+                    if(in_array('paidaccountpro', $get_user_status)){
+                        ?> <option value="new">Add Brand</option> <?php
+                    }
+                    
                     // var_dump($brands);
                     ?>
                 </select>

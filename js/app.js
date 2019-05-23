@@ -298,37 +298,79 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', function(){
         check_on_load_and_click();
     });
-    $('body').on('change', '#product-create-brand', function(){
+
+    $('body').on('click', '#product-add-new-brand-btn', function(e){
+        e.preventDefault();
         indpplAddLoading();
-        var brand = $(this).val();
-        var type = $('#indppl-modal-product-type').val();
+        var brand = $('#product-add-new-brand').val();
         var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
             method: 'POST',
             data: {
-                action: 'indppl_get_products_by_brand_ajax',
+                action: 'indppl_add_new_brand_ajax',
                 brand: brand,
-                type: type,
                 version_check: version_check,
             },
             type: 'POST',
             success: function(e){
-                // console.log(e);
-                $('.product-create-brand-cut-off').children().each(function(){
-                    $(this).empty();
-                })
-                $('.product-create-product').empty();
-                $('.product-create-product').append(e);
+                console.log(e);
+                $(".create-brand-button-container").hide();
+                $("#product-add-new-brand").hide();
+                $(".product-create-product").show();
+
+                $('#product-create-brand').append('<option value="' + e + '" selected>' + brand + '</option>');
                 var status = $('#user-status').val();
-                // console.log(status);
                 if(status == 'paidaccountpro'){
                     $('.product-create-product').append('<option value="new">Add Product</option>');
                 }
+
                 indpplDelLoading();
             }
         });
+    })
+
+    $('body').on('change', '#product-create-brand', function(){
+        
+        var brand = $(this).val();
+        if(brand == 'new'){
+            $(".product-create-product").hide();
+            $("<input type='text' id='product-add-new-brand'><div class='create-brand-button-container'><a href='#' class='indppl-button' id='product-add-new-brand-btn'>Create Brand</a></div>").insertAfter(this);
+        }else{
+            indpplAddLoading();
+            $(".product-create-product").show();
+            $("#product-add-new-brand").hide();
+            $(".create-brand-button-container").hide();
+            var type = $('#indppl-modal-product-type').val();
+            var version_check = 1.0;
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_get_products_by_brand_ajax',
+                    brand: brand,
+                    type: type,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function(e){
+                    // console.log(e);
+                    $('.product-create-brand-cut-off').children().each(function(){
+                        $(this).empty();
+                    })
+                    $('.product-create-product').empty();
+                    $('.product-create-product').append(e);
+                    var status = $('#user-status').val();
+                    // console.log(status);
+                    if(status == 'paidaccountpro'){
+                        $('.product-create-product').append('<option id="add_new_brand_select" value="new">Add Product</option>');
+                    }
+                    indpplDelLoading();
+                }
+            });
+        }
     });
     $('body').on('change', '#product-create-product', function(e){
         indpplAddLoading();
