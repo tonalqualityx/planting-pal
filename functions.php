@@ -1857,6 +1857,14 @@ function indppl_duplicate_store($store_id, $new_details){
             'wpcf-planting-guide-ground-options' => $meta['planting-guide-ground-options'][0],
             'wpcf-planting-guide-pots-options' => $meta['planting-guide-pots-options'][0],
             'wpcf-planting-guide-beds-options' => $meta['planting-guide-beds-options'][0],
+            'wpcf-address1' => $new_details['address1'],
+            'wpcf-address2' => $new_details['address2'],
+            'wpcf-city' => $new_details['city'],
+            'wpcf-state' => $new_details['state'],
+            'wpcf-zip' => $new_details['zip'],
+            'wpcf-phone' => $new_details['phone'],
+            'wpcf-email' => $new_details['email'],
+            'wpcf-weburl' => $new_details['url'],
         ),
     );
 
