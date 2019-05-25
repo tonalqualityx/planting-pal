@@ -2092,7 +2092,7 @@ function indppl_copy_store_form_ajax(){
     ?>
     <h1>Store Duplication</h1>
     <p>Please enter the address & contact information for this store.</p>
-    <form method="post" action="//localhost/my-account/store-profile/" id="store-duplication-form" class="form-horizontal" enctype="multipart/form-data" _lpchecked="1">
+    <form method="post" action="//localhost/my-account/store-profile/" id="store-duplication-form" class="form-horizontal" enctype="multipart/form-data" _lpchecked="1" onsubmit="return indpplCheckAddedStore(this);" >
 		<fieldset>
 			<!-- Text input-->
 			<div class="form-group">
@@ -2218,20 +2218,30 @@ function indppl_copy_store_form_ajax(){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="store-email">Email Address</label>
-			<div class="col-md-4">
-			<input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email; ?>">
-			
+                <label class="col-md-4 control-label" for="store-email">Email Address</label>
+                <div class="col-md-4">
+                    <input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email; ?>">
+                
+                </div>
 			</div>
+
+            <div class="form-group">
+                <div class=" indppl-flex indppl-no-wrap" style="max-width: 600px; margin:auto;align-items:center;">
+                    <input id="billing" name="billing" type="checkbox" class="form-control input-md" style="height:auto; width: auto;" required> 
+                    <p style="margin-bottom: 0; margin-left:10px;">I understand that I will be billed an additional subscription.</p>
+                    
+                
+                </div>
 			</div>
 
             			<!-- Button -->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="submit"></label>
-			<div class="col-md-4">
-				<p class="submit"><input type="submit" name="submit" id="store-duplicate" class="button button-primary" value="Create Store" data-store="<?php echo $store; ?>"></p>
+                <label class="col-md-4 control-label" for="submit"></label>
+                <div class="col-md-4">
+                    <p class="submit"><input type="submit" name="submit" id="store-duplicate" class="button button-primary" value="Create Store" data-store="<?php echo $store; ?>"></p>
+                </div>
 			</div>
-			</div>
+            
 		</fieldset>
     </form>
 
