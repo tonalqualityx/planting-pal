@@ -1910,4 +1910,19 @@ function indppl_duplicate_store($store_id, $new_details){
     foreach ($products as $product) {
         toolset_connect_posts('store-product', $new_store, $product);
     }
+    
+    indppl_notify_new_store($store_id, get_current_user_id() );
+}
+    
+function indppl_notify_new_store($store, $user){
+
+    $user_info = get_userdata( $user );
+    
+    $to = get_option('admin_email');
+    $subject = "Billing update needed";
+    $message = "A new store has been added to the user account with the email {$user_info->user_email}";
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+
+    wp_mail( $to, $subject, $message, $headers);
+    
 }
