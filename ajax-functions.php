@@ -320,7 +320,7 @@ function indppl_add_new_brand_ajax(){
     }
     $term = wp_insert_term(
         $brand,
-        'brand',
+        'brand'
     );
     $slug = get_term($term['term_id']);
     echo $slug->slug;
