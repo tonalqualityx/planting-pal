@@ -1258,9 +1258,15 @@ function update_bag_package_table($store_id, $product_id, $type){
         <!-- <th colspan='1'>Largest Product</th> -->
         <?php
         $order_array = array();
+
         foreach($product_related as $key => $value){
             if(in_array($value, $store_related)){
-                $order_array[get_post_meta($value, 'wpcf-size', true)] = $value;
+                var_dump($value);
+                if(array_key_exists(get_post_meta($value, 'wpcf-size', true), $order_array)){
+                    $order_array[get_post_meta($value, 'wpcf-size', true)+1] = $value;
+                }else{
+                    $order_array[get_post_meta($value, 'wpcf-size', true)] = $value;
+                }
                 
             }
         }
@@ -1371,19 +1377,25 @@ function update_bag_package_table($store_id, $product_id, $type){
                         }
                     }
                     if(!$default || empty($pro_container)){
+                        $qty = 1;
+                        $unit = get_post_meta($pack_id, 'wpcf-unit', true);
+                        // var_dump('what?');
                         if(isset($app_rates[$type][$product_id]['bag'][$id])){
                             $qty = $app_rates[$type][$product_id]['bag'][$id]['amount'];
                             $unit = $app_rates[$type][$product_id]['bag'][$id]['unit'];
                         }
                         // var_dump(get_post_meta($pack_id, 'wpcf-size', true));
-                        // var_dump($unit);
+                        
                         $package_size = get_post_meta($pack_id, 'wpcf-size', true);
                         $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
-                        // var_dump($package_size);
                         $cups = get_post_meta($product_id, 'wpcf-5cups', true);
                         $pp_dilema = 'ppc';
-                        // if($package_unit == 'cuft'){
-                        $conversion = getVolume($qty, $unit, $package_unit);
+                        if($package_unit == 'g' || $package_unit == 'lb' || $package_unit == 'kg' || $package_unit == 'oz'){
+                            $conversion = getMass($qty, $unit, $package_unit);
+                        }else{
+                            $conversion = getVolume($qty, $unit, $package_unit);
+                        }
+                        // var_dump($conversion);
                         if($conversion >= $package_size){
                             $final = $conversion / $package_size;
                             $pp_dilema = 'cpp';
