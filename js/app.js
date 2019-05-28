@@ -793,6 +793,20 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.product-create-pots-submit', function(e){
         e.preventDefault();
         indpplAddLoading();
+        var required = true;
+        console.log($('.indppl-add-product-name').val());
+        if($('.indppl-add-product-name').val() == ""){
+            $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
+            required = false;
+        }
+        if(!$('.indppl-background-green')[0]){
+            $('.indppl-product-create-size-num-inside-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
+            required = false;
+        }
+        if(required == false){
+            indpplDelLoading();
+            return;
+        }
         var store_id = $('#store-id').val();
         var type = $('#indppl-modal-product-type').val();
         var brand = $('#product-create-brand').val();
