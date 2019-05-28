@@ -1261,7 +1261,7 @@ function update_bag_package_table($store_id, $product_id, $type){
 
         foreach($product_related as $key => $value){
             if(in_array($value, $store_related)){
-                var_dump($value);
+                // var_dump($value);
                 if(array_key_exists(get_post_meta($value, 'wpcf-size', true), $order_array)){
                     $order_array[get_post_meta($value, 'wpcf-size', true)+1] = $value;
                 }else{
@@ -1376,6 +1376,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                             }
                         }
                     }
+                    
                     if(!$default || empty($pro_container)){
                         $qty = 1;
                         $unit = get_post_meta($pack_id, 'wpcf-unit', true);
