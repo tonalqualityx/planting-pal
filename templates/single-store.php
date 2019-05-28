@@ -38,7 +38,6 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
             if(array_key_exists($container, $apprates['ground'][$key]['containers'])){
                 $product = get_the_title($key);
                 $standard = get_post_meta($key, 'wpcf-unit', TRUE);
-                // echo "<h2>STANDARD L1 $standard</h2>";
                 $brand = get_the_terms($key, 'brand');
                 $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
                 $brand = $brand[0];
@@ -62,14 +61,16 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         $need = $amount_cups * $cups1;
                         // echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
                     }
-                } else {
-                    $need = $amount;
-                }
+                } 
                 // var_dump($need);
                 if($amount > 0){
                     $need = 0;
                     foreach($normalized as $k => $v) {
-                        $need += $v['standard-amount']; 
+                        if($standard != 'each'){
+                            $need += $v['standard-amount']; 
+                        } else {
+                            $need = $amount;
+                        }
                     }
     
                     if(isset($products[$key])){
@@ -81,6 +82,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         $products[$key]['unit'] = $standard;
                     }
                 }
+
 
             }
         }
@@ -276,9 +278,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     // Calculate the shopping list!
     $shopping_list = array();
     foreach($products as $key => $val) {
-
         // Setup the important values
-        // var_dump($val);
         $standard = get_post_meta( $key, 'wpcf-unit', TRUE);
         // echo "<h1>List Standard $standard</h1>";
         $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
@@ -293,7 +293,6 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
             $amount = get_post_meta($package, 'wpcf-size', TRUE);
             $unit = get_post_meta($package, 'wpcf-unit', TRUE);
             if($unit == 'each') {
-                // var_dump($unit);
                 $normalized_packs[$amount . " " . $unit] = array(
                     "amount" => $amount,
                     "unit" => $unit,
@@ -309,10 +308,11 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
         } 
         
         if($standard == 'each'){
-            // echo "<h1>PIEL</h1>";
+
         } else {
             $normalized_packs = indppl_normalize($convert, $standard, $cups);
         }
+
         // var_dump($normalized_packs);
         // echo "<br /><br />";
         // var_dump($convert);
