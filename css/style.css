@@ -367,7 +367,7 @@ span.padding-right-5{
   margin-bottom: 5px;
   line-height: 0;
 }
-.container-submit{
+.container-submit, .margin-top-20{
   margin-top: 20px;
 }
 .display-none{
@@ -682,6 +682,7 @@ div.ui-datepicker{
 }
 .product-create-add-product-name, .max-width-300{
   max-width: 300px;
+  display: flex;
 }
 .spining-loader{
   height: 25px;
@@ -815,7 +816,7 @@ GUIDES STYLES
   flex-grow: 9999;
 }
 
-.store-address {
+.store-address, .margin-left-10{
   margin-left: 10px;
 }
 

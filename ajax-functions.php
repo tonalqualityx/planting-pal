@@ -742,12 +742,15 @@ function indppl_save_product_ajax(){
         }
     }
     // var_dump($package_array);
+
     // var_dump($new_pack);
+    $pack_id_array = [];
     foreach($new_pack as $key => $value){
         $new_id = indppl_create_package($value);
         $new_package = toolset_connect_posts('store-package', $store_id, $new_id);
         $prod_pack = toolset_connect_posts('product-package', $product_id, $new_id);
         // var_dump($new_package);
+        array_push($pack_id_array, $new_id);
     }
     foreach($package_array as $package_id){
         if($package_id != 0){
@@ -773,11 +776,12 @@ function indppl_save_product_ajax(){
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
         // $console = $updated_app_rates;
     }
-    // $console = $product_dryliquid;
+    $console = $pack_id_array;
     $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
     $ajax_array['dryliquid'] = $product_dryliquid;
+    $ajax_array['pack_id_array'] = $pack_id_array;
     if($default){
         $ajax_array['default'] = $set_default;
     }
