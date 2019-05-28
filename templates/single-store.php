@@ -45,22 +45,27 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                 $plant = get_the_title($container);
                 $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
                 // echo "<h1>$amount</h1>";
-                $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
-                $unit_args = array(array('unit' => $unit, 'amount' => $amount));
-                
-                $normalized = indppl_normalize($unit_args, $standard, $cups);
-                
-                if($standard != 'lb'){
-                    $need = getVolume($amount, $unit, $standard);
-                    // echo "<h2>Volume: $need $standard</h2>";
+
+                if($standard != 'each'){
+                    $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
+                    $unit_args = array(array('unit' => $unit, 'amount' => $amount));
+                    
+                    $normalized = indppl_normalize($unit_args, $standard, $cups);
+                    
+                    if($standard != 'lb'){
+                        $need = getVolume($amount, $unit, $standard);
+                        // echo "<h2>Volume: $need $standard</h2>";
+                    } else {
+                        $calc = getDensity($cups, $unit);
+                        $cups1 = $cups/5;
+                        $amount_cups = getVolume($amount, $unit, 'cup');
+                        $need = $amount_cups * $cups1;
+                        // echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
+                    }
                 } else {
-                    $calc = getDensity($cups, $unit);
-                    $cups1 = $cups/5;
-                    $amount_cups = getVolume($amount, $unit, 'cup');
-                    $need = $amount_cups * $cups1;
-                    // echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
+                    $need = $amount;
                 }
-                
+                // var_dump($need);
                 if($amount > 0){
                     $need = 0;
                     foreach($normalized as $k => $v) {
@@ -273,24 +278,44 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     foreach($products as $key => $val) {
 
         // Setup the important values
+        // var_dump($val);
         $standard = get_post_meta( $key, 'wpcf-unit', TRUE);
+        // echo "<h1>List Standard $standard</h1>";
         $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
         $brand = get_the_terms( $key, 'brand' );
         $brand = $brand[0]->name;
         $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
+        $normalized_packs = array();
 
         // Create a conversion array and fill it with all the package sizes for conversion
         $convert = array();
         foreach($packages as $package) {
             $amount = get_post_meta($package, 'wpcf-size', TRUE);
             $unit = get_post_meta($package, 'wpcf-unit', TRUE);
-            $convert[$amount . " " . $unit] = array(
-                'amount' => $amount,
-                'unit'  => $unit,
-            );
+            if($unit == 'each') {
+                // var_dump($unit);
+                $normalized_packs[$amount . " " . $unit] = array(
+                    "amount" => $amount,
+                    "unit" => $unit,
+                    "standard" => $standard,
+                    "standard-amount" => $amount,
+                );
+            } else {
+                $convert[$amount . " " . $unit] = array(
+                    'amount' => $amount,
+                    'unit'  => $unit,
+                );
+            }
         } 
+        
+        if($standard == 'each'){
+            // echo "<h1>PIEL</h1>";
+        } else {
+            $normalized_packs = indppl_normalize($convert, $standard, $cups);
+        }
+        // var_dump($normalized_packs);
+        // echo "<br /><br />";
         // var_dump($convert);
-        $normalized_packs = indppl_normalize($convert, $standard, $cups);
         // echo "<h3>Normalization</h3>";
         // var_dump($normalized_packs);
         // echo "<br /><br /><h4>Sorted</h4>";
@@ -304,6 +329,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
         $check_last = array_keys($normalized_packs);
         $last_pack = array_pop($check_last);
         $skipped_packs = array();
+        // echo "<h2>{$val['need']}</h2>";
         foreach($ref as $pack_key => $pack) {
 
             if($val['need'] >= $pack['standard-amount']){
