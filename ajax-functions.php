@@ -696,7 +696,12 @@ function indppl_save_product_ajax(){
         );
         $product_id = wp_insert_post($new_product_args);
         wp_set_object_terms($product_id, $brand, 'brand');
+    }else{
+        update_post_meta($product_id, 'wpcf-5cups', $cups_num);
+        update_post_meta($product_id, 'wpcf-5cups-unit', $cups_unit);
     }
+    // checking change of 5_cups
+
     // $console = $product_rate;
     // $app_rates = indppl_apprates($store_id);
     // $console;
@@ -1065,6 +1070,9 @@ function indppl_save_pots_product_ajax(){
         );
         $product_id = wp_insert_post($new_product_args);
         wp_set_object_terms($product_id, $brand, 'brand');
+    }else{
+        update_post_meta($product_id, 'wpcf-5cups', $cups_num);
+        update_post_meta($product_id, 'wpcf-5cups-unit', $cups_unit);
     }
 
     // var_dump($product_id);
