@@ -1164,8 +1164,18 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
             
             }
         } else {
-            $items[$k]['unit-per-standard'] = getDensity($cups, $item['unit']);
-            $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
+            if($standard_type == 'mass'){
+                $items[$k]['unit-per-standard'] = getDensity($cups, $item['unit']);
+                $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
+            }else{
+                $cup = $cups/5;
+                $mass = getMass($cup, $cups_unit, $item['unit']);
+                $total_cups = $item['amount'] / $mass;
+                $blank = getVolume($total_cups, 'cup', $unit);
+                $items[$k]['unit-per-standard'] = 1;
+                $items[$k]['standard-amount'] = $blank;
+            }
+
         }
         // echo "<h4>{$item['amount']} {$item['unit']}<br /> Unit: $unit <br /> Per Standard: {$items[$k]['unit-per-standard']}<br />Item Unit: {$item['unit']}<br />5 Cups = $cups <br /> Size = {$item['amount']} <br /> Standard size: {$items[$k]['standard-amount']}</h4>";
     }

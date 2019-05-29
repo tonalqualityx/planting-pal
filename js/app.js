@@ -1861,9 +1861,10 @@ function updateAppRates(elem){
         },
         type: 'POST',
         success: function(e){
+            console.log(e);
             array = JSON.parse(e);
             // console.log(elem);
-            // console.log(array);
+            console.log(array['console']);
             jQuery.each(array['app_rates'], function(index, value){
                 // console.log(index);
 

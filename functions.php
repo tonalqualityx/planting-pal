@@ -1514,7 +1514,7 @@ function indppl_get_product_info(){
                     <option value='' disabled selected>Select Brand</option>
                     <?php
                     $brands = get_terms('brand');
-                    var_dump($brands);
+                    // var_dump($brands);
                     foreach($brands as $key => $value){
                         $custom = get_term_meta($value->term_id, 'wpcf-custom-brand', true);
                         if($custom){
