@@ -253,6 +253,7 @@ function indppl_get_products_by_brand_ajax(){
     if(isset($_POST['type'])){
         $type = $_POST['type'];
     }
+
     $args = array(
         'post_type' => 'product',
         'tax_query' => array(
@@ -318,14 +319,55 @@ function indppl_add_new_brand_ajax(){
     if(isset($_POST['brand'])){
         $brand = $_POST['brand'];
     }
-    $term = wp_insert_term(
-        $brand,
-        'brand'
-    );
-    $slug = get_term($term['term_id']);
-    echo $slug->slug;
-    add_term_meta($term['term_id'], 'wpcf-custom-brand', 1);
-    add_term_meta($term['term_id'], 'wpcf-creator-user-id', get_current_user_id());
+    $name = get_term_by('name', $brand, 'brand');
+    if($name != false){
+        $terms = get_terms( array(
+            'taxonomy' => 'brand',
+            'hide_empty' => false,
+        ) );
+        // var_dump($terms);
+        $count = 0;
+        $is_user_made = '';
+        foreach($terms as $key => $value){
+            if($value->name == $name->name){
+                $id = $value->term_id;
+                $default = get_term_meta($id, 'wpcf-custom-brand', true);
+                $user_id = get_term_meta($id, 'wpcf-creator-user-id', true);
+                if($user_id == get_current_user_id() || $default == false){
+                    $is_user_made = $value->slug;
+                }
+                $count++;
+            }
+        }
+        if($is_user_made){
+            echo $is_user_made;
+        }else{
+            $term = wp_insert_term(
+                $brand . "_" . $count,
+                'brand',
+            );
+            wp_update_term($term['term_id'], 'brand', array(
+                'name' => $brand
+            ));
+            $slug = get_term($term['term_id']);
+            echo $slug->slug;
+            add_term_meta($term['term_id'], 'wpcf-custom-brand', 1);
+            add_term_meta($term['term_id'], 'wpcf-creator-user-id', get_current_user_id());
+            $name = get_term_by('id', $term['term_id'], 'brand');
+            // var_dump($terms);
+        }
+    }else{
+        $term = wp_insert_term(
+            $brand,
+            'brand'
+        );
+        $slug = get_term($term['term_id']);
+        echo $slug->slug;
+        add_term_meta($term['term_id'], 'wpcf-custom-brand', 1);
+        add_term_meta($term['term_id'], 'wpcf-creator-user-id', get_current_user_id());
+        // echo "you failed";
+    }
+    
     die();
 }
 add_action( 'wp_ajax_indppl_add_new_brand_ajax', 'indppl_add_new_brand_ajax' );
@@ -508,6 +550,28 @@ function indppl_get_product_info_ajax(){
         // $console = $unit;
         
         $cups = ob_get_clean();
+    }else{
+        $cups_num = get_post_meta($product_id, 'wpcf-5cups', true);
+        $cups_unit = get_post_meta($product_id, 'wpcf-5cups-unit', true);
+        ob_start();
+
+        ?>
+
+        <div class='product-create-5-cups-inside-container' style='display: none;'>
+            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='<?php echo $cups_num; ?>'>
+            <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
+                <!-- <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option> -->
+                <?php
+                    ?>
+                    <option class='product-create-5-cups-option' value='<?php echo $cups_unit; ?>' selected >
+                    <?php echo $weight_unit; ?>
+                    </option>
+
+            </select>
+        </div>
+        <?php
+        $cups = ob_get_clean();
+
     }
 
     // app rates chart container
@@ -561,7 +625,7 @@ function indppl_get_product_info_ajax(){
             </div>
             <div>
                 <input type='checkbox' name='indppl-add-product-additive-blend' class='indppl-add-usage-type-check' id='indppl-add-product-additive-blend' <?php if($additive){ ?>checked<?php }?>>
-                <label for='indppl-add-product-additive-blend'>Additive Blended In thie Potting Soil</label>
+                <label for='indppl-add-product-additive-blend'>Additive Blended in with Potting Soil</label>
             </div>
             <div>
                 <input type='checkbox' name='indppl-add-product-additive-surface' class='indppl-add-usage-type-check' id='indppl-add-product-additive-surface' <?php if($surface){ ?>checked<?php }?>>
@@ -965,6 +1029,11 @@ function indppl_update_app_rates_ajax(){
         $container_unit = $_POST['container_unit'];
     }
     $cups = get_post_meta($product_id, 'wpcf-5cups', true);
+    $cups_unit = get_post_meta($product_id, 'wpcf-5cups-unit', true);
+    if(!$cups_unit || $cups_unit == ''){
+        $cups_unit = 'lb';
+        update_post_meta($product_id, 'wpcf-5cups-unit', 'lb');
+    }
     $update_array = [];
     $items = array(
         array(
@@ -974,16 +1043,22 @@ function indppl_update_app_rates_ajax(){
     );
     // var_dump($cups);
     // var_dump($container_unit);
+    $console = $cups;
     foreach($current_pack as $key => $value){
-        $conversion = indppl_normalize($items, $value['unit'], $cups);
+        $conversion = indppl_normalize($items, $value['unit'], $cups, $cups_unit);
         // var_dump($items);
+        // $console = $cups;
         // var_dump($value['unit']);
         // var_dump($cups);
         $final = $value['size'] / $conversion[0]['standard-amount'];
-        $update_array[] = round($final, 2);
+        if(is_float($final) || is_int($final)){
+            $final = round($final, 2);
+        }
+        $update_array[] = $final;
     }
     $send_array = [];
     $send_array['app_rates'] = $update_array;
+    $send_array['console'] = $console;
     echo json_encode($send_array);
     // var_dump($send_array);
     die();
