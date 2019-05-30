@@ -606,14 +606,19 @@ function indppl_get_product_info_ajax(){
         $surface = get_post_meta($product_id, 'wpcf-use-surface');
 
         $app_rates = indppl_apprates($store_id);
-        if(isset($app_rates[$type]['filler'][$product_id])){
-            $filler = '1';
-        }
-        if(isset($app_rates[$type]['blended'][$product_id])){
-            $additive = '1';
-        }
-        if(isset($app_rates[$type]['surface'][$product_id])){
-            $surface = '1';
+        if(isset($app_rates[$type]['filler'][$product_id]) || isset($app_rates[$type]['blended'][$product_id]) || isset($app_rates[$type]['surface'][$product_id])){
+            $filler = '0';
+            $additive = '0';
+            $surface = '0';
+            if(isset($app_rates[$type]['filler'][$product_id])){
+                $filler = '1';
+            }
+            if(isset($app_rates[$type]['blended'][$product_id])){
+                $additive = '1';
+            }
+            if(isset($app_rates[$type]['surface'][$product_id])){
+                $surface = '1';
+            }
         }
         $console = $additive;
         ?>
@@ -641,7 +646,8 @@ function indppl_get_product_info_ajax(){
         ?>
         <div class='indppl-add-product-fraction-bag'>
         <h3 class='product-create-fraction-bag-title'>When you recommend applying this product, is it by:</h3>
-            <input type='checkbox' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag
+            <input type='radio' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag <br />
+            <input type='radio' class='product-create-other' name='product-create-fraction-bag' id='product-create-other' <?php if(!$fraction){ ?>checked<?php }?> value='1'>Other  ie. cups, tablespoons, etc
         </div>
         <?php
     $fraction_bag = ob_get_clean();
@@ -933,7 +939,6 @@ function indppl_remove_package_from_store_ajax(){
     if(!$default){
         wp_delete_post($product_id);
     }
-    var_dump($test);
     die();
 }
 add_action( 'wp_ajax_indppl_remove_package_from_store_ajax', 'indppl_remove_package_from_store_ajax' );
@@ -1154,6 +1159,7 @@ function indppl_save_pots_product_ajax(){
     // var_dump($surface);
     $send_array = array($product_id => array());
     // foreach($product_rate as $key => $value){
+    
     $temp = array();
     if($filler == 'true'){
         $temp['filler'] = array(
@@ -1190,8 +1196,13 @@ function indppl_save_pots_product_ajax(){
     
     // }
     if($product_id != 'new'){
-        // var_dump($type);
-        var_dump($send_array);
+        $del_array = array(
+            $type => $product_id,
+        );
+        var_dump($del_array);
+        $del = indppl_delete_apprate($store_id, $del_array);
+        var_dump($del);
+        // var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
 
         // var_dump($save);
@@ -1394,12 +1405,12 @@ function indppl_get_pot_apprates_ajax(){
                     $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
                     // apprates_array
                     
-                    if($get_apps == true){
+                    // if($get_apps == true){
                         if(isset($app_rates[$type]['blended'][$key]['amount'])){
                             $dilution = $app_rates[$type]['blended'][$key]['amount'];
                             $unit = $app_rates[$type]['blended'][$key]['unit'];
                         }
-                    }
+                    // }
                     
                     $select_array = array(
                         'cup' => 'Cups',
@@ -1475,13 +1486,13 @@ function indppl_get_pot_apprates_ajax(){
                     $units = get_post_meta($key, 'wpcf-surface-units', true);
                     $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
                     // apprates_array
-                    if($get_apps == true){
+                    // if($get_apps == true){
                         if(isset($app_rates[$type]['surface'][$key]['amount'])){
                             $dilution = $app_rates[$type]['surface'][$key]['amount'];
                             $units = $app_rates[$type]['surface'][$key]['unit'];
                             $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
                         }
-                    }
+                    // }
 
                     $select_unit = array(
                         'cup' => 'Cups',
@@ -1590,7 +1601,7 @@ function indppl_get_pot_apprates_ajax(){
                     if(!$img){
                         $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
                     }
-                    if($get_apps == true){
+                    if(isset($app_rates[$type]['each'][$key])){
                         $each_small = $app_rates[$type]['each'][$key]['small'];
                         $each_medium = $app_rates[$type]['each'][$key]['medium'];
                         $each_large = $app_rates[$type]['each'][$key]['large'];
