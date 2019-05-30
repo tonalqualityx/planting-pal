@@ -1195,6 +1195,7 @@ jQuery(document).ready(function( $ ) {
                 email : email
             }, 
             success : function(response) {
+                console.log(response);
                 $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
                 $('.keep-going').hide();
                 $('.email-address-add').hide();
