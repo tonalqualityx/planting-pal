@@ -344,7 +344,7 @@ function indppl_add_new_brand_ajax(){
         }else{
             $term = wp_insert_term(
                 $brand . "_" . $count,
-                'brand',
+                'brand'
             );
             wp_update_term($term['term_id'], 'brand', array(
                 'name' => $brand
