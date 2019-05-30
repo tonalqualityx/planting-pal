@@ -1251,6 +1251,7 @@ jQuery(document).ready(function( $ ) {
             blend_array[$(this).data('product')] = {'amount': $(this).val()};
             blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
         });
+        console.log(blend_array);
         var surface_array = {}
         $('.surface-num').each(function(){
             surface_array[$(this).data('product')] = {'amount': $(this).val()};
@@ -1264,7 +1265,7 @@ jQuery(document).ready(function( $ ) {
             each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
             each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
         });
-        console.log(type);
+        // console.log(type);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -1814,12 +1815,18 @@ function updateAppRates(elem){
         var cont_id = jQuery(elem).attr('name');
         var num = jQuery(elem).attr('value');
         var unit = jQuery(elem).next().val();
+        if(!jQuery.isNumeric(num)){
+            jQuery(elem).attr('value', 1);
+        }
     }else if(jQuery(elem).hasClass('indppl-product-create-chart-app-unit')){
         var cont_id = jQuery(elem).attr('name');
         var num = jQuery(elem).prev().attr('value');
         var unit = jQuery(elem).val();
+        if(!jQuery.isNumeric(num)){
+            jQuery(elem).prev().attr('value' , 1);
+        }
     }
-    if(num == null){
+    if(num == null || !jQuery.isNumeric(num)){
         num = 1;
     }
     if(unit == null){
@@ -1889,6 +1896,10 @@ function updateBagAppRates(elem){
     var product_unit = $('.bag-apprates-title').first().data('unit');
     var cont_id = $(elem).parent().prev().data('id');
     var version_check = 1.0;
+    if(val == null || !$.isNumeric(val)){
+        val = 1;
+        $(elem).parent().children().val(1);
+    }
     console.log('--------');
     console.log(cont_id);
     console.log(product_num);

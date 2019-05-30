@@ -453,6 +453,7 @@ function indppl_delete_apprate($store_id, $args = null) {
                 }
             }
             $newapprates = json_encode($apprates);
+            // var_dump($newapprates);
             $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
             $results = array('apprates' => $newapprates, 'update' => $update);
 
