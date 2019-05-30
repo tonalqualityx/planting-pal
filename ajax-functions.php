@@ -1736,7 +1736,7 @@ function indppl_build_guide_ajax() {
         // var_dump(json_encode($list));
         // var_dump($market_args);
         $save_data = indppl_insert_marketing_data($market_args);
-    
+        
         // Load this array so you can build the email
         $guide_links = array();
 
@@ -1745,8 +1745,11 @@ function indppl_build_guide_ajax() {
             if(($type == 'ground' && count($plant) > 0) || $plant['qty'] > 0){
 
                 $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
-                $guide_options = str_replace('\\', '' ,$guide_options);
+                $guide_options = str_replace(array("\\'",'/','u2019'), array("'",'\/',"'") ,$guide_options);
+                var_dump($guide_options);
                 $guide_options = json_decode($guide_options, true);
+                echo "<br /><br />";
+                var_dump($guide_options);
                 ob_start();
                     include(INDPPL_ROOT_PATH . '/templates/template_parts/planting-guide.php');
                 $guide = ob_get_clean();
