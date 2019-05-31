@@ -44,6 +44,7 @@ function indppl_switch_live_ajax(){
         if($status){
             update_post_meta($store_id, 'wpcf-issetup', 0);
             echo 0;
+            indppl_notify_new_store($store_id, get_current_user_id(  ) );
         }else {
             update_post_meta( $store_id, 'wpcf-issetup', 1);
             echo 1;
@@ -2350,14 +2351,14 @@ function indppl_copy_store_form_ajax(){
                 </div>
 			</div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class=" indppl-flex indppl-no-wrap" style="max-width: 600px; margin:auto;align-items:center;">
                     <input id="billing" name="billing" type="checkbox" class="form-control input-md" style="height:auto; width: auto;" required> 
                     <p style="margin-bottom: 0; margin-left:10px;">I understand that I will be billed an additional subscription.</p>
                     
                 
                 </div>
-			</div>
+			</div> -->
 
             			<!-- Button -->
 			<div class="form-group">

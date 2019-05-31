@@ -302,6 +302,25 @@ function pp_store_management(){
             $progress = indppl_store_progress_bar($store_id, TRUE);
             if($progress['complete'] == 100){ ?>
                 <p>Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready!</p>
+                <?php 
+                    $user = get_current_user_id();
+                    $args = array(
+                        'author' => $user,
+                        'post_type' => 'store',
+                        'posts_per_page' => -1,
+                        // 'meta_query' => array(
+                            'meta_key' => 'wpcf-issetup',
+                            'meta_value' => 1
+                        // ),
+                    );
+                    
+                    $user_stores = get_posts($args);
+                    $user_stores_count = count($user_stores);
+                    if($user_stores_count > 0){
+                        echo "<p>You will be billed for an additional store when this store is brought online.</p>";
+                        indppl_notify_new_store($store_id, $user);
+                    }
+                ?>
                 <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
 
             <?php } else {
