@@ -2402,3 +2402,43 @@ function indppl_delete_store_ajax(){
 }
 add_action( 'wp_ajax_indppl_delete_store_ajax', 'indppl_delete_store_ajax' );
 add_action('wp_ajax_nopriv_indppl_delete_store_ajax', 'indppl_delete_store_ajax');
+
+function indppl_store_go_live_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['id'])){
+        $id = $_POST['id'];
+    }
+    $return = update_post_meta($id, 'wpcf-issetup', 1);
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_store_go_live_ajax', 'indppl_store_go_live_ajax' );
+add_action('wp_ajax_nopriv_indppl_store_go_live_ajax', 'indppl_store_go_live_ajax');
+
+function indppl_store_deactivate_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['id'])){
+        $id = $_POST['id'];
+    }
+    $return = update_post_meta($id, 'wpcf-issetup', 0);
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_store_deactivate_ajax', 'indppl_store_deactivate_ajax' );
+add_action('wp_ajax_nopriv_indppl_store_deactivate_ajax', 'indppl_store_deactivate_ajax');
