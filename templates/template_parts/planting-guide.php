@@ -41,6 +41,9 @@ $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
             <?php foreach($guide_options as $step){
                 echo "<h3 class='orange-text'>{$step['title']}</h3>";
                 echo "<div class='guide-step-instructions'>{$step['description']}</div>";
+                if($step['image'] && $step['image'] != ''){
+                    echo "<img src='{$step['image']}'></img>";
+                }
 
                 // THIS PART SHOULD BE A SHORTCODE THAT GETS CALLED EVERY TIME
                 foreach($step['products'] as $product){

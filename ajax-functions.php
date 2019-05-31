@@ -1742,14 +1742,13 @@ function indppl_build_guide_ajax() {
 
         // Use the type & product list to build planting guide
         foreach($plants as $type => $plant){
-            if(($type == 'ground' && count($plant) > 0) || $plant['qty'] > 0){
+            var_dump($type);
+            var_dump($plant);
+            if((($type == 'ground' && count($plant) > 0) || $plant['qty'] > 0) ){
 
                 $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
                 $guide_options = str_replace(array("\\'",'/','u2019'), array("'",'\/',"'") ,$guide_options);
-                var_dump($guide_options);
                 $guide_options = json_decode($guide_options, true);
-                echo "<br /><br />";
-                var_dump($guide_options);
                 ob_start();
                     include(INDPPL_ROOT_PATH . '/templates/template_parts/planting-guide.php');
                 $guide = ob_get_clean();
