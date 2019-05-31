@@ -436,7 +436,7 @@ function pp_my_stores(){
                     ?>
                     <div class='indppl-single-store-container'>
                         <?php
-                        $status = indppl_store_progress_bar($id, false, false);
+                        // $status = indppl_store_progress_bar($id, false, false);
                         ?>
                         <div class='status-for-business'><?php echo $status['bar']; ?></div>
                         <!-- $status['bar']; -->
