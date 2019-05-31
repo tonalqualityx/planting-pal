@@ -463,7 +463,7 @@ function pp_my_stores(){
                                 <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Copy</a>
                                 <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a>
                             </div>
-                            <div class='ind-flex'>
+                            <div class='ind-flex' style="display:none;">
                                 <?php
                                 if($status['complete'] < 100){
                                     ?>
