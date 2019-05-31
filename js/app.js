@@ -1578,6 +1578,101 @@ jQuery(document).ready(function( $ ) {
         });
 
     })
+    $('body').on('click', '.indppl-live-store', function(e){
+        e.preventDefault();
+        indpplAddLoading();
+        var id = $(this).data('store');
+        var version_check = 1.0;
+        var elem = $(this);
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_store_go_live_ajax',
+                id: id,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                console.log(response);
+                if(response){
+                    $(elem).replaceWith("<a href='#' class='indppl-button button-primary indppl-store-deactivate' data-store=" + id + ">Deactivate</a>");
+                }
+                indpplDelLoading();
+            }
+        });
+    })
+
+    $('body').on('click', '.indppl-store-deactivate', function(e){
+        e.preventDefault();
+        indpplAddLoading();
+        var id = $(this).data('store');
+        var version_check = 1.0;
+        var elem = $(this);
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_store_deactivate_ajax',
+                id: id,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                console.log(response);
+                if(response){
+                    $(elem).replaceWith("<a href='#' data-store=" + id + " class='indppl-button button-primary indppl-live-store'>Go Live</a>");
+                }
+                indpplDelLoading();
+            }
+        });
+    })
+
+    $('body').on('click', '#indppl-add-product-additive-blend', function(){
+        $('#indppl-add-product-bulk-filler').prop('checked', false);
+    })
+
+    $('body').on('click', '#indppl-add-product-bulk-filler', function(){
+        $('#indppl-add-product-additive-blend').prop('checked', false);
+    })
+
+    $('body').on('change', '.container-date', function(){
+        var date = $(this).datepicker('getDate');
+        var startformat = $.datepicker.formatDate('yymmdd', date);
+        var count = 0;
+        var overlap = false;
+        var inside = false;
+        $('.container-date').each(function(){
+            var date = $(this).datepicker('getDate');
+            var format = $.datepicker.formatDate('yymmdd', date);
+            if(count == 0){
+                if(parseInt(startformat) > parseInt(format)){
+                    inside = true;
+                }
+                count++;
+            }else{
+                if(inside == true && parseInt(startformat) < parseInt(format)){
+                    overlap = true;
+                }
+                inside = false;
+                count = 0;
+            }
+        })
+        if(overlap == true){
+            $('body').prepend("<div class='indppl-loading-background indppl-date-overlap-modal-background'><div class='container-date-overlap-modal'><div class='container-date-overlap-modal-inside'><div class='indppl-x x-date-overlap-modal'>X</div><h3 class='container-overlap-header'>The seasons overlap and products from both seasons will be available during the overlap.</h3></div></div></div>");
+        }
+
+    })
+
+    $('body').on('click', '.x-date-overlap-modal', function(){
+        $('.indppl-loading-background').remove();
+    })
+
+    $('body').on('click', '.indppl-date-overlap-modal-background', function(){
+        $('.indppl-loading-background').remove();
+    })
 });
 
 // start of functions

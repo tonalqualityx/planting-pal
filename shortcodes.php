@@ -413,12 +413,15 @@ function pp_my_stores(){
                     $state = get_post_meta($id, 'wpcf-state', true);
                     $link = home_url() . '/store-profile?store-id=' . $id;
                     $permalink = get_the_permalink($id);
+                    $live = get_post_meta($id, 'wpcf-issetup', true);
                     ?>
                     <div class='indppl-single-store-container'>
                         <?php
                         $status = indppl_store_progress_bar($id, false, false);
-                        // echo $status['complete'];
-
+                        ?>
+                        <div class='status-for-business'><?php echo $status['bar']; ?></div>
+                        <!-- $status['bar']; -->
+                        <?php
                         if($img){
                             ?>
                         <div class='flex-half'>
@@ -440,6 +443,23 @@ function pp_my_stores(){
                             <div class='ind-flex'>
                                 <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Copy</a>
                                 <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a>
+                            </div>
+                            <div class='ind-flex'>
+                                <?php
+                                if($status['complete'] < 100){
+                                    ?>
+                                    <p class='color-grey'>Go Live</p>
+                                    <?php
+                                }else if(!$live){
+                                ?>
+                                    <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-live-store'>Go Live</a>
+                                <?php
+                                }else{
+                                    ?>
+                                    <a href='#' class='indppl-button button-primary indppl-store-deactivate' data-store='<?php echo $id; ?>'>Deactivate</a>
+                                    <?php
+                                }
+                                ?>
                             </div>
                         </div>
                     </div>

@@ -1058,9 +1058,19 @@ function update_package_table($store_id, $product_id, $type){
         ?>
     </tr>
     <?php
+    $args = array(
+        'numberposts' => -1,
+        'post_type' => 'container',
+    );
+
+    $def_containers = get_posts($args);
     // $console = $pro_container;
     // var_dump($containers); used for sorting
-    foreach($containers as $key => $id){
+    $key = 0;
+    foreach($def_containers as $dcon){
+        // echo 'inside';
+        if(in_array($dcon->ID, $containers)){
+        $id = $dcon->ID;
         // echo 'inside';
         $title = get_the_title($id);
         $pack_id = $store_related[$key];
@@ -1167,6 +1177,8 @@ function update_package_table($store_id, $product_id, $type){
             ?>
         </tr>
         <?php
+        $key++;
+        }
     }
     
     ?>
@@ -1196,7 +1208,10 @@ function update_bag_package_table($store_id, $product_id, $type){
         'parent',
         '100',
         '0',
-        array(),
+        array(
+            'orderby' => 'title',
+            'order' => 'ASC',
+        ),
         'post_id',
         'child'
     );
@@ -1292,12 +1307,23 @@ function update_bag_package_table($store_id, $product_id, $type){
     // var_dump($order_array);
     // var_dump("<br /><br />");
     // var_dump($pro_container);
+    $args = array(
+        'numberposts' => -1,
+        'post_type' => 'container',
+    );
+
+    $def_containers = get_posts($args);
+
     $first_key = key($order_array);
     $non_default_app_rate = "";
     $volume_units = indppl_get_units('volume');
     $mass_units = indppl_get_units('mass');
-    foreach($containers as $key => $id){
+    $key = 0;
+    foreach($def_containers as $dcon){
         // echo 'inside';
+        if(in_array($dcon->ID, $containers)){
+        $id = $dcon->ID;
+        
         $title = get_the_title($id);
         $pack_id = $store_related[$key];
         $package = get_post_meta($pack_id, 'wpcf-unit', true);
@@ -1477,6 +1503,8 @@ function update_bag_package_table($store_id, $product_id, $type){
             
         </tr>
         <?php
+        $key++;
+        }
     }
     
     ?>
