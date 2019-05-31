@@ -280,7 +280,7 @@ ul.style-free {
 .indppl-small-title{
   font-weight: 600;
 }
-.indppl-small-store-link, .indppl-small-store-perma-link, .indppl-duplicate-store{
+.indppl-small-store-link, .indppl-small-store-perma-link, .indppl-duplicate-store, .indppl-delete-store, .delete-store-yes, .delete-store-no{
   padding-top: 0PX;
   Padding-bottom: 0px;
   width: 40%;
@@ -288,6 +288,38 @@ ul.style-free {
   padding-top: 4px!important;
   margin-top: 5px;
   text-align: center;
+}
+.indppl-delete-store{
+  width: 50%;
+}
+.store-delete-header{
+  text-align: center;
+}
+.store-delete-button-container{
+  justify-content: space-between;
+  width: 80%;
+  margin: auto;
+  margin-top: 70px;
+}
+.store-delete-modal{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+}
+.store-delete-modal-inside{
+  max-width: 500px;
+  width: 30vw;
+  height: 400px;
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  border: black 1px solid;
+}
+.indppl-small-store-link, .indppl-delete-store{
+  margin-left: 5px;
 }
 .indppl-store-thumb{
   padding-right: 5px;
@@ -1057,7 +1089,7 @@ APP PAGES
 #add-sponsor-img{
   max-width: 150px;
 }
-.indppl-add-sponsor-container{
+.indppl-add-sponsor-container, .ind-flex{
   display: flex;
   flex-wrap: wrap;
 }
