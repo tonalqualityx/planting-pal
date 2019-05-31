@@ -2379,3 +2379,26 @@ function indppl_copy_store_form_ajax(){
 
 
 add_action('wp_ajax_indppl_copy_store_form_ajax', 'indppl_copy_store_form_ajax');
+
+function indppl_delete_store_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['id'])){
+        $id = $_POST['id'];
+    }
+    $return = wp_delete_post($id, true);
+    if($return){
+        $return = do_shortcode('[pp-my-stores]');
+    }
+    echo $return;
+    die();
+}
+add_action( 'wp_ajax_indppl_delete_store_ajax', 'indppl_delete_store_ajax' );
+add_action('wp_ajax_nopriv_indppl_delete_store_ajax', 'indppl_delete_store_ajax');

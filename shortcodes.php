@@ -416,6 +416,9 @@ function pp_my_stores(){
                     ?>
                     <div class='indppl-single-store-container'>
                         <?php
+                        $status = indppl_store_progress_bar($id, false, false);
+                        // echo $status['complete'];
+
                         if($img){
                             ?>
                         <div class='flex-half'>
@@ -430,9 +433,14 @@ function pp_my_stores(){
                             <h4 class='indppl-small-title'><?php echo $title; ?></h4>
                             <p class='indppl-small-store-text'><?php echo $address1; ?></p>
                             <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
-                            <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">View</a>
-                            <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
-                            <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Copy</a>
+                            <div class='ind-flex'>
+                                <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">View</a>
+                                <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
+                            </div>
+                            <div class='ind-flex'>
+                                <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Copy</a>
+                                <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a>
+                            </div>
                         </div>
                     </div>
                     <?php

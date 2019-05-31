@@ -1544,6 +1544,40 @@ jQuery(document).ready(function( $ ) {
         });
     });
 
+    $('body').on('click', '.indppl-delete-store', function(e){
+        e.preventDefault();
+        var id = $(this).data('store');
+        $('body').prepend("<div class='indppl-loading-background'><div class='store-delete-modal'><div class='store-delete-modal-inside'><h3 class='store-delete-header'>You are about to Delete this Store</h3><h3 class='store-delete-header'>Are you Sure?</h3><div class='ind-flex store-delete-button-container'><a href='#' class='indppl-button button-primary delete-store-yes' data-store=" + id + ">YES</a><a href='#' class='indppl-button button-primary delete-store-no'>NO</a></div></div></div></div>");
+    })
+
+    $('body').on('click', '.delete-store-no', function(e){
+        e.preventDefault();
+        $('.indppl-loading-background').remove();
+    })
+    $('body').on('click', '.delete-store-yes', function(e){
+        e.preventDefault();
+        $('.indppl-loading-background').remove();
+        indpplAddLoading();
+        var id = $(this).data('store');
+        var version_check = 1.0;
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_delete_store_ajax',
+                id: id,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                console.log(response);
+                $('.indppl-my-stores-container').replaceWith(response);
+                indpplDelLoading();
+            }
+        });
+
+    })
 });
 
 // start of functions
