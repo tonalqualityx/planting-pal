@@ -1742,8 +1742,7 @@ function indppl_build_guide_ajax() {
 
         // Use the type & product list to build planting guide
         foreach($plants as $type => $plant){
-            var_dump($type);
-            var_dump($plant);
+
             if((($type == 'ground' && count($plant) > 0) || $plant['qty'] > 0) ){
 
                 $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
