@@ -2392,6 +2392,7 @@ function indppl_delete_store_ajax(){
     if(isset($_POST['id'])){
         $id = $_POST['id'];
     }
+    indppl_notify_deleted_store($id, get_current_user() );
     $return = wp_delete_post($id, true);
     if($return){
         $return = do_shortcode('[pp-my-stores]');

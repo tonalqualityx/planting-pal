@@ -1960,7 +1960,7 @@ function indppl_duplicate_store($store_id, $new_details){
         toolset_connect_posts('store-product', $new_store, $product);
     }
     
-    indppl_notify_new_store($store_id, get_current_user_id() );
+    // indppl_notify_new_store($store_id, get_current_user_id() );
 }
     
 function indppl_notify_new_store($store, $user){
