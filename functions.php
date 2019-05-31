@@ -1988,7 +1988,7 @@ function indppl_duplicate_store($store_id, $new_details){
         toolset_connect_posts('store-product', $new_store, $product);
     }
     
-    indppl_notify_new_store($store_id, get_current_user_id() );
+    // indppl_notify_new_store($store_id, get_current_user_id() );
 }
     
 function indppl_notify_new_store($store, $user){
@@ -1997,9 +1997,38 @@ function indppl_notify_new_store($store, $user){
     
     $to = get_option('admin_email');
     $subject = "Billing update needed";
-    $message = "A new store has been added to the user account with the email {$user_info->user_email}";
+    $message = "A new store has been published to the user account with the email {$user_info->user_email}";
     $headers = array('Content-Type: text/html; charset=UTF-8');
 
     wp_mail( $to, $subject, $message, $headers);
     
+}
+
+function indppl_notify_deleted_store($store, $user){
+
+    $user_info = get_userdata($user);
+
+    // Get all the user's active stores
+    $args = array(
+        'author' => $user,
+        'post_type' => 'store',
+        'posts_per_page' => -1,
+        // 'meta_query' => array(
+            'meta_key' => 'wpcf-issetup',
+            'meta_value' => 1
+        // ),
+    );
+
+    $stores = get_posts($args);
+    $count_stores = count($stores);
+
+    if($count_stores > 0){
+        $to      = get_option('admin_email');
+        $subject = "Billing update needed";
+        $message = "An additional store has been removed from the user account with the email {$user_info->user_email}";
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+
+        wp_mail($to, $subject, $message, $headers);
+    }
+
 }
