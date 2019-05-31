@@ -1979,7 +1979,37 @@ function indppl_duplicate_store($store_id, $new_details){
     // Get related containers
     $containers = toolset_get_related_posts($store_id, 'store-container', $toolset_args);
     foreach ($containers as $container) {
-        toolset_connect_posts('store-container', $new_store, $container);
+
+        // Get the intermediary post id
+        $options = toolset_get_related_posts(
+            ['parent' => $store_id,'child' => $container,],
+            'store-container',
+            ['return' => 'post_id', 'role_to_return' => 'intermediary']
+        );
+
+        // Get the seasons from the intermediary post
+        $spring = get_post_meta($options[0], 'wpcf-available-in-spring', true);
+        $summer = get_post_meta($options[0], 'wpcf-available-in-summer', true);
+        $fall = get_post_meta($options[0], 'wpcf-available-in-fall', true);
+        $winter = get_post_meta($options[0], 'wpcf-available-in-winter', true);
+
+        //Create the connection
+        $intermediary = toolset_connect_posts('store-container', $new_store, $container);
+
+        // Set the seasons
+        if($spring){
+            update_post_meta( $intermediary['intermediary_post'], 'wpcf-available-in-spring', $spring);
+        }
+        if ($summer) {
+            update_post_meta($intermediary['intermediary_post'], 'wpcf-available-in-summer', $summer);
+        }
+        if ($fall) {
+            update_post_meta($intermediary['intermediary_post'], 'wpcf-available-in-fall', $fall);
+        }
+        if ($winter) {
+            update_post_meta($intermediary['intermediary_post'], 'wpcf-available-in-winter', $winter);
+        }
+
     }
 
     // Get related products

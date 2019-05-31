@@ -1539,6 +1539,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
+                // $('body').html(response);
                 location.reload();
             }
         });
