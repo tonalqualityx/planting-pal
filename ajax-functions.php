@@ -289,7 +289,7 @@ function indppl_get_products_by_brand_ajax(){
             $do_it = true;
             $each_test = get_post_meta($id, 'wpcf-unit', true);
             if($each_test == 'each'){
-                if($type != 'pots'){
+                if($type == 'beds'){
                     $do_it = false;
                 }
 
