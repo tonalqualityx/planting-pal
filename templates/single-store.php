@@ -188,7 +188,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     if (isset($_POST['beds']) && isset($apprates['beds'])) {
 
         $beds = $_POST['beds'];
-        $user_plants['beds'] = $pots;
+        $user_plants['beds'] = $beds;
 
         // Loop through however many rows of beds were added, then each type of apprate
         // THE NEXT MAJOR SECTION SHOULD BE REFACTORED TO MERGE WITH THE POTS SECTION
