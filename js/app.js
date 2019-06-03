@@ -571,10 +571,10 @@ jQuery(document).ready(function( $ ) {
             var first_package = {}
             first_package['num'] = $('.bag-apprates-title').data('num');
             first_package['unit'] = $('.bag-apprates-title').data('unit');
-        }else{
-            var cups_num = $('.indppl-product-create-cups-num').val();
-            var cups_unit = $('.product-create-5-cups').val();
         }
+        var cups_num = $('.indppl-product-create-cups-num').val();
+        var cups_unit = $('#product-create-5-cups').children("option:selected").val();
+        
             // console.log(product_array);
         var elem = $(this);
         var package_array = [];
@@ -605,7 +605,6 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
-        console.log(package_remove);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -820,7 +819,7 @@ jQuery(document).ready(function( $ ) {
         // var product_select = $("#product-create-form").find('sel ect').filter('.some-kind-of-wonderful').serializeArray();
         var product_name = $('.indppl-add-product-name').val();
         var cups_num = $('.indppl-product-create-cups-num').val();
-        var cups_unit = $('.product-create-5-cups').val();
+        var cups_unit = $('#product-create-5-cups').children("option:selected").val();
         var elem = $(this);
         var fraction = false;
         if($('#product-create-fraction-bag').is(':checked')){
