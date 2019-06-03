@@ -420,9 +420,9 @@ function indppl_get_product_info_ajax(){
     }else{
         ob_start();
         ?>
-        <h3 class='product-create-dry-wet-title'>Select Dry or Wet for this product</h3>
+        <h3 class='product-create-dry-wet-title'>Select Dry or liquid for this product</h3>
         <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >Dry
-        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >Wet
+        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >Liquid
         <?php
         $dry_wet = ob_get_clean();
         ob_start();
@@ -776,6 +776,7 @@ function indppl_save_product_ajax(){
     // $console = $product_rate;
     // $app_rates = indppl_apprates($store_id);
     // $console;
+
     if($fraction == 'true' && $product_rate){
         $args = array(
             $product_id => array(
@@ -794,10 +795,18 @@ function indppl_save_product_ajax(){
             }else{
                 $app_rate = $first_package['num'] / $value['value'];
             }
-            $args[$product_id]['bag'][$value['name']] = array(
-                'amount' => $app_rate,
-                'unit' => $first_package['unit'],
-            );
+            // $console = $app_rate;
+            if($app_rate == 0){
+                $args[$product_id]['bag'][$value['name']] = array(
+                    'amount' => $app_rate,
+                    'unit' => 0,
+                );
+            }else{
+                $args[$product_id]['bag'][$value['name']] = array(
+                    'amount' => $app_rate,
+                    'unit' => $first_package['unit'],
+                );
+            }
 
         }
         // $console = $args;
@@ -805,11 +814,20 @@ function indppl_save_product_ajax(){
     }else{
         $send_array = array($product_id => array());
         foreach($product_rate as $key => $value){
-            $temp = array(
+            if($value['value'] == 0){
+
+                $temp = array(
+                    'unit' => $product_unit[$key]['value'],
+                    'amount' => 0,
+                );
+                $send_array[$product_id]['containers'][$value['name']] = $temp;
+            }else{
+                $temp = array(
                     'unit' => $product_unit[$key]['value'],
                     'amount' => $value['value'],
-            );
-            $send_array[$product_id]['containers'][$value['name']] = $temp;
+                );
+                $send_array[$product_id]['containers'][$value['name']] = $temp;
+            }
         }
         if($product_rate){
             // $console = $send_array;
@@ -852,7 +870,7 @@ function indppl_save_product_ajax(){
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
         // $console = $updated_app_rates;
     }
-    $console = $pack_id_array;
+    // $console = $pack_id_array;
     $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
@@ -1056,9 +1074,13 @@ function indppl_update_app_rates_ajax(){
         // $console = $cups;
         // var_dump($value['unit']);
         // var_dump($cups);
-        $final = $value['size'] / $conversion[0]['standard-amount'];
-        if(is_float($final) || is_int($final)){
-            $final = round($final, 2);
+        if($conversion[0]['standard-amount'] == 0){
+            $final = 0;
+        }else{
+            $final = $value['size'] / $conversion[0]['standard-amount'];
+            if(is_float($final) || is_int($final)){
+                $final = round($final, 2);
+            }
         }
         $update_array[] = $final;
     }
@@ -1840,10 +1862,14 @@ function indppl_update_bag_app_rates_ajax(){
             'bag' => array(),
         ),
     );
-    if($ppc == 'cpp'){
-        $app_rate = $val * $product_num;
+    if($val == 0){
+        $app_rate = 0;
     }else{
-        $app_rate = $product_num / $val;
+        if($ppc == 'cpp'){
+            $app_rate = $val * $product_num;
+        }else{
+            $app_rate = $product_num / $val;
+        }
     }
     $args[$product_id]['bag'][$cont_id] = array(
         'amount' => $app_rate,

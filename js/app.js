@@ -409,11 +409,13 @@ jQuery(document).ready(function( $ ) {
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
                     // console.log(array['dry_wet'][2]);
+                    if(array['dry_wet'][1] == 'wet'){
+                        $('.product-create-fraction-bag').addClass('hide');
+                    }
                     $.each(units, function(index, value){
                         // console.log(value);
                         if(value != array['dry_wet'][2]){
                             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
-                            
                         }
                         $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + value + '</option>');
                     })
@@ -476,6 +478,13 @@ jQuery(document).ready(function( $ ) {
         $.each(array, function(index, value){
             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
         })
+        if(type == "wet"){
+            $('.product-create-fraction-bag').addClass('hide');
+            $('.product-create-5-cups-container').addClass('hide');
+        }else{
+            $('.product-create-fraction-bag').removeClass('hide');
+            $('.product-create-5-cups-container').removeClass('hide'); 
+        }
     })
     $('body').on('click', '#indppl-product-create-new-size-btn', function(e){
         e.preventDefault();
@@ -562,8 +571,9 @@ jQuery(document).ready(function( $ ) {
         }
         var product_name = $('.indppl-add-product-name').val();
         if(!$(this).is('#product-create-next')){
-            var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
+            
             var product_select = $("#product-create-form").find('select').filter('.some-kind-of-wonderful').serializeArray();
+            var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
             var container_id = [];
             $('.bag-apprates-container-title').each(function(){
                 container_id.push($(this).data('id'));
@@ -572,6 +582,7 @@ jQuery(document).ready(function( $ ) {
             first_package['num'] = $('.bag-apprates-title').data('num');
             first_package['unit'] = $('.bag-apprates-title').data('unit');
         }
+        
         var cups_num = $('.indppl-product-create-cups-num').val();
         var cups_unit = $('#product-create-5-cups').children("option:selected").val();
         
@@ -1682,6 +1693,8 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.indppl-date-overlap-modal-background', function(){
         $('.indppl-loading-background').remove();
     })
+
+    
 });
 
 // start of functions
@@ -1875,6 +1888,10 @@ function indpplEditProduct(type, store_id, product_id){
                 $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                 units = indppl_get_units(array['dry_wet'][1]);
                 // console.log(array['dry_wet'][2]);
+                if(array['dry_wet'][1] == 'wet'){
+                    $('.product-create-fraction-bag').addClass('hide');
+                    $('.product-create-5-cups-container').addClass('hide');
+                }
                 $.each(units, function(index, value){
                     // console.log(value);
                     if(value != array['dry_wet'][2]){
