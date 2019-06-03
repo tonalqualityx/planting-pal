@@ -1211,12 +1211,21 @@ jQuery(document).ready(function( $ ) {
         var content = $(this).parent().find('.sponsor-copy').html();
         var brand = $(this).siblings('.product-name').find('.brand').text();
         var product = $(this).siblings('.product-name').find('.product').text();
+        console.log(product);
         var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
-        if(!image){
+        if(!image || image == 'undefined'){
             content = $(this).next('.sponsor-copy').html();
             image_url = $(this).parent().find('img').attr('src');
-            image = "<img src='" + image_url + "'>";
+            if(!image_url || image_url == 'undefined'){
+                image = '';
+            } else {
+                image = "<img src='" + image_url + "'>";
+            }
+        }
+        if(!brand || brand == 'undefined'){
             brand = $(this).parents('.sponsorship').next().children().first().html();
+        }
+        if(!product || product == 'undefined'){
             product = $(this).parents('.sponsorship').next().children().last().html();
         }
         console.log(brand);

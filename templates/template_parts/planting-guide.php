@@ -46,6 +46,14 @@ $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
                 }
 
                 // THIS PART SHOULD BE A SHORTCODE THAT GETS CALLED EVERY TIME
+                // indppl_guide_products($step['products']);
+                // var_dump($step['products']);
+                // $step_products = array();
+                // foreach($step['products'] as $product){
+                //     // var_dump($product);
+                //     $step_products[] = array('product' => $product['id'], 'label' => 'test', 'instructions' => $product['instructions']);
+                // }
+                // indppl_guide_products($step_products);
                 foreach($step['products'] as $product){
                     $prod_name = get_the_title($product['id']);
                     $brands       = get_the_terms($product['id'], 'brand');
@@ -66,7 +74,7 @@ $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
                         <div class='product-guide-step-instructions'>
                             <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $prod_name; ?></span></span> <?php echo $product["instructions"]; ?>
                             <?php if ($sponsorship) {?>
-                                <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a><div class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></div>
+                                <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a> <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
                             <?php }?>
                         </div>
                     </div>

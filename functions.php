@@ -1684,19 +1684,21 @@ function indppl_guide_products($products){
     $sponsor_copy = '';?>
         <div class='indppl-flex indppl-align-center guide-product-template'>
             <?php if ($sponsorship) {
-        $sponsor_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
-        $sponsor_copy  = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
-        $sponsor_link  = get_post_meta($sponsorship, 'wpcf-sponsor-url', TRUE);
-        $image         = $sponsor_image;
-        ?>
+                $sponsor_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
+                $sponsor_copy  = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
+                $sponsor_link  = get_post_meta($sponsorship, 'wpcf-sponsor-url', TRUE);
+                $image         = $sponsor_image;
+                ?>
             <?php }
-    if ($image && $image != '') {?>
+
+            if ($image && $image != '') {?>
                 <div class='product-guide-image'><img src="<?php echo $image; ?>" alt="<?php echo $product['label']; ?>"></div>
             <?php }?>
+
             <div class='product-guide-step-instructions'>
                 <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $product["label"]; ?></span></span> <?php echo $product["instructions"]; ?>
                 <?php if ($sponsorship) {?>
-                    <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a><div class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></div>
+                    <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a><span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
                 <?php }?>
             </div>
         </div>
