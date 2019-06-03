@@ -1089,7 +1089,7 @@ function update_package_table($store_id, $product_id, $type){
                         
                         // echo $v['intermediary'];
                         // $app_qty_array[$k] = get_post_meta($v['intermediary']);
-                        if(!empty($app_rates[$type][$product_id]['containers'][$id]['amount'])){
+                        if(array_key_exists('amount', $app_rates[$type][$product_id]['containers'][$id])){
                             $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
                         }else{
                             $app_qty = get_post_meta($v['intermediary'], 'wpcf-apprate-qty', true);
@@ -1128,7 +1128,7 @@ function update_package_table($store_id, $product_id, $type){
                     }else{
                         $app_unit = 'gal';
                     }
-                    if(!empty($app_rates[$type][$product_id]['containers'][$id]['amount'])){
+                    if(array_key_exists('amount', $app_rates[$type][$product_id]['containers'][$id])){
                         $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
                     }
                     if(!empty($app_rates[$type][$product_id]['containers'][$id]['unit'])){
@@ -1165,7 +1165,11 @@ function update_package_table($store_id, $product_id, $type){
                     $conversion = indppl_normalize($items, $package_unit, $cups);
                     // var_dump($conversion);
                     // $conversion = getVolume($app_qty, $app_unit, $package_unit);
-                    $final = $package_size / $conversion[0]['standard-amount'];
+                    if($conversion[0]['standard-amount'] == 0){
+                        $final = 0;
+                    }else{
+                        $final = $package_size / $conversion[0]['standard-amount'];
+                    }
                     // echo $;
                     
                     ?>
@@ -1357,6 +1361,8 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 $qty = $app_rates[$type][$product_id]['bag'][$id]['amount'];
                                 $unit = $app_rates[$type][$product_id]['bag'][$id]['unit'];
                             }
+                            // var_dump($qty);
+                            // var_dump($app_qty);
                             // var_dump(get_post_meta($pack_id, 'wpcf-size', true));
                             $package_size = get_post_meta($pack_id, 'wpcf-size', true);
                             $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
@@ -1365,13 +1371,18 @@ function update_bag_package_table($store_id, $product_id, $type){
                             $cups = getMass($cups, get_post_meta($product_id, 'wpcf-5cups-unit', true), 'lb');
                             $pp_dilema = 'ppc';
                             // if($package_unit == 'cuft'){
-                            $conversion = getVolume($qty, $unit, $package_unit);
-                            if($conversion >= $package_size){
-                                $final = $conversion / $package_size;
+                            if($qty == 0){
+                                $final = 0;
                                 $pp_dilema = 'cpp';
                             }else{
-                                $final = $package_size / $conversion;
-                                $pp_dilema = 'ppc';
+                                $conversion = getVolume($qty, $unit, $package_unit);
+                                if($conversion >= $package_size){
+                                    $final = $conversion / $package_size;
+                                    $pp_dilema = 'cpp';
+                                }else{
+                                    $final = $package_size / $conversion;
+                                    $pp_dilema = 'ppc';
+                                }
                             }
                             // var_dump($conversion);
                             // }else{
@@ -1437,30 +1448,39 @@ function update_bag_package_table($store_id, $product_id, $type){
                         if((in_array($package_unit, $mass_units) && in_array($unit, $mass_units)) || (in_array($package_unit, $volume_units) && in_array($unit, $volume_units))){
                             $type_same = true;
                         }
-                        // var_dump($type_same);
-                        if($type_same == true && in_array($package_unit, $mass_units)){
-                            $conversion = getMass($qty, $unit, $package_unit);
-                        }else if($type_same == true){
-                            $conversion = getVolume($qty, $unit, $package_unit);
-                        }else{
-                            $cup = $cups/5;
-                            if(in_array($package_unit, $mass_units)){
-                                $another_unit = getVolume($qty, $unit, 'cup');
-                                $conversion = $cup * $another_unit;
+                        
+                        if($qty == 0){
+                            $final = 0;
+                            $pp_dilema = 'cpp';
+                        }else{ 
+                            if($type_same == true && in_array($package_unit, $mass_units)){
+                                $conversion = getMass($qty, $unit, $package_unit);
+                            }else if($type_same == true){
+                                $conversion = getVolume($qty, $unit, $package_unit);
                             }else{
-                                $another = $qty / $cup;
-                                $conversion = getVolume($another, 'cup', $package_unit);
+                                $cup = $cups/5;
+                                if(in_array($package_unit, $mass_units)){
+                                    $another_unit = getVolume($qty, $unit, 'cup');
+                                    $conversion = $cup * $another_unit;
+                                }else{
+                                    $another = $qty / $cup;
+                                    $conversion = getVolume($another, 'cup', $package_unit);
+                                }
+                            }
+    
+                            // var_dump($non_default_app_rate);
+                            if($conversion >= $package_size){
+                                $final = $conversion / $package_size;
+                                $pp_dilema = 'cpp';
+                            }else{
+                                $final = $package_size / $conversion;
+                                $pp_dilema = 'ppc';
                             }
                         }
-                        // var_dump($non_default_app_rate);
-                        if($conversion >= $package_size){
-                            $final = $conversion / $package_size;
-                            $pp_dilema = 'cpp';
-                        }else{
-                            $final = $package_size / $conversion;
-                            $pp_dilema = 'ppc';
-                        }
                         $app_qty = round($final, 2);
+                        if($app_qty == INF){
+                            $app_qty = 0;
+                        }
                         if($knife != $first_key){
                             if($pp_dilema == 'ppc'){
                                 $ppc_text = "plants per bag / container";
@@ -1478,6 +1498,9 @@ function update_bag_package_table($store_id, $product_id, $type){
                             }
                         }else{
                             if($app_qty){
+                                if($app_qty == INF){
+                                    $app_qty = 0;
+                                }
                                 ?>
                                 <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
                                 <?php

@@ -733,7 +733,7 @@ div.ui-datepicker{
   width: 25%!important;
   display: inline-block!important;
 }
-.product-create-app-rates-chart-container{
+.product-create-app-rates-chart-container, .hide{
   display: none;
 }
 .indppl-product-list td, .indppl-product-list th{
