@@ -1723,7 +1723,7 @@ function indppl_build_guide_ajax() {
         $store = htmlspecialchars($_POST['store']);
         $plants =  $_POST['plants'];
         $list =  $_POST['list']; 
-        $email = htmlspecialchars( $_POST['email'] );
+        $send_email = htmlspecialchars( $_POST['email'] );
         $guides = array(); // set the array so we can fill it up and create multiple guides
 
         // Stash the shopping list, email address, and store in the DB for later marketing
@@ -1782,7 +1782,7 @@ function indppl_build_guide_ajax() {
         $subject = "Your Custom Planting Guide";
         $headers = array();
         $headers[] = 'From: Planting Pal <hello@plantingpal.com>';
-        wp_mail($email, $subject, $email_content, $headers);
+        wp_mail($send_email, $subject, $email_content, $headers);
 
         // Generate the page
 
