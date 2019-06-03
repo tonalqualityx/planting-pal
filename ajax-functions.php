@@ -1875,7 +1875,6 @@ function indppl_update_bag_app_rates_ajax(){
         'amount' => $app_rate,
         'unit' => $product_unit,
     );
-    var_dump($args);
     $save = indppl_apprates($store_id, $type, $args, true);
     // var_dump($save);
     $return = update_bag_package_table($store_id, $product_id, $type);
