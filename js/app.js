@@ -413,11 +413,15 @@ jQuery(document).ready(function( $ ) {
                         $('.product-create-fraction-bag').addClass('hide');
                     }
                     $.each(units, function(index, value){
+                        var name = value;
                         // console.log(value);
+                        // if(value == 'qt-d'){
+                        //     name = 'Quart';
+                        // }
                         if(value != array['dry_wet'][2]){
-                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
+                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + name + '</option>');
                         }
-                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + value + '</option>');
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + name + '</option>');
                     })
                 }
                 if(array['cups']){
@@ -438,12 +442,16 @@ jQuery(document).ready(function( $ ) {
                     var elem = $(this);
                     // console.log(select);
                     $.each(units, function(index, value){
+                        var name = value;
+                        // if(value == 'qt-d' || value == 'qt-l'){
+                        //     name = 'Quart';
+                        // }
                         if(select == index){
                             selected = `selected`;
                         }else{
                             selected = ``;
                         }
-                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
                     });
                     // console.log(unit);
                 });
@@ -476,7 +484,11 @@ jQuery(document).ready(function( $ ) {
         array = indppl_get_units(type);
         $('.product-create-standard-unit').empty();
         $.each(array, function(index, value){
-            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+            var name = value;
+            // if(value == 'qt-d' || value == 'qt-l'){
+            //     name = 'Quart';
+            // }
+            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + name + '</option>');
         })
         if(type == "wet"){
             $('.product-create-fraction-bag').addClass('hide');
@@ -500,7 +512,11 @@ jQuery(document).ready(function( $ ) {
         })
         console.log(create_new);
         if(create_new == true){
-            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>');
+            var name = unit;
+            if(unit == 'qt-l' || unit == 'qt-d'){
+                name = 'Quart';
+            }
+            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
         }
 
     })
@@ -679,12 +695,16 @@ jQuery(document).ready(function( $ ) {
                         var elem = $(this);
                         // console.log(select);
                         $.each(units, function(index, value){
+                            var name = value;
+                            // if(value == 'qt-d' || value == 'qt-l'){
+                            //     name = 'Quart';
+                            // }
                             if(select == index || (select == 'tbl' && index == 'tbls')){
                                 selected = `selected`;
                             }else{
                                 selected = ``;
                             }
-                            $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                            $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
                         });
                         // console.log(unit);
                     });
@@ -694,12 +714,16 @@ jQuery(document).ready(function( $ ) {
                         var elem = $(this);
                         // console.log(select);
                         $.each(bagunits, function(index, value){
+                            var name = value;
+                            // if(value == 'qt-d' || value == 'qt-l'){
+                            //     name = 'Quart';
+                            // }
                             if(select == index || (select == 'tbl' && index == 'tbls')){
                                 selected = `selected`;
                             }else{
                                 selected = ``;
                             }
-                            $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                            $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
                         });
                         // console.log(unit);
                     });
@@ -1464,7 +1488,11 @@ jQuery(document).ready(function( $ ) {
         // console.log(array['dry_wet'][2]);
         $.each(units, function(index, value){
             // console.log(value);
-            $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
+            var name = value;
+            // if(value == 'qt-d' || value == 'qt-l'){
+            //     name = 'Quart';
+            // }
+            $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-option" value="' + index + '">' + name + '</option>');
         })
     });
 

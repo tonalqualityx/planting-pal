@@ -1049,10 +1049,13 @@ function update_package_table($store_id, $product_id, $type){
 
         foreach($product_related as $key => $value){
             if(in_array($value, $store_related)){
-
-            ?>
-            <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
-            <?php
+                $name = get_post_meta($value, 'wpcf-unit', true);
+                if($name == 'qt-d' || $name == 'qt-l'){
+                    $name = 'Quart';
+                }
+                ?>
+                <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></th>
+                <?php
             }
         }
         ?>
@@ -1293,8 +1296,13 @@ function update_bag_package_table($store_id, $product_id, $type){
         }
         krsort($order_array);
         foreach($order_array as $key => $value){
+            $name = get_post_meta($value, 'wpcf-unit', true);
+            if($name == 'qt-d' || $name == 'qt-l'){
+                $name = 'Quart';
+            }
             ?>
-            <th class='bag-apprates-title' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . get_post_meta($value, 'wpcf-unit', true); ?></th>
+            
+            <th class='bag-apprates-title' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></th>
             <?php
         }
         ?>

@@ -106,6 +106,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     $standard = get_post_meta($prod, 'wpcf-unit', TRUE);
                     $brand = get_the_terms($prod, 'brand');
                     $cups  = get_post_meta($prod, 'wpcf-5cups', TRUE);
+                    
                     $brand = $brand[0];
                     
                     // Check if it's full height or just some
@@ -119,13 +120,14 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     $cuft = getVolume($ci, 'ci', 'cuft');
 
                     $sqft = (intval($pots['qty'][$i]) * intval($pots['length'][$i]) * intval($pots['width'][$i]))/144;
-    
+                    
                     switch($type){
                         
                         case 'filler':
                             $fill_rate = intval($rates['amount'])/100;
                             $amount = $cuft * $fill_rate;
                             $unit_args = array(array('unit' => 'cuft', 'amount' => $amount));
+
                             $normalized = indppl_normalize($unit_args, $standard, $cups);
                             $need = $normalized[0]['standard-amount'];
                             break;
