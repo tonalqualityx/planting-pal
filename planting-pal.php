@@ -120,3 +120,35 @@ function indppl_set_content_type() {
     return "text/html";
 }
 add_filter('wp_mail_content_type', 'indppl_set_content_type');
+
+// Add custom template to tempaltes list
+function indppl_add_dashboard_template_to_list($post_templates, $wp_theme, $post, $post_type) {
+
+    // Add custom template named template-custom.php to select dropdown
+    $post_templates['template-dashboard.php'] = __('Dashboard');
+
+    return $post_templates;
+}
+
+add_filter('theme_page_templates', 'indppl_add_dashboard_template_to_list', 10, 4);
+
+// Load dashboard template
+function indppl_dashboard_template($template) {
+
+    if (get_page_template_slug() === 'template-dashboard.php') {
+
+        if ($theme_file = locate_template(array('/templates/template-dashboard.php'))) {
+            $template = $theme_file;
+        } else {
+            $template = plugin_dir_path(__FILE__) . '/templates/template-dashboard.php';
+        }
+    }
+
+    if ($template == '') {
+        throw new \Exception('No template found');
+    }
+
+    return $template;
+}
+
+add_filter('template_include', 'indppl_dashboard_template');

@@ -32,6 +32,10 @@ img{
   align-items: center;
 }
 
+.indppl-align-stretch {
+  align-items: stretch;
+}
+
 .indppl-justify-center {
   justify-content: center;
 }
@@ -1216,4 +1220,55 @@ PROGRESS BAR
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/*********
+DASHBOARD
+*********/
+
+#dashboard-title-bar {
+  background: #303135;
+  color: white;
+}
+
+#indppl-dashboard-nav {
+  background: #34602f;
+  min-height: 100vh;
+}
+
+#indppl-dashboard-nav ul {
+  list-style: none;
+  margin: 10px 0;
+  padding: 0;
+}
+
+#indppl-dashboard-nav ul li {
+  padding: 7px 15px;
+}
+
+#indppl-dashboard-nav ul li.active {
+  background: white;
+  color: #e6561a;
+}
+
+
+#indppl-dashboard-nav a {
+  color: white;
+}
+
+#indppl-dashboard-nav ul li.active a {
+  color: #e6561a;
+}
+
+.coming-soon {
+  color:#e6561a;
+  font-style: italic;
+}
+
+#dashboard-content {
+  padding: 50px;
+  max-width: 1000px;  
+  display: block;
+  margin: auto;
+  flex-grow: 999;
 }
