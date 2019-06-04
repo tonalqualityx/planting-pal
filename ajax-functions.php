@@ -1510,11 +1510,11 @@ function indppl_get_pot_apprates_ajax(){
                     $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
                     // apprates_array
                     // if($get_apps == true){
-                        if(isset($app_rates[$type]['surface'][$key]['amount'])){
-                            $dilution = $app_rates[$type]['surface'][$key]['amount'];
-                            $units = $app_rates[$type]['surface'][$key]['unit'];
-                            $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
-                        }
+                    if(array_key_exists('amount', $app_rates[$type]['surface'][$key])){
+                        $dilution = $app_rates[$type]['surface'][$key]['amount'];
+                        $units = $app_rates[$type]['surface'][$key]['unit'];
+                        $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
+                    }
                     // }
 
                     $select_unit = array(
@@ -1619,17 +1619,16 @@ function indppl_get_pot_apprates_ajax(){
                     $each_small = get_post_meta($key, 'wpcf-each-small', true);
                     $each_medium = get_post_meta($key, 'wpcf-each-medium', true);
                     $each_large = get_post_meta($key, 'wpcf-each-large', true);
-                    // apprates_array
+
                     $img = get_post_meta($key, 'wpcf-product-image', true);
                     if(!$img){
                         $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
                     }
-                    if(isset($app_rates[$type]['each'][$key])){
+                    if(array_key_exists('small', $app_rates[$type]['each'][$key])){
                         $each_small = $app_rates[$type]['each'][$key]['small'];
                         $each_medium = $app_rates[$type]['each'][$key]['medium'];
                         $each_large = $app_rates[$type]['each'][$key]['large'];
                     }
-
 
                     ?>
                     <tr>

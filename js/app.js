@@ -1694,6 +1694,46 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
+    $('body').on('click', '.next-button', function(e){
+        var load = true;
+        var ground = false;
+        $('.rounded-input').each(function(){
+            if($(this).val() >= 1){
+                ground = true;
+                return false;
+            }
+        })
+        var pots_line = false;
+        $('.rounded-input.pots').each(function(){
+            console.log($(this).val());
+            if($(this).val() >= 1){
+
+                var count = 0;
+                $(this).parent().parent().find('.rounded-input2').each(function(){
+                    if($(this).val() >= 1){
+                        console.log($(this).val());
+                        count++;
+                    }
+                })
+                if(count == 3){
+                    pots_line = true;
+                }else{
+                    load = false;
+                }
+            }
+        })
+        console.log(ground);
+        console.log(pots_line);
+        if(ground == true || pots_line == true && load == true){
+        }else{
+            e.preventDefault();
+            if(load == false){
+                alert('You need to fill out each row you start completely.')
+            }else{
+                alert('Fill out at least one of the plant types to continue.');
+            }
+        }
+    })
     
 });
 
