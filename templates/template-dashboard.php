@@ -12,12 +12,13 @@ wp_head();?>
                 <li <?php if($post->post_name == 'subscription-info') { echo "class='active'";} ?>><a href="/my-account/subscription-info/">Account Profile</a></li>
                 <li <?php if ($post->post_name == 'store-profile') {echo "class='active'";}?>><a href="/my-account/store-profile">Manage Stores</a></li>
                 <li><a href="#">Manage Users</a> <span class='coming-soon'>coming soon!</span></li>
-                <li><a href="#">Billing</a></li>
+                <!-- <li><a href="#">Billing</a></li> -->
                 <li><a href="#">Reports</a> <span class='coming-soon'>coming soon!</span></li>
-                <li><a href="#">Support</a></li>
+                <li <?php if ($post->post_name == 'support') {echo "class='active'";}?>><a href="/my-account/support/">Support</a></li>
             </ul>
         </div>
         <div id="dashboard-content" class="main-body">
+            <h1><?php the_title(); ?></h1>
             <?php 
             if (have_posts()) : while (have_posts()) : the_post();
                 the_content();

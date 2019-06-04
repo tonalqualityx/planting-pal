@@ -456,11 +456,11 @@ function pp_my_stores(){
                             <p class='indppl-small-store-text'><?php echo $address1; ?></p>
                             <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
                             <div class='ind-flex'>
-                                <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">View</a>
+                                <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a>
                                 <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
                             </div>
                             <div class='ind-flex'>
-                                <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Copy</a>
+                                <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a>
                                 <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a>
                             </div>
                             <div class='ind-flex' style="display:none;">
@@ -471,7 +471,7 @@ function pp_my_stores(){
                                     <?php
                                 }else if(!$live){
                                 ?>
-                                    <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-live-store'>Go Live</a>
+                                    <!-- <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-live-store'>Go Live</a> -->
                                 <?php
                                 }else{
                                     ?>

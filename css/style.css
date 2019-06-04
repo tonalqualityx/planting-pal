@@ -261,14 +261,23 @@ ul.style-free {
 }
 
 .indppl-my-stores-container{
-  display:flex;
-  flex-wrap: wrap;
+  /* display:flex;
+  flex-wrap: wrap; */
 }
 .indppl-single-store-container, .indppl-add-store-container{
   display: flex;
   flex-basis: 33%;
   padding: 7px;
 }
+
+
+.indppl-single-store-container {
+  -webkit-box-shadow: 2px 3px 3px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 2px 3px 3px 0px rgba(0,0,0,0.5);
+  box-shadow: 2px 3px 3px 0px rgba(0,0,0,0.5);
+  margin: 20px 0;
+}
+
 .flex-half{
   width: 50%;
   display: flex;
@@ -1254,6 +1263,8 @@ DASHBOARD
 
 #indppl-dashboard-nav a {
   color: white;
+  font-weight: 600;
+
 }
 
 #indppl-dashboard-nav ul li.active a {
@@ -1271,4 +1282,10 @@ DASHBOARD
   display: block;
   margin: 0 auto;
   flex-grow: 999;
+}
+
+#dashboard-content h1 {
+  color: #34602f;
+  border-bottom: 2px solid #34602f;
+  margin-bottom: 
 }
