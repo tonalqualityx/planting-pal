@@ -1269,6 +1269,6 @@ DASHBOARD
   padding: 50px;
   max-width: 1000px;  
   display: block;
-  margin: auto;
+  margin: 0 auto;
   flex-grow: 999;
 }
