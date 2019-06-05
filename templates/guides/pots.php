@@ -167,23 +167,30 @@ $inst_checked = ' checked="checked" '; ?>
             </ul>
             <p>Products used in this step:</p>
             <div id="products-<?php echo $i; ?>" class="step-product-select">
-                <?php foreach ($apprates['pots'] as $type) {
+                <?php 
+                $displayed = array();
+                foreach ($apprates['pots'] as $type) {
                     foreach($type as $key => $value){
-                        $product              = get_post($key);
-                        $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
-                        // If there are product instructions, let's just check the box
-                        $checked = '';
-                        if ($product_instructions != '') {
-                            $checked = 'checked="checked"';
-                        }
-                        ?>
+                        if(!in_array($key,$displayed)){
+                            $displayed[] = $key;
+                            $product              = get_post($key);
+                            $prod_brand = get_the_terms($key, 'brand');
+                            $prod_brand = $prod_brand[0]->name;
+                            $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
+                            // If there are product instructions, let's just check the box
+                            $checked = '';
+                            if ($product_instructions != '') {
+                                $checked = 'checked="checked"';
+                            }
+                            ?>
 
-                        <div class="indppl-flex indppl-no-wrap planting-guide-products indppl-align-center">
-                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
-                            <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $product->post_title; ?></label>
-                            <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
-                        </div>
-                    <?php }
+                            <div class="indppl-flex indppl-no-wrap planting-guide-products indppl-align-center">
+                                <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
+                                <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $prod_brand . " " . $product->post_title; ?></label>
+                                <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                            </div>
+                        <?php }
+                    }
 
                 }?>
             </div>
