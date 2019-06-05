@@ -77,11 +77,24 @@ jQuery(document).ready(function( $ ) {
     // tabs
     $('body').on('click', '.indppl-nav li', function(e){
         e.preventDefault();
+        var active = '';
+        if($(this).children().attr('href') != '#indppl-tab-2'){
+            $('.indppl-tab-pane').each(function(){
+                if($(this).hasClass('indppl-active')){
+                    
+                    active = $(this).attr('id');
+
+                }
+            });
+            if(active == 'indppl-tab-2'){
+                containerSubmit();
+            }
+        }
         var split = location.search.replace('?', '').split('=')
         $store_id = $('#store-id').val();
         var url = window.location.href;
         url = url + "?store-id=" + $store_id;
-        console.log(split);
+        // console.log(split);
         if(split[0] != 'store-id'){
             window.location.href = url;
         }else{
@@ -182,87 +195,7 @@ jQuery(document).ready(function( $ ) {
     });
     $('body').on('click', '#container-submit', function(e){
         e.preventDefault();
-        indpplAddLoading();
-        var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
-        var available = [];
-        var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
-        var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
-        var store_id = $('#store-id').val();
-        var not_available = [];
-        var remove_dot = [];
-        var new_array = {};
-        var array_num = 0;
-        var version_check = 1.0;
-        $(".indppl-checked").each(function(){
-            available.push($(this).find('input').data('container'));
-        });
-        $(".indppl-unchecked").each(function(){
-            not_available.push($(this).find('input').data('container'));
-        });
-        $('.indppl-remove-dot').each(function(){
-            remove_dot.push($(this).attr('name'));
-        });
-        $('.indppl-container-edit-title').each(function(){
-            if($(this).attr('name') == "new-container"){
-                new_array[array_num] = {};
-                new_array[array_num]['name'] = $(this).val();
-                $(this).parent().parent().find('input').each(function(){
-                    if($(this).is(':checked')){
-                        season = $(this).attr('name');
-                        season_array = season.split('-');
-                        new_array[array_num][season] = season_array[1];
-                    }
-                });
-                // $(this).attr('name', 'dead');
-                array_num++;
-            }
-        });
-
-        // console.log(available);
-        $.ajax({
-            url:indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_save_container_data_ajax',
-                date: date,
-                default_container: default_container,
-                non_default: non_default,
-                store_id: store_id,
-                available: available,
-                not_available: not_available,
-                new_array: new_array,
-                remove_dot: remove_dot,
-                version_check: version_check,
-            },
-            type: 'POST',
-            success: function(e){
-                console.log(e);
-                var new_array = jQuery.parseJSON(e);
-                // console.log(new_array);
-                var i = 0;
-                $('.container-add-new').each(function(){
-                    $(this).attr('name', "indppl-container-title");
-                    $(this).addClass('container-title');
-                    $(this).removeClass('container-add-new');
-                    $(this).parent().removeClass()
-                    $(this).parent().addClass("padding-left-40 position-absolute check-box-container");
-                    $(this).parent().prepend('<div class="container-available indppl-checked"><input type="checkbox" id="' + new_array[i] + '-container-available" class="display-none" data-container="' + new_array[i] + '" name="' + new_array[i] + '-container-available" checked=""><label class="margin-0 container-available-check" for="' + new_array[i] + '-container-available"><div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div></label></div>');
-                    $(this).parent().parent().find('input').each(function(){
-                        if($(this).is(':checkbox')){
-                            var season = $(this).attr('name');
-                            season_array = season.split('-');
-                            $(this).attr('name', new_array[i] + "-" + season_array[1]);
-                            $(this).attr('id', new_array[i] + '-' + season_array[1]);
-                            $(this).next().attr('for', new_array[i] + '-' + season_array[1]);
-                        }
-                    });
-                    i++;
-                });
-                greyOutAllUnchecked();
-                indpplDelLoading();
-            }
-        });
+        containerSubmit();
             
     });
     $('body').on('click', '.indppl-add-product-btn', function(e){
@@ -413,11 +346,15 @@ jQuery(document).ready(function( $ ) {
                         $('.product-create-fraction-bag').addClass('hide');
                     }
                     $.each(units, function(index, value){
+                        var name = value;
                         // console.log(value);
+                        // if(value == 'qt-d'){
+                        //     name = 'Quart';
+                        // }
                         if(value != array['dry_wet'][2]){
-                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
+                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + name + '</option>');
                         }
-                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + value + '</option>');
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + name + '</option>');
                     })
                 }
                 if(array['cups']){
@@ -438,12 +375,16 @@ jQuery(document).ready(function( $ ) {
                     var elem = $(this);
                     // console.log(select);
                     $.each(units, function(index, value){
+                        var name = value;
+                        // if(value == 'qt-d' || value == 'qt-l'){
+                        //     name = 'Quart';
+                        // }
                         if(select == index){
                             selected = `selected`;
                         }else{
                             selected = ``;
                         }
-                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
                     });
                     // console.log(unit);
                 });
@@ -476,7 +417,11 @@ jQuery(document).ready(function( $ ) {
         array = indppl_get_units(type);
         $('.product-create-standard-unit').empty();
         $.each(array, function(index, value){
-            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + value + '</option>');
+            var name = value;
+            // if(value == 'qt-d' || value == 'qt-l'){
+            //     name = 'Quart';
+            // }
+            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + name + '</option>');
         })
         if(type == "wet"){
             $('.product-create-fraction-bag').addClass('hide');
@@ -500,7 +445,11 @@ jQuery(document).ready(function( $ ) {
         })
         console.log(create_new);
         if(create_new == true){
-            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + unit + '</a>');
+            var name = unit;
+            if(unit == 'qt-l' || unit == 'qt-d'){
+                name = 'Quart';
+            }
+            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
         }
 
     })
@@ -679,12 +628,16 @@ jQuery(document).ready(function( $ ) {
                         var elem = $(this);
                         // console.log(select);
                         $.each(units, function(index, value){
+                            var name = value;
+                            // if(value == 'qt-d' || value == 'qt-l'){
+                            //     name = 'Quart';
+                            // }
                             if(select == index || (select == 'tbl' && index == 'tbls')){
                                 selected = `selected`;
                             }else{
                                 selected = ``;
                             }
-                            $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                            $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
                         });
                         // console.log(unit);
                     });
@@ -694,12 +647,16 @@ jQuery(document).ready(function( $ ) {
                         var elem = $(this);
                         // console.log(select);
                         $.each(bagunits, function(index, value){
+                            var name = value;
+                            // if(value == 'qt-d' || value == 'qt-l'){
+                            //     name = 'Quart';
+                            // }
                             if(select == index || (select == 'tbl' && index == 'tbls')){
                                 selected = `selected`;
                             }else{
                                 selected = ``;
                             }
-                            $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                            $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
                         });
                         // console.log(unit);
                     });
@@ -1464,7 +1421,11 @@ jQuery(document).ready(function( $ ) {
         // console.log(array['dry_wet'][2]);
         $.each(units, function(index, value){
             // console.log(value);
-            $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
+            var name = value;
+            // if(value == 'qt-d' || value == 'qt-l'){
+            //     name = 'Quart';
+            // }
+            $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-option" value="' + index + '">' + name + '</option>');
         })
     });
 
@@ -1567,7 +1528,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.indppl-delete-store', function(e){
         e.preventDefault();
         var id = $(this).data('store');
-        $('body').prepend("<div class='indppl-loading-background'><div class='store-delete-modal'><div class='store-delete-modal-inside'><h3 class='store-delete-header'>You are about to Delete this Store</h3><h3 class='store-delete-header'>Are you Sure?</h3><div class='ind-flex store-delete-button-container'><a href='#' class='indppl-button button-primary delete-store-yes' data-store=" + id + ">YES</a><a href='#' class='indppl-button button-primary delete-store-no'>NO</a></div></div></div></div>");
+        $('body').prepend("<div class='indppl-loading-background'><div class='store-delete-modal'><div class='store-delete-modal-inside'><h4 class='store-delete-header'>You are about to delete this store. You will be billed to the end of this period.</h4><h3 class='store-delete-header'>Are you Sure?</h3><div class='ind-flex store-delete-button-container'><a href='#' class='indppl-button button-primary delete-store-yes' data-store=" + id + ">YES</a><a href='#' class='indppl-button button-primary delete-store-no'>NO</a></div></div></div></div>");
     })
 
     $('body').on('click', '.delete-store-no', function(e){
@@ -2168,6 +2129,90 @@ function monitorProgress(store){
                     $('.indppl-progress-container').html(results);
                 }
             });
+        }
+    });
+}
+
+function containerSubmit(){
+    indpplAddLoading();
+    var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
+    var available = [];
+    var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
+    var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
+    var store_id = $('#store-id').val();
+    var not_available = [];
+    var remove_dot = [];
+    var new_array = {};
+    var array_num = 0;
+    var version_check = 1.0;
+    $(".indppl-checked").each(function(){
+        available.push($(this).find('input').data('container'));
+    });
+    $(".indppl-unchecked").each(function(){
+        not_available.push($(this).find('input').data('container'));
+    });
+    $('.indppl-remove-dot').each(function(){
+        remove_dot.push($(this).attr('name'));
+    });
+    $('.indppl-container-edit-title').each(function(){
+        if($(this).attr('name') == "new-container"){
+            new_array[array_num] = {};
+            new_array[array_num]['name'] = $(this).val();
+            $(this).parent().parent().find('input').each(function(){
+                if($(this).is(':checked')){
+                    season = $(this).attr('name');
+                    season_array = season.split('-');
+                    new_array[array_num][season] = season_array[1];
+                }
+            });
+            // $(this).attr('name', 'dead');
+            array_num++;
+        }
+    });
+
+    // console.log(available);
+    $.ajax({
+        url:indppl_ajax.ajaxurl,
+        dataType: 'text',
+        method: 'POST',
+        data: {
+            action: 'indppl_save_container_data_ajax',
+            date: date,
+            default_container: default_container,
+            non_default: non_default,
+            store_id: store_id,
+            available: available,
+            not_available: not_available,
+            new_array: new_array,
+            remove_dot: remove_dot,
+            version_check: version_check,
+        },
+        type: 'POST',
+        success: function(e){
+            console.log(e);
+            var new_array = jQuery.parseJSON(e);
+            // console.log(new_array);
+            var i = 0;
+            $('.container-add-new').each(function(){
+                $(this).attr('name', "indppl-container-title");
+                $(this).addClass('container-title');
+                $(this).removeClass('container-add-new');
+                $(this).parent().removeClass()
+                $(this).parent().addClass("padding-left-40 position-absolute check-box-container");
+                $(this).parent().prepend('<div class="container-available indppl-checked"><input type="checkbox" id="' + new_array[i] + '-container-available" class="display-none" data-container="' + new_array[i] + '" name="' + new_array[i] + '-container-available" checked=""><label class="margin-0 container-available-check" for="' + new_array[i] + '-container-available"><div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div></label></div>');
+                $(this).parent().parent().find('input').each(function(){
+                    if($(this).is(':checkbox')){
+                        var season = $(this).attr('name');
+                        season_array = season.split('-');
+                        $(this).attr('name', new_array[i] + "-" + season_array[1]);
+                        $(this).attr('id', new_array[i] + '-' + season_array[1]);
+                        $(this).next().attr('for', new_array[i] + '-' + season_array[1]);
+                    }
+                });
+                i++;
+            });
+            greyOutAllUnchecked();
+            indpplDelLoading();
         }
     });
 }

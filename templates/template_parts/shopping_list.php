@@ -47,8 +47,15 @@
                 }
                 ?>
                 <div class='product-name'>
+                    <?php
+                    $name = $item['name'];
+                    if(explode(' ', $item['name'])[1] == 'qt-d' || explode(' ', $item['name'])[1] == 'qt-l'){
+                        
+                        $name = explode(' ', $item['name'])[0] . ' Quart';
+                    }
+                    ?>
                     <p><strong><?php echo $item['brand']; ?></strong></p>
-                    <p class="bigger"><strong><?php echo str_replace($item['brand'] . " ", '', $item['product']); ?><br><?php echo $item['name'];?></strong></p>
+                    <p class="bigger"><strong><?php echo str_replace($item['brand'] . " ", '', $item['product']); ?><br><?php echo $name;?></strong></p>
 
                 </div>
             </div>
