@@ -2142,3 +2142,17 @@ function indppl_gform_user_phone_pop($value) {
     return $phone;
 }
 add_filter('gform_field_value_indppl-user-phone', 'indppl_gform_user_phone_pop');
+
+function indppl_gform_firstname_pop($value) {
+
+    $user = get_userdata(get_current_user_id());
+    return $user->first_name;
+}
+add_filter('gform_field_value_indppl-first-name', 'indppl_gform_firstname_pop');
+
+function indppl_gform_lastname_pop($value) {
+
+    $user = get_userdata(get_current_user_id());
+    return $user->last_name;
+}
+add_filter('gform_field_value_indppl-last-name', 'indppl_gform_lastname_pop');
