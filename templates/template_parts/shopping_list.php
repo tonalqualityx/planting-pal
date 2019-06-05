@@ -70,11 +70,11 @@
 
 
 <div class="row no-gutters" id="buttons">
-    <div class="col">
-        <p class="button"><a style="color:#fff" href="">Go back</a></p>
+    <div class="col indppl-big-button-container">
+        <a style="color:#fff" class='indppl-big-button indppl-green-button' href="">Go back</a>
     </div>
-    <div class="col button2">
-        <p class="button"><a style="color:#fff" href="">Start over</a></p>
+    <div class="col button2 indppl-big-button-container">
+        <a style="color:#fff" class='indppl-big-button indppl-green-button' href="/app">Start over</a>
     </div>
 </div>
 

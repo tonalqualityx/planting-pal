@@ -417,6 +417,8 @@ function pp_my_stores(){
             );
             $stores = new WP_Query($args);
             $status = indppl_user_status($user_id);
+            global $wp;
+            $curernt_url =  home_url( $wp->request );
             if($stores->have_posts()){
                 ?>
                 <div class='indppl-my-stores-container'>
@@ -492,6 +494,9 @@ function pp_my_stores(){
                 ?>
                 </div>
                 <?php
+            }else if(home_url() . '/my-account' == $curernt_url){
+                $store_form = indppl_store_info($id);
+                echo $store_form;
             }else{
                 $add_button = get_add_store_button();
                 echo $add_button;

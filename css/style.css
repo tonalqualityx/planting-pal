@@ -577,7 +577,19 @@ div.ui-datepicker{
   background: #4a8943;
   color: #fff;
 }
-
+.indppl-big-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.indppl-big-button-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
+}
 .indppl-green-button:hover{
   background-color: #76ab49;
   color: #000;

@@ -599,7 +599,9 @@ jQuery(document).ready(function( $ ) {
                     setTimeout(function(){
                         $('.slide-in-products-container').remove();
                     }, 1000);
+                    console.log('ummm');
                     indpplDelLoading();
+                    indpplAddProduct(type);
                 }else{
                     // console.log(e);
                     array = JSON.parse(e);
@@ -761,7 +763,6 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         indpplAddLoading();
         var required = true;
-        console.log($('.indppl-add-product-name').val());
         if($('.indppl-add-product-name').val() == ""){
             $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
             required = false;
@@ -866,13 +867,23 @@ jQuery(document).ready(function( $ ) {
             success: function(e){
                 // array = JSON.parse(e);
                 // console.log(array);
-                console.log(e);
-                getProductInfo();
-                $('.slide-in-products-container').removeClass('left-0');
-                setTimeout(function(){
-                    $('.slide-in-products-container').remove();
-                }, 1000);
-                indpplDelLoading();
+                if($(elem).attr('id') == 'product-create-pots-finish'){
+                    getProductInfo();
+                    $('.slide-in-products-container').removeClass('left-0');
+                    setTimeout(function(){
+                        $('.slide-in-products-container').remove();
+                        getAppRates(type);
+                    }, 1000);
+                    indpplDelLoading();
+                }else{
+                    getProductInfo();
+                    $('.slide-in-products-container').removeClass('left-0');
+                    setTimeout(function(){
+                        $('.slide-in-products-container').remove();
+                        indpplAddProduct(type);
+                    }, 1000);
+                    indpplDelLoading();
+                }
             }
         });
     });
@@ -888,31 +899,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.indppl-application-rates-pots-btn', function(e){
         e.preventDefault();
         var type = $(this).data('type');
-        $('body').prepend("<div class='slide-in-products-container'></div>");
-        setTimeout(function(){
-            $('.slide-in-products-container').addClass('left-0');
-            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
-        }, 20);
-        var store_id = $('#store-id').val();
-        var version_check = 1.0;
-        $.ajax({
-            url:indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_get_pot_apprates_ajax',
-                store_id: store_id,
-                type: type,
-                version_check: version_check,
-            },
-            type: 'POST',
-            success: function(e){
-                // console.log(e);
-                $('.slide-in-products-container').append(e);
-                get100Percent();
-                indpplDelLoading();
-            }
-        })
+        getAppRates(type);
     })
 
     $('body').on('change', '.pots-apprates-filler', function(e){
@@ -2215,4 +2202,33 @@ function containerSubmit(){
             indpplDelLoading();
         }
     });
+}
+
+function getAppRates(type){
+    
+    $('body').prepend("<div class='slide-in-products-container'></div>");
+    setTimeout(function(){
+        $('.slide-in-products-container').addClass('left-0');
+        indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+    }, 20);
+    var store_id = $('#store-id').val();
+    var version_check = 1.0;
+    $.ajax({
+        url:indppl_ajax.ajaxurl,
+        dataType: 'text',
+        method: 'POST',
+        data: {
+            action: 'indppl_get_pot_apprates_ajax',
+            store_id: store_id,
+            type: type,
+            version_check: version_check,
+        },
+        type: 'POST',
+        success: function(e){
+            // console.log(e);
+            $('.slide-in-products-container').append(e);
+            get100Percent();
+            indpplDelLoading();
+        }
+    })
 }

@@ -583,7 +583,8 @@ function indppl_get_product_info_ajax(){
     ob_start();
     if($type == 'pots' || $type == 'beds'){
         ?>
-        <input type="submit" name="product-create-pots-next" data-exit="true" id="product-create-pots-next" class="product-create-pots-submit" value="Next">
+        <input type="submit" name="product-create-pots-next" id="product-create-pots-next" class="product-create-pots-submit" value="Create Another Product">
+        <input type="submit" name="product-create-pots-finish" id="product-create-pots-finish" class="product-create-pots-submit" value="Finish">
         <?php
     }else{
         ?>
