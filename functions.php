@@ -2097,3 +2097,48 @@ function indppl_notify_deleted_store($store, $user){
     }
 
 }
+
+// GRAVITY FORMS DYNAMIC POPULATION FUNCTIONS
+
+function indppl_gform_user_type_pop($value) {
+    $user = get_current_user_id();
+    $status = indppl_user_status($user);
+    $subscriptions = "Current user subscriptions:";
+    if(count($status) < 1) {
+        $subscriptions .= " no active subs!?";
+    } else {
+        foreach($status as $stat){
+            $subscriptions .= " {$stat},";
+        }
+    }
+    return $subscriptions;
+}
+add_filter('gform_field_value_indppl-user-type', 'indppl_gform_user_type_pop');
+
+function indppl_gform_user_email_pop($value) {
+
+    $user = get_userdata(get_current_user_id());
+    return $user->user_email;
+}
+add_filter('gform_field_value_indppl-user-email', 'indppl_gform_user_email_pop');
+
+function indppl_gform_username_pop($value) {
+
+    $user = get_userdata(get_current_user_id());
+    return $user->user_login;
+}
+add_filter('gform_field_value_indppl-username', 'indppl_gform_username_pop');
+
+function indppl_gform_user_id_pop($value) {
+
+    $user = get_userdata(get_current_user_id());
+    return $user->ID;
+}
+add_filter('gform_field_value_indppl-account-number', 'indppl_gform_user_id_pop');
+
+function indppl_gform_user_phone_pop($value) {
+
+    $phone = get_user_meta(get_current_user_id(), 'mepr_phone_number', TRUE);
+    return $phone;
+}
+add_filter('gform_field_value_indppl-user-phone', 'indppl_gform_user_phone_pop');

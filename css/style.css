@@ -1303,12 +1303,13 @@ DASHBOARD
   margin: 15px 0 25px 100px;
   flex-grow: 999;
   background: #f2f2f2;
+  padding-bottom: 50px;
 }
 
 #dashboard-content h1 {
   color: #34602f;
   border-bottom: 2px solid #34602f;
-  margin-bottom: 
+  margin-bottom: 0;
 }
 
 .indppl-add-store-text-container {
