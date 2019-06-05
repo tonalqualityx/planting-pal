@@ -171,23 +171,28 @@ $inst_checked = ' checked="checked" ';
             </ul>
             <p>Products used in this step:</p>
             <div id="products-<?php echo $i; ?>" class="step-product-select">
-                <?php foreach($apprates['ground'] as $key => $value){
-                    $product = get_post($key);
-                    $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
-                    // If there are product instructions, let's just check the box
-                    $checked = '';
-                    if($product_instructions != ''){
-                        $checked = 'checked="checked"';
-                    }
-                    ?>
-                    
-                    <div class="indppl-flex planting-guide-products indppl-align-center indppl-no-wrap">
-                        <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
-                        <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $product->post_title; ?></label>
-                        <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
-                    </div>
+                <?php 
+                $displayed = array();
+                foreach($apprates['ground'] as $key => $value){
+                    if(!in_array($key,$displayed)){
+                        $displayed[] = $key;
+                        $product = get_post($key);
+                        $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
+                        // If there are product instructions, let's just check the box
+                        $checked = '';
+                        if($product_instructions != ''){
+                            $checked = 'checked="checked"';
+                        }
+                        ?>
+                        
+                        <div class="indppl-flex planting-guide-products indppl-align-center indppl-no-wrap">
+                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
+                            <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $product->post_title; ?></label>
+                            <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                        </div>
+                    <?php }
 
-                <?php } ?>
+                } ?>
             </div>
             <?php
             $i++;
