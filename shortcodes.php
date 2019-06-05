@@ -434,34 +434,61 @@ function pp_my_stores(){
                         $permalink = get_the_permalink($id);
                         $live = get_post_meta($id, 'wpcf-issetup', true);
                         ?>
-                        <div class='indppl-single-store-container white-background'>
-                            <?php
-                            // $status = indppl_store_progress_bar($id, false, false);
-                            ?>
-                            <div class='status-for-business'><?php echo $status['bar']; ?></div>
-                            <!-- $status['bar']; -->
+                        <div class='indppl-single-store-container white-background indppl-space-between'>
                             <?php
                             if($img){
                                 ?>
-                            <div class='flex-half'>
-                                <div class='indppl-store-thumb'>
-                                        <img src='<?php echo $img; ?>'>
+                            <div class="indppl-store-dash-left">
+                                <div class='indppl-flex'>
+                                    <div class='indppl-store-thumb indppl-dash-thumb'>
+                                            <img src='<?php echo $img; ?>'>
+                                    </div>
+                                    <div class="indppl-store-address">
+                                        <h4 class=''><?php echo $title; ?></h4>
+                                        <p class='indppl-small-store-text'><?php echo $address1; ?></p>
+                                        <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
+                                    </div>
+                                </div>
+                                <div class="dash-buttons">
+                                    <p><a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a> Manage profile, products, & planting guide</p>
+                                    <p><a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a> Test store in the app</p>
+                                    <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a> Copy store settings to create a new store</p>
+                                    <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a> Delete this store</p>
                                 </div>
                             </div>
                                 <?php
                             }
                             ?>
-                            <div class='flex-half flex-half-text'>
-                                <h4 class='indppl-small-title'><?php echo $title; ?></h4>
-                                <p class='indppl-small-store-text'><?php echo $address1; ?></p>
-                                <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
-                                <div class='ind-flex'>
-                                    <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a>
-                                    <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
-                                </div>
-                                <div class='ind-flex'>
-                                    <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a>
-                                    <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a>
+                            <div class=''>
+                                
+                                <div class=''>
+                                    <?php 
+                                    $status = "Offline";
+                                    $status_class = "grey-text";
+                                    $progress = indppl_store_progress_bar($id, false, false);
+                                    if($progress['complete'] == 100){
+                                        $status = "Online";
+                                        $status_class = "green-text";
+                                    }
+                                         ?>
+                                    <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>'><?php echo $status; ?></span></p>
+                                    <?php if ($progress['complete'] < 100) {
+                                        $gauge_level = 360*($progress['complete']/100);
+                                        $p51 = '';
+                                        if($gauge_level > 180){
+                                            $p51 = 'p51';
+                                        }
+                                         ?>
+                                        <div class="c100 <?php echo $p51; ?> center orange">
+                                            <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
+                                            <div class="slice">
+                                                <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
+                                                <div class="fill"></div>
+                                            </div>
+                                        </div>
+                                        <a href="<?php echo $link; ?>" class="orange-text text-center" style="display:block; margin-top:5px;">finish store setup</a>
+
+                                    <?php } ?>
                                 </div>
                                 <div class='ind-flex' style="display:none;">
                                     <?php
