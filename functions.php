@@ -1904,7 +1904,7 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
     $bar .= "<div class='indppl-progress'><div class='indppl-progress-fill' style='width:{$percentage}%;{$styles}'><span>{$percentage}%</span></div></div>";
 
     if($next_step){
-
+        
         $next_incomplete = '';
         foreach($steps as $title => $step){
             if(!$step){
@@ -1915,40 +1915,45 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
         
         switch($next_incomplete){
             case '' :
-                $next = "Start by adding some containers under the 'Plant Containers' tab below.";
+            $next = "Start by adding some containers under the 'Plant Containers' tab below.";
                 break;
-            case 'containers' :
+                case 'containers' :
                 $next = "Next up - select which container sizes you carry. Do this under the 'Plant Containers' tab.";
                 break;
-            case 'ground' :
+                case 'ground' :
                 $next = "Great work! Next you'll need to add some in-ground products. Do that under the 'Products' tab below.";
                 break;
-            case 'pots' :
+                case 'pots' :
                 $next = "Next you'll need to setup the products you recommend for potted plants. Find this just below the in ground products.";
                 break;
-            case 'pots-rates' :
+                case 'pots-rates' :
                 $next = "Great! Now be sure to setup your recommended application rates for potted plants.";
                 break;
-            case 'beds' :
+                case 'beds' :
                 $next = "Coming along! Now add your recommended products for raised beds.";
                 break;
-            case 'beds-rates' :
+                case 'beds-rates' :
                 $next = "Excellent. Now wrap up your product recommendations by setting up your recommended application rates for raised beds.";
                 break;
-            case 'guide-ground' :
+                case 'guide-ground' :
                 $next = "Almost done! Now move to the 'Guides' tab and setup your planting guide for in-ground products";
                 break;
-            case 'guide-pots' :
+                case 'guide-pots' :
                 $next = "Making great progress! The planting guide for potted plants is next on your to-do list!";
                 break;
-            case 'guide-beds' :
+                case 'guide-beds' :
                 $next = "Just about there. Wrap up your planting guides by setting up your recommendations for raised beds.";
                 break;
-        }
+            }
 
-        $bar .= "<div class='next-step'><p>{$next}</p></div>";
+            if($percentage == 100){
+                $next = "Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready! <br /><br /> <a href='#' class='store-go-live-btn button button-primary
+            ' data-id='{$store}'>Make Public</a>";
+            }
+            
+            $bar .= "<div class='next-step'><p>{$next}</p></div>";
     }
-
+    
     if($container){
         $bar .= "</div>";
     }
