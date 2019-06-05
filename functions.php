@@ -1757,18 +1757,20 @@ function update_sponsorship_view_count($store_id, $sponsor_id){
 function get_add_store_button(){
     ob_start();
     ?>
-    <div class='indppl-my-stores-container'>
-        <div class='indppl-add-store-container'>
-            <a class='indppl-add-store-link' href='<?php
-                echo home_url() . "/store-profile/?new=true";
-            ?>'>
-                <div class='indppl-add-store-centered'>
-                    <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
-                    </svg>
-                </div>
-                <h4 class='indppl-add-store-text'>Add Store</h4>
-            </a>
+    <div class='indppl-add-store-container'>
+
+        <a class='indppl-add-store-link' href='<?php
+            echo home_url() . "/store-profile/?new=true";
+        ?>'>
+            <div class='indppl-add-store-centered'>
+                <svg id='path' class="icon  icon--plus" viewBox="-52.5 -52.5 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M-5 -25 h5 v20 h20 v5 h-20 v20 h-5 v-20 h-20 v-5 h20 z" />
+                </svg>
+            </div>
+        </a>
+        <div class='indppl-add-store-text-container'>
+            <h4 class="orange-text">Add New Store</h4>
+            <p class="grey-text">Start from scratch</p>
         </div>
     </div>
     <?php

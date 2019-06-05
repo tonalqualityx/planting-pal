@@ -420,76 +420,71 @@ function pp_my_stores(){
             if($stores->have_posts()){
                 ?>
                 <div class='indppl-my-stores-container'>
-                <?php
-                while($stores->have_posts()){
-                    $stores->the_post();
-                    
-                    $id = get_the_ID();
-                    $img = get_post_meta($id, 'wpcf-logo', true);
-                    $title = get_the_title();
-                    $address1 = get_post_meta($id, 'wpcf-address1', true);
-                    $city = get_post_meta($id, 'wpcf-city', true);
-                    $state = get_post_meta($id, 'wpcf-state', true);
-                    $link = home_url() . '/store-profile?store-id=' . $id;
-                    $permalink = get_the_permalink($id);
-                    $live = get_post_meta($id, 'wpcf-issetup', true);
-                    ?>
-                    <div class='indppl-single-store-container'>
-                        <?php
-                        // $status = indppl_store_progress_bar($id, false, false);
-                        ?>
-                        <div class='status-for-business'><?php echo $status['bar']; ?></div>
-                        <!-- $status['bar']; -->
-                        <?php
-                        if($img){
-                            ?>
-                        <div class='flex-half'>
-                            <div class='indppl-store-thumb'>
-                                    <img src='<?php echo $img; ?>'>
-                            </div>
-                        </div>
-                            <?php
-                        }
-                        ?>
-                        <div class='flex-half flex-half-text'>
-                            <h4 class='indppl-small-title'><?php echo $title; ?></h4>
-                            <p class='indppl-small-store-text'><?php echo $address1; ?></p>
-                            <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
-                            <div class='ind-flex'>
-                                <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a>
-                                <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
-                            </div>
-                            <div class='ind-flex'>
-                                <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a>
-                                <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a>
-                            </div>
-                            <div class='ind-flex' style="display:none;">
-                                <?php
-                                if($status['complete'] < 100){
-                                    ?>
-                                    <p class='color-grey'>Go Live</p>
-                                    <?php
-                                }else if(!$live){
-                                ?>
-                                    <!-- <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-live-store'>Go Live</a> -->
-                                <?php
-                                }else{
-                                    ?>
-                                    <a href='#' class='indppl-button button-primary indppl-store-deactivate' data-store='<?php echo $id; ?>'>Deactivate</a>
-                                    <?php
-                                }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
                     <?php
-                }
-                wp_reset_postdata();
-                if(in_array('paidaccountpro', $status)){
-                    $add_button = get_add_store_button();
-                    echo $add_button;
-                }
-                ?>
+                    while($stores->have_posts()){
+                        $stores->the_post();
+                        
+                        $id = get_the_ID();
+                        $img = get_post_meta($id, 'wpcf-logo', true);
+                        $title = get_the_title();
+                        $address1 = get_post_meta($id, 'wpcf-address1', true);
+                        $city = get_post_meta($id, 'wpcf-city', true);
+                        $state = get_post_meta($id, 'wpcf-state', true);
+                        $link = home_url() . '/store-profile?store-id=' . $id;
+                        $permalink = get_the_permalink($id);
+                        $live = get_post_meta($id, 'wpcf-issetup', true);
+                        ?>
+                        <div class='indppl-single-store-container white-background'>
+                            <?php
+                            // $status = indppl_store_progress_bar($id, false, false);
+                            ?>
+                            <div class='status-for-business'><?php echo $status['bar']; ?></div>
+                            <!-- $status['bar']; -->
+                            <?php
+                            if($img){
+                                ?>
+                            <div class='flex-half'>
+                                <div class='indppl-store-thumb'>
+                                        <img src='<?php echo $img; ?>'>
+                                </div>
+                            </div>
+                                <?php
+                            }
+                            ?>
+                            <div class='flex-half flex-half-text'>
+                                <h4 class='indppl-small-title'><?php echo $title; ?></h4>
+                                <p class='indppl-small-store-text'><?php echo $address1; ?></p>
+                                <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
+                                <div class='ind-flex'>
+                                    <a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a>
+                                    <a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a>
+                                </div>
+                                <div class='ind-flex'>
+                                    <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a>
+                                    <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a>
+                                </div>
+                                <div class='ind-flex' style="display:none;">
+                                    <?php
+                                    if($status['complete'] < 100){
+                                        ?>
+                                        <p class='color-grey'>Go Live</p>
+                                        <?php
+                                    }else if(!$live){
+                                    ?>
+                                        <!-- <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-live-store'>Go Live</a> -->
+                                    <?php
+                                    }else{
+                                        ?>
+                                        <a href='#' class='indppl-button button-primary indppl-store-deactivate' data-store='<?php echo $id; ?>'>Deactivate</a>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    wp_reset_postdata(); ?>
                 </div>
                 <?php
             }else{

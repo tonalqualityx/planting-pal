@@ -45,7 +45,12 @@ img{
 }
 
 .orange-text {
-  color: #f79f2c;
+  /* color: #f79f2c; */
+  color: #e6561a;
+}
+
+.grey-text {
+  color: #838384;
 }
 
 .ppl-green-bg {
@@ -54,6 +59,14 @@ img{
 
 .pad-top-3 {
   padding-top: 2%;
+}
+
+.grey-background {
+  background: #f2f2f2;
+}
+
+.white-background {
+  background: white;
 }
 
 ul.style-free {
@@ -264,10 +277,14 @@ ul.style-free {
   /* display:flex;
   flex-wrap: wrap; */
 }
-.indppl-single-store-container, .indppl-add-store-container{
+.indppl-single-store-container{
   display: flex;
-  flex-basis: 33%;
+  /* flex-basis: 33%; */
   padding: 7px;
+}
+
+.indppl-add-store-container {
+  display: flex;
 }
 
 
@@ -349,14 +366,9 @@ ul.style-free {
 .indppl-store-thumb{
   padding-right: 5px;
 }
-.indppl-add-store-container{
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100px;
-}
+
 .indppl-add-store-centered, .indppl-add-sponsor-centered{
-  border: #34602f 3px solid;
+  border: #e6561a 3px solid;
   width: 100%;
   height: auto;
   transition: background 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
@@ -366,7 +378,7 @@ ul.style-free {
   height: 100%;
 }
 .indppl-add-store-centered:hover, .icon--plus:hover, .indppl-add-sponsor-centered:hover{
-  background: #4a8943;
+  background: #e6561a;
   color: white;
 }
 
@@ -376,7 +388,7 @@ ul.style-free {
 }
 .icon--plus > path{
   transition: fill 0.35s ease-in-out, color 0.35s ease-in-out, font-size 0.35s ease-in-out;
-  fill: #34602f;
+  fill: #e6561a;
 }
 .indppl-add-store-centered:hover svg path, .indppl-add-sponsor-centered:hover svg path{
   fill:white;
@@ -387,7 +399,7 @@ ul.style-free {
   text-align: center;
 }
 .indppl-add-store-link{
-  width:150px;
+  width:50px;
 }
 .indppl-containers-table{
   width:100%;
@@ -1256,7 +1268,7 @@ DASHBOARD
 }
 
 #indppl-dashboard-nav ul li.active {
-  background: white;
+  background: #f2f2f2;
   color: #e6561a;
 }
 
@@ -1282,10 +1294,32 @@ DASHBOARD
   display: block;
   margin: 0 auto;
   flex-grow: 999;
+  background: #f2f2f2;
 }
 
 #dashboard-content h1 {
   color: #34602f;
   border-bottom: 2px solid #34602f;
   margin-bottom: 
+}
+
+.indppl-add-store-text-container {
+  width: auto;
+  margin-left: 11px;
+  padding: 0;
+  margin-top: 4px;
+}
+
+.indppl-add-store-text-container  h4 {
+  font-size: 0.75em;
+  font-weight: 100;
+  text-align: left;
+  margin: 0;
+  line-height: 1;
+}
+
+.indppl-add-store-text-container p {
+  margin: 0;
+  font-size: 0.5em;
+  line-height: 1;
 }
