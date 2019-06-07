@@ -353,7 +353,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                 }
 
                 // Find out if total amount needed is 50% or more of the next size up
-                if(count($skipped_packs) > 0){
+                if(count($skipped_packs) > 0 && $whole > 1){
 
                     // How much are we telling them to buy?
                     $calc_amount = $whole * $pack['standard-amount'];
