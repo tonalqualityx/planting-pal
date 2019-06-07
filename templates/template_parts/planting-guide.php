@@ -1,5 +1,6 @@
 <?php 
 defined('ABSPATH') or die('No script kiddies please!'); //For security 
+$store_name = get_the_title($store);
 $address1 = get_post_meta($store, 'wpcf-address1', TRUE);
 $address2 = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone    = get_post_meta($store, 'wpcf-phone', TRUE);
@@ -13,6 +14,7 @@ $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
             <img src="<?php echo get_post_meta($store, 'wpcf-logo', TRUE);?>">
             <div class="store-address">
                 <?php 
+                echo "<h4 style='font-size:28px;margin:0;'>{$store_name}</h4>";
                 if($address1 && $address1 != ''){
                     echo "<p>$address1</p>";
                 }
