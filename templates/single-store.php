@@ -352,6 +352,28 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     }
                 }
 
+                // Find out if total amount needed is 50% or more of the next size up
+                if(count($skipped_packs) > 0 && $whole > 1){
+
+                    // How much are we telling them to buy?
+                    $calc_amount = $whole * $pack['standard-amount'];
+                    
+                    // Check the package sizes for measurements
+                    foreach($skipped_packs as $k => $v){
+
+                        $skipped_pack_amount = floatval($v['standard-amount']);
+                        $div = ($calc_amount/$skipped_pack_amount);
+
+                        if($div >= 0.5 && $div <= 1){
+
+                            $whole = 1;
+                            $pack_name = $v['name'];
+                            break;
+
+                        }
+                    }
+                }
+
                 $pack_count = $whole;
                 $shopping_list[$key] = array(
                     'count' => $pack_count,
