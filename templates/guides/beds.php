@@ -169,14 +169,22 @@ foreach ($sections as $section => $options) {
             <div id="products-<?php echo $i; ?>" class="step-product-select">
                 <?php 
                 $displayed = array();
-                foreach ($apprates['beds'] as $type) {
+                foreach ($apprates['beds'] as $type_key => $type) {
                     foreach($type as $key => $value){
                         if(!in_array($key, $displayed)){
                             $displayed[] = $key;
                             $product              = get_post($key);
                             $prod_brand = get_the_terms($key, 'brand');
                             $prod_brand = $prod_brand[0]->name;
-                            $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
+                            
+                            if($i == 1 && $type_key == 'filler'){
+                                $product_instructions = get_post_meta($key, 'wpcf-beds-instructions-step-1-bulk', TRUE);
+                            } elseif($i == 1 && $type_key == 'blended'){
+                                $product_instructions = get_post_meta($key, 'wpcf-beds-instructions-step-1-blended', TRUE);
+                            } else {
+                                $product_instructions = get_post_meta($key, 'wpcf-beds-instructions-step-' . $i , TRUE);
+                            }
+
                             // If there are product instructions, let's just check the box
                             $checked = '';
                             if ($product_instructions != '') {
