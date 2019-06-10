@@ -1970,6 +1970,11 @@ function indppl_duplicate_store($store_id, $new_details){
 
     // Get store meta
     $meta = get_post_meta($store_id);
+
+    $ground_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-ground-options'][0]);
+    $pots_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-pots-options'][0]);
+    $beds_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-beds-options'][0]);
+
     $args = array(
         'post_type' => 'store',
         'post_status' => 'publish',
@@ -1985,9 +1990,9 @@ function indppl_duplicate_store($store_id, $new_details){
             'wpcf-winter-start' => $meta['wpcf-winter-start'][0],
             'wpcf-winter-end' => $meta['wpcf-winter-end'][0],
             'wpcf-apprates' => $meta['wpcf-apprates'][0],
-            'wpcf-planting-guide-ground-options' => $meta['wpcf-planting-guide-ground-options'][0],
-            'wpcf-planting-guide-pots-options' => $meta['wpcf-planting-guide-pots-options'][0],
-            'wpcf-planting-guide-beds-options' => $meta['wpcf-planting-guide-beds-options'][0],
+            'wpcf-planting-guide-ground-options' => $ground_guide,
+            'wpcf-planting-guide-pots-options' => $pots_guide,
+            'wpcf-planting-guide-beds-options' => $beds_guide,
             'wpcf-address1' => $new_details['address1'],
             'wpcf-address2' => $new_details['address2'],
             'wpcf-city' => $new_details['city'],
