@@ -775,8 +775,6 @@ function indppl_save_product_ajax(){
     // checking change of 5_cups
 
     // $console = $product_rate;
-    // $app_rates = indppl_apprates($store_id);
-    // $console;
 
     if($fraction == 'true' && $product_rate){
         $args = array(
@@ -1179,6 +1177,13 @@ function indppl_save_pots_product_ajax(){
         update_post_meta($product_id, 'wpcf-5cups-unit', $cups_unit);
     }
 
+    $app_rates = indppl_apprates($store_id);
+    // $console = $app_rates[$type][$product_id];
+    var_dump($app_rates[$type]['filler'][$product_id]);
+    $filler_check = $app_rates[$type]['filler'][$product_id];
+    $blended_check = $app_rates[$type]['blended'][$product_id];
+    $surface_check = $app_rates[$type]['surface'][$product_id];
+    $each_check = $app_rates[$type]['each'][$product_id];
     // var_dump($product_id);
     // var_dump($surface);
     $send_array = array($product_id => array());
@@ -1186,35 +1191,58 @@ function indppl_save_pots_product_ajax(){
     
     $temp = array();
     if($filler == 'true'){
-        $temp['filler'] = array(
-            $product_id => array(
-                'bag' => '',
-            ),
-        );
+        if(key_exists('amount', $filler_check)){
+            $temp['filler'] = array(
+                $product_id => $filler_check
+            );
+        }else{
+            $temp['filler'] = array(
+                $product_id => array(
+                    'bag' => '',
+                ),
+            );
+        }
     }
     if($blend == 'true'){
-        $temp['blended'] = array(
-            $product_id => array(
-                'bag' => '',
-            ),
-        );
+        if(key_exists('amount', $blended_check)){
+            $temp['blended'] = array(
+                $product_id => $blended_check
+            );
+        }else{
+            $temp['blended'] = array(
+                $product_id => array(
+                    'bag' => '',
+                ),
+            );
+        }
 
     }
     if($surface == 'true'){
-        $temp['surface'] = array(
-            $product_id => array(
-                'bag' => '',
-            ),
-        );
+        if(key_exists('amount', $surface_check)){
+            $temp['surface'] = array(
+                $product_id => $surface_check
+            );
+        }else{
+            $temp['surface'] = array(
+                $product_id => array(
+                    'bag' => '',
+                ),
+            );
+        }
     }
-    var_dump($temp);
-    var_dump($product_id);
+
     if($new_pack[count($new_pack)-1]['unit'] == 'each' || $product_unit == 'each'){
-        $temp['each'] = array(
-            $product_id => array(
-                'bag' => '',
-            ),
-        );
+        if(key_exists('small', $each_check)){
+            $temp['each'] = array(
+                $product_id => $each_check
+            );
+        }else{
+            $temp['each'] = array(
+                $product_id => array(
+                    'bag' => '',
+                ),
+            );
+        }
     }
     $send_array = $temp;
     
@@ -1223,9 +1251,7 @@ function indppl_save_pots_product_ajax(){
         $del_array = array(
             $type => $product_id,
         );
-        var_dump($del_array);
         $del = indppl_delete_apprate($store_id, $del_array);
-        var_dump($del);
         // var_dump($send_array);
         $save = indppl_apprates($store_id, $type, $send_array);
 

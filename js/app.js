@@ -814,30 +814,25 @@ jQuery(document).ready(function( $ ) {
         console.log("surface: " + surface);
         var i = 0;
         var version_check = 1.0;
-        if($(this).is('#product-create-pots-next')){
-            $('.indppl-product-create-size-btn').each(function(){
-                if($(this).hasClass('indppl-background-green')){
-                    if($(this).hasClass('indppl-new-package')){
-                        new_pack[i] = {};
-                        new_pack[i]['size'] = $(this).data('size');
-                        new_pack[i]['unit'] = $(this).data('unit');
-                        new_pack[i]['name'] = brand + " " + product_name + " " + $(this).data('size') + $(this).data('unit');
-                        i++;
-                    }else{
-                        package_array.push($(this).data('id'));
-                    }
+        $('.indppl-product-create-size-btn').each(function(){
+            if($(this).hasClass('indppl-background-green')){
+                if($(this).hasClass('indppl-new-package')){
+                    new_pack[i] = {};
+                    new_pack[i]['size'] = $(this).data('size');
+                    new_pack[i]['unit'] = $(this).data('unit');
+                    new_pack[i]['name'] = brand + " " + product_name + " " + $(this).data('size') + $(this).data('unit');
+                    i++;
                 }else{
-                    if($(this).hasClass('indppl-non-default-package')){
-                        package_remove.push({'id': $(this).data('id')})
-                    }else{
-                        package_remove.push($(this).data('id'));
-                    }
+                    package_array.push($(this).data('id'));
                 }
-            })
-        }
-        // console.log(filler);
-        // console.log(blend);
-        // console.log(surface);
+            }else{
+                if($(this).hasClass('indppl-non-default-package')){
+                    package_remove.push({'id': $(this).data('id')})
+                }else{
+                    package_remove.push($(this).data('id'));
+                }
+            }
+        })
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -865,8 +860,9 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                // array = JSON.parse(e);
-                // console.log(array);
+                // var array = JSON.parse(e);
+                // console.log(array['console']);
+                console.log(e);
                 if($(elem).attr('id') == 'product-create-pots-finish'){
                     getProductInfo();
                     $('.slide-in-products-container').removeClass('left-0');
@@ -1131,31 +1127,35 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '#get-planting-guide', function(e){
         e.preventDefault();
-        var store = $(this).data('store');
-        var plants = $(this).data('plants');
-        var list = $(this).data('list');
         var email = $('input[name=email]').val();
-
-        $.ajax({
-            url : indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data : {
-                action : 'indppl_build_guide_ajax',
-                nonce : indppl_ajax.guide_nonce,
-                store : store,
-                plants : plants,
-                list : list,
-                email : email
-            }, 
-            success : function(response) {
-                console.log(response);
-                $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
-                $('.keep-going').hide();
-                $('.email-address-add').hide();
-                $('#get-planting-guide').hide();
-            }
-        });
+        if(validateEmail(email)){
+            var store = $(this).data('store');
+            var plants = $(this).data('plants');
+            var list = $(this).data('list');
+    
+            $.ajax({
+                url : indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data : {
+                    action : 'indppl_build_guide_ajax',
+                    nonce : indppl_ajax.guide_nonce,
+                    store : store,
+                    plants : plants,
+                    list : list,
+                    email : email
+                }, 
+                success : function(response) {
+                    console.log(response);
+                    $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
+                    $('.keep-going').hide();
+                    $('.email-address-add').hide();
+                    $('#get-planting-guide').hide();
+                }
+            });
+        }else{
+            alert('Please enter a valid email address!');
+        }
 
     })
 
@@ -1196,64 +1196,69 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.pots-apprates-save-btn', function(e){
         e.preventDefault();
-        indpplAddLoading();
-        console.log('something');
-        var store_id = $('#store-id').val();
-        var fill_array = {};
-        var version_check = 1.0;
-        var type = $('#pots-and-beds-type').data('type');
-        $('.pots-apprates-filler').each(function(){
-            fill_array[$(this).data('product')] = {'amount': $(this).val()};
-            if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
-                fill_array[$(this).data('product')]['primary'] = true;
-            }else{
-                fill_array[$(this).data('product')]['primary'] = false;
-            }
-        });
-        var blend_array = {};
-        $('.blended-num').each(function(){
-            blend_array[$(this).data('product')] = {'amount': $(this).val()};
-            blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
-        });
-        console.log(blend_array);
-        var surface_array = {}
-        $('.surface-num').each(function(){
-            surface_array[$(this).data('product')] = {'amount': $(this).val()};
-            surface_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.surface-select').val();
-            surface_array[$(this).data('product')]['per-sqft'] = $(this).parent().parent().find('.surface-select-sqft').val();
-        });
-        var each_array = {};
-        $('.pots-apprates-each-num-8').each(function(){
-            var product = $(this).data('product');
-            each_array[product] = {'small': $(this).val()};
-            each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
-            each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
-        });
-        // console.log(type);
-        $.ajax({
-            url:indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_save_pot_apprates_ajax',
-                store_id: store_id,
-                fill_array: fill_array,
-                blend_array: blend_array,
-                surface_array: surface_array,
-                each_array: each_array,
-                type: type,
-                version_check: version_check,
-            },
-            type: 'POST',
-            success: function(e){
-                console.log(e);
-                indpplDelLoading();
-                $('.slide-in-products-container').removeClass('left-0');
-                setTimeout(function(){
-                    $('.slide-in-products-container').remove();
-                }, 1000)
-            }
-        });
+        if($('.pots-apprates-filler-total').text() != '100'){
+            alert('You need your mix to equal 100%!');
+        }else{
+            indpplAddLoading();
+            var store_id = $('#store-id').val();
+            var fill_array = {};
+            var version_check = 1.0;
+            var type = $('#pots-and-beds-type').data('type');
+            $('.pots-apprates-filler').each(function(){
+                fill_array[$(this).data('product')] = {'amount': $(this).val()};
+                if($(this).parent().parent().find('.pots-apprates-filler-radio').is(':checked')){
+                    fill_array[$(this).data('product')]['primary'] = true;
+                }else{
+                    fill_array[$(this).data('product')]['primary'] = false;
+                }
+            });
+            var blend_array = {};
+            $('.blended-num').each(function(){
+                blend_array[$(this).data('product')] = {'amount': $(this).val()};
+                blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
+            });
+            console.log(blend_array);
+            var surface_array = {}
+            $('.surface-num').each(function(){
+                surface_array[$(this).data('product')] = {'amount': $(this).val()};
+                surface_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.surface-select').val();
+                surface_array[$(this).data('product')]['per-sqft'] = $(this).parent().parent().find('.surface-select-sqft').val();
+            });
+            var each_array = {};
+            $('.pots-apprates-each-num-8').each(function(){
+                var product = $(this).data('product');
+                each_array[product] = {'small': $(this).val()};
+                each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
+                each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
+            });
+            // console.log(type);
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_save_pot_apprates_ajax',
+                    store_id: store_id,
+                    fill_array: fill_array,
+                    blend_array: blend_array,
+                    surface_array: surface_array,
+                    each_array: each_array,
+                    type: type,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function(e){
+                    console.log(e);
+                    indpplDelLoading();
+                    $('.slide-in-products-container').removeClass('left-0');
+                    setTimeout(function(){
+                        $('.slide-in-products-container').remove();
+                    }, 1000)
+                }
+            });
+        }
+
+        
     })
     $('body').on('click', '.indppl-add-sponsor-link', function(e){
         $('body').prepend("<div class='slide-in-sponsor-container'><div class='container pad-top-3'><a href='#' class='sponsor-modal-close'>X</a></div></div>");
@@ -1682,11 +1687,20 @@ jQuery(document).ready(function( $ ) {
             }
         }
     })
+
+    $('body').on('click', '.product-create-exit', function(e){
+        e.preventDefault();
+        closeModal();
+        $('.modal-close').remove();
+    })
     
 });
 
 // start of functions
-
+function validateEmail($email) {
+    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return emailReg.test( $email );
+}
 
 function get100Percent(){
     

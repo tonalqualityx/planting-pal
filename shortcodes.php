@@ -600,15 +600,60 @@ function pp_store_containers(){
                         <span class='padding-right-5'>
                             starts
                         </span>
+                        <?php
+                        if(get_post_meta($store_id, "wpcf-spring-start", true)){
+                            $spring_start = get_post_meta($store_id, 'wpcf-spring-start', true);
+                        }else{
+                            $spring_start = '3/20';
+                        }
+                        if(get_post_meta($store_id, "wpcf-spring-end", true)){
+                            $spring_end = get_post_meta($store_id, 'wpcf-spring-start', true);
+                        }else{
+                            $spring_end = '6/20';
+                        }
+                        
+                        if(get_post_meta($store_id, "wpcf-summer-start", true)){
+                            $summer_start = get_post_meta($store_id, 'wpcf-summer-start', true);
+                        }else{
+                            $summer_start = '6/21';
+                        }
+                        if(get_post_meta($store_id, "wpcf-summer-end", true)){
+                            $summer_end = get_post_meta($store_id, 'wpcf-summer-start', true);
+                        }else{
+                            $summer_end = '9/22';
+                        }
+
+                        if(get_post_meta($store_id, "wpcf-fall-start", true)){
+                            $fall_start = get_post_meta($store_id, 'wpcf-fall-start', true);
+                        }else{
+                            $fall_start = '9/23';
+                        }
+                        if(get_post_meta($store_id, "wpcf-fall-end", true)){
+                            $fall_end = get_post_meta($store_id, 'wpcf-fall-start', true);
+                        }else{
+                            $fall_end = '12/20';
+                        }
+
+                        if(get_post_meta($store_id, "wpcf-winter-start", true)){
+                            $winter_start = get_post_meta($store_id, 'wpcf-winter-start', true);
+                        }else{
+                            $winter_start = '12/21';
+                        }
+                        if(get_post_meta($store_id, "wpcf-winter-end", true)){
+                            $winter_end = get_post_meta($store_id, 'wpcf-winter-start', true);
+                        }else{
+                            $winter_end = '3/19';
+                        }
+                        ?>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='spring-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-spring-start", true); ?>'>
+                        <input type='text' name='spring-start' class='container-date' value='<?php echo $spring_start; ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='spring-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-spring-end", true); ?>'>
+                        <input type='text' name='spring-end' class='container-date' value='<?php echo $spring_end; ?>'>
                     </div>
                 </th>
                 <th class='contianer-date-col'>
@@ -618,14 +663,14 @@ function pp_store_containers(){
                             starts
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='summer-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-summer-start", true); ?>'>
+                        <input type='text' name='summer-start' class='container-date' value='<?php echo $summer_start; ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='summer-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-summer-end", true); ?>'>
+                        <input type='text' name='summer-end' class='container-date' value='<?php echo $summer_end; ?>'>
                     </div>
                 </th>
                 <th class='contianer-date-col'>
@@ -635,14 +680,14 @@ function pp_store_containers(){
                             starts
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='fall-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-fall-start", true); ?>'>
+                        <input type='text' name='fall-start' class='container-date' value='<?php echo $fall_start; ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='fall-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-fall-end", true); ?>'>
+                        <input type='text' name='fall-end' class='container-date' value='<?php echo $fall_end; ?>'>
                     </div>
                 </th>
                 <th class='contianer-date-col'>
@@ -652,14 +697,14 @@ function pp_store_containers(){
                             starts
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='winter-start' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-winter-start", true); ?>'>
+                        <input type='text' name='winter-start' class='container-date' value='<?php echo $winter_start; ?>'>
                     </div>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             ends
                         </span>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
-                        <input type='text' name='winter-end' class='container-date' value='<?php echo get_post_meta($store_id, "wpcf-winter-end", true); ?>'>
+                        <input type='text' name='winter-end' class='container-date' value='<?php echo $winter_end; ?>'>
                     </div>
                 </th>
             </tr>
