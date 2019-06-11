@@ -1687,6 +1687,23 @@ function indppl_get_products($store_id, $key, $type){
                 }
                 ?>
             </td>
+            <?php
+            if($type == 'ground'){
+            ?>
+                <td>
+                    <?php
+                    $update = get_post_meta($store_id, 'wpcf-apprate-update', true);
+                    $update = json_decode($update, true);
+                    if($update[$pid] == true){
+                        $url = plugin_dir_url(__FILE__);
+                        $url = $url . "assets/img/error.png";
+                        echo "<span class='color-red'><img class='height-17' src='" . $url . "'> Verify App-rates</span>";
+                    }
+                    ?>
+                </td>
+            <?php
+            }
+            ?>
         </tr>
         <?php  
     

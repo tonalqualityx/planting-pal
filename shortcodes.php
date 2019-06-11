@@ -438,7 +438,7 @@ function pp_my_stores(){
                         ?>
                         <div class='indppl-single-store-container white-background indppl-space-between'>
                             <?php
-                            if($img){
+                            if($title){
                                 ?>
                             <div class="indppl-store-dash-left">
                                 <div class='indppl-flex'>

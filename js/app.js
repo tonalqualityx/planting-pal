@@ -407,6 +407,7 @@ jQuery(document).ready(function( $ ) {
                 if(array['fraction']){
                     $('.product-create-fraction-bag').append(array['fraction']);
                 }
+                checkIfEach();
                 indpplDelLoading();
             }
         });
@@ -451,6 +452,7 @@ jQuery(document).ready(function( $ ) {
             }
             $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
         }
+        checkIfEach();
 
     })
     $('body').on('mouseenter', '.indppl-background-green', function(){
@@ -1675,8 +1677,6 @@ jQuery(document).ready(function( $ ) {
                 }
             }
         })
-        console.log(ground);
-        console.log(pots_line);
         if(ground == true || pots_line == true && load == true){
         }else{
             e.preventDefault();
@@ -1709,7 +1709,6 @@ function get100Percent(){
     jQuery('.pots-apprates-filler').each(function(){
         total = total + Number(jQuery(this).val());
     })
-    console.log(total);
     if(total == 100){
         jQuery('.pots-apprates-filler-total').removeClass('color-red');
         jQuery('.pots-apprates-filler-total').addClass('color-green');
@@ -1785,6 +1784,19 @@ function check_on_load_and_click(){
         }
     })(jQuery);
     
+}
+
+function checkIfEach(){
+    var notEach = true;
+    $('.indppl-product-create-size-btn').each(function(){
+        if($(this).data('unit') == 'each' && $(this).is(':visible')){
+            $('.indppl-add-product-usage-type').addClass('hide');
+            notEach = false;
+        }
+    })
+    if(notEach == true){
+        $('.indppl-add-product-usage-type').removeClass('hide');
+    }
 }
 
 function check_on_load(){
@@ -2190,9 +2202,10 @@ function containerSubmit(){
         },
         type: 'POST',
         success: function(e){
-            console.log(e);
+            getProductInfo();
+            // console.log(e);
             var new_array = jQuery.parseJSON(e);
-            // console.log(new_array);
+            console.log(new_array['update']);
             var i = 0;
             $('.container-add-new').each(function(){
                 $(this).attr('name', "indppl-container-title");

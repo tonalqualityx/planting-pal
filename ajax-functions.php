@@ -213,6 +213,30 @@ function indppl_save_container_data_ajax(){
         //     // }
         //     var_dump($v);
         // }
+        // $store_container_relations = toolset_get_related_posts(
+        //     $store_id, // get posts related to this one
+        //     'store-container', // relationship between the posts
+        //     'parent',
+        //     '100',
+        //     '0',
+        //     array(),
+        //     'post_id',
+        //     'child'
+        // );
+        $app_rates = indppl_apprates($store_id);
+        $update = [];
+        if(!empty($app_rates['ground'])){
+            foreach($app_rates['ground'] as $pro_id => $product){
+                $update[$pro_id] = false;
+                foreach($available as $key => $container){
+                    if(!array_key_exists($container, $app_rates['ground'][$pro_id]['containers']) && !array_key_exists($container, $app_rates['ground'][$pro_id]['bag'])){
+                        $update[$pro_id] = true;
+                    }
+                }
+            }
+        }
+        update_post_meta($store_id, 'wpcf-apprate-update', json_encode($update));
+        $send_back_array['update'] = $update;
         echo json_encode($send_back_array);
     // }
     die();
@@ -869,6 +893,12 @@ function indppl_save_product_ajax(){
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
         // $console = $updated_app_rates;
     }
+    $old_update = get_post_meta($store_id, 'wpcf-apprate-update', true);
+    $old_update = json_decode($old_update, true);
+    $console = $old_update;
+    $old_update[$product_id] = false;
+
+    update_post_meta($store_id, 'wpcf-apprate-update', json_encode($old_update));
     // $console = $pack_id_array;
     $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
