@@ -289,7 +289,7 @@ jQuery(document).ready(function( $ ) {
                 },
                 type: 'POST',
                 success: function(e){
-                    // console.log(e);
+                    console.log(e);
                     $('.product-create-brand-cut-off').children().each(function(){
                         $(this).empty();
                     })
@@ -1299,6 +1299,24 @@ jQuery(document).ready(function( $ ) {
 
     });
 
+    $('body').on('submit', '#store-management-form', function(e){
+        var phone = validatePhone($('#phone').val());
+        console.log(phone);
+        if(phone == false){
+            e.preventDefault();
+            alert('Phone number must be 10 digits.');
+            $('#phonenumber').val('');
+            $('#phonenumber').focus();
+        }
+        var email = validateEmail($('#store-email').val());
+        if(email == false){
+            e.preventDefault();
+            alert('Please enter a valid email address.');
+            $('#store-email').val('');
+            $('#store-email').focus();
+        }
+    })
+
     $('body').on('submit', '#add-sponsor-form', function(e){
         e.preventDefault();
         indpplAddLoading();
@@ -1700,6 +1718,15 @@ jQuery(document).ready(function( $ ) {
 function validateEmail($email) {
     var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     return emailReg.test( $email );
+}
+
+function validatePhone(phone){
+    phone = phone.replace(/[^0-9]/g,'');
+    if (phone.length != 10){
+        return false;
+    }else{
+        return true;
+    }
 }
 
 function get100Percent(){

@@ -575,7 +575,7 @@ function indppl_store_info($store_id = NULL){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="address1">Address Line 1</label>
 			<div class="col-md-4">
-			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1; ?>">
+			<input id="address1" required name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1; ?>">
 			
 			</div>
 			</div>

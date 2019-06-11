@@ -301,8 +301,8 @@ function indppl_get_products_by_brand_ajax(){
         ),
     );
     $products = new WP_Query($args);
-    // var_dump($products);
     ob_start();
+    // var_dump($products);
 
     ?> <option class='product-create-product-option' value='' disabled selected>Select Product</option> <?php
     if($products->have_posts()){
@@ -310,19 +310,24 @@ function indppl_get_products_by_brand_ajax(){
             $products->the_post();
             $title = get_the_title();
             $id = get_the_id();
+            $author = get_the_author_meta('ID');
+            $default = get_post_meta($id, 'wpcf-default', true);
             $do_it = true;
             $each_test = get_post_meta($id, 'wpcf-unit', true);
             if($each_test == 'each'){
                 if($type == 'beds'){
                     $do_it = false;
                 }
-
+            }
+            if($default == false && $author != get_current_user_id() ){
+                $do_it = false;
             }
             if($do_it){
                 ?>
                 <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
                 <?php
             }
+            // var_dump($author);
         }
     }
     echo ob_get_clean();
