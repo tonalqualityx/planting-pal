@@ -189,6 +189,7 @@ jQuery(document).ready(function( $ ) {
         })
         $(this).parent().parent().parent().prev().remove();
         $(this).parent().parent().addClass('indppl-checked');
+        $(this).parent().parent().addClass('indppl-update-apps');
         $(this).parent().parent().removeClass('indppl-unchecked');
         $(this).replaceWith('<div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div>');
 
@@ -196,6 +197,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '#container-submit', function(e){
         e.preventDefault();
         containerSubmit();
+        
             
     });
     $('body').on('click', '.indppl-add-product-btn', function(e){
@@ -251,6 +253,7 @@ jQuery(document).ready(function( $ ) {
                 console.log(e);
                 $(".create-brand-button-container").hide();
                 $("#product-add-new-brand").hide();
+                $('#product-create-product').empty();
                 $(".product-create-product").show();
 
                 $('#product-create-brand').append('<option value="' + e + '" selected>' + brand + '</option>');
@@ -547,6 +550,7 @@ jQuery(document).ready(function( $ ) {
         // console.log(product_input);
         console.log(product_dryliquid);
         if($(this).is('#product-create-next')){
+            var next = true;
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-background-green')){
                     if($(this).hasClass('indppl-new-package')){
@@ -591,6 +595,7 @@ jQuery(document).ready(function( $ ) {
                 first_package: first_package,
                 product_name: product_name,
                 version_check: version_check,
+                next: next,
             },
             type: 'POST',
             success: function(e){
@@ -689,6 +694,17 @@ jQuery(document).ready(function( $ ) {
                     }
                     if(array['default']){
                         $('.slide-in-products-inside-container').append(array['default']);
+                    }
+                    if(array['update']){
+                        $(array['update']).each(function(){
+                            var id = $(this)[0];
+                            console.log(id);
+                            $('.bag-apprates-container-title').each(function(){
+                                if($(this).data('id') == id){
+                                    $(this).addClass('color-red');
+                                }
+                            })
+                        })
                     }
                     indpplDelLoading();
                 }
@@ -2175,6 +2191,9 @@ function monitorProgress(store){
 
 function containerSubmit(){
     indpplAddLoading();
+    if($('.indppl-update-apps').length > 0){
+        alert("We've added your containers, please verify the amounts are correct in your in ground application rates.");
+    }
     var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
     var available = [];
     var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();

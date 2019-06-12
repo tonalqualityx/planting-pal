@@ -466,6 +466,11 @@ span.padding-right-5{
 /* .padding-bottom-5{
   padding-bottom:5px;
 } */
+
+.guide-product-instructions img{
+  width: 100%;
+}
+
 .color-red{
   color:red;
   text-decoration: none;
@@ -1528,4 +1533,11 @@ GUAGE CSS
 
 .gauge-small {
   font-size: 14px;
+}
+
+/* mobile to desktop */
+@media only screen and (min-width: 768px){
+  .guide-product-instructions img{
+    width: 50%;
+  }
 }

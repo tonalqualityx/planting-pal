@@ -771,6 +771,9 @@ function indppl_save_product_ajax(){
     if(isset($_POST['first_package'])){
         $first_package = $_POST['first_package'];
     }
+    if(isset($_POST['next'])){
+        $next = $_POST['next'];
+    }
     $default = get_post_meta($product_id, 'wpcf-default', true);
     if($default){
         ob_start();
@@ -898,12 +901,39 @@ function indppl_save_product_ajax(){
         $updated_app_rates = update_package_table($store_id, $product_id, $type);
         // $console = $updated_app_rates;
     }
-    $old_update = get_post_meta($store_id, 'wpcf-apprate-update', true);
-    $old_update = json_decode($old_update, true);
-    $console = $old_update;
-    $old_update[$product_id] = false;
-
-    update_post_meta($store_id, 'wpcf-apprate-update', json_encode($old_update));
+    if($next){
+        $store_container_relations = toolset_get_related_posts(
+            $store_id, // get posts related to this one
+            'store-container', // relationship between the posts
+            'parent',
+            '100',
+            '0',
+            array(),
+            'post_id',
+            'child'
+        );
+        $app_rates = indppl_apprates($store_id);
+        $update = [];
+        if(!empty($app_rates['ground'])){
+            foreach($app_rates['ground'] as $pro_id => $product){
+                if($pro_id == $product_id){
+                    foreach($store_container_relations as $key => $container){
+                        if(!array_key_exists($container, $app_rates['ground'][$pro_id]['containers']) && !array_key_exists($container, $app_rates['ground'][$pro_id]['bag'])){
+                            $update[] = $container;
+                        }
+                    }
+                }
+            }
+        }
+        $console = $update;
+    }else{
+        $old_update = get_post_meta($store_id, 'wpcf-apprate-update', true);
+        $old_update = json_decode($old_update, true);
+        $console = $old_update;
+        $old_update[$product_id] = false;
+    
+        update_post_meta($store_id, 'wpcf-apprate-update', json_encode($old_update));
+    }
     // $console = $pack_id_array;
     $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
@@ -912,6 +942,9 @@ function indppl_save_product_ajax(){
     $ajax_array['pack_id_array'] = $pack_id_array;
     if($default){
         $ajax_array['default'] = $set_default;
+    }
+    if($next){
+        $ajax_array['update'] = $update;
     }
     $ajax_array['console'] = $console;
     echo json_encode($ajax_array);

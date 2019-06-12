@@ -17,3 +17,6 @@
 #sponsor_count{
     margin-top: 20px;
 }
+.product-guide-image > img{
+    width:100%;
+  }
