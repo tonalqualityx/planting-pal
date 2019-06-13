@@ -1561,7 +1561,11 @@ function indppl_get_product_info(){
     
     ob_start();
     if($type == 'ground'){
-        $heading = 'Product Selection for In-Ground Plantings';
+        $heading = 'Product selection for In-Ground Plantings';
+    }else if($type == 'pots'){
+        $heading = 'Product selection for Pots';
+    }else{
+        $heading = 'Product selection for Raised Beds';
     }
     ?>
     
