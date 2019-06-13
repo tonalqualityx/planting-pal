@@ -8,6 +8,8 @@ $address2 = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone = get_post_meta($store, 'wpcf-phone', TRUE);
 $email = get_post_meta($store, 'wpcf-email', TRUE);
 $website = get_post_meta($store, 'wpcf-weburl', TRUE);
+$website = $website;
+
 $saved_data = get_post_meta($store, 'wpcf-planting-guide-ground-options', TRUE);
 $saved_data = str_replace(array("\'", "u201d","u2019"), array("'",'\"',"'"), $saved_data);
 $saved_data = json_decode($saved_data);

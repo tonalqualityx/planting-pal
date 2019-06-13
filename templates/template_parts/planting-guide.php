@@ -6,6 +6,12 @@ $address2 = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone    = get_post_meta($store, 'wpcf-phone', TRUE);
 $email    = get_post_meta($store, 'wpcf-email', TRUE);
 $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
+
+if(!preg_match('^(http|https):\/\/', $website)){
+    $website = "//" . $website;
+} else {
+    $website = preg_replace('^(http|https):\/\/', '//', $website);
+}
 ?>
 
 <div id="planting-guide" class="planting-guide" data-type="ground" data-store="<?php echo $store ; ?>">
