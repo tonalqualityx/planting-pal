@@ -468,43 +468,37 @@ function pp_my_stores(){
                                     $status = "Offline";
                                     $status_class = "grey-text";
                                     $progress = indppl_store_progress_bar($id, false, false);
-                                    if($progress['complete'] == 100){
+
+                                    if($live){
                                         $status = "Online";
                                         $status_class = "green-text";
                                     }
                                          ?>
-                                    <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>'><?php echo $status; ?></span></p>
-                                    <?php if ($progress['complete'] < 100) {
-                                        $gauge_level = 360*($progress['complete']/100);
-                                        $p51 = '';
-                                        if($gauge_level > 180){
-                                            $p51 = 'p51';
-                                        }
-                                         ?>
-                                        <div class="c100 <?php echo $p51; ?> center orange">
-                                            <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
-                                            <div class="slice">
-                                                <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
-                                                <div class="fill"></div>
-                                            </div>
+                                    <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>' id='status-<?php echo $id; ?>'><?php echo $status; ?></span></p>
+                                    <?php 
+                                    $gauge_level = 360*($progress['complete']/100);
+                                    $p51 = '';
+                                    if($gauge_level > 180){
+                                        $p51 = 'p51';
+                                    }
+                                    ?>
+                                    <div class="c100 <?php echo $p51; ?> center orange">
+                                        <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
+                                        <div class="slice">
+                                            <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
+                                            <div class="fill"></div>
                                         </div>
+                                    </div>
+                                    <?php if ($progress['complete'] < 100) { ?>
                                         <a href="<?php echo $link; ?>" class="orange-text text-center" style="display:block; margin-top:5px;">finish store setup</a>
 
-                                    <?php } ?>
-                                </div>
-                                <div class='ind-flex' style="display:none;">
+                                    <?php } 
+                                    if($progress['complete'] == 100 && !$live){ ?>
+                                        <a href='#' data-store='<?php echo $id; ?>' class='orange-text text-center indppl-live-store' style="display:block; margin-top:5px;">Go Live</a>
                                     <?php
-                                    if($status['complete'] < 100){
+                                    }elseif($progress['complete'] == 100 && $live){
                                         ?>
-                                        <p class='color-grey'>Go Live</p>
-                                        <?php
-                                    }else if(!$live){
-                                    ?>
-                                        <!-- <a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-live-store'>Go Live</a> -->
-                                    <?php
-                                    }else{
-                                        ?>
-                                        <a href='#' class='indppl-button button-primary indppl-store-deactivate' data-store='<?php echo $id; ?>'>Deactivate</a>
+                                        <a href='#' class='orange-text text-center indppl-store-deactivate' data-store='<?php echo $id; ?>' style="display:block; margin-top:5px;">Deactivate</a>
                                         <?php
                                     }
                                     ?>
