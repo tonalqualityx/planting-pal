@@ -6,6 +6,7 @@ $address2 = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone    = get_post_meta($store, 'wpcf-phone', TRUE);
 $email    = get_post_meta($store, 'wpcf-email', TRUE);
 $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
+$guide_rates = indppl_apprates($store);
 
 if(!preg_match('^(http|https):\/\/', $website)){
     $website = "//" . $website;
@@ -82,8 +83,17 @@ $store_link = str_replace("//", "", $website); ?>
                         <?php }?>
                         <div class='product-guide-step-instructions'>
                             <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $prod_name; ?></span></span> <?php echo $product["instructions"]; ?>
+                            <?php 
+                            // var_dump($guide_rates);
+                            $decode_plants = json_decode( $plants, TRUE );
+                            foreach($ground_list as $gid => $g){
+                                // var_dump($gid . ":" . $g);
+                                echo $guide_rates[$type][$product['id']]['containers'][$gid]['amount'] . " " . $guide_rates[$type][$product['id']]['containers'][$gid]['unit']; 
+                            } ?>
                             <?php if ($sponsorship) {?>
                                 <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a> <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
+                                <p>
+                                </p>
                             <?php }?>
                         </div>
                     </div>

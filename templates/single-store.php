@@ -20,6 +20,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     
     $ground = $_POST['ground'];
     $ground = array_filter($ground);
+    $ground_store = json_encode( $ground );
     
     // Quick fix - REFACTOR
     foreach($apprates['ground'] as $prod => $data){

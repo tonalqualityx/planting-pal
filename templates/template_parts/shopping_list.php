@@ -85,5 +85,6 @@
     <input type="hidden" name="storeid" value="<?php echo $storeid;?>">
     <input type="hidden" name="plants" value='<?php echo $user_plants; ?>'>
     <input type="hidden" name="list" value='<?php echo $encoded_shopping_list; ?>'>
-    <input class="form-control email-address-add" name="email" type="text" placeholder="Enter Email Address"><input type="image" id="get-planting-guide" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/send-guide.png" border="0" class="send-guide" data-store="<?php echo $storeid; ?>" data-plants='<?php echo $user_plants; ?>' data-list='<?php echo $encoded_shopping_list; ?>'></form>
+    <input type="hidden" name="ground_store" value='<?php echo $ground_store; ?>'>
+    <input class="form-control email-address-add" name="email" type="text" placeholder="Enter Email Address"><input type="image" id="get-planting-guide" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/send-guide.png" border="0" class="send-guide" data-store="<?php echo $storeid; ?>" data-plants='<?php echo $user_plants; ?>' data-list='<?php echo $encoded_shopping_list; ?>' data-ground='<?php echo $ground_store; ?>'></form>
 </div>

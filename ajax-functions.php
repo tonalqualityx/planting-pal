@@ -1839,6 +1839,7 @@ function indppl_build_guide_ajax() {
         $store = htmlspecialchars($_POST['store']);
         $plants =  $_POST['plants'];
         $list =  $_POST['list']; 
+        $ground_list = $_POST['ground'];
         $send_email = htmlspecialchars( $_POST['email'] );
         $guides = array(); // set the array so we can fill it up and create multiple guides
 
