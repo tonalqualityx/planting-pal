@@ -1606,7 +1606,8 @@ jQuery(document).ready(function( $ ) {
             success: function (response) {
                 console.log(response);
                 if(response){
-                    $(elem).replaceWith("<a href='#' class='indppl-button button-primary indppl-store-deactivate' data-store=" + id + ">Deactivate</a>");
+                    $(elem).replaceWith("<a href='#' class='orange-text text-center indppl-store-deactivate' data-store=" + id + " style='display: block; margin - top: 5px;'>Deactivate</a>");
+                    $('#status-' + id).removeClass('grey-text').addClass('green-text').text('Online');
                 }
                 indpplDelLoading();
             }
@@ -1632,7 +1633,8 @@ jQuery(document).ready(function( $ ) {
             success: function (response) {
                 console.log(response);
                 if(response){
-                    $(elem).replaceWith("<a href='#' data-store=" + id + " class='indppl-button button-primary indppl-live-store'>Go Live</a>");
+                    $(elem).replaceWith("<a href='#' data-store=" + id + " class='orange-text text-center indppl-live-store' style='display: block; margin - top: 5px;'>Go Live</a>");
+                    $('#status-' + id).removeClass('green-text').addClass('grey-text').text('Offline');
                 }
                 indpplDelLoading();
             }
