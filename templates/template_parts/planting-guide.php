@@ -12,7 +12,8 @@ if(!preg_match('^(http|https):\/\/', $website)){
 } else {
     $website = preg_replace('^(http|https):\/\/', '//', $website);
 }
-?>
+
+$store_link = str_replace("//", "", $website); ?>
 
 <div id="planting-guide" class="planting-guide" data-type="ground" data-store="<?php echo $store ; ?>">
     <div class="store-info">
@@ -34,7 +35,7 @@ if(!preg_match('^(http|https):\/\/', $website)){
                     echo "<p>$email</p>";
                 }
                 if($website && $website != '') {
-                    echo "<p><a href='{$website}'>$website</a></p>";
+                    echo "<p><a href='{$website}' target='_blank'>$store_link</a></p>";
                 } ?>
     
             </div>
