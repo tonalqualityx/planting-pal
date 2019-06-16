@@ -1125,7 +1125,7 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
     // from largest to smallest. Hooray.
     // Each item should be given at least a 'unit' and an 'amount' value
     // Will return a 'standardized-amount' and 'standardized-unit' value
-    // CANNOT CONTAIN THESE KEYS OR THEY WILL BE OVERWRITEEN 
+    // CANNOT CONTAIN THESE KEYS OR THEY WILL BE OVERWRITTEN: 
     // 'type' 'standardized-unit' 'standardized-value'
     $units = indppl_get_units();
 

@@ -14,6 +14,18 @@ if(!preg_match('^(http|https):\/\/', $website)){
     $website = preg_replace('^(http|https):\/\/', '//', $website);
 }
 
+switch ($type) {
+    case 'ground':
+        $type_label = 'In Ground ';
+        break;
+    case 'pots':
+        $type_label = 'Potted Plants ';
+        break;
+    case 'beds':
+        $type_label = 'Raised Beds ';
+        break;
+}
+
 $store_link = str_replace("//", "", $website); ?>
 
 <div id="planting-guide" class="planting-guide" data-type="ground" data-store="<?php echo $store ; ?>">
@@ -44,7 +56,7 @@ $store_link = str_replace("//", "", $website); ?>
     </div>
     <div class="planting-guide-header indppl-flex indppl-justify-center">
         <img src="">
-        <h1 style="text-align: center;">Planting Guide</h1>
+        <h1 style="text-align: center;"><?php echo $type_label; ?>Planting Guide</h1>
     </div>
     <div class="planting-guide-content">
         <div class='guide-product-instructions'>
@@ -52,7 +64,7 @@ $store_link = str_replace("//", "", $website); ?>
                 echo "<h3 class='orange-text'>{$step['title']}</h3>";
                 echo "<div class='guide-step-instructions'>{$step['description']}</div>";
                 if($step['image'] && $step['image'] != ''){
-                    echo "<img src='{$step['image']}'></img>";
+                    echo "<img class='indppl-step-img' src='{$step['image']}'></img>";
                 }
 
                 // THIS PART SHOULD BE A SHORTCODE THAT GETS CALLED EVERY TIME
@@ -83,18 +95,77 @@ $store_link = str_replace("//", "", $website); ?>
                         <?php }?>
                         <div class='product-guide-step-instructions'>
                             <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $prod_name; ?></span></span> <?php echo $product["instructions"]; ?>
-                            <?php 
-                            // var_dump($guide_rates);
-                            $decode_plants = json_decode( $plants, TRUE );
-                            foreach($ground_list as $gid => $g){
-                                // var_dump($gid . ":" . $g);
-                                echo $guide_rates[$type][$product['id']]['containers'][$gid]['amount'] . " " . $guide_rates[$type][$product['id']]['containers'][$gid]['unit']; 
-                            } ?>
                             <?php if ($sponsorship) {?>
                                 <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a> <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
                                 <p>
                                 </p>
                             <?php }?>
+                        </div>
+                        <div class="indppl-full-flex">
+                            <h4><?php echo $prod_name; ?> Application Rates</h4>
+                            <ul class="indppl-guide-rates" >
+                                <?php // GET THE APPROPRIATE APPLICATION RATES
+
+                                // Determine type
+                                if($type == 'ground'){ // If guide is in ground
+                                    $decode_plants = json_decode( $plants, TRUE );
+                                    foreach($ground_list as $gid => $g){
+
+                                        // Check if there's an apprate for this product
+                                        if(isset($guide_rates[$type][$product['id']]['containers'][$gid]['amount']) || isset($guide_rates[$type][$product['id']]['bag'][$gid]['amount'])){
+                                            $parse_by = key($guide_rates[$type][$product['id']]);
+                                            switch ($parse_by) {
+                                                case 'bag':
+                                                    // If by bag then parse how much of the bag to use for this portion (based on bag size)
+                                                    $bag = explode(" ", $list[$product['id']]['name']);
+                                                    $cur_cups = get_post_meta( $product['id'], 'wpcf-5cups', TRUE );
+
+                                                    $cur_unit = $guide_rates[$type][$product['id']][$parse_by][$gid]['unit'];
+                                                    $cur_amount = $guide_rates[$type][$product['id']][$parse_by][$gid]['amount'];
+
+                                                    $cur_items = array(
+                                                        array(
+                                                            'amount' => $cur_amount,
+                                                            'unit'  => $cur_unit,
+                                                        )
+                                                    );
+
+                                                    
+                                                    $cur_normalized = indppl_normalize($cur_items, $bag[1], $cur_cups);
+
+                                                    $fraction = $bag[0]/$cur_normalized[0]['standard-amount'];
+                                                    $fraction = 1/$fraction;
+                                                    if($fraction >= 0.1){
+                                                        $cur_unit = " of a {$bag[0]} {$bag[1]} package";
+                                                        $cur_amount = dec2frac($fraction);
+                                                    } else {
+                                                        // Now determine if that's a reasonable fraction to manage - if not set the variables as cups...
+                                                        $new_normalized = indppl_normalize($cur_items, 'cup', $cur_cups);
+                                                        $cur_amount = round($new_normalized[0]['standard-amount'], 1);
+                                                        $cur_unit = 'cup';
+                                                        
+                                                    }
+                                                    break;
+
+
+
+                                                // Next, just fall through to set the values...
+                                                default:
+                                                    $cur_amount = round($guide_rates[$type][$product['id']][$parse_by][$gid]['amount'], 1);
+                                                    $cur_unit   = $guide_rates[$type][$product['id']][$parse_by][$gid]['unit'];
+                                                    break;
+                                            }
+
+                                            echo "<li><strong>" .  get_the_title($gid) . ":</strong> " . $cur_amount . " " . $cur_unit . "</li>"; 
+                                        }
+
+                                    } 
+                                } else { // If guide is pots or beds
+
+                                }
+                                
+                                ?>
+                            </ul>
                         </div>
                     </div>
                 <?php }
