@@ -40,6 +40,10 @@ img{
   justify-content: center;
 }
 
+.indppl-full-flex {
+  flex-basis: 100%;
+}
+
 .margin-auto {
     margin: auto;
 }
@@ -1016,12 +1020,25 @@ inddpl-
 
 .product-guide-step-instructions {
   margin-top: 10px;
+  max-width: 75%;
 }
 
+.product-guide-step-instructions .product-name.strong {
+    display: block;
+    font-size: 1.5em;
+    line-height: 1;
+    color: #e6561a;
+}
 /* SINGLE GUIDE TEMPLATE */
 
 .single-guide {
   background: white;
+}
+
+.guide-product-template h4{
+  line-height: 1;
+  font-size: 1.4em;
+  margin-top: 20px;
 }
 
 /*********************
@@ -1537,7 +1554,7 @@ GUAGE CSS
 
 /* mobile to desktop */
 @media only screen and (min-width: 768px){
-  .guide-product-instructions img{
+  .guide-product-instructions img.indppl-step-img{
     width: 50%;
   }
 }

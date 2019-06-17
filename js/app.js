@@ -1150,6 +1150,8 @@ jQuery(document).ready(function( $ ) {
             var store = $(this).data('store');
             var plants = $(this).data('plants');
             var list = $(this).data('list');
+            var ground = $(this).data('ground');
+
     
             $.ajax({
                 url : indppl_ajax.ajaxurl,
@@ -1161,6 +1163,7 @@ jQuery(document).ready(function( $ ) {
                     store : store,
                     plants : plants,
                     list : list,
+                    ground: ground,
                     email : email
                 }, 
                 success : function(response) {
