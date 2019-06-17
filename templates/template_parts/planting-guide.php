@@ -63,6 +63,21 @@ $store_link = str_replace("//", "", $website); ?>
             <?php foreach($guide_options as $step){
                 echo "<h3 class='orange-text'>{$step['title']}</h3>";
                 echo "<div class='guide-step-instructions'>{$step['description']}</div>";
+                if(($type == 'pots' || $type == 'beds') && $step['step'] == 1  ){
+                    $partial = false;
+                    foreach($plants[$type]['need'] as $cur_need){
+                        if($cur_need != '' && $cur_need != 0){
+                            $partial = true;
+                            $term = $type;
+                            if($type == 'beds') {
+                                $term = 'raised beds';
+                            }
+                        }
+                    }
+                    if($partial){
+                        echo "<p>For partially filled {$term}, thoroughly blend the existing soil with the new soil.</p>";
+                    }
+                }
                 if($step['image'] && $step['image'] != ''){
                     echo "<img class='indppl-step-img' src='{$step['image']}'></img>";
                 }
