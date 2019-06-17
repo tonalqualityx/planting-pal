@@ -9,9 +9,9 @@ $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
 $guide_rates = indppl_apprates($store);
 
 if(!preg_match('^(http|https):\/\/', $website)){
-    $website = "//" . $website;
+    $url = "//" . $website;
 } else {
-    $website = preg_replace('^(http|https):\/\/', '//', $website);
+    $url = preg_replace('^(http|https):\/\/', '//', $website);
 }
 
 switch ($type) {
@@ -160,8 +160,69 @@ $store_link = str_replace("//", "", $website); ?>
                                         }
 
                                     } 
-                                } else { // If guide is pots or beds
+                                } elseif($type == 'pots' || $type = 'beds') { // If guide is pots or beds
+                                    $cur_rates = null;
+                                    // var_dump($guide_rates[$type]);
+                                    $pi = 0;
+                                    foreach($plants[$type]['qty'] as $pot){
 
+                                        if($plants[$type]['qty'][$pi] != '' && $plants[$type]['qty'][$pi] != 0){
+
+                                            $s = '';
+                                            $cur_rates = null;
+                                            if($step['step'] == 3 || $step['step'] == 4){
+    
+                                                if(isset($guide_rates[$type]['surface'][$product['id']])) {
+                                                    $cur_sqft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi];
+                                                    $cur_sqft = $cur_sqft/144;
+                                                    $cur_sqft = $cur_sqft/$guide_rates[$type]['surface'][$product['id']]['per-sqft'];
+    
+                                                    $cur_rates = $guide_rates[$type]['surface'][$product['id']]['amount'] * $cur_sqft;
+                                                    $cur_rates = round($cur_rates, 2);
+                                                    if($cur_sqft > 1){ $s = 's'; }
+                                                    $cur_rates = "Apply " . $cur_rates . " " . $guide_rates[$type]['surface'][$product['id']]['unit'] . $s;
+    
+                                                }
+    
+                                            } 
+                                            // Eaches
+                                            if(isset($guide_rates[$type]['each'][$product['id']])){
+                                                if($plants[$type]['width'][$pi] < 8){
+                                                    $cur_rates = $guide_rates[$type]['each'][$product['id']]['small']; 
+                                                } elseif($plants[$type]['width'][$pi] >= 8 && $plants[$type]['width'][$pi] < 24){
+                                                    $cur_rates = $guide_rates[$type]['each'][$product['id']]['medium'];
+                                                } elseif($plants[$type]['width'][$pi] >= 24){
+                                                    $cur_rates = $guide_rates[$type]['each'][$product['id']]['large'];
+                                                }
+    
+                                                $cur_rates = "Use $cur_rates for each";
+                                            }
+    
+                                            if(!$cur_rates){
+                                                if(isset($guide_rates[$type]['filler'][$product['id']])){
+                                                    $cur_rates = "Fill {$guide_rates[$type]['filler'][$product['id']]['amount']}% with this product";
+                                                }
+    
+                                                if(isset($guide_rates[$type]['blended'][$product['id']])){
+                                                    $cur_cuft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi] * $plants[$type]['height'][$pi];
+                                                    $cur_cuft = $cur_cuft/1728;
+    
+                                                    $cur_rates = $cur_cuft * $guide_rates[$type]['blended'][$product['id']]['amount'];
+                                                    $cur_rates = round($cur_rates, 2);
+                                                    if($cur_rates > 1){ $s = 's';}
+                                                    $cur_rates = "Blend in " . $cur_rates . " " . $guide_rates[$type]['blended'][$product['id']]['unit'] . $s;
+                                                }
+    
+                                            }
+    
+                                               
+                                            if(true){
+                                                echo "<li><strong>{$plants[$type]['length'][$pi]}x{$plants[$type]['width'][$pi]}x{$plants[$type]['height'][$pi]}:</strong> {$cur_rates}</li>";
+                                            }
+                                        }
+                                        
+                                        $pi++; // Increment that sucker!
+                                    }
                                 }
                                 
                                 ?>
