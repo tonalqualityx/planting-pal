@@ -91,8 +91,17 @@ if($type == 'ground'){ // If guide is in ground
         $cur_rates = null;
         $cur_sqft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi];
         $cur_sqft = $cur_sqft/144;
-        $cur_cuft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi] * $plants[$type]['height'][$pi];
+        $cur_need = 0;
+        if($plants[$type]['need'][$pi] != ''){
+            $cur_need = $plants[$type]['need'][$pi];
+        }
+        $cur_cuft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi] * ($plants[$type]['height'][$pi] - $cur_need);
         $cur_cuft = $cur_cuft / 1728;
+
+        $cur_rates_need = ' ';
+        if ($cur_need > 0) {
+            $cur_rates_need = " with $cur_need inches of existing soil ";
+        }
 
         if($plants[$type]['qty'][$pi] != '' && $plants[$type]['qty'][$pi] != 0){
 
@@ -105,7 +114,7 @@ if($type == 'ground'){ // If guide is in ground
                     $cur_rates = $guide_rates[$type]['surface'][$product['id']]['amount'] * $cur_sqft;
                     $cur_rates = round($cur_rates, 2);
                     if($cur_sqft > 1){ $s = 's'; }
-                    $cur_rates = "Apply " . $cur_rates . " " . $guide_rates[$type]['surface'][$product['id']]['unit'] . $s;
+                    $cur_rates = "Apply " . $cur_rates . " ". $guide_rates[$type]['surface'][$product['id']]['unit'] . $s;
 
                 }
 
@@ -125,6 +134,8 @@ if($type == 'ground'){ // If guide is in ground
 
             if(!$cur_rates){
                 if(isset($guide_rates[$type]['filler'][$product['id']])){
+
+                    // Figure out if we need to indicate that this product has existing soil
                     
                     $prod_need = ($cur_cuft * $guide_rates[$type]['filler'][$product['id']]['amount'])/100;
                     $cur_items = array(
@@ -155,18 +166,21 @@ if($type == 'ground'){ // If guide is in ground
                         } elseif($fraction_int != '' && $fraction_int > 0) {
                             $fraction_int = $fraction_int . " & ";
                         } 
-                        var_dump($fraction);
+
                         $cur_amount = $fraction_int . $fraction;
-                        $cur_rates = $cur_amount . $cur_unit;
+                        $cur_rates = $cur_amount . " " . $cur_unit;
 
                     } else {
                         // Now determine if that's a reasonable fraction to manage - if not set the variables as cups...
                         $new_normalized = indppl_normalize($cur_items, 'cup', $cur_cups);
+
                         $cur_amount = round($new_normalized[0]['standard-amount'], 1);
                         if($cur_amount > 1){
                             $s = 's';
                         }
                         $cur_unit = 'cup' . $s ;
+
+                        $cur_rates = $cur_amount . " " . $cur_unit;
                         
                     }
                 }
@@ -175,14 +189,14 @@ if($type == 'ground'){ // If guide is in ground
                     $cur_rates = $cur_cuft * $guide_rates[$type]['blended'][$product['id']]['amount'];
                     $cur_rates = round($cur_rates, 2);
                     if($cur_rates > 1){ $s = 's';}
+                    $cur_rates = $cur_rates . " " . $guide_rates[$type]['blended'][$product['id']]['unit'] . $s;
                 }
-                $cur_rates = $cur_rates . " " . $guide_rates[$type]['blended'][$product['id']]['unit'] . $s;
 
             }
 
                 
             if(true){
-                $print_apprates .= "{$plants[$type]['length'][$pi]}x{$plants[$type]['width'][$pi]}x{$plants[$type]['height'][$pi]} ({$cur_rates}), ";
+                $print_apprates .= "{$plants[$type]['length'][$pi]}x{$plants[$type]['width'][$pi]}x{$plants[$type]['height'][$pi]} $cur_rates_need ({$cur_rates}), ";
             }
         }
         
