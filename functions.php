@@ -2194,6 +2194,9 @@ function indppl_readable_fraction($decimal){
     if ($calc_frac[1] > 8) {
         while ($calc_frac[1] > 8) {
             $calc_frac[0]++;
+            if($calc_frac[0] == $calc_frac[1]){
+                return 1;
+            }
             $fraction = dec2frac($calc_frac[0] / $calc_frac[1]);
             // var_dump($fraction);
             $calc_frac = explode("/", $fraction);

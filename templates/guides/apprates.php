@@ -7,7 +7,11 @@ $s = '';
 $cur_cups = get_post_meta( $product['id'], 'wpcf-5cups', TRUE );
 $dry = get_post_meta($product['id'], 'wpcf-dryliquid', TRUE);
 $bag = explode(" ", $list[$product['id']]['name']);
-
+$volume = false;
+$volume_units = indppl_get_units('volume');
+if(in_array($bag[1], $volume_units) ){
+    $volume = true;
+}
 
 // Determine type
 if($type == 'ground'){ // If guide is in ground
@@ -86,6 +90,7 @@ if($type == 'ground'){ // If guide is in ground
     $pi = 0;
     foreach($plants[$type]['qty'] as $pot){
 
+        $fraction = 0;
         $fraction_int = '';
         $s = '';
         $cur_rates = null;
@@ -136,8 +141,9 @@ if($type == 'ground'){ // If guide is in ground
                 if(isset($guide_rates[$type]['filler'][$product['id']])){
 
                     // Figure out if we need to indicate that this product has existing soil
-                    
                     $prod_need = ($cur_cuft * $guide_rates[$type]['filler'][$product['id']]['amount'])/100;
+                    
+                    // Setup the current item to be normalized
                     $cur_items = array(
                         array(
                             'amount' => $prod_need,
@@ -150,23 +156,24 @@ if($type == 'ground'){ // If guide is in ground
                     
                     // var_dump($guide_rates[$type]['filler'][$product['id']]);
                     $fraction = $cur_normalized[0]['standard-amount']/$bag[0];
+                    $fraction_int = '';
                
                     if($cur_normalized[0]['standard-amount'] > $bag[0] && $fraction > 1){
-                        $fraction_int = floor($fraction - 1);
+                        $fraction_int = floor($fraction);
                         $fraction = $fraction - $fraction_int;
                     }
-                    
                     // $fraction = 1/$fraction;
                     if($fraction >= 0.15){
                         $cur_unit = " of a {$bag[0]} {$bag[1]} package";
-                        $fraction = indppl_readable_fraction($fraction);
+
                         if($fraction == floor($fraction) && $fraction_int != ''){
                             $fraction = $fraction_int + $fraction;
                             $fraction_int = '';
                         } elseif($fraction_int != '' && $fraction_int > 0) {
                             $fraction_int = $fraction_int . " & ";
                         } 
-
+                        $fraction = indppl_readable_fraction($fraction);
+                        // var_dump($fraction_int);
                         $cur_amount = $fraction_int . $fraction;
                         $cur_rates = $cur_amount . " " . $cur_unit;
 
@@ -185,11 +192,66 @@ if($type == 'ground'){ // If guide is in ground
                     }
                 }
 
+                // BLENDED!
                 if(isset($guide_rates[$type]['blended'][$product['id']])){
-                    $cur_rates = $cur_cuft * $guide_rates[$type]['blended'][$product['id']]['amount'];
-                    $cur_rates = round($cur_rates, 2);
-                    if($cur_rates > 1){ $s = 's';}
-                    $cur_rates = $cur_rates . " " . $guide_rates[$type]['blended'][$product['id']]['unit'] . $s;
+                    
+                    if($dry == 'dry' && $volume){
+
+                        $prod_need = ($cur_cuft * $guide_rates[$type]['blended'][$product['id']]['amount'])/100;
+                        $cur_items = array(
+                            array(
+                                'amount' => $prod_need,
+                                'unit'  => 'cuft',
+                            )
+                        );
+                        
+                        $cur_normalized = indppl_normalize($cur_items, $bag[1], $cur_cups);
+    
+                        
+                        // var_dump($guide_rates[$type]['blended'][$product['id']]);
+                        $fraction = $cur_normalized[0]['standard-amount']/$bag[0];
+                        $fraction_int = '';
+                   
+                        if($cur_normalized[0]['standard-amount'] > $bag[0] && $fraction > 1){
+                            $fraction_int = floor($fraction);
+                            $fraction = $fraction - $fraction_int;
+                        }
+                        // $fraction = 1/$fraction;
+                        if($fraction >= 0.15){
+                            $cur_unit = " of a {$bag[0]} {$bag[1]} package";
+    
+                            if($fraction == floor($fraction) && $fraction_int != ''){
+                                $fraction = $fraction_int + $fraction;
+                                $fraction_int = '';
+                            } elseif($fraction_int != '' && $fraction_int > 0) {
+                                $fraction_int = $fraction_int . " & ";
+                            } 
+                            $fraction = indppl_readable_fraction($fraction);
+                            // var_dump($fraction_int);
+                            $cur_amount = $fraction_int . $fraction;
+                            $cur_rates = $cur_amount . " " . $cur_unit;
+    
+                        } else {
+                            // Now determine if that's a reasonable fraction to manage - if not set the variables as cups...
+                            $new_normalized = indppl_normalize($cur_items, 'cup', $cur_cups);
+    
+                            $cur_amount = round($new_normalized[0]['standard-amount'], 1);
+                            if($cur_amount > 1){
+                                $s = 's';
+                            }
+                            $cur_unit = 'cup' . $s ;
+    
+                            $cur_rates = $cur_amount . " " . $cur_unit;
+                            
+                        }
+                    } else {
+                        //Ye Old Way
+                        $cur_rates = $cur_cuft * $guide_rates[$type]['blended'][$product['id']]['amount'];
+                        $cur_rates = round($cur_rates, 2);
+                        if($cur_rates > 1){ $s = 's';}
+                        $cur_rates = $cur_rates . " " . $guide_rates[$type]['blended'][$product['id']]['unit'] . $s;
+                    }
+
                 }
 
             }
