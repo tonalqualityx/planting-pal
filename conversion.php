@@ -1089,7 +1089,7 @@ function dec2frac($num = 0.0, $err = 0.001)
             $lower_d = $middle_d;
         } else {
             // Middle is our best fraction
-            return (string) (($n * $middle_d + $middle_n) * $sign) . '/' . (string) $middle_d;
+            return (string) (($n * $middle_d + $middle_n) * $sign) . '&frasl;' . (string) $middle_d;
         }
     }
 
