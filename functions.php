@@ -775,7 +775,7 @@ function indppl_save_post($store_id = 0){
         $store_id = wp_insert_post($store);
         
         $bill = htmlspecialchars($_POST['billing']);
-        if($bill == 1){
+        if($bill == 'on'){
             $email = indppl_notify_new_store($store_id, $user_id);
         }
 
@@ -2126,7 +2126,7 @@ function indppl_notify_new_store($store, $user){
     $message = "A new store has been published to the user account with the email {$user_info->user_email}";
     $headers = array('Content-Type: text/html; charset=UTF-8');
 
-    wp_mail( $to, $subject, $message, $headers);
+    wp_mail($to, $subject, $message, $headers);
     
 }
 
