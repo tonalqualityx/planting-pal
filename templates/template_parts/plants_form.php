@@ -125,7 +125,7 @@
 
                     <div class="indppl-app-split indppl-flex">
                         <div class="" id="qty">
-                            <input type="number" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0">
+                            <input type="number" min="0" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0">
                         </div>
                         <div class="" id="plant-size">
                             <p class="plant-size-format"><?php echo $container->post_title; ?></p>
@@ -162,22 +162,22 @@
                     <div class="pots-form">
                         <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                             <div class="">
-                                <input type="number" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto">
+                                <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto">
                             </div>
                             <div class=" tacos">
                                 <div class="indppl-flex">
                                     <div>
-                                        <input type="number" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots">
+                                        <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots">
                                         <label>Length</label>
                                     </div>
                                     <p class="by-the-by">x</p>
                                     <div>
-                                        <input type="number" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth">
+                                        <input type="number" min="0" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth">
                                         <label>Width</label>
                                     </div>
                                     <p class="by-the-by">x</p>
                                     <div>
-                                        <input type="number" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="rounded-input2 pots">
+                                        <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="rounded-input2 pots">
                                         <label>Height</label>
                                     </div>                            
                                 </div>
@@ -192,7 +192,7 @@
                                     </div>
                                 </div>
                                 <div class="hide inches-needed" style="margin-top:15px;">
-                                    <input type="number" id="pneed_1" name="pots[need][]" class="rounded-input3 pots">
+                                    <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots">
                                     <label class="soil-need">Inches of soil needed</label>
                                 </div>
                             </div>
@@ -234,22 +234,22 @@
                     <div class="rb-form">
                         <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                             <div class="" >
-                                <input type="number" name="beds[qty][]" class="rounded-input pots margin-auto">
+                                <input type="number" min="0" name="beds[qty][]" class="rounded-input pots margin-auto">
                             </div>
                             <div class="tacos">
                                 <div class="indppl-flex">
                                     <div>
-                                        <input type="number" name="beds[length][]" placeholder="L&quot;" class="rounded-input2">
+                                        <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2">
                                         <label>Length</label>
                                     </div>
                                     <p class="by-the-by">x</p>
                                     <div>
-                                        <input type="number" name="beds[width][]" placeholder="W&quot;" class="rounded-input2">
+                                        <input type="number" min="0" name="beds[width][]" placeholder="W&quot;" class="rounded-input2">
                                         <label>Width</label>
                                     </div>
                                     <p class="by-the-by">x</p>
                                     <div>
-                                        <input type="number" name="beds[height][]" placeholder="H&quot;" class="rounded-input2">
+                                        <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="rounded-input2">
                                         <label>Height</label>
                                     </div>
                                 </div>
@@ -263,7 +263,7 @@
                                     </div>
                                 </div>
                                 <div class="hide inches-needed">
-                                    <input type="number" id="rbneed_1" name="beds[need][]" class="rounded-input3">
+                                    <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3">
                                     <label class="soil-need">Inches of soil needed</label>
                                 </div>
                             </div>

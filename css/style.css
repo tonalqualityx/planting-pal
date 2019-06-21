@@ -925,7 +925,7 @@ GUIDES STYLES
 }
 
 .planting-guide .store-info img, .sponsor-image {
-  max-height: 100px;
+  max-height: 75px;
 }
 
 .indppl-custom-guide-instructions {
@@ -1120,6 +1120,7 @@ APP PAGES
   max-width: 600px;
   margin: auto;
   margin-bottom: 5px;
+  flex-direction: row-reverse;
 }
 
 .indppl-app-split > * {
@@ -1140,7 +1141,7 @@ APP PAGES
 }
 
 .tacos .indppl-flex{
-  justify-content: center;
+  /* justify-content: center;s */
   align-items: center;
 }
 
@@ -1226,6 +1227,7 @@ SHOPPING LIST
   border-style: solid;
   border-width: 0 0 0 1px;
   border-color: #D8D8D8;
+  flex-direction: row-reverse;
 }
 
 body #logo-header {

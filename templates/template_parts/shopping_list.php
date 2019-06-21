@@ -54,7 +54,7 @@
                         $name = explode(' ', $item['name'])[0] . ' Quart';
                     }
                     ?>
-                    <p><strong><?php echo $item['brand']; ?></strong></p>
+                    <p class='smaller'><strong><?php echo $item['brand']; ?></strong></p>
                     <p class="bigger"><strong><?php echo str_replace($item['brand'] . " ", '', $item['product']); ?><br><?php echo $name;?></strong></p>
 
                 </div>
