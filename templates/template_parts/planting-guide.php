@@ -7,7 +7,12 @@ $phone    = get_post_meta($store, 'wpcf-phone', TRUE);
 $email    = get_post_meta($store, 'wpcf-email', TRUE);
 $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
 $guide_rates = indppl_apprates($store);
+$pro = false;
 
+$status = indppl_user_status(get_the_author_id($store));
+if(in_array('paidaccountpro', $status)){
+    $pro = true;
+}
 if(!preg_match('^(http|https):\/\/', $website)){
     $url = "//" . $website;
 } else {
@@ -110,7 +115,7 @@ $store_link = str_replace("//", "", $website); ?>
                         <?php }?>
                         <div class='product-guide-step-instructions'>
                             <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $prod_name; ?></span></span> <?php echo $product["instructions"]; ?>
-                            <?php include(INDPPL_ROOT_PATH . '/templates/guides/apprates.php'); ?>
+                            <?php if($pro){ include INDPPL_ROOT_PATH . '/templates/guides/apprates.php'; } ?>
 
                             <?php if ($sponsorship) {?>
                                 <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a> <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
