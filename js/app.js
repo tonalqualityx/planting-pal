@@ -256,10 +256,10 @@ jQuery(document).ready(function( $ ) {
                 $('#product-create-product').empty();
                 $(".product-create-product").show();
 
-                $('#product-create-brand').append('<option value="' + e + '" selected>' + brand + '</option>');
+                $('#product-create-brand').append('<option selected value="' + e + '">' + brand + '</option>');
                 var status = $('#user-status').val();
                 if(status == 'paidaccountpro'){
-                    $('.product-create-product').append('<option value="new">Add Product</option>');
+                    $('.product-create-product').append('<option selected dissabled>Select Brand</option><option value="new">Add Product</option>');
                 }
 
                 indpplDelLoading();
@@ -708,6 +708,7 @@ jQuery(document).ready(function( $ ) {
                     }
                     indpplDelLoading();
                 }
+                $('#container-select-form').removeClass('ind-first-time');
             }
         });
 
@@ -1733,6 +1734,9 @@ jQuery(document).ready(function( $ ) {
         $('.modal-close').remove();
     })
     
+    $('body').on('click', '.indppl-go-back-btn', function(e){
+        
+    });
 });
 
 // start of functions
@@ -2196,9 +2200,14 @@ function monitorProgress(store){
 
 function containerSubmit(){
     indpplAddLoading();
-    if($('.indppl-update-apps').length > 0){
+    $first_time = $('.ind-first-time').length;
+    console.log($first_time);
+    if($('.indppl-update-apps').length > 0 && $first_time == 0){
         alert("We've added your containers, please verify the amounts are correct in your in ground application rates.");
     }
+    $('.container-available').each(function(){
+        $(this).removeClass('indppl-update-apps');
+    });
     var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
     var available = [];
     var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();

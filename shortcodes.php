@@ -549,6 +549,21 @@ function pp_store_containers(){
         'child'
     );
 
+    $first_time_class = '';
+    $product_array = toolset_get_related_posts(
+        $store_id,
+        'store-product',
+        'parent',
+        '100',
+        '0',
+        array('limit' => 999),
+        'post_id',
+        'child'
+    );
+    if(empty($product_array)){
+        $first_time_class = 'ind-first-time';
+    }
+
     // var_dump($store_container_relations);
     // var_dump($container_array);
     $int_args = array(
@@ -570,6 +585,7 @@ function pp_store_containers(){
             $int_meta = get_post_meta($int_id);
             $int_array[$cont_id] = array();
             // var_dump($int_id);
+            
             foreach($int_meta as $key => $value){
                 array_push($int_array[$cont_id], $key);
             }
@@ -578,11 +594,12 @@ function pp_store_containers(){
         // var_dump('<br /><br />');
         // var_dump($int_array);
     }
+        
     $user_status = indppl_user_status(get_current_user_id());
     ob_start();
 
     ?>
-    <form  method="post" action='#' id='container-select-form' class="form-horizontal" enctype="multipart/form-data">
+    <form  method="post" action='#' id='container-select-form' class="form-horizontal <?php echo $first_time_class; ?>" enctype="multipart/form-data">
         <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
         <input type='hidden' id='user-status' name='user-status' value='<?php echo $user_status[0]; ?>'>
         <table class='indppl-containers-table'>

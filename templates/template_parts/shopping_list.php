@@ -71,10 +71,10 @@
 
 <div class="row no-gutters" id="buttons">
     <div class="col indppl-big-button-container">
-        <a style="color:#fff" class='indppl-big-button indppl-green-button' href="">Go back</a>
+        <a style="color:#fff" class='indppl-go-back-btn indppl-big-button indppl-green-button' href="">Go back</a>
     </div>
     <div class="col button2 indppl-big-button-container">
-        <a style="color:#fff" class='indppl-big-button indppl-green-button' href="/app">Start over</a>
+        <a style="color:#fff" class='indppl-big-button indppl-green-button' href="">Start over</a>
     </div>
 </div>
 
