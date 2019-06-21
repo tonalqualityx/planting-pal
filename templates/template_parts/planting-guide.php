@@ -119,8 +119,8 @@ $store_link = str_replace("//", "", $website); ?>
 
                             <?php if ($sponsorship) {?>
                                 <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a> <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
-                                <p>
-                                </p>
+                                <!-- <p>
+                                </p> -->
                             <?php }?>
                         </div>
                         
