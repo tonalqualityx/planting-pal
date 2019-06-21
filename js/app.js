@@ -1513,11 +1513,11 @@ jQuery(document).ready(function( $ ) {
     $("body").on('click', '#store-duplicate', function (e) {
 
         e.preventDefault();
-        // console.log($("#store-duplication-form input[name=billing]").is(':checked'));
-        // if (!$("#store-duplication-form input[name=billing]").is(":checked") ){
-        //     alert("Please indicate that you understand that your subscription will be increased to reflect the new store.");
-        //     return;
-        // }
+        console.log($("#store-duplication-form input[name=billing]").is(':checked'));
+        if (!$("#store-duplication-form input[name=billing]").is(":checked") ){
+            alert("Please indicate that you understand that your subscription will be increased to reflect the new store.");
+            return;
+        }
         indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
         var storeid = $(this).data('store');
         var storeName = $('#store-duplication-form input[name=store-name]').val();

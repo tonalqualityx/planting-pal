@@ -662,23 +662,45 @@ function indppl_store_info($store_id = NULL){
 				<div class="store-edit-logo-container">
 					<?php if($logo){ ?>
 						<div class='current-store-logo'><img src='<?php echo $logo; ?>'></div>
-						<div>
-							<!-- <a href="#" class='edit-logo-btn'>Change Logo</a>
-							<div class='edit-store-logo'> -->
-								<label for=b1>
-									Change Logo
-									<input type="file" name="my_file_upload[]" data-buttonText="Change Logo" onchange='optionalExtraProcessing(b1.files[0])'>
-								</label>
-							<!-- </div> -->
-						</div>
+                            <div>
+                                <!-- <a href="#" class='edit-logo-btn'>Change Logo</a>
+                                <div class='edit-store-logo'> -->
+                                    <label for=b1>
+                                        Change Logo
+                                        <input type="file" name="my_file_upload[]" data-buttonText="Change Logo" onchange='optionalExtraProcessing(b1.files[0])'>
+                                    </label>
+                                <!-- </div> -->
+                            </div>
 						
-					<?php }else{ ?>
-						<input type="file" name="my_file_upload[]">
-					<?php } ?>
+                        <?php }else{ ?>
+                            <input type="file" name="my_file_upload[]">
+                        <?php } ?>
 
-				</div>
+                    </div>
+                </div>
 			</div>
-			</div>
+            <?php 
+            $user_id = get_current_user_id();
+            $args = array(
+                'author' => $user_id,
+                'post_type' => 'store',
+                'orderby' => 'post-date',
+            );
+            $stores = new WP_Query($args);
+            $status = indppl_user_status($user_id);
+            global $wp;
+            $curernt_url =  home_url( $wp->request );
+            if($stores->have_posts()){ ?>
+                <div class="form-group">
+                    <div class=" indppl-flex indppl-no-wrap" style="max-width: 600px; margin:auto;align-items:center;">
+                        <input id="billing" name="billing" type="checkbox" class="form-control input-md" style="height:auto; width: auto;" required> 
+                        <p style="margin-bottom: 0; margin-left:10px;">I understand that I will be billed an additional subscription.</p>
+                        
+                    
+                    </div>
+                </div>
+            <?php } ?>
+
             <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
             <?php
 			// }
@@ -705,6 +727,8 @@ function indppl_save_post($store_id = 0){
         require_once( ABSPATH . 'wp-admin/includes/file.php' );
         require_once( ABSPATH . 'wp-admin/includes/media.php' );
         
+        $user_id = get_current_user_id();
+
         $store = array();
         $files = $_FILES["my_file_upload"];
         // var_dump($files);
@@ -730,7 +754,7 @@ function indppl_save_post($store_id = 0){
         $store = array(
             'ID' => $store_id,
             'post_title' => wp_strip_all_tags($_POST['store-name']),
-            'post_author' => get_current_user_id(),
+            'post_author' => $user_id,
             'post_type' => 'store',
             'post_status' => "publish",
             'meta_input' => array(
@@ -749,6 +773,12 @@ function indppl_save_post($store_id = 0){
             $store['meta_input']['wpcf-logo'] = wp_get_attachment_image_src($attachment_id)[0];
         }
         $store_id = wp_insert_post($store);
+        
+        $bill = htmlspecialchars($_POST['billing']);
+        if($bill == 'on'){
+            $email = indppl_notify_new_store($store_id, $user_id);
+        }
+
         return $store_id;
         
     }
@@ -2096,7 +2126,7 @@ function indppl_notify_new_store($store, $user){
     $message = "A new store has been published to the user account with the email {$user_info->user_email}";
     $headers = array('Content-Type: text/html; charset=UTF-8');
 
-    wp_mail( $to, $subject, $message, $headers);
+    wp_mail($to, $subject, $message, $headers);
     
 }
 
