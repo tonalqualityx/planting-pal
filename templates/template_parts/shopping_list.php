@@ -88,7 +88,7 @@
 </div>
 
 
-<div class="container"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/keep-going-pg.png" class="keep-going">
+<div id='keep-going-container' class="container"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/keep-going-pg.png" class="keep-going">
     <form action="" method="post" enctype="text/plain" >
     <input type="hidden" name="next-step" value="planting-guide">
     <input type="hidden" name="storeid" value="<?php echo $storeid;?>">

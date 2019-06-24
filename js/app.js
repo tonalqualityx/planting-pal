@@ -1733,10 +1733,15 @@ jQuery(document).ready(function( $ ) {
         closeModal();
         $('.modal-close').remove();
     })
-    
-    $('body').on('click', '.indppl-go-back-btn', function(e){
-        
-    });
+
+
+    if($("#keep-going-container").length > 0) {
+        console.log('ummm yeah should scroll');
+        setTimeout(function(){
+            // $(document).scrollTop( $("#keep-going-container").offset().top ); 
+            $('html, body').animate({scrollTop:$("#keep-going-container").offset().top}, 1200);
+        }, 1000);
+    }
 });
 
 // start of functions

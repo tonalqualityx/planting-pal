@@ -10,7 +10,9 @@ body {
 img{
   max-width: 100%;
 }
-
+#keep-going-container{
+  padding-bottom: 40px;
+}
 .strong {
   font-weight: 800;
 }
