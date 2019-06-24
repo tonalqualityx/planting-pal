@@ -1122,7 +1122,22 @@ APP PAGES
   margin-bottom: 5px;
   flex-direction: row-reverse;
 }
-
+#indppl-form-go-back{
+  background: #4a8943;
+  color: #fff;
+  border: unset;
+  border-radius: 0;
+  font-family: "Open Sans",sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  text-transform: unset;
+  transition: unset;
+}
+#indppl-form-go-back:hover{
+  background-color: #76ab49;
+  text-decoration: underline;
+}
 .indppl-app-split > * {
   width: 50%;
   text-align: center;
@@ -1143,6 +1158,10 @@ APP PAGES
 .tacos .indppl-flex{
   /* justify-content: center;s */
   align-items: center;
+}
+#return-form-data{
+  width: 100%;
+  margin-bottom: 0;
 }
 
 .tacos input {

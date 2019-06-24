@@ -1,5 +1,20 @@
 <?php defined('ABSPATH') or die('No script kiddies please!'); //For security ?>
+<?php
+$list = $_POST['ground_store'];
+$list = stripslashes($list);
+$list = json_decode($list, true);
+// var_dump($_POST);
+$plants = $_POST['plants'];
+$plants = stripslashes($plants);
+$plants = json_decode($plants, true);
+$pots = $plants['pots'];
 
+$beds = $_POST['plants'];
+$beds = stripslashes($beds);
+$beds = json_decode($beds, true);
+$beds = $beds['beds'];
+
+?>
 <div class="row guide-top" >
         <div class="col">
             <p class="text-uppercase text-center text-white d-flex justify-content-center align-items-center" style="font-size: 9px;margin-top: 7px;margin-bottom: 10px;"><strong>AMENDMENT CALCULATOR &amp; PLANTING GUIDE</strong><br></p>
@@ -120,12 +135,12 @@
                 }
                 
 
-                // var_dump($containers);
+                
                 foreach($containers as $cont){ $container = get_post($cont); ?>
 
                     <div class="indppl-app-split indppl-flex">
                         <div class="" id="qty">
-                            <input type="number" min="0" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0">
+                            <input type="number" min="0" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0" value='<?php echo $list[$container->ID]; ?>'>
                         </div>
                         <div class="" id="plant-size">
                             <p class="plant-size-format"><?php echo $container->post_title; ?></p>
@@ -159,51 +174,65 @@
                 <hr class="light-rule">
 
                 <div class="container">
-                    <div class="pots-form">
-                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                            <div class="">
-                                <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto">
+                    <?php
+                    if(!$pots){
+                        $pots = array('qty' => array(
+                            '1' => ''
+                        ));
+                    }
+                    foreach($pots['qty'] as $key => $value){
+                        ob_start();
+                        ?>
+                        <div class="pots-form">
+                            <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
+                                <div class="">
+                                    <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
+                                </div>
+                                <div class=" tacos">
+                                    <div class="indppl-flex">
+                                        <div>
+                                            <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots" value='<?php echo $pots["length"][$key]; ?>'>
+                                            <label>Length</label>
+                                        </div>
+                                        <p class="by-the-by">x</p>
+                                        <div>
+                                            <input type="number" min="0" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth" value='<?php echo $pots["width"][$key]; ?>'>
+                                            <label>Width</label>
+                                        </div>
+                                        <p class="by-the-by">x</p>
+                                        <div>
+                                            <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="rounded-input2 pots" value='<?php echo $pots["height"][$key]; ?>'>
+                                            <label>Height</label>
+                                        </div>                            
+                                    </div>
+                                    <div class="indppl-flex ">
+                                        <div class=" empty-filled indppl-flex margin-right-0">
+                                            <input class=" pots" type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
+                                            <label class="form-check-label" for="formCheck-1">Empty</label>
+                                        </div>
+                                        <div class=" empty-filled indppl-flex margin-right-0">
+                                            <input class=" pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
+                                            <label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                        </div>
+                                    </div>
+                                    <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
+                                        <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots" value='<?php echo $pots["need"][$key]; ?>'>
+                                        <label class="soil-need">Inches of soil needed</label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class=" tacos">
-                                <div class="indppl-flex">
-                                    <div>
-                                        <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots">
-                                        <label>Length</label>
-                                    </div>
-                                    <p class="by-the-by">x</p>
-                                    <div>
-                                        <input type="number" min="0" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth">
-                                        <label>Width</label>
-                                    </div>
-                                    <p class="by-the-by">x</p>
-                                    <div>
-                                        <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="rounded-input2 pots">
-                                        <label>Height</label>
-                                    </div>                            
-                                </div>
-                                <div class="indppl-flex ">
-                                    <div class=" empty-filled indppl-flex margin-right-0">
-                                        <input class=" pots" type="radio" id="pstatus_1" name="pstatus_1" checked value="empty">
-                                        <label class="form-check-label" for="formCheck-1">Empty</label>
-                                    </div>
-                                    <div class=" empty-filled indppl-flex margin-right-0">
-                                        <input class=" pots" type="radio" id="pstatus_1" name="pstatus_1" value="partial">
-                                        <label class="form-check-label" for="formCheck-2">Partially Filled</label>
-                                    </div>
-                                </div>
-                                <div class="hide inches-needed" style="margin-top:15px;">
-                                    <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots">
-                                    <label class="soil-need">Inches of soil needed</label>
+                            <div class="row">
+                                <div class="indppl-flex indppl-justify-center max-600">
+                                    
+                                    
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="indppl-flex indppl-justify-center max-600">
-                                
-                                
-                            </div>
-                        </div>
-                    </div>
+                        <?php
+                        $return .= ob_get_clean();
+                    }
+                    echo $return;
+                    ?>
                 </div>
                 <div class="row">
                     <div class="col">
@@ -231,44 +260,58 @@
                 <hr class="light-rule">
 
                 <div class="container">
-                    <div class="rb-form">
-                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                            <div class="" >
-                                <input type="number" min="0" name="beds[qty][]" class="rounded-input pots margin-auto">
+                <?php
+                    if(!$beds){
+                        $beds = array('qty' => array(
+                            '1' => ''
+                        ));
+                    }
+                    foreach($beds['qty'] as $key => $value){
+                        ob_start();
+                        ?>
+                        <div class="rb-form">
+                            <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
+                                <div class="" >
+                                    <input type="number" min="0" name="beds[qty][]" class="rounded-input pots margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
+                                </div>
+                                <div class="tacos">
+                                    <div class="indppl-flex">
+                                        <div>
+                                            <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2" value='<?php echo $beds["length"][$key]; ?>'>
+                                            <label>Length</label>
+                                        </div>
+                                        <p class="by-the-by">x</p>
+                                        <div>
+                                            <input type="number" min="0" name="beds[width][]" placeholder="W&quot;" class="rounded-input2" value='<?php echo $beds["width"][$key]; ?>'>
+                                            <label>Width</label>
+                                        </div>
+                                        <p class="by-the-by">x</p>
+                                        <div>
+                                            <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="rounded-input2" value='<?php echo $beds["height"][$key]; ?>'>
+                                            <label>Height</label>
+                                        </div>
+                                    </div>
+                                    <div class="indppl-flex ">
+                                        <div class="empty-filled indppl-flex margin-right-0">
+                                            <input class="pots" <?php if(!$beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" checked value="empty">
+                                            <label class="form-check-label" for="formCheck-1">Empty</label>
+                                        </div>
+                                        <div class="empty-filled indppl-flex margin-right-0">
+                                            <input class="pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                        </div>
+                                    </div>
+                                    <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
+                                        <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
+                                        <label class="soil-need">Inches of soil needed</label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="tacos">
-                                <div class="indppl-flex">
-                                    <div>
-                                        <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2">
-                                        <label>Length</label>
-                                    </div>
-                                    <p class="by-the-by">x</p>
-                                    <div>
-                                        <input type="number" min="0" name="beds[width][]" placeholder="W&quot;" class="rounded-input2">
-                                        <label>Width</label>
-                                    </div>
-                                    <p class="by-the-by">x</p>
-                                    <div>
-                                        <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="rounded-input2">
-                                        <label>Height</label>
-                                    </div>
-                                </div>
-                                <div class="indppl-flex ">
-                                    <div class="empty-filled indppl-flex margin-right-0">
-                                        <input class="pots" type="radio" name="rbstatus_1" checked value="empty">
-                                        <label class="form-check-label" for="formCheck-1">Empty</label>
-                                    </div>
-                                    <div class="empty-filled indppl-flex margin-right-0">
-                                        <input class="pots" type="radio" name="rbstatus_1" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
-                                    </div>
-                                </div>
-                                <div class="hide inches-needed">
-                                    <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3">
-                                    <label class="soil-need">Inches of soil needed</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>  
+                        </div> 
+                        <?php
+                        $return_bed .= ob_get_clean();
+                    }
+                    echo $return_bed;
+                    ?>
                 </div>
                 <div class="row">
                         <div class="col">
