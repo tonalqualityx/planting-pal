@@ -691,14 +691,14 @@ function indppl_store_info($store_id = NULL){
             global $wp;
             $curernt_url =  home_url( $wp->request );
             if($stores->have_posts()){ ?>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <div class=" indppl-flex indppl-no-wrap" style="max-width: 600px; margin:auto;align-items:center;">
                         <input id="billing" name="billing" type="checkbox" class="form-control input-md" style="height:auto; width: auto;" required> 
                         <p style="margin-bottom: 0; margin-left:10px;">I understand that I will be billed an additional subscription.</p>
                         
                     
                     </div>
-                </div>
+                </div> -->
             <?php } ?>
 
             <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>

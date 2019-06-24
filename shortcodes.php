@@ -922,7 +922,17 @@ function indppl_authorized_dups(){
     $user = get_userdata( get_current_user_id() );
     $response = indppl_get_dup_auth($user->user_email, 'sub');
 
-    if(count($response) > 0){
+    $user_id = get_current_user_id();
+            $args = array(
+                'author' => $user_id,
+                'post_type' => 'store',
+                'orderby' => 'post-date',
+            );
+            $stores = new WP_Query($args);
+            $status = indppl_user_status($user_id);
+            global $wp;
+
+    if(count($response) > 0 && !$stores->have_posts()){
 
         ob_start(); ?>
 
