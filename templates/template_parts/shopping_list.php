@@ -71,7 +71,16 @@
 
 <div class="row no-gutters" id="buttons">
     <div class="col indppl-big-button-container">
-        <a style="color:#fff" class='indppl-go-back-btn indppl-big-button indppl-green-button' href="">Go back</a>
+        <!-- <a style="color:#fff" class='indppl-go-back-btn indppl-big-button indppl-green-button' href="">Go back</a> -->
+        <?php $actual_link = "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}"; ?>
+        <form id='return-form-data' method='post' action='' enctype="multipart/form-data">
+        <input type="hidden" name="next-step" value="plants_form">
+        <input type="hidden" name="storeid" value="<?php echo $storeid;?>">
+        <input type="hidden" name="plants" value='<?php echo $user_plants; ?>'>
+        <input type="hidden" name="list" value='<?php echo $encoded_shopping_list; ?>'>
+        <input type="hidden" name="ground_store" value='<?php echo $ground_store; ?>'>
+        <input style="color:#fff" id='indppl-form-go-back' value='Go Back' class='indppl-go-back-btn indppl-big-button indppl-green-button' type='submit'>
+        </form>           
     </div>
     <div class="col button2 indppl-big-button-container">
         <a style="color:#fff" class='indppl-big-button indppl-green-button' href="">Start over</a>
@@ -84,7 +93,7 @@
     <input type="hidden" name="next-step" value="planting-guide">
     <input type="hidden" name="storeid" value="<?php echo $storeid;?>">
     <input type="hidden" name="plants" value='<?php echo $user_plants; ?>'>
-    <input type="hidden" name="list" value='<?php echo $encoded_shopping_list; ?>'>
+    <input type="hidden" name="list" value='<?php echo json_encode($encoded_shopping_list); ?>'>
     <input type="hidden" name="ground_store" value='<?php echo $ground_store; ?>'>
     <input class="form-control email-address-add" name="email" type="text" placeholder="Enter Email Address"><input type="image" id="get-planting-guide" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/send-guide.png" border="0" class="send-guide" data-store="<?php echo $storeid; ?>" data-plants='<?php echo $user_plants; ?>' data-list='<?php echo $encoded_shopping_list; ?>' data-ground='<?php echo $ground_store; ?>'></form>
 </div>
