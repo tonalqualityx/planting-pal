@@ -1068,7 +1068,7 @@ function update_package_table($store_id, $product_id, $type){
     <table class='product-create-chart-table'>
     <tr>
         <th colspan='2'>Choose Application Rates</th>
-        <th colspan='5'>
+            <th colspan='5'>
             <p>Application Rates Automatically Calculated for Other Sizes</p>
             <p>Use the numbers below to fine tune your application rate on the left</p>
         </th>
@@ -1302,9 +1302,12 @@ function update_bag_package_table($store_id, $product_id, $type){
     <table class='product-create-chart-table'>
     <tr>
         <th colspan='2'>Choose Application Rates</th>
-        <th colspan='5'>
+        <?php if(count($product_related) > 1){
+            ?>
+            <th colspan='5'>
             <p>Application Rates Automatically Calculated for Other Sizes</p>
             <p>Use the numbers below to fine tune your application rate on the left</p>
+        <?php } ?>
         </th>
     </tr>
     <tr>
