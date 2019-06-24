@@ -922,75 +922,81 @@ function indppl_authorized_dups(){
     $user = get_userdata( get_current_user_id() );
     $response = indppl_get_dup_auth($user->user_email, 'sub');
 
-    ob_start(); ?>
+    if(count($response) > 0){
 
-        <div class="indppl-dup-stores">
-            <h2>Stores you are authorized to duplicate</h2>
-            <!-- <ul class="style-free"> -->
-                <?php foreach($response as $store){
-                    $store_name = get_the_title($store['store_id']);
-                    if($store_name){
+        ob_start(); ?>
 
-                        $address1   = get_post_meta($store['store_id'], 'wpcf-address1', TRUE);
-                        $city = get_post_meta($store['store_id'], 'wpcf-city', TRUE);
-                        $state = get_post_meta($store['store_id'], 'wpcf-state', TRUE); ?>
+            <div class="indppl-dup-stores">
+                <h2>Stores you are authorized to duplicate</h2>
+                <!-- <ul class="style-free"> -->
+                    <?php foreach($response as $store){
+                        $store_name = get_the_title($store['store_id']);
+                        if($store_name){
 
-                        <div class="indppl-single-store-container white-background indppl-space-between">
-                            <div class="indppl-store-dash-left">
-                                <div class="indppl-flex">
-                                    <div class="indppl-store-thumb indppl-dash-thumb">
-                                            <img src="http://localhost/wp-content/uploads/2019/05/indelible-logo-icon-150x150.jpg">
+                            $address1   = get_post_meta($store['store_id'], 'wpcf-address1', TRUE);
+                            $city = get_post_meta($store['store_id'], 'wpcf-city', TRUE);
+                            $state = get_post_meta($store['store_id'], 'wpcf-state', TRUE); ?>
+
+                            <div class="indppl-single-store-container white-background indppl-space-between">
+                                <div class="indppl-store-dash-left">
+                                    <div class="indppl-flex">
+                                        <div class="indppl-store-thumb indppl-dash-thumb">
+                                                <img src="http://localhost/wp-content/uploads/2019/05/indelible-logo-icon-150x150.jpg">
+                                        </div>
+                                        <div class="indppl-store-address">
+                                            <h4 class=""><?php echo $store_name; ?></h4>
+                                            <p class="indppl-small-store-text"><?php echo $address1; ?></p>
+                                            <p class="indppl-small-store-text"><?php echo $city . ", " . $state; ?></p>
+                                        </div>
                                     </div>
-                                    <div class="indppl-store-address">
-                                        <h4 class=""><?php echo $store_name; ?></h4>
-                                        <p class="indppl-small-store-text"><?php echo $address1; ?></p>
-                                        <p class="indppl-small-store-text"><?php echo $city . ", " . $state; ?></p>
+                                    <div class="dash-buttons">
+                                        <p><a class="indppl-button button-primary indppl-small-store-link indppl-duplicate-store" data-store="<?php echo $store['store-id']; ?>" href="#">Duplicate</a> Duplicate this store's containers, products, application rates, and planting guides</p>
                                     </div>
                                 </div>
-                                <div class="dash-buttons">
-                                    <p><a class="indppl-button button-primary indppl-small-store-link indppl-duplicate-store" data-store="<?php echo $store['store-id']; ?>" href="#">Duplicate</a> Duplicate this store's containers, products, application rates, and planting guides</p>
-                                </div>
-                            </div>
-                            <div class="">
-                                    
                                 <div class="">
-                                    <?php 
-                                    $status = "Offline";
-                                    $status_class = "grey-text";
-                                    $progress = indppl_store_progress_bar($store['store_id'], false, false);
+                                        
+                                    <div class="">
+                                        <?php 
+                                        $status = "Offline";
+                                        $status_class = "grey-text";
+                                        $progress = indppl_store_progress_bar($store['store_id'], false, false);
+                                        $live = get_post_meta($store['store_id'], 'wpcf-issetup', TRUE);
 
-                                    if($live){
-                                        $status = "Online";
-                                        $status_class = "green-text";
-                                    }
-                                         ?>
-                                    <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>' id='status-<?php echo $store['store_id']; ?>'><?php echo $status; ?></span></p>
-                                    <?php 
-                                    $gauge_level = 360*($progress['complete']/100);
-                                    $p51 = '';
-                                    if($gauge_level > 180){
-                                        $p51 = 'p51';
-                                    }
-                                    ?>
-                                    <div class="c100 <?php echo $p51; ?> center orange">
-                                        <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
-                                        <div class="slice">
-                                            <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
-                                            <div class="fill"></div>
+                                        if($live){
+                                            $status = "Online";
+                                            $status_class = "green-text";
+                                        }
+                                            ?>
+                                        <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>' id='status-<?php echo $store['store_id']; ?>'><?php echo $status; ?></span></p>
+                                        <?php 
+                                        $gauge_level = 360*($progress['complete']/100);
+                                        $p51 = '';
+                                        if($gauge_level > 180){
+                                            $p51 = 'p51';
+                                        }
+                                        ?>
+                                        <div class="c100 <?php echo $p51; ?> center orange">
+                                            <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
+                                            <div class="slice">
+                                                <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
+                                                <div class="fill"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <?php } else{
+                        <?php } else{
 
-                    } ?>
+                        } ?>
 
-                <?php } ?>
-            <!-- </ul> -->
-        </div>
+                    <?php } ?>
+                <!-- </ul> -->
+            </div>
 
-    <?php $response = ob_get_clean();
-    return $response;
+        <?php $response = ob_get_clean();
+        return $response;
+    } else {
+        // Nothing to see here...
+    }
 }
 add_shortcode('pp-my-dups', 'indppl_authorized_dups');
