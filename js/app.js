@@ -1690,37 +1690,85 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('click', '.next-button', function(e){
+        e.preventDefault();
         var load = true;
         var ground = false;
-        $('.rounded-input').each(function(){
-            if($(this).val() >= 1){
+        $('.ground-shopping-list').find('.rounded-input').each(function(){
+            // console.log($.isNumeric($(this).val()));
+            console.log(ground);
+            if($(this).val() > 0 && $.isNumeric($(this).val()) && ground == false){
                 ground = true;
                 return false;
             }
         })
-        var pots_line = false;
-        $('.rounded-input.pots').each(function(){
-            console.log($(this).val());
-            if($(this).val() >= 1){
-
-                var count = 0;
-                $(this).parent().parent().find('.rounded-input2').each(function(){
-                    if($(this).val() >= 1){
-                        console.log($(this).val());
-                        count++;
-                    }
-                })
-                if(count == 3){
-                    pots_line = true;
-                }else{
+        var pots_empty = true;
+        $('.pots-form').find('.rounded-input.pots').each(function(){
+            if($(this).val() > 0){
+                pots_empty = false;
+            }else{
+                load = false;
+            }
+            var count = 0;
+            $(this).parent().parent().find('.rounded-input2').each(function(){
+                if($(this).val() >= 1){
+                    count++;
+                    pots_empty = false;
+                }
+            })
+            if(count != 3){
+                load = false;
+                return false;
+            }
+        })
+        
+        $(".indppl-pots-partial").each(function(){
+            if($(this).is(':checked')){
+                var pots_need = $(this).parent().parent().next().children(0).val();
+                if(!pots_need >= 1 || pots_need == 0){
                     load = false;
+                    return false;
                 }
             }
         })
-        if(ground == true || pots_line == true && load == true){
+
+        var beds_load = true;
+        var beds_empty = true;
+        $('.rb-form').find('.rounded-input.beds').each(function(){
+            console.log($(this).val());
+            if($(this).val() > 0){
+                beds_empty = false;
+            }else{
+                beds_load = false;
+            }
+            var count = 0;
+            $(this).parent().parent().find('.rounded-input2').each(function(){
+                console.log($(this).val());
+                if($(this).val() >= 1){
+                    count++;
+                    beds_empty = false;
+                }
+            })
+            if(count != 3){
+                beds_load = false;
+                return false;
+            }
+        })
+        var qty_empty = true
+        $(".indppl-beds-partial").each(function(){
+            if($(this).is(':checked')){
+                var beds_need = $(this).parent().parent().next().children(0).val();
+                if(!beds_need >= 1 || beds_need == 0){
+                    beds_load = false;
+                    qty_empty = false;
+                    return false;
+                }
+            }
+        })
+        console.log('ground: ' + ground + " Pots: " + load + " beds: " + beds_load + " beds empty: " + beds_empty);
+        if(ground == true && load == true && beds_load == true || (ground == true && beds_empty == true)){
         }else{
             e.preventDefault();
-            if(load == false){
+            if(load == false || beds_load == false){
                 alert('You need to fill out each row you start completely.')
             }else{
                 alert('Fill out at least one of the plant types to continue.');
@@ -1736,7 +1784,6 @@ jQuery(document).ready(function( $ ) {
 
 
     if($("#keep-going-container").length > 0) {
-        console.log('ummm yeah should scroll');
         setTimeout(function(){
             // $(document).scrollTop( $("#keep-going-container").offset().top ); 
             $('html, body').animate({scrollTop:$("#keep-going-container").offset().top}, 1200);

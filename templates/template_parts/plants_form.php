@@ -139,7 +139,7 @@ $beds = $beds['beds'];
                 foreach($containers as $cont){ $container = get_post($cont); ?>
 
                     <div class="indppl-app-split indppl-flex">
-                        <div class="" id="qty">
+                        <div id="qty" class='ground-shopping-list'>
                             <input type="number" min="0" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0" value='<?php echo $list[$container->ID]; ?>'>
                         </div>
                         <div class="" id="plant-size">
@@ -207,11 +207,11 @@ $beds = $beds['beds'];
                                     </div>
                                     <div class="indppl-flex ">
                                         <div class=" empty-filled indppl-flex margin-right-0">
-                                            <input class=" pots" type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
+                                            <input class="pots" type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
                                             <label class="form-check-label" for="formCheck-1">Empty</label>
                                         </div>
                                         <div class=" empty-filled indppl-flex margin-right-0">
-                                            <input class=" pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
+                                            <input class="indppl-pots-partial pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
                                             <label class="form-check-label" for="formCheck-2">Partially Filled</label>
                                         </div>
                                     </div>
@@ -272,7 +272,7 @@ $beds = $beds['beds'];
                         <div class="rb-form">
                             <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                                 <div class="" >
-                                    <input type="number" min="0" name="beds[qty][]" class="rounded-input pots margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
+                                    <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
                                 </div>
                                 <div class="tacos">
                                     <div class="indppl-flex">
@@ -297,7 +297,7 @@ $beds = $beds['beds'];
                                             <label class="form-check-label" for="formCheck-1">Empty</label>
                                         </div>
                                         <div class="empty-filled indppl-flex margin-right-0">
-                                            <input class="pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                            <input class="indppl-beds-partial pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
                                         </div>
                                     </div>
                                     <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
