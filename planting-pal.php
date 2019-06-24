@@ -10,6 +10,10 @@
  * Github Plugin URI: tonalqualityx/planting-pal
  */
 
+function my_function_admin_bar($content) {
+	return ( current_user_can( 'administrator' ) ) ? $content : false;
+}
+add_filter( 'show_admin_bar' , 'my_function_admin_bar');
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 
@@ -152,3 +156,5 @@ function indppl_dashboard_template($template) {
 }
 
 add_filter('template_include', 'indppl_dashboard_template');
+
+
