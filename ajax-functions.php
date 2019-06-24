@@ -2565,3 +2565,97 @@ function indppl_store_deactivate_ajax(){
 }
 add_action( 'wp_ajax_indppl_store_deactivate_ajax', 'indppl_store_deactivate_ajax' );
 add_action('wp_ajax_nopriv_indppl_store_deactivate_ajax', 'indppl_store_deactivate_ajax');
+
+function indppl_dup_auth_form_ajax(){
+
+    if($_POST['version_check'] == '1.0'){
+        
+        $store = htmlspecialchars($_POST['store']); ?>
+
+        <h1>Manage Authorized Users</h1>
+        <p>The users below have permission to duplicate your store's containers, application rates, and planting guides. Removing a user from this list does not remove a store that they have already duplicated!</p>
+        <form style="max-width: 400px;">
+            <label for="auth-email">Add Authorized User by Email:</label>
+            <div class="indppl-flex indppl-no-wrap">
+                <input type="text" data-store="<?php echo $store; ?>" name="authorized_email" id="auth-email" style="border-top-right-radius: 0;
+    border-bottom-right-radius: 0;">
+                <input type="submit" value="Add User" id="indppl-add-auth-user" class="orange-bg" style="border-top-left-radius: 0;
+    border-bottom-left-radius: 0;">
+            </div>
+        </form>
+
+        <?php $results = indppl_get_dup_auth($store);
+
+        echo "<h2>Users authorized to duplicate your store</h2>";
+        echo "<ul id='authorized-users' class='style-free'>";
+        foreach($results as $key => $val){
+            $username = "Not a member yet";
+            $auth_user = get_user_by( 'email', $val['user_email'] );
+            if($auth_user){
+                $auth_data = get_userdata($auth_user->ID);
+                $username = $auth_data->first_name . " " . $auth_data->last_name;
+            }
+            echo "<li>{$val['user_email']} ({$username}) <a href='#' class='remove-auth' data-id='{$val['auth_id']}' data-email='{$val['user_email']}' style='color:red'>remove access</a></li>";
+        }
+        echo "</ul>";
+
+    }
+
+    die();
+
+}
+add_action('wp_ajax_indppl_dup_auth_form_ajax', 'indppl_dup_auth_form_ajax');
+// add_action('wp_ajax_nopriv_indppl_dup_auth_form_ajax', 'indppl_dup_auth_form_ajax');
+
+function indppl_auth_users_ajax(){
+    
+    if($_POST['process'] == 'add'){
+
+        $store = htmlspecialchars($_POST['store']);
+        $email = htmlspecialchars($_POST['email']);
+        if($email == ''){
+            $response = 'error';
+        } else {
+            $args = array(
+                'store_id' => $store,
+                'user_email' => $email,
+            );
+    
+            $response = indppl_dup_auth($args);
+    
+            if($response[0]){
+                $username  = "Not a member yet";
+                $auth_user = get_user_by('email', $email);
+                if ($auth_user) {
+                    $auth_data = get_userdata($auth_user->ID);
+                    $username  = $auth_data->first_name . " " . $auth_data->last_name;
+                }
+    
+                $response = "<li>{$email} ({$username}) <a href='#' data-id='{$response[1]}' class='remove-auth' style='color:red;'>remove access</a></li>";
+    
+                echo $response;
+    
+            } else {
+                $response = 'There was a problem. Please refresh and try again.';
+            }
+        }
+
+    } elseif($_POST['process'] == 'remove'){
+
+        $auth_id = $_POST['auth'];
+        $response = indppl_dup_auth($auth_id, 'delete');
+        if($response){
+            echo "success";
+        } else {
+            echo "error";
+        }
+
+    } else {
+        echo "<li>There was an error. Please refresh and try again... If this persists contact support.</li>";
+    }
+
+
+    die();
+}
+add_action('wp_ajax_indppl_auth_users_ajax', 'indppl_auth_users_ajax');
+// add_action('wp_ajax_nopriv_indppl_auth_users_ajax', 'indppl_auth_users_ajax');

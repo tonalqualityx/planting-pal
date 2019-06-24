@@ -454,8 +454,9 @@ function pp_my_stores(){
                                 <div class="dash-buttons">
                                     <p><a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a> Manage profile, products, & planting guide</p>
                                     <p><a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a> Test store in the app</p>
-                                    <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a> Copy store settings to create a new store</p>
+                                    <p style="display:none;"><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a> Copy store settings to create a new store</p>
                                     <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a> Delete this store</p>
+                                    <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-store-auth'>Authorize</a> Manage who can duplicate this store</p>
                                 </div>
                             </div>
                                 <?php
@@ -916,3 +917,80 @@ function pp_sponsor_management(){
     return $return;
 }
 add_shortcode('pp-sponsor-management', 'pp_sponsor_management');
+
+function indppl_authorized_dups(){
+    $user = get_userdata( get_current_user_id() );
+    $response = indppl_get_dup_auth($user->user_email, 'sub');
+
+    ob_start(); ?>
+
+        <div class="indppl-dup-stores">
+            <h2>Stores you are authorized to duplicate</h2>
+            <!-- <ul class="style-free"> -->
+                <?php foreach($response as $store){
+                    $store_name = get_the_title($store['store_id']);
+                    if($store_name){
+
+                        $address1   = get_post_meta($store['store_id'], 'wpcf-address1', TRUE);
+                        $city = get_post_meta($store['store_id'], 'wpcf-city', TRUE);
+                        $state = get_post_meta($store['store_id'], 'wpcf-state', TRUE); ?>
+
+                        <div class="indppl-single-store-container white-background indppl-space-between">
+                            <div class="indppl-store-dash-left">
+                                <div class="indppl-flex">
+                                    <div class="indppl-store-thumb indppl-dash-thumb">
+                                            <img src="http://localhost/wp-content/uploads/2019/05/indelible-logo-icon-150x150.jpg">
+                                    </div>
+                                    <div class="indppl-store-address">
+                                        <h4 class=""><?php echo $store_name; ?></h4>
+                                        <p class="indppl-small-store-text"><?php echo $address1; ?></p>
+                                        <p class="indppl-small-store-text"><?php echo $city . ", " . $state; ?></p>
+                                    </div>
+                                </div>
+                                <div class="dash-buttons">
+                                    <p><a class="indppl-button button-primary indppl-small-store-link indppl-duplicate-store" data-store="<?php echo $store['store-id']; ?>" href="#">Duplicate</a> Duplicate this store's containers, products, application rates, and planting guides</p>
+                                </div>
+                            </div>
+                            <div class="">
+                                    
+                                <div class="">
+                                    <?php 
+                                    $status = "Offline";
+                                    $status_class = "grey-text";
+                                    $progress = indppl_store_progress_bar($store['store_id'], false, false);
+
+                                    if($live){
+                                        $status = "Online";
+                                        $status_class = "green-text";
+                                    }
+                                         ?>
+                                    <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>' id='status-<?php echo $store['store_id']; ?>'><?php echo $status; ?></span></p>
+                                    <?php 
+                                    $gauge_level = 360*($progress['complete']/100);
+                                    $p51 = '';
+                                    if($gauge_level > 180){
+                                        $p51 = 'p51';
+                                    }
+                                    ?>
+                                    <div class="c100 <?php echo $p51; ?> center orange">
+                                        <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
+                                        <div class="slice">
+                                            <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
+                                            <div class="fill"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php } else{
+
+                    } ?>
+
+                <?php } ?>
+            <!-- </ul> -->
+        </div>
+
+    <?php $response = ob_get_clean();
+    return $response;
+}
+add_shortcode('pp-my-dups', 'indppl_authorized_dups');

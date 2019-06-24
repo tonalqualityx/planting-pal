@@ -23,8 +23,13 @@ function indppl_dup_auth($options, $action = 'insert'){
         );
 
         $success = $wpdb->insert($table_name, $args);
+        $auth_id = $wpdb->insert_id;
+
+        $success = array($success, $auth_id);
+
     } elseif($action == 'delete'){
-        $success = $wpdb->delete($table_name, $options);
+        $where = array('auth_id' => $options);
+        $success = $wpdb->delete($table_name, $where);
     } else {
         $success = "You done messed up a-a-ron!";
     }
@@ -37,9 +42,9 @@ function indppl_get_dup_auth($id, $user = 'owner'){
     global $wpdb;
 
     if($user == 'owner'){
-        $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}indppl_dup_auth WHERE store_id = {$id}");
+        $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}indppl_dup_auth WHERE store_id = {$id}", 'ARRAY_A');
     } elseif($user == 'sub'){
-        $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}indppl_dup_auth WHERE user_email = {$id}");
+        $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}indppl_dup_auth WHERE user_email = '{$id}'", 'ARRAY_A');
     } else {
         $results = "Error - you haven't entered the data quite right...";
     }
