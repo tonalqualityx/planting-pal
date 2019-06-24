@@ -2474,14 +2474,14 @@ function indppl_copy_store_form_ajax(){
                 </div>
 			</div>
 
-            <!-- <div class="form-group">
+            <div class="form-group">
                 <div class=" indppl-flex indppl-no-wrap" style="max-width: 600px; margin:auto;align-items:center;">
                     <input id="billing" name="billing" type="checkbox" class="form-control input-md" style="height:auto; width: auto;" required> 
                     <p style="margin-bottom: 0; margin-left:10px;">I understand that I will be billed an additional subscription.</p>
                     
                 
                 </div>
-			</div> -->
+			</div>
 
             			<!-- Button -->
 			<div class="form-group">
@@ -2605,7 +2605,7 @@ function indppl_dup_auth_form_ajax(){
 
 }
 add_action('wp_ajax_indppl_dup_auth_form_ajax', 'indppl_dup_auth_form_ajax');
-// add_action('wp_ajax_nopriv_indppl_dup_auth_form_ajax', 'indppl_dup_auth_form_ajax');
+add_action('wp_ajax_nopriv_indppl_dup_auth_form_ajax', 'indppl_dup_auth_form_ajax');
 
 function indppl_auth_users_ajax(){
     
@@ -2658,4 +2658,4 @@ function indppl_auth_users_ajax(){
     die();
 }
 add_action('wp_ajax_indppl_auth_users_ajax', 'indppl_auth_users_ajax');
-// add_action('wp_ajax_nopriv_indppl_auth_users_ajax', 'indppl_auth_users_ajax');
+add_action('wp_ajax_nopriv_indppl_auth_users_ajax', 'indppl_auth_users_ajax');

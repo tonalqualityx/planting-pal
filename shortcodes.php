@@ -456,7 +456,9 @@ function pp_my_stores(){
                                     <p><a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a> Test store in the app</p>
                                     <p style="display:none;"><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a> Copy store settings to create a new store</p>
                                     <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a> Delete this store</p>
-                                    <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-store-auth'>Authorize</a> Manage who can duplicate this store</p>
+                                    <?php if(in_array('paidaccountpro', $status)){ ?>
+                                        <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-store-auth'>Authorize</a> Manage who can duplicate this store</p>
+                                    <?php } ?>
                                 </div>
                             </div>
                                 <?php
@@ -923,16 +925,16 @@ function indppl_authorized_dups(){
     $response = indppl_get_dup_auth($user->user_email, 'sub');
 
     $user_id = get_current_user_id();
-            $args = array(
-                'author' => $user_id,
-                'post_type' => 'store',
-                'orderby' => 'post-date',
-            );
-            $stores = new WP_Query($args);
-            $status = indppl_user_status($user_id);
-            global $wp;
+    $args = array(
+        'author' => $user_id,
+        'post_type' => 'store',
+        'orderby' => 'post-date',
+    );
+    $stores = new WP_Query($args);
+    $status = indppl_user_status($user_id);
+    global $wp;
 
-    if(count($response) > 0 && !$stores->have_posts()){
+    if(count($response) > 0){
 
         ob_start(); ?>
 
@@ -960,7 +962,16 @@ function indppl_authorized_dups(){
                                         </div>
                                     </div>
                                     <div class="dash-buttons">
-                                        <p><a class="indppl-button button-primary indppl-small-store-link indppl-duplicate-store" data-store="<?php echo $store['store-id']; ?>" href="#">Duplicate</a> Duplicate this store's containers, products, application rates, and planting guides</p>
+                                        <p><a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a> Manage profile, products, & planting guide</p>
+                                        <p><a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo get_the_permalink($store['store_id']); ?>' target="_blank">Test</a> Test store in the app</p>
+                                        <p style="display:none;"><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a> Copy store settings to create a new store</p>
+                                        <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a> Delete this store</p>
+                                        <?php if(in_array('paidaccountpro', $status)){ ?>
+                                            <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-store-auth'>Authorize</a> Manage who can duplicate this store</p>
+                                        <?php } ?>
+                                        <?php if(!$stores->have_posts()) { ?>
+                                            <p><a class="indppl-button button-primary indppl-small-store-link indppl-duplicate-store" data-store="<?php echo $store['store-id']; ?>" href="#">Duplicate</a> Duplicate this store's containers, products, application rates, and planting guides</p>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <div class="">
