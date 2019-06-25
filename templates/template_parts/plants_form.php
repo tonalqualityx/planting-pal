@@ -183,7 +183,7 @@ $beds = $beds['beds'];
                     foreach($pots['qty'] as $key => $value){
                         ob_start();
                         ?>
-                        <div class="pots-form">
+                        <div class="pots-form pb-first">
                             <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                                 <div class="">
                                     <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
@@ -269,7 +269,7 @@ $beds = $beds['beds'];
                     foreach($beds['qty'] as $key => $value){
                         ob_start();
                         ?>
-                        <div class="rb-form">
+                        <div class="rb-form pb-first">
                             <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                                 <div class="" >
                                     <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
@@ -348,7 +348,7 @@ $(document).ready(function(){
 
                // Create clone
                var p_newel = $('.pots-form:last').clone(true);
-
+               $(p_newel).removeClass('pb-first');
                // Set id of new element
                $(p_newel).find('input[type=number]:nth-child(1)').attr("id","qty_"+index);
                $(p_newel).find('input[type=number]:nth-child(2)').attr("id","plength_"+index);
@@ -391,6 +391,9 @@ $(document).ready(function(){
 
                // Create clone
                var r_newel = $('.rb-form:last').clone(true);
+            //    if($(r_newel).hasClass('pb-first')){
+                   $(r_newel).removeClass('pb-first');
+            //    }
 
                // Set id of new element
                $(r_newel).find('.offset-1 input[type=number]:nth-child(1)').attr("id","rbqty_"+index);

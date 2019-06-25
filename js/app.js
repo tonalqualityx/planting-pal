@@ -1690,8 +1690,8 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('click', '.next-button', function(e){
-        e.preventDefault();
-        var load = true;
+        // e.preventDefault();
+        var pots_load = true;
         var ground = false;
         $('.ground-shopping-list').find('.rounded-input').each(function(){
             // console.log($.isNumeric($(this).val()));
@@ -1706,7 +1706,7 @@ jQuery(document).ready(function( $ ) {
             if($(this).val() > 0){
                 pots_empty = false;
             }else{
-                load = false;
+                pots_load = false;
             }
             var count = 0;
             $(this).parent().parent().find('.rounded-input2').each(function(){
@@ -1716,20 +1716,24 @@ jQuery(document).ready(function( $ ) {
                 }
             })
             if(count != 3){
-                load = false;
+                pots_load = false;
                 return false;
             }
         })
-        
+        var pots_partial_empty = true;
         $(".indppl-pots-partial").each(function(){
             if($(this).is(':checked')){
                 var pots_need = $(this).parent().parent().next().children(0).val();
                 if(!pots_need >= 1 || pots_need == 0){
-                    load = false;
+                    pots_load = false;
+                    pots_partial_empty = false;
                     return false;
                 }
             }
         })
+        if(pots_partial_empty == false){
+            pots_empty = false;
+        }
 
         var beds_load = true;
         var beds_empty = true;
@@ -1753,27 +1757,58 @@ jQuery(document).ready(function( $ ) {
                 return false;
             }
         })
-        var qty_empty = true
+        var bed_partial_empty = true;
         $(".indppl-beds-partial").each(function(){
             if($(this).is(':checked')){
                 var beds_need = $(this).parent().parent().next().children(0).val();
                 if(!beds_need >= 1 || beds_need == 0){
+                    console.log('testing' + beds_need);
                     beds_load = false;
-                    qty_empty = false;
+                    bed_partial_empty = false;
                     return false;
                 }
             }
         })
-        console.log('ground: ' + ground + " Pots: " + load + " beds: " + beds_load + " beds empty: " + beds_empty);
-        if(ground == true && load == true && beds_load == true || (ground == true && beds_empty == true)){
+        if(bed_partial_empty == false){
+            beds_empty = false;
+        }
+        console.log('ground: ' + ground + " Pots: " + pots_load + " beds: " + beds_load + " pots empty: " + pots_empty + " beds empty: " + beds_empty);
+        if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true)) || 
+        (pots_load == true && (beds_empty == true || beds_load == true)) ||
+        (beds_load == true && (pots_empty == true || pots_load == true))){
         }else{
             e.preventDefault();
-            if(load == false || beds_load == false){
+            if(pots_load == false || beds_load == false){
                 alert('You need to fill out each row you start completely.')
             }else{
                 alert('Fill out at least one of the plant types to continue.');
             }
         }
+    })
+
+    $('body').on('mouseenter', '.rb-form', function(){
+        if(!$(this).hasClass('pb-first')){
+            $(this).append('<a href="#" class="pb-remove-button">Remove</a>');
+        }
+    })
+
+    $('body').on('mouseleave', '.rb-form', function(){
+        $(this).find('.pb-remove-button').remove();
+    })
+
+    $('body').on('mouseenter', '.pots-form', function(){
+        if(!$(this).hasClass('pb-first')){
+            $(this).append('<a href="#" class="pb-remove-button">Remove</a>');
+        }
+    })
+
+    $('body').on('mouseleave', '.pots-form', function(){
+        $(this).find('.pb-remove-button').remove();
+    })
+
+    $('body').on('click', '.pb-remove-button', function(e){
+        e.preventDefault();
+        $(this).parent().remove();
     })
 
     $('body').on('click', '.product-create-exit', function(e){
