@@ -1264,6 +1264,15 @@ img.keep-going {
   margin: auto;
 }
 
+.pb-remove-button{
+  position: absolute;
+  top: 75px;
+  right: 15%;
+}
+.rb-form, .pots-form{
+  position: relative;
+}
+
 /* sponsorships */
 .sponsor-stats-sub-container{
   max-height: 50vh;
@@ -1579,5 +1588,8 @@ GUAGE CSS
 @media only screen and (min-width: 768px){
   .guide-product-instructions img.indppl-step-img{
     width: 50%;
+  }
+  .pb-remove-button{
+    top: 10px;
   }
 }
