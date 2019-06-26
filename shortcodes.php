@@ -271,13 +271,15 @@ function pp_store_management(){
     $store_id = '';
     $user_id = get_current_user_id();
     if(isset($_GET['store-id'])){
-        $author_id = get_post_field('post_author', intval($_GET['store-id']));
-        if($user_id == $author_id || current_user_can('administrator')){
+        $safe_store_id = intval($_GET['store-id']);
+        $author_id = get_post_field('post_author', $safe_store_id);
+        
+        if($user_id == $author_id || current_user_can('administrator') || indppl_user_is_auth($user_id, $safe_store_id)){
             $store_id = intval(htmlspecialchars($_GET['store-id']));
             echo "<script>monitorProgress({$store_id});</script>";
         }else{
             ?>
-            <h3 class='color-red'>Sorry, but you must be logged in to access this store. Further Options below.</h3>
+            <h3 class='color-red'>Sorry, but you must be logged in and authorized to access this store in order to make edits.</h3>
             <?php
         }
     }
@@ -425,7 +427,6 @@ function pp_my_stores(){
                     <?php
                     while($stores->have_posts()){
                         $stores->the_post();
-                        
                         $id = get_the_ID();
                         $img = get_post_meta($id, 'wpcf-logo', true);
                         $title = get_the_title();
@@ -939,7 +940,7 @@ function indppl_authorized_dups(){
         ob_start(); ?>
 
             <div class="indppl-dup-stores">
-                <h2>Stores you are authorized to duplicate</h2>
+                <h2>Stores you are authorized to manage</h2>
                 <!-- <ul class="style-free"> -->
                     <?php foreach($response as $store){
                         $store_name = get_the_title($store['store_id']);
@@ -947,7 +948,8 @@ function indppl_authorized_dups(){
 
                             $address1   = get_post_meta($store['store_id'], 'wpcf-address1', TRUE);
                             $city = get_post_meta($store['store_id'], 'wpcf-city', TRUE);
-                            $state = get_post_meta($store['store_id'], 'wpcf-state', TRUE); ?>
+                            $state = get_post_meta($store['store_id'], 'wpcf-state', TRUE);
+                            $link = home_url() . "/store-profile?store-id=" . $store['store_id']; ?>
 
                             <div class="indppl-single-store-container white-background indppl-space-between">
                                 <div class="indppl-store-dash-left">
@@ -1003,6 +1005,19 @@ function indppl_authorized_dups(){
                                                 <div class="fill"></div>
                                             </div>
                                         </div>
+                                        <?php if ($progress['complete'] < 100) { ?>
+                                        <a href="<?php echo $link; ?>" class="orange-text text-center" style="display:block; margin-top:5px;">finish store setup</a>
+
+                                        <?php } 
+                                        if($progress['complete'] == 100 && !$live){ ?>
+                                            <a href='#' data-store='<?php echo $id; ?>' class='orange-text text-center indppl-live-store' style="display:block; margin-top:5px;">Go Live</a>
+                                        <?php
+                                        }elseif($progress['complete'] == 100 && $live){
+                                            ?>
+                                            <a href='#' class='orange-text text-center indppl-store-deactivate' data-store='<?php echo $id; ?>' style="display:block; margin-top:5px;">Deactivate</a>
+                                            <?php
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>

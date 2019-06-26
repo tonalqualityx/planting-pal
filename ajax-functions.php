@@ -279,6 +279,18 @@ function indppl_get_products_by_brand_ajax(){
         $type = $_POST['type'];
     }
 
+    $authors = array(get_current_user_id());
+    
+    $auth    = indppl_get_dup_auth($store_id);
+    if (count($auth) > 0) {
+        foreach ($auth as $a) {
+            $a_user = get_user_by('email', $a['user_email']);
+            if ($a_user) {
+                $authors[] = $a_user->ID;
+            }
+        }
+    }
+
     $args = array(
         'post_type' => 'product',
         'tax_query' => array(
@@ -290,7 +302,7 @@ function indppl_get_products_by_brand_ajax(){
         ),
         'relation' => 'OR',
         array(
-            'author' => get_current_user_id(),
+            'author__in' => $authors,
             'meta_query' => array(
                 array(
                     'key' => 'wpcf-default',

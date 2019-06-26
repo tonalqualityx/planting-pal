@@ -953,11 +953,22 @@ function indppl_get_current_products($type){
     }else if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
+    // Build array based on current user AND any authorized user
+    $authors = array($id);
+    $auth = indppl_get_dup_auth($store_id);
+    if(count($auth) > 0){
+        foreach($auth as $a){
+            $a_user = get_user_by('email', $a['user_email']);
+            if($a_user){
+                $authors[] = $a_user->ID;
+            }
+        }
+    }
     $args = array(
         'post_type' => 'product',
         'relation' => 'OR',
         array(
-            'author' => $id,
+            'author__in' => $authors,
             'meta_query' => array(
                 array(
                     'key' => 'wpcf-default',
@@ -2154,7 +2165,7 @@ function indppl_notify_deleted_store($store, $user){
         $message = "An additional store has been removed from the user account with the email {$user_info->user_email}";
         $headers = array('Content-Type: text/html; charset=UTF-8');
 
-        wp_mail($to, $subject, $message, $headers);
+        // wp_mail($to, $subject, $message, $headers);
     }
 
 }
@@ -2234,4 +2245,19 @@ function indppl_readable_fraction($decimal){
     }
 
     return $fraction;
+}
+
+function indppl_user_is_auth($user_id, $store){
+    $user_info  = get_userdata($user_id);
+    $user_email = $user_info->user_email;
+    $authorized = indppl_get_dup_auth($user_email, 'sub');
+    if(count($authorized > 0)){
+        foreach($authorized as $auth){
+            if($auth['store_id'] == $store){
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
