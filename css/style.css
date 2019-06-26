@@ -55,6 +55,21 @@ img{
   color: #e6561a;
 }
 
+.orange-bg {
+  background: #e6561a;
+}
+
+input[type=submit].orange-bg {
+  background: #e6561a;
+  border: 1px solid #d6460a;
+  transition: background 0.35s ease-in-out, color 0.35s ease-in-out;
+}
+
+input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
+  background: #d6460a;
+  color: #efefef;
+}
+
 .grey-text {
   color: #838384;
 }
@@ -324,7 +339,7 @@ ul.style-free {
 .indppl-small-title{
   font-weight: 600;
 }
-.indppl-small-store-link, .indppl-small-store-perma-link, .indppl-duplicate-store, .indppl-delete-store, .delete-store-yes, .delete-store-no{
+.indppl-small-store-link, .indppl-small-store-perma-link, .indppl-duplicate-store, .indppl-store-auth, .indppl-delete-store, .delete-store-yes, .delete-store-no{
   padding-top: 0PX;
   Padding-bottom: 0px;
   width: 40%;

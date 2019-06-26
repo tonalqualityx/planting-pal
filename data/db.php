@@ -1,5 +1,5 @@
 <?php 
-defined('ABSPATH') or die('No script kiddies please!'); //For security
+defined('ABSPATH') or die('Sectumsempra!'); //For enemies
 
 //SETUP THE DATABASE
 function indppl_install() {
@@ -40,6 +40,26 @@ function indppl_install() {
 		) $charset_collate";
 
         dbDelta($sql);
+    }
+
+    if(version_compare($db_version, '1.1', '<')){
+
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name      = $wpdb->prefix . 'indppl_dup_auth';
+
+        $sql = "CREATE TABLE $table_name (
+
+                    auth_id bigint(20) NOT NULL AUTO_INCREMENT,
+                    user_email varchar(255) NOT NULL,
+                    store_id bigint(20) NOT NULL,
+                    process_date timestamp,
+                    PRIMARY KEY  (auth_id)
+                ) $charset_collate;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta($sql);
+
+        update_option('indppl_db_version', '1.1');
     }
 }
 

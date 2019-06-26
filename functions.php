@@ -691,14 +691,14 @@ function indppl_store_info($store_id = NULL){
             global $wp;
             $curernt_url =  home_url( $wp->request );
             if($stores->have_posts()){ ?>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <div class=" indppl-flex indppl-no-wrap" style="max-width: 600px; margin:auto;align-items:center;">
                         <input id="billing" name="billing" type="checkbox" class="form-control input-md" style="height:auto; width: auto;" required> 
                         <p style="margin-bottom: 0; margin-left:10px;">I understand that I will be billed an additional subscription.</p>
                         
                     
                     </div>
-                </div>
+                </div> -->
             <?php } ?>
 
             <input type='hidden' id='store-id' name='store-id' value='<?php echo $store_id; ?>'>
@@ -953,11 +953,22 @@ function indppl_get_current_products($type){
     }else if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
+    // Build array based on current user AND any authorized user
+    $authors = array($id);
+    $auth = indppl_get_dup_auth($store_id);
+    if(count($auth) > 0){
+        foreach($auth as $a){
+            $a_user = get_user_by('email', $a['user_email']);
+            if($a_user){
+                $authors[] = $a_user->ID;
+            }
+        }
+    }
     $args = array(
         'post_type' => 'product',
         'relation' => 'OR',
         array(
-            'author' => $id,
+            'author__in' => $authors,
             'meta_query' => array(
                 array(
                     'key' => 'wpcf-default',
@@ -2157,7 +2168,7 @@ function indppl_notify_deleted_store($store, $user){
         $message = "An additional store has been removed from the user account with the email {$user_info->user_email}";
         $headers = array('Content-Type: text/html; charset=UTF-8');
 
-        wp_mail($to, $subject, $message, $headers);
+        // wp_mail($to, $subject, $message, $headers);
     }
 
 }
@@ -2237,4 +2248,19 @@ function indppl_readable_fraction($decimal){
     }
 
     return $fraction;
+}
+
+function indppl_user_is_auth($user_id, $store){
+    $user_info  = get_userdata($user_id);
+    $user_email = $user_info->user_email;
+    $authorized = indppl_get_dup_auth($user_email, 'sub');
+    if(count($authorized > 0)){
+        foreach($authorized as $auth){
+            if($auth['store_id'] == $store){
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

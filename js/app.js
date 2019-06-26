@@ -1483,6 +1483,92 @@ jQuery(document).ready(function( $ ) {
 
     })
 
+    //Authorize Store Duplication Form
+    $("body").on('click', '.indppl-store-auth', function (e) {
+
+        $('body').prepend("<div class='slide-in-products-container'><div class='container pad-top-3'><a href='#' class='modal-close'>X</a></div></div>");
+        setTimeout(function () {
+            $('.slide-in-products-container').addClass('left-0');
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20);
+        var storeid = $(this).data('store');
+        var version_check = 1.0;
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_dup_auth_form_ajax',
+                store: storeid,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                $('.indppl-loading-background').remove();
+                $('.slide-in-products-container .container').append(response);
+            }
+        });
+    });
+
+    // Add authorized duplicator
+    $("body").on('click', '#indppl-add-auth-user', function (e) {
+        e.preventDefault();
+        indpplAddLoading();
+        var email = $('#auth-email').val();
+        var storeid = $('#auth-email').data('store'); 
+        var version_check = 1.0;
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_auth_users_ajax',
+                store: storeid,
+                email: email,
+                process: 'add',
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                $('.indppl-loading-background').remove();
+                $('#authorized-users').append(response);
+                $('#auth-email').val('');
+            }
+        });
+    });
+
+    // Remove authorized duplicator
+    $("body").on('click', '.remove-auth', function (e) {
+        e.preventDefault();
+        console.log('sdfsfsdfsdf');
+        indpplAddLoading();
+        var auth = $(this).data('id');
+        var entry = $(this);
+        var version_check = 1.0;
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_auth_users_ajax',
+                auth: auth,
+                process: 'remove',
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                console.log(response);
+                $('.indppl-loading-background').remove();
+                if(response == 'success'){
+                    entry.parent().remove();
+                } else {
+                    alert('There was an error. Please try again.');
+                }
+            }
+        });
+    });
+
+
     //Duplicate Store Process
     $("body").on('click', '.indppl-duplicate-store', function (e) {
 
@@ -1514,10 +1600,11 @@ jQuery(document).ready(function( $ ) {
 
         e.preventDefault();
         console.log($("#store-duplication-form input[name=billing]").is(':checked'));
-        if (!$("#store-duplication-form input[name=billing]").is(":checked") ){
-            alert("Please indicate that you understand that your subscription will be increased to reflect the new store.");
-            return;
-        }
+        // Billing confirmation
+        // if (!$("#store-duplication-form input[name=billing]").is(":checked") ){
+        //     alert("Please indicate that you understand that your subscription will be increased to reflect the new store.");
+        //     return;
+        // }
         indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
         var storeid = $(this).data('store');
         var storeName = $('#store-duplication-form input[name=store-name]').val();
