@@ -10,6 +10,16 @@
  * Github Plugin URI: tonalqualityx/planting-pal
  */
 
+add_filter('wp_headers', 'indppl_add_ie_edge_wp_headers');
+
+function indppl_add_ie_edge_wp_headers($headers) {
+    if (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false)) {
+        $headers['X-UA-Compatible'] = 'IE=edge,chrome=1';
+    }
+
+    return $headers;
+}
+
 function my_function_admin_bar($content) {
 	return ( current_user_can( 'administrator' ) ) ? $content : false;
 }

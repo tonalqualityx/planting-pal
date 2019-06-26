@@ -1572,6 +1572,7 @@ jQuery(document).ready(function( $ ) {
     //Duplicate Store Process
     $("body").on('click', '.indppl-duplicate-store', function (e) {
 
+        e.preventDefault();
         $('body').prepend("<div class='slide-in-products-container'><div class='container pad-top-3'><a href='#' class='modal-close'>X</a></div></div>");
         setTimeout(function () {
             $('.slide-in-products-container').addClass('left-0');
