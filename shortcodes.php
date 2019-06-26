@@ -319,8 +319,8 @@ function pp_store_management(){
                     $user_stores = get_posts($args);
                     $user_stores_count = count($user_stores);
                     if($user_stores_count > 0){
-                        echo "<p>You will be billed for an additional store when this store is brought online.</p>";
-                        indppl_notify_new_store($store_id, $user);
+                        // echo "<p>You will be billed for an additional store when this store is brought online.</p>";
+                        // indppl_notify_new_store($store_id, $user);
                     }
                 ?>
                 <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
