@@ -20,8 +20,11 @@ if(isset($_GET['desktop'])){
 }
 ?>
 <script>
+<?php 
+$indppl_mobile = 'false';
+if(wp_is_mobile()){ $indppl_mobile = 'true';} ?>
     var ind_base_url = "<?php echo home_url() . "/"; ?>"; 
-    var ind_is_mobile = <?php echo wp_is_mobile(); ?>;
+    var ind_is_mobile = <?php echo $indppl_mobile; ?>;
 </script>
 <?php
 function geofind($lat, $lon, $radius) {
