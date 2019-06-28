@@ -492,9 +492,16 @@ span.padding-right-5{
   width: 100%;
 }
 
-.color-red{
+.color-red, .duplicate-required-fill{
   color:red;
   text-decoration: none;
+}
+.duplicate-required-fill{
+  height: 0;
+  float: right;
+  position: relative;
+  top: -33px;
+  right: 5px;
 }
 .color-green{
   color: green;

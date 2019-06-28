@@ -2363,7 +2363,7 @@ function indppl_copy_store_form_ajax(){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="store-name">Store Name</label>
 			<div class="col-md-4">
-			<input id="store-name" name="store-name" type="text" placeholder="" class="form-control input-md" required="" value="" style="">
+			<input id="store-name" name="store-name" type="text" placeholder="" class="form-control duplicate-store-required input-md" required="" value="" style="">
 			
 			</div>
 			</div>
@@ -2372,7 +2372,7 @@ function indppl_copy_store_form_ajax(){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="address1">Address Line 1</label>
 			<div class="col-md-4">
-			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md" required="" value="">
+			<input id="address1" name="address1" type="text" placeholder="" class="form-control input-md duplicate-store-required" required="" value="">
 			
 			</div>
 			</div>
@@ -2390,7 +2390,7 @@ function indppl_copy_store_form_ajax(){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="city">City</label>
 			<div class="col-md-4">
-			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="">
+			<input id="city" name="city" type="text" placeholder="" class="form-control input-md duplicate-store-required" required="" value="">
                 
 			</div>
 			</div>
@@ -2458,7 +2458,7 @@ function indppl_copy_store_form_ajax(){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="zip">Zipcode</label>
 			<div class="col-md-2">
-			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="">
+			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md duplicate-store-required" required="" value="">
 			
 			</div>
 			</div>
@@ -2476,7 +2476,7 @@ function indppl_copy_store_form_ajax(){
 			<div class="form-group">
 			<label class="col-md-4 control-label" for="phone">Phone Number</label>
 			<div class="col-md-4">
-			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="" value="">
+			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md duplicate-store-required" required="" value="">
 			
 			</div>
 			</div>
@@ -2485,7 +2485,7 @@ function indppl_copy_store_form_ajax(){
 			<div class="form-group">
                 <label class="col-md-4 control-label" for="store-email">Email Address</label>
                 <div class="col-md-4">
-                    <input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email; ?>">
+                    <input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md duplicate-store-required" required="" value="<?php echo $email; ?>">
                 
                 </div>
 			</div>

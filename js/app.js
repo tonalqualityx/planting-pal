@@ -1480,15 +1480,6 @@ jQuery(document).ready(function( $ ) {
         }
     });
 
-    $('.indppl-duplicate-store').click(function() {
-        // Provide a form to the user to get the store name
-
-        // Run the Ajax
-
-        // Redirect User to Edit Store
-
-    })
-
     //Authorize Store Duplication Form
     $("body").on('click', '.indppl-store-auth', function (e) {
 
@@ -1603,52 +1594,82 @@ jQuery(document).ready(function( $ ) {
         });
     });
 
+    $('body').on('focus', '.duplicate-store-required', function(){
+        $(this).parent().find('.duplicate-required-fill').remove();
+    });
+    $('body').on('focusout', '.duplicate-store-required', function(){
+        if(!$(this).val() > 0){
+            $(this).parent().append('<span class="duplicate-required-fill">Required</span>');
+        }
+    });
+
     $("body").on('click', '#store-duplicate', function (e) {
 
         e.preventDefault();
-        console.log($("#store-duplication-form input[name=billing]").is(':checked'));
+        // console.log($("#store-duplication-form input[name=billing]").is(':checked'));
         // Billing confirmation
         // if (!$("#store-duplication-form input[name=billing]").is(":checked") ){
         //     alert("Please indicate that you understand that your subscription will be increased to reflect the new store.");
         //     return;
         // }
-        indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
-        var storeid = $(this).data('store');
-        var storeName = $('#store-duplication-form input[name=store-name]').val();
-        var address1 = $('#store-duplication-form input[name=address1]').val();
-        var address2 = $('#store-duplication-form input[name=address2]').val();
-        var city = $('#store-duplication-form input[name=city]').val();
-        var state = $('#store-duplication-form select[name=state]').val();
-        var zip = $('#store-duplication-form input[name=zip]').val();
-        var webURL = $('#store-duplication-form input[name=weburl]').val();
-        var phone = $('#store-duplication-form input[name=phone]').val();
-        var email = $('#store-duplication-form input[name=store-email]').val();
-        var storeName = $('#store-duplication-form input[name=store-name]').val();
-        var version_check = 1.0;
-        $.ajax({
-            url: indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_duplicate_store_ajax',
-                store: storeid,
-                storeName: storeName,
-                address1: address1,
-                address2: address2,
-                city: city,
-                state: state,
-                zip: zip,
-                webURL: webURL,
-                phone: phone,
-                email: email,
-                version_check: version_check,
-            },
-            type: 'POST',
-            success: function (response) {
-                // $('body').html(response);
-                location.reload();
+        $('.duplicate-required-fill').remove();
+        $('.duplicate-store-required').each(function(){
+            if(!$(this).val().length > 0){
+                $(this).parent().append('<span class="duplicate-required-fill">Required</span>');
             }
-        });
+        })
+        var phone = validatePhone($('#phone').val());
+        if(phone == false){
+            alert('Phone number must be 10 digits.');
+            $('#phonenumber').val('');
+            $('#phonenumber').focus();
+        }
+        var email = validateEmail($('#store-email').val());
+        if(email == false || !$('#store-email').val() > 0){
+            alert('Please enter a valid email address.');
+            $('#store-email').val('');
+            $('#store-email').focus();
+            email = false;
+        }
+        if(!$('.duplicate-required-fill').length > 0 && phone == true && email == true){
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+            var storeid = $(this).data('store');
+            var storeName = $('#store-duplication-form input[name=store-name]').val();
+            var address1 = $('#store-duplication-form input[name=address1]').val();
+            var address2 = $('#store-duplication-form input[name=address2]').val();
+            var city = $('#store-duplication-form input[name=city]').val();
+            var state = $('#store-duplication-form select[name=state]').val();
+            var zip = $('#store-duplication-form input[name=zip]').val();
+            var webURL = $('#store-duplication-form input[name=weburl]').val();
+            var phone = $('#store-duplication-form input[name=phone]').val();
+            var email = $('#store-duplication-form input[name=store-email]').val();
+            var storeName = $('#store-duplication-form input[name=store-name]').val();
+            var version_check = 1.0;
+            $.ajax({
+                url: indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_duplicate_store_ajax',
+                    store: storeid,
+                    storeName: storeName,
+                    address1: address1,
+                    address2: address2,
+                    city: city,
+                    state: state,
+                    zip: zip,
+                    webURL: webURL,
+                    phone: phone,
+                    email: email,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function (response) {
+                    // $('body').html(response);
+                    location.reload();
+                }
+            });
+        }
     });
 
     $('body').on('click', '.indppl-delete-store', function(e){
