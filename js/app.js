@@ -1,6 +1,8 @@
-if(window.location.href == ind_base_url){
-    if(ind_is_mobile == true && ind_desktop != true){
-        window.location.href = ind_base_url + 'app';
+if(typeof ind_base_url !== 'undefined'){
+    if(window.location.href == ind_base_url){
+        if(ind_is_mobile == true && ind_desktop != true){
+            window.location.href = ind_base_url + 'app';
+        }
     }
 }
 
@@ -331,8 +333,8 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
+                console.log(e);
                 array = JSON.parse(e);
-                // console.log(array['console']);
                 $('.product-create-brand-cut-off').children().each(function(){
                     $(this).empty();
                 })
@@ -2015,7 +2017,10 @@ function greyOutAllUnchecked(){
     })
 }
 
-function indppl_get_units($type = 'dry'){
+function indppl_get_units($type){
+    if($type == undefined){
+        $type = 'dry';
+    }
     if($type == 'dry'){
         return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
     }else if($type == 'bag'){
@@ -2077,7 +2082,20 @@ function getLocation() {
     }
 }
 
-function indpplAddLoading(location = 'body', primary = 'white', secondary = 'white', background = 'indppl-loading-background'){
+function indpplAddLoading(location, primary, secondary, background){
+    console.log(location);
+    if(location == undefined){
+        location = 'body';
+    }
+    if(primary == undefined){
+        primary = 'white';
+    }
+    if(secondary == undefined){
+        secondary = 'white';
+    }
+    if(background == undefined){
+        background = 'indppl-loading-background'; 
+    }
     jQuery(location).append("<div class='indppl-loading-background'><div class=" + background + "><div id='indppl-loading-icon'><svg class='image' width='100' height='100'><path d='M5,50 a1,1 0 0,0 90,0' fill='none' stroke-opacity='0.9' stroke='" + primary + "' stroke-width='9'/></svg><svg class='image-rev' width='100' height='100'><path d='M2,50 a1,1 0 0,1 96,0' fill='none' stroke-opacity='0.7' stroke='" + secondary + "' stroke-width='3.6'/></svg><svg class='image-rev-2' width='100' height='100'><path d='M10,50 a40,40 0 0,0  40,40' stroke-width='6' stroke-opacity='0.7' stroke='" + secondary + "' fill='none'</></svg></div></div></div>");
 }
 

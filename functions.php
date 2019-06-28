@@ -4,26 +4,38 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 Collection of functions for the entire site.
  */
 
-?>
-    <script>
-        var ind_desktop = false;
-    </script>
-    <?php
-if(isset($_GET['desktop'])){
-    if(htmlspecialchars($_GET['desktop'] == true)){
-        ?>
+function only_on_home(){
+    ?>
         <script>
-            var ind_desktop = true;
+            var ind_desktop = false;
         </script>
         <?php
+    if(isset($_GET['desktop'])){
+        if(htmlspecialchars($_GET['desktop'] == true)){
+            ?>
+            <script>
+                var ind_desktop = true;
+            </script>
+            <?php
+        }
     }
+    $ind_mobile = 0;
+    if(wp_is_mobile()){
+        $ind_mobile = 1;
+    }
+    ?>
+    <script>
+        var ind_base_url = "<?php echo home_url() . "/"; ?>"; 
+        var ind_is_mobile = <?php echo $ind_mobile; ?>;
+    </script>
+    <?php
 }
-?>
-<script>
-    var ind_base_url = "<?php echo home_url() . "/"; ?>"; 
-    var ind_is_mobile = <?php echo wp_is_mobile(); ?>;
-</script>
-<?php
+global $wp;
+$actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+if(home_url() . "/" == $actual_link){
+    only_on_home();
+}
+
 function geofind($lat, $lon, $radius) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
