@@ -524,10 +524,14 @@ function indppl_get_product_info_ajax(){
                 }
                 // echo $author;
                 // echo $default_package;
-                
+                if($unit_meta == 'qt-d' || $unit_meta == 'qt-l'){
+                    $unit_val = 'Quart';
+                }else{
+                    $unit_val = $unit_meta;
+                }
                 ?>
                 
-                <a href='#' class='<?php echo $in_store . " " . $non_default; ?> indppl-product-create-size-btn' data-size='<?php echo $size_meta; ?>' data-unit='<?php echo $unit_meta;?>' data-id='<?php echo $value; ?>'><?php echo $size_meta . " " . $unit_meta; ?></a>
+                <a href='#' class='<?php echo $in_store . " " . $non_default; ?> indppl-product-create-size-btn' data-size='<?php echo $size_meta; ?>' data-unit='<?php echo $unit_meta;?>' data-id='<?php echo $value; ?>'><?php echo $size_meta . " " . $unit_val; ?></a>
                 <?php
                 
             }
