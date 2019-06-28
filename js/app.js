@@ -1984,7 +1984,7 @@ function greyOutAllUnchecked(){
     })
 }
 
-function indppl_get_units($type = 'dry'){
+function indppl_get_units($type){
     if($type == 'dry'){
         return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
     }else if($type == 'bag'){

@@ -1,8 +1,6 @@
 <?php defined('ABSPATH') or die('No script kiddies please!'); //For enemies
 global $post;
 
-get_header();
-
 $user_id = get_current_user_id();
 $status = indppl_user_status($user_id);
 

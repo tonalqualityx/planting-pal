@@ -2,8 +2,7 @@
 //Single Store Template
 //Use this file to collect input from end users on what they'll be planting
 
-// wp_head();
-get_header();
+wp_head();
 
 $storeid = get_the_ID(  );
 $user_plants = array();
