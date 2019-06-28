@@ -3,8 +3,22 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 /*
 Collection of functions for the entire site.
  */
-?>
 
+?>
+    <script>
+        var ind_desktop = false;
+    </script>
+    <?php
+if(isset($_GET['desktop'])){
+    if(htmlspecialchars($_GET['desktop'] == true)){
+        ?>
+        <script>
+            var ind_desktop = true;
+        </script>
+        <?php
+    }
+}
+?>
 <script>
     var ind_base_url = "<?php echo home_url() . "/"; ?>"; 
     var ind_is_mobile = <?php echo wp_is_mobile(); ?>;

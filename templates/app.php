@@ -14,7 +14,11 @@ the_post();
     <div class="container">
         <?php the_content(); ?>
     </div>
-
+    <?php if(wp_is_mobile()){ ?>
+        <div class="desktop-link">
+            <a href="<?php echo home_url(); ?>?desktop=true" style="text-align:center;">View Desktop Site</a>
+        </div>
+    <?php } ?>
 </body>
 
 <?php wp_footer(); ?>

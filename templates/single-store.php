@@ -427,7 +427,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     <?php include(INDPPL_ROOT_PATH . "/templates/template_parts/" . $display . ".php"); ?>
     <?php if(wp_is_mobile()){ ?>
         <div class="desktop-link">
-            <a href="<?php home_url(); ?>?desktop=true" style="text-align:center;">View Desktop Site</a>
+            <a href="<?php echo home_url(); ?>?desktop=true" style="text-align:center;">View Desktop Site</a>
         </div>
     <?php } ?>
     <?php echo wp_footer(); ?>
