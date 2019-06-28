@@ -1149,8 +1149,10 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '#get-planting-guide', function(e){
         e.preventDefault();
+        
         var email = $('input[name=email]').val();
         if(validateEmail(email) && email != ''){
+            indpplAddLoading();
             var store = $(this).data('store');
             var plants = $(this).data('plants');
             var list = $(this).data('list');
@@ -1176,6 +1178,7 @@ jQuery(document).ready(function( $ ) {
                     $('.keep-going').hide();
                     $('.email-address-add').hide();
                     $('#get-planting-guide').hide();
+                    indpplDelLoading();
                 }
             });
         }else{
