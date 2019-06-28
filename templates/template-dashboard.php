@@ -1,7 +1,7 @@
 <?php defined('ABSPATH') or die('No script kiddies please!'); //For enemies
 global $post;
 
-get_header();
+// get_header();
 
 $user_id = get_current_user_id();
 $status = indppl_user_status($user_id);
@@ -17,9 +17,9 @@ wp_head();?>
             <ul>
                 <li <?php if($post->post_name == 'subscription-info') { echo "class='active'";} ?>><a href="/my-account/subscription-info/">Account Profile</a></li>
                 <li <?php if ($post->post_name == 'store-profile') {echo "class='active'";}?>><a href="/my-account/store-profile">Manage Stores</a></li>
-                <li><a href="#">Manage Users</a> <span class='coming-soon'>coming soon!</span></li>
+                <li class='no-small'><a href="#">Manage Users</a> <span class='coming-soon'>coming soon!</span></li>
                 <!-- <li><a href="#">Billing</a></li> -->
-                <li><a href="#">Reports</a> <span class='coming-soon'>coming soon!</span></li>
+                <li class='no-small'><a href="#">Reports</a> <span class='coming-soon'>coming soon!</span></li>
                 <li <?php if ($post->post_name == 'support') {echo "class='active'";}?>><a href="/my-account/support/">Support</a></li>
             </ul>
         </div>

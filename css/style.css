@@ -10,6 +10,11 @@ body {
 img{
   max-width: 100%;
 }
+
+.no-small {
+  display: none;
+}
+
 #keep-going-container{
   padding-bottom: 40px;
 }
@@ -1598,6 +1603,12 @@ GUAGE CSS
 
 .gauge-small {
   font-size: 14px;
+}
+
+@media screen and (min-width: 850px){
+  .no-small {
+    display: block;
+  }
 }
 
 /* mobile to desktop */
