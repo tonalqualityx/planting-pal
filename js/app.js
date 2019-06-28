@@ -1,3 +1,4 @@
+console.log(ind_base_url);
 if(window.location.href == ind_base_url){
     if(ind_is_mobile == true && ind_desktop != true){
         window.location.href = ind_base_url + 'app';

@@ -2025,7 +2025,7 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
                 break;
                 case 'guide-pots' :
                 $next = "Making great progress! The planting guide for potted plants is next on your to-do list!";
-                break;
+              store/mikes-amazing-nursery/?desktop=true  break;
                 case 'guide-beds' :
                 $next = "Just about there. Wrap up your planting guides by setting up your recommendations for raised beds.";
                 break;
@@ -2093,8 +2093,8 @@ function indppl_duplicate_store($store_id, $new_details){
             'wpcf-city' => $new_details['city'],
             'wpcf-state' => $new_details['state'],
             'wpcf-zip' => $new_details['zip'],
-            'wpcf-phone' => $new_details['phone'],
-            'wpcf-email' => $new_details['email'],
+            'wstore/mikes-amazing-nursery/?desktop=truecf-phone' => $new_details['phone'],
+            'wstore/mikes-amazing-nursery/?desktop=truecf-email' => $new_details['email'],
             'wpcf-weburl' => $new_details['url'],
         ),
     );

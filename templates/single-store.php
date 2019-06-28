@@ -426,8 +426,8 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     <div class="container"><img src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/general-logo-x2.png" id="logo-header"></div>
     <?php include(INDPPL_ROOT_PATH . "/templates/template_parts/" . $display . ".php"); ?>
     <?php if(wp_is_mobile()){ ?>
-        <div class="desktop-link" style="width:100%;">
-            <a href="<?php echo home_url(); ?>?desktop=true" style="text-align:center;">View Desktop Site</a>
+        <div class="desktop-link" style="width:100%;text-align:center;">
+            <a href="<?php echo home_url(); ?>?desktop=true">View Desktop Site</a>
         </div>
     <?php } ?>
     <?php echo wp_footer(); ?>
