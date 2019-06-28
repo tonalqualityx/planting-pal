@@ -3,7 +3,13 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 /*
 Collection of functions for the entire site.
  */
+?>
 
+<script>
+    var ind_base_url = "<?php echo home_url() . "/"; ?>"; 
+    var ind_is_mobile = <?php echo wp_is_mobile(); ?>;
+</script>
+<?php
 function geofind($lat, $lon, $radius) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';

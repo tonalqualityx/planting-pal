@@ -25,6 +25,8 @@ function my_function_admin_bar($content) {
 }
 add_filter( 'show_admin_bar' , 'my_function_admin_bar');
 
+
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 
 define('INDPPL_ROOT_PATH', plugin_dir_path(__FILE__));

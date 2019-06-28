@@ -1,3 +1,11 @@
+console.log(window.location.href);
+console.log(ind_base_url);
+if(window.location.href == ind_base_url){
+    if(ind_is_mobile == true){
+        window.location.href = ind_base_url + 'app';
+    }
+}
+
 jQuery(document).ready(function( $ ) {
     $('body').on('click', '.geo-submit', function(e){
         e.preventDefault();
