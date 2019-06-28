@@ -2036,6 +2036,16 @@ function indppl_duplicate_store($store_id, $new_details){
     // Get store meta
     $meta = get_post_meta($store_id);
 
+    $apprates = $meta['wpcf-apprates'][0];
+    // $junk = var_export($apprates, TRUE);
+    // $apprates = 'apprates';
+    // $ground_guide = 'sdfsd';
+    // $pots_guide = 'sdfsd';
+    // $beds_guide = 'ssfsgsg';
+    // $ground_guide = $meta['wpcf-planting-guide-ground-options'][0];
+    // $pots_guide = $meta['wpcf-planting-guide-pots-options'][0];
+    // $beds_guide = $meta['wpcf-planting-guide-beds-options'][0];
+
     $ground_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-ground-options'][0]);
     $pots_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-pots-options'][0]);
     $beds_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-beds-options'][0]);
@@ -2054,7 +2064,7 @@ function indppl_duplicate_store($store_id, $new_details){
             'wpcf-fall-end' => $meta['wpcf-fall-end'][0],
             'wpcf-winter-start' => $meta['wpcf-winter-start'][0],
             'wpcf-winter-end' => $meta['wpcf-winter-end'][0],
-            'wpcf-apprates' => $meta['wpcf-apprates'][0],
+            'wpcf-apprates' => $apprates,
             'wpcf-planting-guide-ground-options' => $ground_guide,
             'wpcf-planting-guide-pots-options' => $pots_guide,
             'wpcf-planting-guide-beds-options' => $beds_guide,
@@ -2128,7 +2138,7 @@ function indppl_duplicate_store($store_id, $new_details){
         toolset_connect_posts('store-product', $new_store, $product);
     }
     
-    // indppl_notify_new_store($store_id, get_current_user_id() );
+    indppl_notify_new_store($store_id, get_current_user_id() );
 }
     
 function indppl_notify_new_store($store, $user){
