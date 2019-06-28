@@ -1,3 +1,4 @@
+
 if(typeof ind_base_url !== 'undefined'){
     if(window.location.href == ind_base_url){
         if(ind_is_mobile == true && ind_desktop != true){

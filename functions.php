@@ -35,7 +35,6 @@ $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https"
 if(home_url() . "/" == $actual_link){
     only_on_home();
 }
-
 function geofind($lat, $lon, $radius) {
 
     $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
@@ -2105,8 +2104,8 @@ function indppl_duplicate_store($store_id, $new_details){
             'wpcf-city' => $new_details['city'],
             'wpcf-state' => $new_details['state'],
             'wpcf-zip' => $new_details['zip'],
-            'wpcf-phone' => $new_details['phone'],
-            'wpcf-email' => $new_details['email'],
+            'wstore/mikes-amazing-nursery/?desktop=truecf-phone' => $new_details['phone'],
+            'wstore/mikes-amazing-nursery/?desktop=truecf-email' => $new_details['email'],
             'wpcf-weburl' => $new_details['url'],
         ),
     );
