@@ -10,6 +10,11 @@ body {
 img{
   max-width: 100%;
 }
+
+.no-small {
+  display: none;
+}
+
 #keep-going-container{
   padding-bottom: 40px;
 }
@@ -1392,7 +1397,7 @@ DASHBOARD
   /* padding: 50px; */
   max-width: 1000px;  
   display: block;
-  margin: 15px 50px 25px 50px;
+  margin: 15px 10px 25px 10px;
   flex-grow: 999;
   background: #f2f2f2;
   padding-bottom: 50px;
@@ -1605,6 +1610,17 @@ GUAGE CSS
 
 .gauge-small {
   font-size: 14px;
+}
+
+@media screen and (min-width: 850px){
+  .no-small {
+    display: block;
+  }
+
+  #dashboard-content {
+    /* padding: 50px; */
+    margin: 15px 50px 25px 50px;
+  }
 }
 
 /* mobile to desktop */
