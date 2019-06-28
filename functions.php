@@ -2025,7 +2025,7 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
                 break;
                 case 'guide-pots' :
                 $next = "Making great progress! The planting guide for potted plants is next on your to-do list!";
-              store/mikes-amazing-nursery/?desktop=true  break;
+                break;
                 case 'guide-beds' :
                 $next = "Just about there. Wrap up your planting guides by setting up your recommendations for raised beds.";
                 break;
