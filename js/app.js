@@ -345,6 +345,9 @@ jQuery(document).ready(function( $ ) {
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
                     // console.log(array['dry_wet'][2]);
+                    if(type == 'beds'){
+                        delete units['each'];
+                    }
                     if(array['dry_wet'][1] == 'wet'){
                         $('.product-create-fraction-bag').addClass('hide');
                     }
@@ -2132,6 +2135,9 @@ function indpplEditProduct(type, store_id, product_id){
                 if(array['dry_wet'][1] == 'wet'){
                     $('.product-create-fraction-bag').addClass('hide');
                     $('.product-create-5-cups-container').addClass('hide');
+                }
+                if(type == 'beds'){
+                    delete units['each'];
                 }
                 $.each(units, function(index, value){
                     // console.log(value);
