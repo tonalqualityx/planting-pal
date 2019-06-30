@@ -2067,7 +2067,7 @@ function check_on_load(){
     (function($){
         var user_status = $('#user-status').val();
         if(user_status != 'paidaccountpro'){
-            $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="#" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
+            $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="/my-account/subscription-info/?action=subscriptions" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
         }
     })(jQuery);
 }

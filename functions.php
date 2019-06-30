@@ -1458,14 +1458,21 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 $final = 0;
                                 $pp_dilema = 'cpp';
                             }else{
-                                $conversion = getVolume($qty, $unit, $package_unit);
+                                $to_convert = array(
+                                    array('amount' => $qty, 'unit' => $unit)
+                                );
+                                // $conversion = getVolume($qty, $unit, $package_unit);
+                                $conversion = indppl_normalize($to_convert, $package_unit, $cups);
+                                // var_dump($conversion);
+                                $conversion = $conversion[0]['standard-amount'];
+                                // $conversion = getVolume($qty, $unit, $package_unit); 
                                 if($conversion >= $package_size){
                                     $final = $conversion / $package_size;
                                     $pp_dilema = 'cpp';
                                 }else{
                                     $final = $package_size / $conversion;
                                     $pp_dilema = 'ppc';
-                                }
+                                } 
                             }
                             // var_dump($conversion);
                             // }else{

@@ -564,7 +564,7 @@ span.padding-right-5{
   height: 34px;
   background: rgba(0, 0, 0, 0.36);
   position: absolute;
-  z-index: 99;
+  z-index: 9999;
   left: 65px;
 }
 

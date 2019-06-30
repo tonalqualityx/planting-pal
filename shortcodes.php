@@ -54,12 +54,18 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
 		$args = array(
 			'post_type' => 'store',
             'meta_query' => array(
+                'relation' => 'AND',
 				array(
 					'key' => 'wpcf-zip',
                     'value'   => $zip_array,
                     'compare' => 'IN',
 					
-                )
+                ),
+                array(
+                    'key' => 'wpcf-issetup',
+                    'value' => '1',
+                    'compare' => '=',
+                ),
             )
         );
         $the_query = new WP_Query( $args );
@@ -291,9 +297,9 @@ function pp_store_management(){
         indppl_save_post($store_id);
     }
     
+    ob_start();
     
     if($store_id > 0){
-        ob_start();
         $setup = get_post_meta($store_id, 'wpcf-issetup', true);
         if($setup){
             ?>
@@ -375,18 +381,18 @@ function pp_store_management(){
             </div>
         </div>
         <?php
-        $return = ob_get_clean();
+        // $return = ob_get_clean();
     }else if($_GET['new'] == true){
-        ob_start();
+        // ob_start();
         ?>
         <h2>Store Management</h2>
         <p>This is a place for instructions</p>
         <?php
         $store_info = indppl_store_info($store_id);
         echo $store_info;
-        $return = ob_get_clean();
+        // $return = ob_get_clean();
     }else{
-        ob_start();
+        // ob_start();
         ?>
         <div class='indppl-store-management-container'>
             <!-- <h2>My Stores</h2>
@@ -394,12 +400,14 @@ function pp_store_management(){
             <?php
             $store_info  = do_shortcode('[pp-my-stores]');
             echo $store_info;
+            echo do_shortcode('[pp-my-dups]');
             ?>
         </div>
         <?php
-        $return = ob_get_clean();
     }
     
+    
+    $return = ob_get_clean();
     
 	return $return;
 }
@@ -521,6 +529,7 @@ function pp_my_stores(){
                 $add_button = get_add_store_button();
                 echo $add_button;
             }
+            do_shortcode('[pp-my-dups]');
         ?>
     <?php
     $return = ob_get_clean();
