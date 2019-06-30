@@ -2025,7 +2025,7 @@ function indppl_get_units($type){
     if($type == 'dry'){
         return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
     }else if($type == 'bag'){
-        return {'ppc': 'plants per bag / contianer', 'cpp': 'bags / containers per plant'};
+        return {'ppc': 'plants per bag / container', 'cpp': 'bags / containers per plant'};
     }else{
         return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt-l': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
     }  
