@@ -1062,12 +1062,13 @@ function indppl_setup_guide_forms_ajax(){
     $defaults = get_posts(array("post_type" => "guide-defaults", 'meta_key' => 'wpcf-guide-type', 'meta_value' => $form));
     $default = $defaults[0];
     $store = htmlspecialchars($_POST['store']);
-    $options = toolset_get_related_posts($default->ID, 'guide-steps',['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child', 'meta_key'=>'toolset-post-sortorder']);
+    $options = toolset_get_related_posts($default->ID, 'guide-steps',['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child', 'args' =>['meta_key'=>'toolset-post-sortorder'], 'orderby' => 'meta_value_num', 'order' => 'ASC']);
     $apprates = indppl_apprates($store);
 
     $sections = array();
     
     foreach($options as $option) {
+        var_dump(get_post_meta($option));
         $sections[get_post_meta($option, 'wpcf-step-title', TRUE)] = array(
             'a-instructions' => get_post_meta($option, 'wpcf-option-a-instructions', TRUE),
             'a-image' => get_post_meta($option, 'wpcf-option-a-image', TRUE),
