@@ -1068,7 +1068,7 @@ function indppl_setup_guide_forms_ajax(){
     $sections = array();
     
     foreach($options as $option) {
-        var_dump(get_post_meta($option));
+        // var_dump(get_post_meta($option));
         $sections[get_post_meta($option, 'wpcf-step-title', TRUE)] = array(
             'a-instructions' => get_post_meta($option, 'wpcf-option-a-instructions', TRUE),
             'a-image' => get_post_meta($option, 'wpcf-option-a-image', TRUE),
