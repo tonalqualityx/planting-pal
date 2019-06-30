@@ -958,13 +958,15 @@ function indppl_authorized_dups(){
                             $address1   = get_post_meta($store['store_id'], 'wpcf-address1', TRUE);
                             $city = get_post_meta($store['store_id'], 'wpcf-city', TRUE);
                             $state = get_post_meta($store['store_id'], 'wpcf-state', TRUE);
+                            $logo = get_post_meta($store['store_id'], 'wpcf-logo', TRUE);
                             $link = home_url() . "/store-profile?store-id=" . $store['store_id']; ?>
-
                             <div class="indppl-single-store-container white-background indppl-space-between">
                                 <div class="indppl-store-dash-left">
                                     <div class="indppl-flex">
                                         <div class="indppl-store-thumb indppl-dash-thumb">
-                                                <img src="http://localhost/wp-content/uploads/2019/05/indelible-logo-icon-150x150.jpg">
+                                            <?php if($logo){ ?>
+                                                <img src="<?php echo $logo; ?>" alt="Store Logo">
+                                            <?php } ?>
                                         </div>
                                         <div class="indppl-store-address">
                                             <h4 class=""><?php echo $store_name; ?></h4>
