@@ -1048,6 +1048,7 @@ function indppl_get_current_products($type){
 
 function update_package_table($store_id, $product_id, $type){
     // app rates chart container
+
     $app_rates = indppl_apprates($store_id);
     // var_dump($app_rates);
     ob_start();
@@ -1353,7 +1354,8 @@ function update_bag_package_table($store_id, $product_id, $type){
         </th>
     </tr>
     <tr>
-        <th colspan='1'></th>
+        <th colspan='1' id='indppl-plant-container-size-header'>Plant Container Size</th>
+        <th colspan='1' id='indppl-how-much-header'>'How Much' Adjusted</th>
         <!-- <th colspan='1'>Largest Product</th> -->
         <?php
         $order_array = array();
@@ -1370,15 +1372,23 @@ function update_bag_package_table($store_id, $product_id, $type){
             }
         }
         krsort($order_array);
+        $class_count = 0;
         foreach($order_array as $key => $value){
             $name = get_post_meta($value, 'wpcf-unit', true);
             if($name == 'qt-d' || $name == 'qt-l'){
                 $name = 'Quart';
             }
+            if($class_count == 0){
+                $class = 'grey-bg';
+            }else{
+                $class = '';
+            }
             ?>
             
-            <th class='bag-apprates-title' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></th>
+
+            <th class='bag-apprates-title <?php echo $class; ?>' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></th>
             <?php
+            $class_count++;
         }
         ?>
     </tr>
@@ -1421,7 +1431,12 @@ function update_bag_package_table($store_id, $product_id, $type){
             <td class='bag-apprates-container-title' data-id='<?php echo $id; ?>'>
                 <?php echo $title; ?>
             </td>
+            <td class='indppl-bag-controls-container'>
+                <a href='#' class='indppl-bag-controls-neg orange-bg'><span class='indppl-bag-control'>-</span></a>
+                <a href='#' class='indppl-bag-controls-pos orange-bg'><span class='indppl-bag-control'>+</span></a>
+            </td>
                 <?php
+                $largest_package = '';
                 
                 foreach($order_array as $knife => $pack_id){
                     ?>
@@ -1494,10 +1509,12 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 if($app_qty){
                                     ?>
                                     <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
+                                    <p class='indppl-bag-rate-num'><?php echo $app_qty; ?></p>
                                     <?php
                                 }else{
                                     ?>
                                     <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
+                                    <p class='indppl-bag-rate-num'><?php echo '0'; ?></p>
                                     <?php
                                 }
                                 echo ' ';
@@ -1518,14 +1535,19 @@ function update_bag_package_table($store_id, $product_id, $type){
                             $unit = get_post_meta($pack_id, 'wpcf-unit', true);
                         }
                         $qty = 0;
-
+                        $package_size = get_post_meta($pack_id, 'wpcf-size', true);
+                        $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
+                        
                         if(isset($app_rates[$type][$product_id]['bag'][$id])){
                             $qty = $app_rates[$type][$product_id]['bag'][$id]['amount'];
                             $unit = $app_rates[$type][$product_id]['bag'][$id]['unit'];
+                        }else if($knife == $first_key){
+                            $qty = $package_size;
+                            $largest_package = $qty;
+                        }else{
+                            $qty = $largest_package;
                         }
                         // var_dump(get_post_meta($pack_id, 'wpcf-size', true));
-                        $package_size = get_post_meta($pack_id, 'wpcf-size', true);
-                        $package_unit = get_post_meta($pack_id, 'wpcf-unit', true);
                         if(!$non_default_app_rate){
                             $non_default_app_rate = $package_unit;
                         }
@@ -1571,19 +1593,23 @@ function update_bag_package_table($store_id, $product_id, $type){
                         if($app_qty == INF){
                             $app_qty = 0;
                         }
+                        if($pp_dilema == 'ppc'){
+                            $ppc_text = "plants per bag";
+                            $color_class = 'color-green';
+                        }else{
+                            $ppc_text = 'bags per plant';
+                            $color_class = '';
+                        }
                         if($knife != $first_key){
-                            if($pp_dilema == 'ppc'){
-                                $ppc_text = "plants per bag / container";
-                            }else{
-                                $ppc_text = 'bags / containers per plant';
-                            }
                             if($qty){
                                 ?>
-                                <p data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty . "  " . $ppc_text; ?></p>
+                                <h4 class='indppl-bag-rate-num' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
+                                <p class='indppl-bag-rate-unit' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
                                 <?php
                             }else{
                                 ?>
-                                <p data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo "Fill out info to Left"; ?></p>
+                                <h4 class='indppl-bag-rate-num' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
+                                <p class='indppl-bag-rate-unit' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
                                 <?php
                             }
                         }else{
@@ -1592,19 +1618,22 @@ function update_bag_package_table($store_id, $product_id, $type){
                                     $app_qty = 0;
                                 }
                                 ?>
-                                <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
+                                <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num hide' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
+                                <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
                                 <?php
                             }else{
                                 ?>
-                                <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
+                                <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num hide' name=<?php echo $id; ?> value=0 >
+                                <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-num='<?php echo $app_qty; ?>'><?php echo '0'; ?></h4>
                                 <?php
                             }
                             echo ' ';
                             
                             ?>
-                            <select class='some-kind-of-wonderful indppl-product-create-chart-bag-unit' name=<?php echo $id; ?> data-unit=<?php echo $pp_dilema; ?>>
+                            <select class='some-kind-of-wonderful indppl-product-create-chart-bag-unit hide' name=<?php echo $id; ?> data-unit=<?php echo $pp_dilema; ?>>
                                 
                             </select>
+                            <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
                             <?php
                         }
                     }
@@ -1625,9 +1654,9 @@ function update_bag_package_table($store_id, $product_id, $type){
     </table>
     <div class="product-create-submit-container">
         <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/>
-        <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
         <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="Save and add another product"/>
-        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/>
+        <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
+        <!-- <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/> -->
     </div>
     <?php
     $app_rates_chart = ob_get_clean();
