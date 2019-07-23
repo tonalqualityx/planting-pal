@@ -1946,6 +1946,124 @@ jQuery(document).ready(function( $ ) {
             $('html, body').animate({scrollTop:$("#keep-going-container").offset().top}, 1200);
         }, 1000);
     }
+
+    function bagControlsNEG(elem){
+        hold_end = false;
+        
+        var num = $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
+        var unit = $(elem).parent().parent().find('.indppl-product-create-chart-bag-unit').first().val();
+        num = parseFloat(num) - .01;
+        var number = parseFloat(num).toFixed(2);
+        if (number < 0.01){
+            number = 0;
+        }
+        $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val(number);
+        $(elem).parent().parent().find('.indppl-bag-rate-num').first().text(number);
+        isDown = -.01;
+    };
+
+    function bagControlsPOS(elem){        
+        hold_end = false;
+        var num = $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
+        var unit = $(elem).parent().parent().find('.indppl-product-create-chart-bag-unit').first().val();
+        num = parseFloat(num) + .01;
+        var number = parseFloat(num).toFixed(2);
+        if (number < 0.01){
+            number = 0;
+        }
+        $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val(number);
+        $(elem).parent().parent().find('.indppl-bag-rate-num').first().text(number);
+        isDown = .01;
+    };
+
+    var isDown = 0.0;
+    var delay = 350;
+    var nextTime = 0;
+    var current_button;
+    var hold_end = false;
+    var timeout;
+    var load_app_rates;
+    requestAnimationFrame(watcher);
+
+    $('body').on('mousedown', '.indppl-bag-controls-neg', function(e){handleMouseDown(e, $(this));});
+    $('body').on('mouseup', '.indppl-bag-controls-neg', function(e){handleMouseUp(e, $(this));});
+    $('body').on('mouseout', '.indppl-bag-controls-neg', function(e){handleMouseout(e, $(this));});
+    $('body').on('mousedown', '.indppl-bag-controls-pos', function(e){handleMouseDown(e, $(this));});
+    $('body').on('mouseup', '.indppl-bag-controls-pos', function(e){handleMouseUp(e, $(this));});
+    $('body').on('mouseout', '.indppl-bag-controls-pos', function(e){handleMouseout(e, $(this));});
+
+    function handleMouseDown(e, elem){
+        e.preventDefault();
+        e.stopPropagation();
+        clearTimeout(load_app_rates);
+        current_button = $(elem);
+        if($(elem).hasClass('indppl-bag-controls-neg')){
+            timeout = setTimeout(function(){
+                if(isDown != 0){
+                    isDown = parseFloat(-.1);
+                }
+            }, 1000);
+            timeout = setTimeout(function(){
+                if(isDown != 0){
+                    isDown = parseFloat(-1);
+                }
+            }, 3000);
+            if(isDown == 0){
+                bagControlsNEG(elem);
+            }
+            
+        }else{
+            timeout = setTimeout(function(){
+                if(isDown != 0){
+                    isDown = parseFloat(.1);
+                }
+            }, 1000);
+            timeout = setTimeout(function(){
+                if(isDown != 0){
+                    isDown = parseFloat(1);
+                }
+            }, 3000);
+            if(isDown == 0){
+                bagControlsPOS(elem);
+            }
+        }
+    }
+    function handleMouseout(e, elem){
+        e.preventDefault();
+        e.stopPropagation();
+        clearTimeout(timeout);
+        isDown=0;
+        hold_end = true;
+    }
+
+    function handleMouseUp(e, elem){
+        e.preventDefault();
+        e.stopPropagation();
+        clearTimeout(timeout);
+        isDown=0;
+        hold_end = true;
+        load_app_rates = setTimeout(function(){
+            updateBagAppRates($(elem).parent().parent().find('.some-kind-of-wonderful').first());
+        }, 2000);
+    }
+
+    function watcher(time){
+        requestAnimationFrame(watcher);
+        if(time<nextTime){return;}
+        nextTime=time+delay;
+        if(isDown != 0){
+            var num = $(current_button).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
+            num = parseFloat(num) + parseFloat(isDown);
+            var number = parseFloat(num).toFixed(2);
+            if (number < 0.01){
+                number = 0;
+            }
+            $(current_button).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val(parseFloat(number));
+            $(current_button).parent().parent().find('.indppl-bag-rate-num').first().text(parseFloat(number));
+        }
+    }
+
+
 });
 
 // start of functions
@@ -2340,17 +2458,18 @@ function updateBagAppRates(elem){
     var store_id = $('#store-id').val();
     var type = $('#indppl-modal-product-type').val();
     var product_id = $('#product-create-product').val();
-    var val = $(elem).parent().children().val();
+    var val = $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
     var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
     var product_num = $('.bag-apprates-title').first().data('num');
     var product_unit = $('.bag-apprates-title').first().data('unit');
-    var cont_id = $(elem).parent().prev().data('id');
+    var cont_id = $(elem).parent().parent().find('.bag-apprates-container-title').data('id');
     var version_check = 1.0;
     if(val == null || !$.isNumeric(val)){
         val = 1;
         $(elem).parent().children().val(1);
     }
     console.log('--------');
+    console.log(elem);
     console.log(cont_id);
     console.log(product_num);
     console.log(product_unit);

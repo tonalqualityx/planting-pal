@@ -113,7 +113,7 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
   color: #838384;
 }
 
-.green-text {
+.green-text, .green-color {
   color: #449040;
 }
 
@@ -957,6 +957,68 @@ PRODUCT MANAGEMENT
   max-width: 300px;
   display: flex;
 }
+#indppl-plant-container-size-header, #indppl-how-much-header{
+  padding-right: 5px;
+  max-width: 100px;
+  text-align: center;
+}
+.indppl-bag-rate-num, .indppl-bag-rate-unit{
+  text-align: center;
+}
+.indppl-bag-control{
+  position: absolute;
+  right: 0%;
+  width: 100%;
+}
+.bag-apprates-title{
+  background: lightgray;
+  text-align: center;
+}
+.grey-bg{
+  background: gray;
+}
+.product-create-chart-table td:nth-child(3){
+  border-left: 2px solid lightgray;
+}
+.product-create-chart-table td:last-child{
+  border-right: 2px solid lightgray;
+}
+.product-create-chart-table tr:last-child td:nth-child( n+3 ){
+  border-bottom: 2px solid lightgray;
+}
+.product-create-chart-table tr:nth-child(2) th:last-child{
+  border-right: 2px solid lightgray;
+}
+.product-create-submit-back, .product-create-submit, .product-create-submit{
+  background: #e6561a;
+}
+/* .indppl-bag-control-pos{
+  position:absolute;
+  right: 32%;
+} */
+.indppl-bag-controls-neg, .indppl-bag-controls-pos{
+  position: relative;
+  width: 50px;
+  height: 15px;
+  padding-bottom: 28px;
+  display: inline-block;
+  text-align: center;
+  color: white;
+  font-size: 2em;
+  line-height: 75%;
+  border-radius: 14px;
+}
+.indppl-bag-controls-pos{
+  line-height: 88%;
+}
+.indppl-bag-control:hover{
+  text-decoration: none;
+  color:white;
+}
+.indppl-bag-controls-container{
+  padding: 0px 10px;
+}
+
 .spining-loader{
   height: 25px;
   animation-name: small-rotate;
