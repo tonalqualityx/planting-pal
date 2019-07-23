@@ -186,22 +186,26 @@ $beds = $beds['beds'];
                         <div class="pots-form pb-first">
                             <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                                 <div class="">
+                                    <p style='margin-bottom: 35px;'></p>
                                     <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
                                 </div>
                                 <div class=" tacos">
                                     <div class="indppl-flex">
                                         <div>
+                                            <p style='margin-bottom: 35px;'></p>
                                             <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots" value='<?php echo $pots["length"][$key]; ?>'>
                                             <label>Length</label>
                                         </div>
                                         <p class="by-the-by">x</p>
                                         <div>
+                                            <p style='margin-bottom: 35px;'></p>
                                             <input type="number" min="0" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth" value='<?php echo $pots["width"][$key]; ?>'>
                                             <label>Width</label>
                                         </div>
                                         <p class="by-the-by">x</p>
                                         <div>
-                                            <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="rounded-input2 pots" value='<?php echo $pots["height"][$key]; ?>'>
+                                            <p style='margin-bottom: 35px;'></p>
+                                            <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="height rounded-input2 pots" value='<?php echo $pots["height"][$key]; ?>'>
                                             <label>Height</label>
                                         </div>                            
                                     </div>
@@ -216,6 +220,7 @@ $beds = $beds['beds'];
                                         </div>
                                     </div>
                                     <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
+                                        <p style='margin-bottom: 35px;'></p>    
                                         <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots" value='<?php echo $pots["need"][$key]; ?>'>
                                         <label class="soil-need">Inches of soil needed</label>
                                     </div>
@@ -272,22 +277,26 @@ $beds = $beds['beds'];
                         <div class="rb-form pb-first">
                             <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                                 <div class="" >
+                                    <p style='margin-bottom: 35px;'></p>
                                     <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
                                 </div>
                                 <div class="tacos">
                                     <div class="indppl-flex">
                                         <div>
+                                            <p style='margin-bottom: 35px;'></p>
                                             <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2" value='<?php echo $beds["length"][$key]; ?>'>
                                             <label>Length</label>
                                         </div>
                                         <p class="by-the-by">x</p>
                                         <div>
+                                            <p style='margin-bottom: 35px;'></p>
                                             <input type="number" min="0" name="beds[width][]" placeholder="W&quot;" class="rounded-input2" value='<?php echo $beds["width"][$key]; ?>'>
                                             <label>Width</label>
                                         </div>
                                         <p class="by-the-by">x</p>
                                         <div>
-                                            <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="rounded-input2" value='<?php echo $beds["height"][$key]; ?>'>
+                                            <p style='margin-bottom: 35px;'></p>
+                                            <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="height rounded-input2" value='<?php echo $beds["height"][$key]; ?>'>
                                             <label>Height</label>
                                         </div>
                                     </div>
@@ -301,6 +310,7 @@ $beds = $beds['beds'];
                                         </div>
                                     </div>
                                     <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
+                                        <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
                                         <label class="soil-need">Inches of soil needed</label>
                                     </div>
@@ -340,7 +350,7 @@ $(document).ready(function(){
             $('#pot_add').click(function(){
 
                // Selecting last id
-               var lastname_id = $('.pots-form input[type=number]:nth-child(1)').last().attr('id');
+               var lastname_id = $('.pots-form input[type=number]:nth-child(2)').last().attr('id');
                var split_id = lastname_id.split('_');
 
                // New index
@@ -383,7 +393,7 @@ $(document).ready(function(){
             $('#rb_add').click(function(){
 
                // Selecting last id
-               var lastname_id = $('.rb-form input[type=number]:nth-child(1)').last().attr('id');
+               var lastname_id = $('.rb-form input[type=number]:nth-child(2)').last().attr('id');
                var split_id = lastname_id.split('_');
 
                // New index

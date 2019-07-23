@@ -613,8 +613,22 @@ span.padding-right-5{
 .guide-product-instructions img{
   width: 100%;
 }
-
-.color-red, .duplicate-required-fill{
+.next-button-error{
+  position: fixed;
+  bottom: -9px;
+  color: red;
+  font-weight: 800;
+  text-decoration: none;
+  font-size: 1.2em;
+}
+p.round-button-error{
+  font-weight: 800;
+  color:red!important;
+  text-decoration: none;
+  font-size: 1.2em;
+  margin-bottom:0;
+}
+.color-red, .duplicate-required-fill, .next-button-error, .round-button-error{
   color:red;
   text-decoration: none;
 }
