@@ -397,8 +397,16 @@ function pp_store_management(){
             </div>
             <div id='indppl-tab-4' class='indppl-tab-pane'>
                 
-                <h2>Guides</h2>
-                <p>This is a place for instructions</p>
+                <div class="indppl-instructions">
+                    <div class="indppl-instructions-text">
+                        <h2>Planting Guides</h2>
+                        <p>We're not big fans of one-size-fits-all. That applies to planting guides as well. From here, you'll be able to manage customized planting guides for each planting situation your customer faces.</p>
+                    </div>
+                    <div class="indppl-video">
+                        <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+
                 <?php 
                 $guides = do_shortcode('[pp-store-guides]');
                 echo $guides; 
@@ -861,22 +869,23 @@ function indppl_store_guides(){
     $user = get_current_user_id(  );
     $stati = indppl_user_status($user);
     $store = htmlspecialchars($_GET['store-id']);
-    $pots_text = "Manage Potted Plants Planting Guide";
-    $beds_text = "Manage Raised Bed Planting Guide";
+    $pots_text = "Pot Planting Guide";
+    $beds_text = "Raised Bed Planting Guide";
     
     $pots = "<span style='font-style:italic;font-weight: 100;'>{$pots_text} (Pro Required)</span>";
     $beds = "<span style='font-style:italic;font-weight: 100;'>{$beds_text} (Pro Required)</span>";
 
 
     if(in_array('paidaccountpro', $stati)){
-        $pots = "<a href='#' class='edit-guides pots-guide' data-target='pots' data-storeid='{$store}'>{$pots_text}</a>";
-        $beds = "<a href='#' class='edit-guides pots-guide' data-target='beds' data-storeid='{$store}'>{$beds_text}</a>";
+        $pots = "<h3 class='indppl-dark-green'>{$pots_text}</h3><a href='#' class='edit-guides pots-guide indppl-btn' data-target='pots' data-storeid='{$store}'>Edit</a>";
+        $beds = "<h3 class='indppl-dark-green'>{$beds_text}</h3><a href='#' class='edit-guides pots-guide indppl-btn' data-target='beds' data-storeid='{$store}'>Edit</a>";
     }
     
     ob_start(); ?>
-    <h3 class="indppl-products-title">Your Planting Guides</h3>
-    <ul class="style-free">
-        <li><a href="#" class="edit-guides ground-guide" data-target="ground" data-storeid="<?php echo $store; ?>">Manage In Ground Planting Guide</a></li>
+    <ul class="style-free planting-guide-editor">
+        <li>
+            <h3 class="indppl-dark-green">In Ground Planting Guide</h3>
+            <a href="#" class="edit-guides ground-guide indppl-btn" data-target="ground" data-storeid="<?php echo $store; ?>">Edit</a></li>
         <li><?php echo $pots; ?></li>
         <li><?php echo $beds; ?></li>
     </ul>

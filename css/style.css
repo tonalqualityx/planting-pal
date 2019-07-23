@@ -82,6 +82,17 @@ img{
   margin-top: 10px;
 }
 
+.indppl-btn:hover {
+  color: white;
+  background: #e25216;
+  text-decoration: none;
+}
+
+.planting-guide-editor .indppl-btn {
+  padding-left: 35px;
+  padding-right: 35px;
+}
+
 input[type=submit].orange-bg, .indppl-btn, #dashboard-content input[type=button], #dashboard-content input[type=submit] {
   background: #f26226;
   border: 1px solid #d6460a;
@@ -849,7 +860,7 @@ div.ui-datepicker{
 PRODUCT MANAGEMENT
 *****************/
 
-.indppl-products-main-container h3 {
+.indppl-products-main-container h3, .planting-guide-editor h3 {
   font-size: 1.75em;
   margin-bottom: 0;
 }
@@ -1015,6 +1026,10 @@ PRODUCT MANAGEMENT
 /**************
 GUIDES STYLES
 **************/
+
+.planting-guide-editor li {
+  margin-bottom: 20px;
+}
 
 .planting-guide {
   max-width: 1000px;
