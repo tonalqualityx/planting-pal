@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+
+/*********
+  FONTS
+*********/
+
+.lobster {
+  font-family : 'Lobster';
+}
 
 /***************
 UTILITY CLASSES
@@ -76,6 +85,10 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
   color: #efefef;
 }
 
+.white-text {
+  color: white;
+}
+
 .grey-text {
   color: #838384;
 }
@@ -88,17 +101,9 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
     background: #254921!important;
 }
 
-.indppl-dark-green {
-  color: #488a41;
-}
-
 .indpple-dark-green-bg {
   background: #488a41;
   color: white;
-}
-
-.indppl-orange {
-  color: #f26226;
 }
 
 .indppl-orange-bg {
@@ -106,17 +111,9 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
   color: white;
 }
 
-.indppl-darkest-grey {
-  color: #303134;
-}
-
 .indppl-darkest-grey-bg {
   background: #303134;
   color: white;
-}
-
-.indppl-dark-grey {
-  color: #6a6e76;
 }
 
 .indppl-dark-grey-bg {
@@ -124,15 +121,34 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
   color: white;
 }
 
-.indppl-light-grey {
-  color: #959696;
-}
-
 .indppl-light-grey-bg {
   background: #959696;
   color: white;
 }
 
+.indppl-dark-green, body h1.indppl-dark-green, body h2.indppl-dark-green, body h3.indppl-dark-green {
+  color: #488a41;
+}
+
+.indppl-light-green, body h1.indppl-light-green, body h2.indppl-light-green, body h3.indppl-light-green {
+  color: #9cca3a;
+}
+
+.indppl-orange {
+  color: #f26226;
+}
+
+.indppl-darkest-grey {
+  color: #303134;
+}
+
+.indppl-dark-grey {
+  color: #6a6e76;
+}
+
+.indppl-light-grey {
+  color: #959696;
+}
 
 .indppl-dark-green-bg h1, .indppl-orange-bg h1, .indppl-darkest-grey-bg h1, .indppl-dark-grey-bg h1, .indppl-light-grey-bg h1,
 .indppl-dark-green-bg h2, .indppl-orange-bg h2, .indppl-darkest-grey-bg h2, .indppl-dark-grey-bg h2, .indppl-light-grey-bg h2,
@@ -1408,6 +1424,8 @@ DASHBOARD
 #dashboard-title-bar {
   background: #303135;
   color: white;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 
 #indppl-dashboard-nav {

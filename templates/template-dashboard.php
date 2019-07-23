@@ -3,14 +3,22 @@ global $post;
 
 // get_header();
 
-$user_id = get_current_user_id();
+$cur_user = wp_get_current_user();
+$user_id = $cur_user->ID;
+$first_name = $cur_user->user_firstname;
 $status = indppl_user_status($user_id);
 
 wp_head();?>
 
 <body >
-    <div id="dashboard-title-bar">
-        <h1 style="color:white;margin:0; padding:15px 7px; font-size: 1.25em; font-weight: 800;">Planting Pal admin center</h1>
+    <div id="dashboard-title-bar" class="indppl-flex indppl-space-between indppl-darkest-grey-bg indppl-align-center">
+        <div class="ind-flex indppl-align-center">
+            <img src="<?php echo INDPPL_ROOT_URL . '/assets/img/planting-pal-carrot.png'; ?>" style="max-height: 50px;">
+            <h1 class="" style="margin:0; padding:15px 7px; font-size: 1.5em;"><span class="lobster indppl-light-green" style="font-size:1.25em;margin-right:25px;">Planting Pal</span>  <strong style="font-size:0.9em;">admin center</strong></h1>
+        </div>
+        <div class="">
+            Welcome <?php echo $first_name; ?> | <a href="<?php echo wp_logout_url("/"); ?>" class="indppl-orange">Logout</a>
+        </div>
     </div>
     <div class="indppl-flex grey-background">
         <div id="indppl-dashboard-nav">
