@@ -339,10 +339,10 @@ function pp_store_management(){
         } ?>
 
         <ul class='indppl-nav indppl-nav-tabs'>
-            <li class="indppl-active"><a href='#indppl-tab-1'>Store Info</a></li>
-            <li><a href='#indppl-tab-2'>Plant Containers</a></li>
-            <li><a href='#indppl-tab-3'>Products</a></li>
-            <li><a href='#indppl-tab-4'>Guides</a></li>
+            <li class="indppl-active"><a href='#indppl-tab-1'>1. Store Info</a></li>
+            <li><a href='#indppl-tab-2'>2. Container Size Selection</a></li>
+            <li><a href='#indppl-tab-3'>3. Products Recommendations</a></li>
+            <li><a href='#indppl-tab-4'>4. Planting Guides</a></li>
         </ul>
         
         <div class='indppl-tab-content'>

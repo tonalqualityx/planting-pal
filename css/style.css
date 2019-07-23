@@ -213,47 +213,70 @@ ul.style-free {
 /* tabs */
 
 .indppl-nav-tabs{
-    display: flex;
-    padding-bottom: 10px;
-    width: 100%;
-    margin: 0;
-    list-style-type: none;
-    border-bottom: 1px solid #ddd;
-  }
-  .indppl-nav-tabs > li{
-    margin-bottom: -1px;
-    margin-top: 30px;
-  }
-  .indppl-nav-tabs > li > a{
-    margin-right: 2px;
-    line-height: 1.5;
-    padding: 10px;
-    border: 1px solid transparent;
-    border-radius: 4px 4px 0 0;
-    text-decoration: none;
-  }
-  .indppl-nav-tabs > li > a:hover{
-    border-color: #eee #eee #ddd;
-  }
-  .indppl-nav-tabs > li.indppl-active > a,
-  .indppl-nav-tabs > li.indppl-active > a:hover,
-  .indppl-nav-tabs > li.indppl-active > a:active{
-    color: #555;
-    cursor: default;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-bottom-color: transparent;
-  }
-  .indppl-tab-content .indppl-tab-pane{
-    width: 100%;
-    display: none;
-  }
-  .indppl-tab-content > .indppl-tab-pane.indppl-active {
-    display: block;
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 5px 4px -2px rgba(0,0,0,0.15);
-  }
+  display: flex;
+  padding-bottom: 10px;
+  padding-left: 0;
+  /* justify-content: space-evenly; */
+  width: 100%;
+  margin: 0;
+  list-style-type: none;
+  border-bottom: 1px solid #ddd;
+}
+
+.indppl-nav-tabs > li{
+  margin-bottom: -1px;
+  margin-top: 30px;
+  margin-right: 30px;
+}
+
+.indppl-nav-tabs > li:after {
+  content: '>>';
+  position: absolute;
+  margin-left: 4px;
+}
+
+.indppl-nav-tabs > li:last-child{
+  margin-right: 0;
+}
+
+.indppl-nav-tabs > li:last-child:after {
+  content :"";
+}
+
+.indppl-nav-tabs > li > a{
+  margin-right: 2px;
+  line-height: 1.5;
+  padding: 10px;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+  text-decoration: none;
+}
+
+.indppl-nav-tabs > li > a:hover{
+  border-color: #eee #eee #ddd;
+}
+
+.indppl-nav-tabs > li.indppl-active > a,
+.indppl-nav-tabs > li.indppl-active > a:hover,
+.indppl-nav-tabs > li.indppl-active > a:active{
+  color: #555;
+  cursor: default;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+}
+
+.indppl-tab-content .indppl-tab-pane{
+  width: 100%;
+  display: none;
+}
+
+.indppl-tab-content > .indppl-tab-pane.indppl-active {
+  display: block;
+  padding: 10px;
+  background-color: #fff;
+  box-shadow: 0 5px 4px -2px rgba(0,0,0,0.15);
+}
 /* loading icon */
 .current-store-logo{
     width: 50%;
