@@ -2005,8 +2005,8 @@ function getProductInfo(){
             type: 'POST',
             success: function(e){
                 // console.log(e);
-                $('#indppl-tab-3').empty();
-                $('#indppl-tab-3').append(e);
+                $('#indppl-tab-3 #pp-store-products').empty();
+                $('#indppl-tab-3 #pp-store-products').append(e);
             }
         });
     })(jQuery);

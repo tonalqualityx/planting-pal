@@ -348,27 +348,52 @@ function pp_store_management(){
         <div class='indppl-tab-content'>
             <div id='indppl-tab-1' class='indppl-tab-pane indppl-active'>
                 <div class='indppl-store-management-container'>
-                <h2>Store Management</h2>
-                <p>This is a place for instructions</p>
-                    <?php
-                    $store_info  = indppl_store_info($store_id);
-                    echo $store_info;
-                    ?>
+                    <div class="indppl-instructions">
+                        <div class="indppl-instructions-text">
+                            <h2>Store Information</h2>
+                            <p>Enter your Garden Center's store information here. This info will be used to help customers find you in the Planting Pal app and customize your planting guide with contact information and store logo.</p>
+                        </div>
+                        <div class="indppl-video">
+                            <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
                 </div>
+                <?php
+                $store_info  = indppl_store_info($store_id);
+                echo $store_info;
+                ?>
             </div>
             <div id='indppl-tab-2' class='indppl-tab-pane'>
                 
-                <h2>Sizes</h2>
-                <p>This is a place for instructions</p>
-                <?php
-                $containers = do_shortcode('[pp-store-containers]');
-                echo $containers;
-                ?>
+                <div class="indppl-instructions">
+                    <div class="indppl-instructions-text">
+                        <h2>Container Size Selection</h2>
+                        <p>Select the plant container sizes you stock at your Garden Center. Only the sizes you select here will be shown to your customer in the app. Also, since some sizes are seasonal, select which plant container sizes you want showing up in the different seasons.</p>
+                    </div>
+                    <div class="indppl-video">
+                        <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                        
+                <div class="margin-top-20">
+                    <?php $containers = do_shortcode('[pp-store-containers]');
+                    echo $containers; ?>
+                </div>
+
             </div>
             <div id='indppl-tab-3' class='indppl-tab-pane'>
-                <h2>Products</h2>
-                <p>This is a place for instructions</p>
-                <?php echo do_shortcode('[pp-store-products]'); ?>
+                <div class="indppl-instructions">
+                    <div class="indppl-instructions-text">
+                        <h2>Product Recommendation 'Recipes'</h2>
+                        <p>Your planting recommendations are like a gourmet recipe where each product is an ingredient. The product recommendation 'recipes' you build on this page will show up on the app's Shopping List and Planting Guide to tell your customers what products to use and in what quantities.</p>
+                    </div>
+                    <div class="indppl-video">
+                        <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div id="pp-store-products">
+                    <?php echo do_shortcode('[pp-store-products]'); ?>
+                </div>
             </div>
             <div id='indppl-tab-4' class='indppl-tab-pane'>
                 
@@ -804,23 +829,29 @@ add_shortcode('pp-store-containers', 'pp_store_containers');
 function pp_store_products(){
     ?>
         <div class='indppl-products-main-container'>
-            <h3 class='indppl-products-title'>In-Ground</h3>
-            <a href="#" class='indppl-add-product-btn' data-type='ground'>Add Product</a>
+
+            <h3 class='indppl-products-title indppl-dark-green'>In-Ground Plantings</h3>
+            <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for in-ground planting recommendations</p>
             <div class='indppl-product-list'>
                 <?php echo indppl_get_current_products("ground"); ?>
             </div>
-            <h3 class='indppl-products-title'>Pots</h3>
-            <a href="#" class='indppl-add-product-pots-btn' data-type='pots'>Add Product</a>
-            <a href="#" class='indppl-application-rates-pots-btn' data-type='pots'>Application rates</a>
+            <a href="#" class='indppl-add-product-btn indppl-btn' data-type='ground'>+ Add Product</a>
+
+            <h3 class='indppl-products-title indppl-dark-green'>Pot Plantings</h3>
+            <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for pot planting recommendations. For this section, be sure to add all the products before adjusting application rates.</p>
             <div class='indppl-product-list'>
                 <?php echo indppl_get_current_products("pots"); ?>
             </div>
-            <h3 class='indppl-products-title'>Raised beds</h3>
-            <a href="#" class='indppl-add-product-pots-btn' data-type='beds'>Add Product</a>
-            <a href="#" class='indppl-application-rates-pots-btn' data-type='beds'>Application rates</a>
+            <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='pots'>+ Add Product</a>
+            <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='pots'>Application rates</a>
+
+            <h3 class='indppl-products-title indppl-dark-green'>Raised Bed Plantings</h3>
+            <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for raised bed planting recommendations. For this section, be sure to add all the products before adjusting application rates.</p>
             <div class='indppl-product-list'>
                 <?php echo indppl_get_current_products("beds"); ?>
             </div>
+            <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='beds'>+ Add Product</a>
+            <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='beds'>Application rates</a>
         </div>
     <?php
 }

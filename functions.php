@@ -585,7 +585,7 @@ function indppl_store_info($store_id = NULL){
     ?>
     <?php
 	if(is_int($store_id)){ ?>
-		<h3>Edit Store Information</h3>
+		<!-- <h3>Edit Store Information</h3> -->
 	<?php }else{ ?>
     	<h3>Welcome to Planting Pal!</h3>
     	<p>We just need to get a few quick details to configure your store then you can begin building out your products and rates.</p>
@@ -595,16 +595,16 @@ function indppl_store_info($store_id = NULL){
 		<fieldset>
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="store-name">Store Name</label>
-			<div class="col-md-4">
-			<input id="store-name" name="store-name" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $store_name; ?>">
-			
-			</div>
+                <label class="col-md-2 control-label" for="store-name">Store Name</label>
+                <div class="col-md-4">
+                    <input id="store-name" name="store-name" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $store_name; ?>">
+                
+                </div>
 			</div>
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="address1">Address Line 1</label>
+			<label class="col-md-2 control-label" for="address1">Address Line 1</label>
 			<div class="col-md-4">
 			<input id="address1" required name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1; ?>">
 			
@@ -613,7 +613,7 @@ function indppl_store_info($store_id = NULL){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="address2">Address Line 2</label>
+			<label class="col-md-2 control-label" for="address2">Address Line 2</label>
 			<div class="col-md-4">
 			<input id="address2" name="address2" type="text" placeholder="" class="form-control input-md" value="<?php echo $address2; ?>">
 			
@@ -622,7 +622,7 @@ function indppl_store_info($store_id = NULL){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="city">City</label>
+			<label class="col-md-2 control-label" for="city">City</label>
 			<div class="col-md-4">
 			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $city; ?>">
                 
@@ -631,7 +631,7 @@ function indppl_store_info($store_id = NULL){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="state">State</label>
+			<label class="col-md-2 control-label" for="state">State</label>
 			<div class="state-selector">
 			<select id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $state; ?>">
                 <?php
@@ -653,7 +653,7 @@ function indppl_store_info($store_id = NULL){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="zip">Zipcode</label>
+			<label class="col-md-2 control-label" for="zip">Zipcode</label>
 			<div class="col-md-2">
 			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $zip; ?>">
 			
@@ -662,7 +662,7 @@ function indppl_store_info($store_id = NULL){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="weburl">Store Website</label>
+			<label class="col-md-2 control-label" for="weburl">Store Website</label>
 			<div class="col-md-4">
 			<input id="weburl" name="weburl" type="text" placeholder="" class="form-control input-md" value="<?php echo $weburl; ?>">
 			
@@ -671,7 +671,7 @@ function indppl_store_info($store_id = NULL){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="phone">Phone Number</label>
+			<label class="col-md-2 control-label" for="phone">Phone Number</label>
 			<div class="col-md-4">
 			<input id="phone" name="phone" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $phone; ?>">
 			
@@ -680,7 +680,7 @@ function indppl_store_info($store_id = NULL){
 			
 			<!-- Text input-->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="store-email">Email Address</label>
+			<label class="col-md-2 control-label" for="store-email">Email Address</label>
 			<div class="col-md-4">
 			<input id="store-email" name="store-email" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $email; ?>">
 			
@@ -688,7 +688,7 @@ function indppl_store_info($store_id = NULL){
 			</div>
 		
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="logo">Store Logo</label>
+			<label class="col-md-2 control-label" for="logo">Store Logo</label>
 			<div class="col-md-4">
 				<div class="store-edit-logo-container">
 					<?php if($logo){ ?>
@@ -738,7 +738,7 @@ function indppl_store_info($store_id = NULL){
 			?>
 			<!-- Button -->
 			<div class="form-group">
-			<label class="col-md-4 control-label" for="submit"></label>
+			<label class="col-md-2 control-label" for="submit"></label>
 			<div class="col-md-4">
 				<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"  /></p>
 			</div>

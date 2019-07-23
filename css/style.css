@@ -74,9 +74,18 @@ img{
   color: white;
 }
 
-input[type=submit].orange-bg {
+.indppl-btn {
+  padding: 5px 15px;
+  border-radius: 25px;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-top: 10px;
+}
+
+input[type=submit].orange-bg, .indppl-btn, #dashboard-content input[type=button], #dashboard-content input[type=submit] {
   background: #f26226;
   border: 1px solid #d6460a;
+  color: white;
   transition: background 0.35s ease-in-out, color 0.35s ease-in-out;
 }
 
@@ -268,12 +277,12 @@ ul.style-free {
 
 .indppl-tab-content .indppl-tab-pane{
   width: 100%;
+  padding: 10px 25px;
   display: none;
 }
 
 .indppl-tab-content > .indppl-tab-pane.indppl-active {
   display: block;
-  padding: 10px;
   background-color: #fff;
   box-shadow: 0 5px 4px -2px rgba(0,0,0,0.15);
 }
@@ -835,6 +844,22 @@ div.ui-datepicker{
   width: 100%;
   background: white;
 }
+
+/*****************
+PRODUCT MANAGEMENT
+*****************/
+
+.indppl-products-main-container h3 {
+  font-size: 1.75em;
+  margin-bottom: 0;
+}
+
+.indppl-products-main-container .indppl-products-instructions {
+  border-bottom: 4px solid #488a41;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
 .indppl-product-create-size-btn{
   padding: 5px 20px;
   color: black;
@@ -1501,6 +1526,30 @@ DASHBOARD
   color: #34602f;
   border-bottom: 2px solid #34602f;
   margin-bottom: 0;
+}
+
+/***********
+Instructions
+***********/
+
+.indppl-instructions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.indppl-instructions-text {
+  width: 65%;
+}
+
+.indppl-instructions-text h2 {
+  font-weight: 800;
+  font-size: 1.85em;
+  margin-bottom: 0;
+}
+
+.indppl-video {
+  width: 25%;
 }
 
 .indppl-add-store-text-container {
