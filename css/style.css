@@ -69,12 +69,16 @@ img{
   color: #f26226;
 }
 
-.orange-bg {
+.slide-in-products-container input[type=submit]{
+  border: none;
+}
+
+.orange-bg, .slide-in-products-container input[type=submit] {
   background: #f26226;
   color: white;
 }
 
-.indppl-btn {
+.indppl-btn, .slide-in-products-container input[type=submit] {
   padding: 5px 15px;
   border-radius: 25px;
   display: inline-block;
@@ -82,10 +86,11 @@ img{
   margin-top: 10px;
 }
 
-.indppl-btn:hover {
+.indppl-btn:hover, .product-create-submit:hover, .product-create-submit:hover, .slide-in-products-container input[type=submit]:hover, .slide-in-products-container input[type=submit]:focus{
   color: white;
   background: #e25216;
   text-decoration: none;
+  border: none;
 }
 
 .planting-guide-editor .indppl-btn {
@@ -588,7 +593,7 @@ span.padding-right-5{
 .display-none{
   display:none;
 }
-.indppl-table-color-offset:nth-of-type(even), .offset-background{
+.indppl-table-color-offset:nth-of-type(even), .offset-background, .slide-in-products-container{
   background: rgba(151, 180, 210, 0.28);
 }
 .margin-0{
@@ -778,7 +783,7 @@ div.ui-datepicker{
 }
 .indppl-button:hover, .indppl-button:focus{
   background: #f26226;
-  color: black;
+  color: white;
   /* border: 1px solid #2d6ca2; */
   text-decoration: none;
 }
@@ -796,7 +801,9 @@ div.ui-datepicker{
   width: 100vw;
   z-index: 9999;
   left: 100%;
-  background: white;
+  display: flex;
+  justify-content: center;
+  background: rgba(60, 60, 60, 0.7);
   -webkit-box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
   -moz-box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
   box-shadow: -4px 2px 16px -1px rgba(153,142,153,0.84);
@@ -815,6 +822,8 @@ div.ui-datepicker{
   background: white;
   padding: 15px;
   overflow-y: auto;
+  padding: 30px;
+  max-width: 1200px;
 }
 .indppl-add-product-name{
   margin-top: 20px;
@@ -826,10 +835,19 @@ div.ui-datepicker{
   margin-right: 10px;
 }
 
+.indppl-green-underline:after {
+  content: "";
+    border-bottom:3px solid #488a41;
+    width:60%;
+    display:block;
+    margin:0 auto;
+  }
+
 .modal-close, .sponsor-modal-close{
   position: fixed;
   line-height: 1;
-  left: 86%;
+  left: 80%;
+  top: 14%;
   width: 24px;
   font-size: 15px;
   padding: 4px 5px;
@@ -853,7 +871,7 @@ div.ui-datepicker{
   top: 0;
   height: 100%;
   width: 100%;
-  background: white;
+  background: rgba(60, 60, 60, 0.7);
 }
 
 /*****************
@@ -942,6 +960,12 @@ PRODUCT MANAGEMENT
 }
 .product-create-chart-title-container{
   display: flex;
+  justify-content: space-between;
+  width: 80%;
+  padding-bottom: 30px;
+}
+.indppl-header-image-bag{
+  flex-basis: 50%;
 }
 .indppl-product-create-chart-app-rate-num{
   width: 25%!important;
@@ -961,9 +985,11 @@ PRODUCT MANAGEMENT
   padding-right: 5px;
   max-width: 100px;
   text-align: center;
+  vertical-align: bottom;
 }
-.indppl-bag-rate-num, .indppl-bag-rate-unit{
+.indppl-bag-rate-num, .indppl-bag-rate-unit, .bag-apprates-container-title{
   text-align: center;
+  font-weight: 600;
 }
 .indppl-bag-control{
   position: absolute;
@@ -989,8 +1015,16 @@ PRODUCT MANAGEMENT
 .product-create-chart-table tr:nth-child(2) th:last-child{
   border-right: 2px solid lightgray;
 }
-.product-create-submit-back, .product-create-submit, .product-create-submit{
-  background: #e6561a;
+.product-create-submit, .product-create-submit{
+  color: white;
+}
+.product-create-submit-back{
+  background: transparent;
+}
+.indppl-round-button{
+  padding: 5px 20px;
+  border-radius: 15px;
+  text-decoration: none;
 }
 /* .indppl-bag-control-pos{
   position:absolute;
@@ -1031,7 +1065,7 @@ PRODUCT MANAGEMENT
   to {transform: rotate(360deg);}
 }
 .product-create-submit-container{
-  padding-top: 10px;
+  padding-top: 40px;
 }
 .indppl-add-product-usage-type{
   display:flex;

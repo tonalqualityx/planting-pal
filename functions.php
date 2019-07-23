@@ -1099,12 +1099,25 @@ function update_package_table($store_id, $product_id, $type){
     }
     ?>
     <div class='product-create-chart-header-container'>
-        <h3><?php echo $header; ?> Planting Application Rates For:</h3>
+        <div class="indppl-instructions">
+            <div class="indppl-instruction-text">
+                <h2><?php echo $header; ?> Planting Application Rates For:</h2>
+                <p>Tell us how much of this product you recommend for each plant container size. We’ll use these application rates to create a customized shopping list in the app AND show exactly how much to use for each size plant on the planting guide (paid subscriptions only)</p>
+            </div>
+            <div class="indppl-video">
+                <video></video>
+            </div>
+        </div>
         <div class='product-create-chart-title-container'>
-            <img class='indppl-product-create-img' src="<?php echo $img; ?>">
-            <div style='margin-left: 10px'>
-                <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
-                <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
+            <div style='display: flex;'>
+                <img class='indppl-product-create-img' src="<?php echo $img; ?>">
+                <div style='margin-left: 10px'>
+                    <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
+                    <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
+                </div>
+            </div>
+            <div class='indppl-header-image-bag'>
+                <img src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img/indppl in-ground other header img.jpg'>
             </div>
         </div>
     </div>
@@ -1333,29 +1346,41 @@ function update_bag_package_table($store_id, $product_id, $type){
     }
     ?>
     <div class='product-create-chart-header-container'>
-        <h3><?php echo $header; ?> Planting Application Rates For:</h3>
+        <div class="indppl-instructions">
+            <div class="indppl-instruction-text">
+                <h2><?php echo $header; ?> Planting Application Rates For:</h2>
+                <p>Tell us how much of this product you recommend for each plant container size. Adjust ‘How Much’ by clicking the + or - buttons. We’ll use these application rates to create a customized shopping list in the app AND show exactly how much to use fore each size plant on the planting guide (paid subscriptions only)</p>
+            </div>
+            <div class="indppl-video">
+                <video></video>
+            </div>
+        </div>
         <div class='product-create-chart-title-container'>
-            <img class='indppl-product-create-img' src="<?php echo $img; ?>">
-            <div style='margin-left: 10px'>
-                <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
-                <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
+            <div style='display: flex;'>
+                <img class='indppl-product-create-img' src="<?php echo $img; ?>">
+                <div style='margin-left: 10px'>
+                    <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
+                    <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
+                </div>
+            </div>
+            <div class='indppl-header-image-bag'>
+                <img src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img/planting pal bag to plant image.jpg'>
             </div>
         </div>
     </div>
     <table class='product-create-chart-table'>
     <tr>
-        <th colspan='2'>Choose Application Rates</th>
+        <th colspan='2'></th>
         <?php if(count($product_related) > 1){
             ?>
             <th colspan='5'>
-            <p>Application Rates Automatically Calculated for Other Sizes</p>
-            <p>Use the numbers below to fine tune your application rate on the left</p>
+            <p>Let us do the math! Recommendations for all product sizes will adjust automatically</p>
         <?php } ?>
         </th>
     </tr>
     <tr>
-        <th colspan='1' id='indppl-plant-container-size-header'>Plant Container Size</th>
-        <th colspan='1' id='indppl-how-much-header'>'How Much' Adjusted</th>
+        <th colspan='1' class='indppl-green-underline' id='indppl-plant-container-size-header'>Plant Container Size</th>
+        <th colspan='1' class='indppl-green-underline' id='indppl-how-much-header'>'How Much' Adjusted</th>
         <!-- <th colspan='1'>Largest Product</th> -->
         <?php
         $order_array = array();
@@ -1499,7 +1524,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                             if($knife != $first_key){
                                 if($pp_dilema == 'ppc'){
                                     $ppc_text = "plants per bag / container";
-                                    $color_class = 'color-green';
+                                    $color_class = 'indppl-dark-green';
                                 }else{
                                     $ppc_text = 'bags / containers per plant';
                                     $color_class = 'color-black';
@@ -1599,7 +1624,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                         }
                         if($pp_dilema == 'ppc'){
                             $ppc_text = "plants per bag";
-                            $color_class = 'color-green';
+                            $color_class = 'indppl-dark-green';
                         }else{
                             $ppc_text = 'bags per plant';
                             $color_class = 'color-black';
@@ -1657,9 +1682,9 @@ function update_bag_package_table($store_id, $product_id, $type){
 
     </table>
     <div class="product-create-submit-container">
-        <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/>
-        <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="Save and add another product"/>
-        <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
+        <a href='#'class='product-create-submit-back indppl-orange'>Back</a>
+        <a href='#' id="product-create-submit" class="product-create-submit indppl-round-button indppl-orange-bg">+ Add Another Product</a>
+        <a href='#' data-exit="true" id="product-create-submit-exit" class="product-create-submit indppl-round-button indppl-orange-bg">Save & Exit</a>
         <!-- <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/> -->
     </div>
     <?php
