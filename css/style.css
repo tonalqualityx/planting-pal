@@ -79,7 +79,7 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
   color: #838384;
 }
 
-.green-text {
+.green-text, .green-color {
   color: #449040;
 }
 
@@ -860,6 +860,9 @@ div.ui-datepicker{
 }
 .product-create-chart-table tr:nth-child(2) th:last-child{
   border-right: 2px solid lightgray;
+}
+.product-create-submit-back, .product-create-submit, .product-create-submit{
+  background: #e6561a;
 }
 /* .indppl-bag-control-pos{
   position:absolute;

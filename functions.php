@@ -1499,22 +1499,25 @@ function update_bag_package_table($store_id, $product_id, $type){
                             if($knife != $first_key){
                                 if($pp_dilema == 'ppc'){
                                     $ppc_text = "plants per bag / container";
+                                    $color_class = 'color-green';
                                 }else{
                                     $ppc_text = 'bags / containers per plant';
+                                    $color_class = 'color-black';
                                 }
                                 ?>
-                                <p data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty . "  " . $ppc_text; ?></p>
+                                <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
+                                <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
                                 <?php
                             }else{
                                 if($app_qty){
                                     ?>
                                     <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?> >
-                                    <p class='indppl-bag-rate-num'><?php echo $app_qty; ?></p>
+                                    <p class='indppl-bag-rate-num <?php echo $color_class; ?>'><?php echo $app_qty; ?></p>
                                     <?php
                                 }else{
                                     ?>
                                     <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=0 >
-                                    <p class='indppl-bag-rate-num'><?php echo '0'; ?></p>
+                                    <p class='indppl-bag-rate-num <?php echo $color_class; ?>'><?php echo '0'; ?></p>
                                     <?php
                                 }
                                 echo ' ';
@@ -1523,6 +1526,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 <select class='some-kind-of-wonderful indppl-product-create-chart-bag-unit' name=<?php echo $id; ?> data-unit=<?php echo $pp_dilema; ?>>
                                     
                                 </select>
+                                <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
                                 <?php
                             }
                         }
@@ -1598,18 +1602,18 @@ function update_bag_package_table($store_id, $product_id, $type){
                             $color_class = 'color-green';
                         }else{
                             $ppc_text = 'bags per plant';
-                            $color_class = '';
+                            $color_class = 'color-black';
                         }
                         if($knife != $first_key){
                             if($qty){
                                 ?>
-                                <h4 class='indppl-bag-rate-num' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
-                                <p class='indppl-bag-rate-unit' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
+                                <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
+                                <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
                                 <?php
                             }else{
                                 ?>
-                                <h4 class='indppl-bag-rate-num' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
-                                <p class='indppl-bag-rate-unit' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
+                                <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
+                                <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
                                 <?php
                             }
                         }else{
