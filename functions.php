@@ -2339,16 +2339,20 @@ function indppl_gform_lastname_pop($value) {
 add_filter('gform_field_value_indppl-last-name', 'indppl_gform_lastname_pop');
 
 function indppl_readable_fraction($decimal){
+    $primes = array(11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97);
     $fraction  = dec2frac($decimal);
     $calc_frac = explode("/", $fraction);
     if ($calc_frac[1] > 8) {
         while ($calc_frac[1] > 8) {
-            $calc_frac[0]++;
+            if(in_array($calc_frac[1], $primes) ){
+                $calc_frac[1] ++;
+            } else {
+                $calc_frac[0]++;
+            }
             if($calc_frac[0] == $calc_frac[1]){
                 return 1;
             }
             $fraction = dec2frac($calc_frac[0] / $calc_frac[1]);
-            // var_dump($fraction);
             $calc_frac = explode("/", $fraction);
         }
     }

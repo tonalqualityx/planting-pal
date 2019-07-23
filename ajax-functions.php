@@ -1881,8 +1881,6 @@ function indppl_build_guide_ajax() {
 
             if(($type == 'ground' && count($plant) > 0) || ($plant['qty'][0] > 0 && $plant['qty'][0] != '') ){
 
-                var_dump($plant['qty']);
-                echo "<br /><br />";
                 $guide_options = get_post_meta($store, 'wpcf-planting-guide-' . $type . '-options', TRUE);
                 $guide_options = str_replace(array("\\'",'/','u2019'), array("'",'\/',"'") ,$guide_options);
                 $guide_options = json_decode($guide_options, true);

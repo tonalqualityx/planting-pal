@@ -49,6 +49,7 @@ if($type == 'ground'){ // If guide is in ground
                     
                     // $fraction = 1/$fraction;
                     if($fraction >= 0.15){
+
                         $cur_unit = " of a {$bag[0]} {$bag[1]} package";
                         $fraction = indppl_readable_fraction($fraction);
                         if($fraction == floor($fraction) && $fraction_int != ''){
@@ -165,7 +166,6 @@ if($type == 'ground'){ // If guide is in ground
                     // $fraction = 1/$fraction;
                     if($fraction >= 0.15){
                         $cur_unit = " of a {$bag[0]} {$bag[1]} package";
-
                         if($fraction == floor($fraction) && $fraction_int != ''){
                             $fraction = $fraction_int + $fraction;
                             $fraction_int = '';
