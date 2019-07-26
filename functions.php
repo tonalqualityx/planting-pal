@@ -2416,19 +2416,15 @@ function indppl_gform_lastname_pop($value) {
 add_filter('gform_field_value_indppl-last-name', 'indppl_gform_lastname_pop');
 
 function indppl_readable_fraction($decimal){
-    $fraction  = dec2frac($decimal);
-    $calc_frac = explode("/", $fraction);
-    if ($calc_frac[1] > 8) {
-        while ($calc_frac[1] > 8) {
-            $calc_frac[0]++;
-            if($calc_frac[0] == $calc_frac[1]){
-                return 1;
-            }
-            $fraction = dec2frac($calc_frac[0] / $calc_frac[1]);
-            // var_dump($fraction);
-            $calc_frac = explode("/", $fraction);
+    $eighths = array(0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1);
+    $fraction = null;
+    foreach($eighths as $item) {
+        if($fraction === null || abs($decimal - $fraction) > abs($item - $decimal) ){
+            $fraction = $item;
         }
     }
+
+    $fraction = dec2frac($fraction);
 
     return $fraction;
 }

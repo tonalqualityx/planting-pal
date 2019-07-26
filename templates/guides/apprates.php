@@ -42,6 +42,7 @@ if($type == 'ground'){ // If guide is in ground
 
                     $fraction = $cur_normalized[0]['standard-amount']/$bag[0];
 
+                    // Is the amount required larger than the bag?
                     if($cur_normalized[0] > $bag[0] && $fraction > 1){
                         $fraction_int = floor($fraction - 1);
                         $fraction = $fraction - $fraction_int;
@@ -49,6 +50,8 @@ if($type == 'ground'){ // If guide is in ground
                     
                     // $fraction = 1/$fraction;
                     if($fraction >= 0.15){
+
+                        // Fix qt-d & qt-l
                         $cur_unit = " of a {$bag[0]} {$bag[1]} package";
                         $fraction = indppl_readable_fraction($fraction);
                         if($fraction == floor($fraction) && $fraction_int != ''){
@@ -151,6 +154,7 @@ if($type == 'ground'){ // If guide is in ground
                         )
                     );
                     
+                    // Normalize to bag value
                     $cur_normalized = indppl_normalize($cur_items, $bag[1], $cur_cups);
 
                     
@@ -165,7 +169,6 @@ if($type == 'ground'){ // If guide is in ground
                     // $fraction = 1/$fraction;
                     if($fraction >= 0.15){
                         $cur_unit = " of a {$bag[0]} {$bag[1]} package";
-
                         if($fraction == floor($fraction) && $fraction_int != ''){
                             $fraction = $fraction_int + $fraction;
                             $fraction_int = '';
@@ -173,7 +176,6 @@ if($type == 'ground'){ // If guide is in ground
                             $fraction_int = $fraction_int . " & ";
                         } 
                         $fraction = indppl_readable_fraction($fraction);
-                        // var_dump($fraction_int);
                         $cur_amount = $fraction_int . $fraction;
                         $cur_rates = $cur_amount . " " . $cur_unit;
 
