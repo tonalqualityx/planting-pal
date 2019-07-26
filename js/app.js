@@ -11,11 +11,11 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.geo-submit', function(e){
         e.preventDefault();
         var zip = $('#zip-for-location').val();
-        var radius = $('#geo-radius-custom').val();
-        if(parseInt(radius) > 30){
-            radius = 30;
-            $('#geo-radius-custom').val(30);
-        }
+        // var radius = $('#geo-radius-custom').val();
+        // if(parseInt(radius) > 30){
+        //     $('#geo-radius-custom').val(30);
+        // }
+        var radius = 30;
         indpplAddLoading();
         setTimeout(function(){
             $.ajax({
@@ -38,6 +38,14 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '#location-icon', function(e){
         e.preventDefault();
+        ind_geo_locate_stores();
+    })
+
+    if($('#location-icon').length > 0){
+        ind_geo_locate_stores();
+    }
+
+    function ind_geo_locate_stores(){
         // var gps = Promise.resolve(getLocation());
         // gps.then(function(value){
         var lat = 0;
@@ -48,11 +56,12 @@ jQuery(document).ready(function( $ ) {
             lon = position.coords.longitude;
             });
         }
-        var radius = $('#geo-radius-custom').val();
-        if(parseInt(radius) > 30){
-            radius = 30;
-            $('#geo-radius-custom').val(30);
-        }
+        // var radius = $('#geo-radius-custom').val();
+        // if(parseInt(radius) > 30){
+        //     radius = 30;
+        //     $('#geo-radius-custom').val(30);
+        // }
+        radius = 30;
         indpplAddLoading();
         setTimeout(function(){
             $.ajax({
@@ -72,7 +81,7 @@ jQuery(document).ready(function( $ ) {
                 }
             });
         }, 200);
-    })
+    }
 
     $('body').on('click', '.edit-logo-btn', function(e){
         e.preventDefault();

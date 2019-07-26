@@ -1930,6 +1930,18 @@ function indppl_get_products($store_id, $key, $type){
     
 }
 
+function isValidZipCode($zipCode) {
+    return (preg_match('/^[0-9]{5}(-[0-9]{4})?$/', $zipCode)) ? true : false;
+}
+
+add_filter( 'posts_where', 'title_like_posts_where', 10, 2 );
+function title_like_posts_where( $where, $wp_query ) {
+    global $wpdb;
+    if ( $post_title_like = $wp_query->get( 'post_title_like' ) ) {
+        $where .= ' AND ' . $wpdb->posts . '.post_title LIKE \'%' . esc_sql( $wpdb->esc_like( $post_title_like ) ) . '%\'';
+    }
+    return $where;
+}
 
 function indppl_image_upload(){
     $filename = $_FILES['file'];
