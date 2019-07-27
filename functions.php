@@ -1790,7 +1790,7 @@ function indppl_get_product_info(){
     
         <div class='slide-in-products-inside-container'>
             <a href='#' class='modal-close'>X</a>
-            <h2><?php echo $heading; ?></h2>
+            <!-- <h2><?php echo $heading; ?></h2> -->
             <form id='product-create-form' method="post" action='#' class="form-horizontal">
                 <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
                 <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>

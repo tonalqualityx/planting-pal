@@ -2353,7 +2353,7 @@ function indpplEditProduct(type, store_id, product_id){
                 $('#product-create-brand').hide();
                 $('#product-create-brand').append('<option value=' + array['brand'] + ' selected></option>')
                 $('#product-create-product').append('<option value=' + product_id + ' selected></option>')
-                $('#product-create-form').prev().html('Edit ' + array['product'] + ' by ' + array['brand']);
+                // $('#product-create-form').prev().html('Edit ' + array['product'] + ' by ' + array['brand']);
             }
             // if(array["standard_unit"]){
             //     $('.product-create-standard-unit-container').append(array["standard_unit"]);
