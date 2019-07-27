@@ -833,6 +833,7 @@ div.ui-datepicker{
 .slide-in-products-inside-container, .pots-apprates-container{
   margin: 5% 10%;
   height: 80vh;
+  position: relative;
   /* border-radius: 10px; */
   /* border: #00000070 solid 1px; */
   background: white;
@@ -861,10 +862,10 @@ div.ui-datepicker{
   }
 
 .modal-close, .sponsor-modal-close{
-  position: fixed;
+  position: absolute;
   line-height: 1;
-  left: 80%;
-  top: 14%;
+  right: 15px;
+  top: 15px;
   width: 24px;
   font-size: 15px;
   padding: 4px 5px;
