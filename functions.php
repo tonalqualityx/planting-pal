@@ -1347,8 +1347,8 @@ function update_bag_package_table($store_id, $product_id, $type){
     ?>
     <div class='product-create-chart-header-container'>
         <div class="indppl-instructions">
-            <div class="indppl-instruction-text">
-                <h2><?php echo $header; ?> Planting Application Rates For:</h2>
+            <div class="indppl-instructions-text">
+                <h2><?php echo $header; ?> Planting Application Rates</h2>
                 <p>Tell us how much of this product you recommend for each plant container size. Adjust ‘How Much’ by clicking the + or - buttons. We’ll use these application rates to create a customized shopping list in the app AND show exactly how much to use fore each size plant on the planting guide (paid subscriptions only)</p>
             </div>
             <div class="indppl-video">
@@ -1358,7 +1358,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         <div class='product-create-chart-title-container'>
             <div style='display: flex;'>
                 <img class='indppl-product-create-img' src="<?php echo $img; ?>">
-                <div style='margin-left: 10px'>
+                <div style='margin-left: 20px'>
                     <p class='indppl-product-create-chart-brand'><?php echo get_the_terms($product_id, 'brand')[0]->name; ?></p>
                     <h4 class='indppl-product-create-chart-product'><?php echo get_the_title($product_id); ?></h4>
                 </div>
@@ -1379,7 +1379,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         </th>
     </tr>
     <tr>
-        <th colspan='1' class='indppl-green-underline' id='indppl-plant-container-size-header'>Plant Container Size</th>
+        <th colspan='1' class='indppl-green-underline' id='indppl-plant-container-size-header'>Plant<br />Container Size</th>
         <!-- <th colspan='2' class='indppl-green-underline' id='indppl-how-much-header'>'How Much' Adjusted</th> -->
         <!-- <th colspan='1'>Largest Product</th> -->
         <?php
@@ -1400,16 +1400,18 @@ function update_bag_package_table($store_id, $product_id, $type){
         $class_count = 0;
         foreach($order_array as $key => $value){
             $name = get_post_meta($value, 'wpcf-unit', true);
+            $colspan = 1;
             if($name == 'qt-d' || $name == 'qt-l'){
                 $name = 'Quart';
             }
             if($class_count == 0){
                 $class = 'indppl-green-underline';
                 $col = "colspan='2'";
-                $header = "'How Much' Adjusted for";
+                $header = "'How Much' Adjusted for <br />";
                 $class_id = 'indppl-how-much-header';
+                $colspan = 2;
             }else{
-                $class = 'brey-bg bag-apprates-title';
+                $class = 'grey-bg bag-apprates-title';
                 $col = '';
                 $header = '';
                 $class_id = '';
@@ -1417,7 +1419,7 @@ function update_bag_package_table($store_id, $product_id, $type){
             ?>
             
 
-            <th <?php echo $col; ?> id='<?php echo $class_id; ?>' class='<?php echo $class; ?>' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='1'><?php echo $header; ?> <br /> <?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></th>
+            <th <?php echo $col; ?> id='<?php echo $class_id; ?>' class='<?php echo $class; ?>' data-num='<?php echo get_post_meta($value, 'wpcf-size', true); ?>' data-unit='<?php echo get_post_meta($value, 'wpcf-unit', true); ?>' colspan='<?php echo $colspan; ?>'><?php echo $header; ?> <span class='bag-header-size'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></span></th>
             <?php
             $class_count++;
         }
@@ -1463,7 +1465,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                 <?php echo $title; ?>
             </td>
             <td class='indppl-bag-controls-container'>
-                <a href='#' class='indppl-bag-controls-neg orange-bg'><span class='indppl-bag-control'>-</span></a>
+                <a href='#' class='indppl-bag-controls-neg orange-bg'><span class='indppl-bag-control'>&ndash;</span></a>
                 <a href='#' class='indppl-bag-controls-pos orange-bg'><span class='indppl-bag-control'>+</span></a>
             </td>
                 <?php
