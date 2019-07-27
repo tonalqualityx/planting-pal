@@ -827,7 +827,9 @@ div.ui-datepicker{
 }
 
 .slide-in-products-container .container {
-  padding-bottom: 50px;
+  background: white;
+  margin-top:50px;
+  padding-bottom: 15px 15px 50px 15px;
 }
 
 .slide-in-products-inside-container, .pots-apprates-container{
