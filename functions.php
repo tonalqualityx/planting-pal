@@ -43,10 +43,10 @@ function geofind($lat, $lon, $radius) {
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
     $configData = json_decode($json, true);
-
+    // var_dump($configData);
     $i = 0;
     foreach ($ob as $taco) {
-        $allzips[] = $configData["code"][$i]["postalcode"];
+        $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
         $i++;
     }
     return $allzips;
@@ -59,10 +59,10 @@ function geozip($zipcode, $radius) {
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
     $configData = json_decode($json, true);
-
+    // var_dump($configData);
     $i = 0;
     foreach ($ob as $taco) {
-        $allzips[] = $configData["code"][$i]["postalcode"];
+        $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
         $i++;
     }
     return $allzips;

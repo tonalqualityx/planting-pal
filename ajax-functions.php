@@ -13,12 +13,8 @@ function indppl_planting_pal_home_ajax(){
     if(isset($_POST['zip'])){
         $zip = $_POST['zip'];
     }
-    if(isset($zip)){
-        // echo $radius;
-        $return = planting_pal_home(null, null, $radius, $zip);
-    }else{
-        $return = planting_pal_home($lat, $lon, $radius);
-    }
+    $return = planting_pal_home($lat, $lon, $radius, $zip);
+    
 
     // do_shortcode('[planting_pal_home]');
     echo $return;

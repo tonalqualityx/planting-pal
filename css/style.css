@@ -676,6 +676,7 @@ p.round-button-error{
 }
 .container-title{
   position: relative;
+  margin-top: 6px;
 }
 .container-title-fix{
   top: -33px;

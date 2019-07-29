@@ -15,6 +15,12 @@ jQuery(document).ready(function( $ ) {
         // if(parseInt(radius) > 30){
         //     $('#geo-radius-custom').val(30);
         // }
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                lat = position.coords.latitude;
+                lon = position.coords.longitude;
+            });
+        }
         var radius = 30;
         indpplAddLoading();
         setTimeout(function(){
@@ -25,6 +31,8 @@ jQuery(document).ready(function( $ ) {
                 data: {
                     action: 'indppl_planting_pal_home_ajax',
                     zip: zip,
+                    lat: lat,
+                    lon: lon,
                     radius: radius,
                 },
                 type: 'POST',
@@ -34,6 +42,44 @@ jQuery(document).ready(function( $ ) {
                 }
             });
         }, 200);
+    })
+
+    $('body').on('click', '#indppl-app-pagination', function(e){
+        e.preventDefault();
+        indpplAddLoading();
+
+        var pagination = $(this).data('page');
+        var zip = $('#zip-for-location').val();
+        var lat = 0;
+        var lon = 0;
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                lat = position.coords.latitude;
+                lon = position.coords.longitude;
+            });
+        }
+        setTimeout(function(){
+            var radius = 30;
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_planting_pal_home_ajax',
+                    zip: zip,
+                    lat: lat,
+                    lon: lon,
+                    radius: radius,
+                    pagination: pagination,
+                },
+                type: 'POST',
+                success: function(e){
+                    indpplDelLoading();
+                    $('.store-list-container').replaceWith(e);
+                }
+            });
+        }, 200);
+
     })
 
     $('body').on('click', '#location-icon', function(e){
@@ -552,8 +598,13 @@ jQuery(document).ready(function( $ ) {
                 container_id.push($(this).data('id'));
             });
             var first_package = {}
-            first_package['num'] = $('.bag-apprates-title').data('num');
-            first_package['unit'] = $('.bag-apprates-title').data('unit');
+            if(fraction){
+                first_package['num'] = $('#indppl-how-much-header').data('num');
+                first_package['unit'] = $('#indppl-how-much-header').data('unit');
+            }else{
+                first_package['num'] = $('.bag-apprates-title').data('num');
+                first_package['unit'] = $('.bag-apprates-title').data('unit');
+            }
         }
         
         var cups_num = $('.indppl-product-create-cups-num').val();

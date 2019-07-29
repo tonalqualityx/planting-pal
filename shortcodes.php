@@ -36,108 +36,182 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
         </div>
        
     <?php
+    $top = ob_get_clean();
+    ob_start();
     $is_zip = isValidZipCode($zip);
-    // if($is_zip){
-        $top = ob_get_clean();
-        ob_start();
-        // var_dump($zip);
+    ?><div class='store-list-container'> <?php
+    $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : '1';
+    $args = array(
+        'post_type' => 'store',
+    );
+    $store_name_search = false;
+    // var_dump($is_zip);
+    if($zip && $is_zip == false){
+        $store_name_search = true;
+        $args['meta_query'] = array(
+            array(
+                'key' => 'wpcf-issetup',
+                'value' => '1',
+                'compare' => '=',
+            ),
+        );
+        $args['post_title_like'] = $zip;
         if($lat != NULL){
-            // $lat = $_POST['lat'];
-            // $lon = $_POST['lon'];
-            // $radius = $_POST['radius'];
             $zip_array = geofind($lat, $lon, $radius);
-            // var_dump('lat');
-        }else if($zip){
-            $zip_array = geozip($zip, $radius);
-        }
-        ?><div class='store-list-container'> <?php
-        if($zip_array){
-            // var_dump($zip, $lat);
-            $args = array(
-                'post_type' => 'store',
-            );
-            if($is_zip || $lat){
-                // var_dump('top');
-                $args['meta_query'] = array(
-                    'relation' => 'AND',
-                    array(
-                        'key' => 'wpcf-zip',
-                        'value'   => $zip_array,
-                        'compare' => 'IN',
-                    ),
-                    array(
-                        'key' => 'wpcf-issetup',
-                        'value' => '1',
-                        'compare' => '=',
-                    ),
-                );
-            }else{
-                // var_dump($zip);
-                $args['meta_query'] = array(
-                    array(
-                        'key' => 'wpcf-issetup',
-                        'value' => '1',
-                        'compare' => '=',
-                    ),
-                );
-                $args['post_title_like'] = $zip;
+            foreach($zip_array as $key => $value){
+                $zips_only[] = $value['zip'];
+                $distance_array[] = round($value['distance'], 2);
             }
-            $the_query = new WP_Query( $args );
-            // The Loop
-            if ( $the_query->have_posts() ) {
-                ?>
-                <div class='flex-left-justify'><?php
-                $i =0;
-                while ( $the_query->have_posts() ) {
-                    // var_dump('special');
-                    $the_query->the_post();
-                    $id = get_the_ID();
-                    // var_dump(get_post_meta($id));
+            $args['meta_query'] = array(
+                'relation' => 'AND',
+                array(
+                    'key' => 'wpcf-zip',
+                    'value'   => $zips_only,
+                    'compare' => 'IN',
+                ),
+                array(
+                    'key' => 'wpcf-issetup',
+                    'value' => '1',
+                    'compare' => '=',
+                ),
+            );
+        }
+    }else if($zip == null && $lat){
+        $distance_array = array();
+        $zips_only = array();
+        if($lat != NULL){
+            $zip_array = geofind($lat, $lon, $radius);
+            foreach($zip_array as $key => $value){
+                $zips_only[] = $value['zip'];
+                $distance_array[] = round($value['distance'], 2);
+            }
+        }
+        $args['meta_query'] = array(
+            'relation' => 'AND',
+            array(
+                'key' => 'wpcf-zip',
+                'value'   => $zips_only,
+                'compare' => 'IN',
+            ),
+            array(
+                'key' => 'wpcf-issetup',
+                'value' => '1',
+                'compare' => '=',
+            ),
+        );
+    }else if($zip){
+        $zip_array = geozip($zip, $radius);
+        foreach($zip_array as $key => $value){
+            $zips_only[] = $value['zip'];
+            $distance_array[] = round($value['distance'], 2);
+        }
+        $args['meta_query'] = array(
+            'relation' => 'AND',
+            array(
+                'key' => 'wpcf-zip',
+                'value'   => $zips_only,
+                'compare' => 'IN',
+            ),
+            array(
+                'key' => 'wpcf-issetup',
+                'value' => '1',
+                'compare' => '=',
+            ),
+        );
+    }
+    // var_dump($store_name_search);
+    $pagination = 5;
+    if(isset($_POST['pagination'])){
+        $pagination = intval($_POST['pagination']);
+    }
 
-                    $add = get_post_meta($id, 'wpcf-address1');
-                    $city = get_post_meta($id, 'wpcf-city');
-                    $state = get_post_meta($id, 'wpcf-state');
-                    $zip = get_post_meta($id, 'wpcf-zip');
-                    $phone = get_post_meta($id, 'wpcf-phone');
-                    $url = get_post_meta($id, 'wpcf-weburl');
-                    $is_pro = get_post_meta($id, 'wpcf-ispro');
-                    $title = get_the_title();
-                    ?>
+    $the_query = new WP_Query( $args );
+    // The Loop
+    if ( $the_query->have_posts() ) {
+        ?>
+        <div class='flex-left-justify'><?php
+        $i =0;
+        $store_array = array();
+        while ( $the_query->have_posts() ) {
+            $the_query->the_post();
+            $id = get_the_ID();
+            $zip = get_post_meta($id, 'wpcf-zip', true);
+            foreach($zip_array as $key => $value){
+                if($value['zip'] == $zip){
+                    $distance = $value['distance'];
+                }
+            }
+            $store_array[$id] = $distance;
+        }
+        asort($store_array);
+        foreach($store_array as $key => $value){
+            $id = $key;
+            $add = get_post_meta($id, 'wpcf-address1', true);
+            $city = get_post_meta($id, 'wpcf-city', true);
+            $state = get_post_meta($id, 'wpcf-state', true);
+            $zip = get_post_meta($id, 'wpcf-zip', true);
+            $distance = $value;
+            $phone = get_post_meta($id, 'wpcf-phone', true);
+            $url = get_post_meta($id, 'wpcf-weburl', true);
+            $is_pro = get_post_meta($id, 'wpcf-ispro', true);
+            $title = get_the_title($id);
+            ?>
+            <div class='single-store-app-container'>
+                <div class='app-store-info'>
                     <h3 class='results-store'><a href='<?php echo get_permalink($id); ?>'><?php echo $title; ?></a></h3>
-                    <p class='store-list-text'><?php echo $add[0]; ?></p>
-                    <p class='store-list-text'><?php echo $city[0] . ", " . $state[0] . " " . $zip[0]; ?></p>
+                    <p class='store-list-text'><?php echo $add; ?></p>
+                    <p class='store-list-text'><?php echo $city . ", " . $state . " " . $zip; ?></p>
                     <?php
 
-                    if($is_pro[0] == 1){
+                    if($is_pro == 1){
                         ?>
-                        <p class='store-list-text'><a href=tel:<?php echo $phone[0]; ?>><?php echo phone_number_format($phone[0]); ?></a> <a href='<?php echo $url[0]; ?>' target='_blank'>Website</a></p>
+                        <p class='store-list-text'><a href=tel:<?php echo $phone; ?>><?php echo phone_number_format($phone); ?></a> <a href='<?php echo $url; ?>' target='_blank'>Website</a></p>
                         <?php
                     }
-                }
-                ?></div><?php
-                
-                /* Restore original Post Data */
-                wp_reset_postdata();
-            } else {
-                ?><p>No Stores in your area</p><?php
-            }
+                    ?>
+                </div>
+                <div class='app-store-distance'>
+                    <p class='store-distance store-list-text'><?php echo round($distance, 2); ?> mi</p>
+                </div>
+                    
+            </div>
             
+            <?php
+            if($i >= $pagination-1){
+                break;
+            }
+            $i++;
         }
-        ?></div><?php
-        if(isset($_POST['radius'])){
-            $get_store = ob_get_clean();
-            return $get_store;
-        }
-        
-        ?>
-            <script src="<?php echo INDPPL_ROOT_URL ?>assets/bootstrap/js/bootstrap.min.js"></script>
-        </body>
-        <!-- </html> -->
+        ?></div>
         <?php
+        if($the_query->found_posts > $pagination){
+        ?>
+            <div class='indppl-pagination-container'>
+                <a href='#' id='indppl-app-pagination' data-page="<?php echo $pagination + 5; ?>">Load More</a>
+            </div>
+
+        <?php
+        }
         
-        $return = ob_get_clean();
-        return $top.$return;
-    // }
+        /* Restore original Post Data */
+        wp_reset_postdata();
+    } else {
+        ?><p>No Stores in your area</p><?php
+    }
+    ?></div><?php
+    if(isset($_POST['radius'])){
+        $get_store = ob_get_clean();
+        return $get_store;
+    }
+    
+    ?>
+        <script src="<?php echo INDPPL_ROOT_URL ?>assets/bootstrap/js/bootstrap.min.js"></script>
+    </body>
+    <!-- </html> -->
+    <?php
+    
+    $return = ob_get_clean();
+    return $top.$return;
 
 }
 add_shortcode('planting-pal-home', 'planting_pal_home');
