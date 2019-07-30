@@ -1432,7 +1432,7 @@ function indppl_get_pot_apprates_ajax(){
     <div class='pots-apprates-container'>
         <div id='pots-and-beds-type' data-type='<?php echo $type; ?>'></div>
         <a href='#' class='modal-close'>X</a>
-        <h2>Pots / Containers Application Rates</h2>
+        <h2><?php echo ucfirst($type); ?> / Containers Application Rates</h2>
         <p>Bulk Filler / Substrate(ie Potting Soil)</p>
         <p>Enter the percentage of each product to be used. Percentages must total 100%.</p>
         <table class='pots-apprates-filler-container'>
