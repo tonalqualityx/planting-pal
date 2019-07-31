@@ -259,8 +259,6 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '#container-submit', function(e){
         e.preventDefault();
         containerSubmit();
-        
-            
     });
     $('body').on('click', '.indppl-add-product-btn', function(e){
         e.preventDefault();
@@ -363,7 +361,7 @@ jQuery(document).ready(function( $ ) {
                     var status = $('#user-status').val();
                     // console.log(status);
                     if(status == 'paidaccountpro'){
-                        $('.product-create-product').append('<option id="add_new_brand_select" value="new">Add Product</option>');
+                        $('.product-create-product option:first').after('<option id="add_new_brand_select" value="new">Create New Product</option>');
                     }
                     indpplDelLoading();
                 }
@@ -422,7 +420,7 @@ jQuery(document).ready(function( $ ) {
                         if(value != array['dry_wet'][2]){
                             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + name + '</option>');
                         }
-                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + name + '</option>');
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '">' + name + '</option>');
                     })
                 }
                 if(array['cups']){
@@ -806,13 +804,27 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.indppl-product-delete', function(e){
         e.preventDefault();
-        var load = indpplAddSmallLoading();
-        $(this).parent().parent().append(load);
+        // var load = indpplAddSmallLoading();
+        // $(this).parent().parent().append(load);
         var store_id = $(this).data('store');
         var type = $(this).data('type');
         var product_id = $(this).data('product');
-        var elem = $(this);
+        var elem = JSON.stringify($(this));
+        var brand = $(this).parent().next().text();
+        var product = $(this).parent().next().next().text();
+        
+        $('body').prepend("<div class='indppl-loading-background'><div class='store-delete-modal'><div class='store-delete-modal-inside'><h4 class='store-delete-header'>You are about to delete</h4><h4 class='store-delete-header'>" + brand + " " + product + "</h4><h3 class='store-delete-header'>Are you Sure?</h3><div class='ind-flex store-delete-button-container'><a href='#' class='indppl-button button-primary indppl-delete-product-yes' data-store=" + store_id + " data-type=" + type + " data-product="+ product_id + ">YES</a><a href='#' class='indppl-button button-primary indppl-delete-product-no'>NO</a></div></div></div></div>");
+    })
+    
+    $('body').on('click', '.indppl-delete-product-yes', function(e){
+        e.preventDefault();
+        indpplAddLoading();
+        var store_id = $(this).data('store');
+        var type = $(this).data('type');
+        var product_id = $(this).data('product');
+        var elem = $('.indppl-product-delete[data-product=' + product_id + ']');
         var version_check = 1.0;
+        
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -826,12 +838,16 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                $(elem).parent().parent().remove();
+                $(elem).closest('tr').remove();
                 // console.log(e);
-                indpplDelSmallLoading();
+                indpplDelLoading();
             }
         })
-    })
+    });
+
+    $('body').on('click', '.indppl-delete-product-no', function(e){
+        $('.indppl-loading-background').remove();
+    });
 
     $('body').on('change', '.some-kind-of-wonderful', function(e){
         e.preventDefault();
@@ -2061,6 +2077,55 @@ jQuery(document).ready(function( $ ) {
         $('.modal-close').remove();
     })
 
+    $('body').on('mouseenter', 'tr.indppl-containers-row', function(){
+        // console.log($(this).find('.indppl-container-edit-title'));
+        if($(this).find('.indppl-container-edit-title').length > 0){
+            var id = $(this).find('.container-available').children(0).data('container');
+            console.log(id);
+            $(this).last().children().last().append('<a class="container-delete" data-id=' + id + '>X</a>');
+        }
+    });
+
+    $('body').on('mouseleave', 'tr.indppl-containers-row', function(){
+        $('.container-delete').remove();
+    })
+
+    $('body').on('click', '.container-delete', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+        $('body').prepend('<div class="del-container-message-container"><div class="del-container-message-inside-container"><h3>Are you sure  you want to delete this container?</h3><div class="ind-yes-no"><a href="#" class="del-container-yes" data-id=' + id + '>Yes</a><a href="#" class="del-container-no">No</a></div></div></div>');
+    });
+
+    $('body').on('click', '.del-container-no', function(e){
+        e.preventDefault();
+        $('.del-container-message-container').remove();
+    });
+
+    $('body').on('click', '.del-container-yes', function(e){
+        e.preventDefault();
+        indpplAddLoading();
+        var id = $(this).data('id');
+        var store_id = $('#store-id').val();
+        var version_check = 1.0;
+        elem = $(this);
+        $.ajax({
+            url: indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_delete_container_ajax',
+                id: id,
+                store_id: store_id,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function (response) {
+                $('#' + response + '-container-available').parents('.indppl-containers-row').remove();
+                $('.del-container-message-container').remove();
+                indpplDelLoading();
+            }
+        });
+    });
 
     if($("#keep-going-container").length > 0) {
         setTimeout(function(){
@@ -2432,7 +2497,7 @@ function indpplEditProduct(type, store_id, product_id){
                         $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
                         
                     }
-                    $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + value + '</option>');
+                    $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '">' + value + '</option>');
                 })
             }
             if(array['cups']){
@@ -2674,90 +2739,104 @@ function containerSubmit(){
     if($('.indppl-update-apps').length > 0 && $first_time == 0){
         alert("We've added your containers, please verify the amounts are correct in your in ground application rates.");
     }
-    $('.container-available').each(function(){
-        $(this).removeClass('indppl-update-apps');
-    });
-    var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
-    var available = [];
-    var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
-    var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
-    var store_id = $('#store-id').val();
-    var not_available = [];
-    var remove_dot = [];
-    var new_array = {};
-    var array_num = 0;
-    var version_check = 1.0;
-    $(".indppl-checked").each(function(){
-        available.push($(this).find('input').data('container'));
-    });
-    $(".indppl-unchecked").each(function(){
-        not_available.push($(this).find('input').data('container'));
-    });
-    $('.indppl-remove-dot').each(function(){
-        remove_dot.push($(this).attr('name'));
-    });
+    var empty = false;
+    var empty_elem;
     $('.indppl-container-edit-title').each(function(){
-        if($(this).attr('name') == "new-container"){
-            new_array[array_num] = {};
-            new_array[array_num]['name'] = $(this).val();
-            $(this).parent().parent().find('input').each(function(){
-                if($(this).is(':checked')){
-                    season = $(this).attr('name');
-                    season_array = season.split('-');
-                    new_array[array_num][season] = season_array[1];
-                }
-            });
-            // $(this).attr('name', 'dead');
-            array_num++;
-        }
-    });
-
-    // console.log(available);
-    $.ajax({
-        url:indppl_ajax.ajaxurl,
-        dataType: 'text',
-        method: 'POST',
-        data: {
-            action: 'indppl_save_container_data_ajax',
-            date: date,
-            default_container: default_container,
-            non_default: non_default,
-            store_id: store_id,
-            available: available,
-            not_available: not_available,
-            new_array: new_array,
-            remove_dot: remove_dot,
-            version_check: version_check,
-        },
-        type: 'POST',
-        success: function(e){
-            getProductInfo();
-            // console.log(e);
-            var new_array = jQuery.parseJSON(e);
-            console.log(new_array['update']);
-            var i = 0;
-            $('.container-add-new').each(function(){
-                $(this).attr('name', "indppl-container-title");
-                $(this).addClass('container-title');
-                $(this).removeClass('container-add-new');
-                $(this).parent().removeClass()
-                $(this).parent().addClass("padding-left-40 position-absolute check-box-container");
-                $(this).parent().prepend('<div class="container-available indppl-checked"><input type="checkbox" id="' + new_array[i] + '-container-available" class="display-none" data-container="' + new_array[i] + '" name="' + new_array[i] + '-container-available" checked=""><label class="margin-0 container-available-check" for="' + new_array[i] + '-container-available"><div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div></label></div>');
-                $(this).parent().parent().find('input').each(function(){
-                    if($(this).is(':checkbox')){
-                        var season = $(this).attr('name');
-                        season_array = season.split('-');
-                        $(this).attr('name', new_array[i] + "-" + season_array[1]);
-                        $(this).attr('id', new_array[i] + '-' + season_array[1]);
-                        $(this).next().attr('for', new_array[i] + '-' + season_array[1]);
-                    }
-                });
-                i++;
-            });
-            greyOutAllUnchecked();
+        console.log($(this).val());
+        if($(this).val() == ""){
+            empty = true;
+            empty_elem = $(this);
             indpplDelLoading();
         }
     });
+    if(empty == true){
+        $(empty_elem).attr('placeholder', 'Required');
+    }else{
+        $('.container-available').each(function(){
+            $(this).removeClass('indppl-update-apps');
+        });
+        var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
+        var available = [];
+        var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
+        var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
+        var store_id = $('#store-id').val();
+        var not_available = [];
+        var remove_dot = [];
+        var new_array = {};
+        var array_num = 0;
+        var version_check = 1.0;
+        $(".indppl-checked").each(function(){
+            available.push($(this).find('input').data('container'));
+        });
+        $(".indppl-unchecked").each(function(){
+            not_available.push($(this).find('input').data('container'));
+        });
+        $('.indppl-remove-dot').each(function(){
+            remove_dot.push($(this).attr('name'));
+        });
+        $('.indppl-container-edit-title').each(function(){
+            if($(this).attr('name') == "new-container"){
+                new_array[array_num] = {};
+                new_array[array_num]['name'] = $(this).val();
+                $(this).parent().parent().find('input').each(function(){
+                    if($(this).is(':checked')){
+                        season = $(this).attr('name');
+                        season_array = season.split('-');
+                        new_array[array_num][season] = season_array[1];
+                    }
+                });
+                // $(this).attr('name', 'dead');
+                array_num++;
+            }
+        });
+
+        // console.log(available);
+        $.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_save_container_data_ajax',
+                date: date,
+                default_container: default_container,
+                non_default: non_default,
+                store_id: store_id,
+                available: available,
+                not_available: not_available,
+                new_array: new_array,
+                remove_dot: remove_dot,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function(e){
+                getProductInfo();
+                // console.log(e);
+                var new_array = jQuery.parseJSON(e);
+                console.log(new_array['update']);
+                var i = 0;
+                $('.container-add-new').each(function(){
+                    $(this).attr('name', "indppl-container-title");
+                    $(this).addClass('container-title');
+                    $(this).removeClass('container-add-new');
+                    $(this).parent().removeClass()
+                    $(this).parent().addClass("padding-left-40 position-absolute check-box-container");
+                    $(this).parent().prepend('<div class="container-available indppl-checked"><input type="checkbox" id="' + new_array[i] + '-container-available" class="display-none" data-container="' + new_array[i] + '" name="' + new_array[i] + '-container-available" checked=""><label class="margin-0 container-available-check" for="' + new_array[i] + '-container-available"><div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div></label></div>');
+                    $(this).parent().parent().find('input').each(function(){
+                        if($(this).is(':checkbox')){
+                            var season = $(this).attr('name');
+                            season_array = season.split('-');
+                            $(this).attr('name', new_array[i] + "-" + season_array[1]);
+                            $(this).attr('id', new_array[i] + '-' + season_array[1]);
+                            $(this).next().attr('for', new_array[i] + '-' + season_array[1]);
+                        }
+                    });
+                    i++;
+                });
+                greyOutAllUnchecked();
+                indpplDelLoading();
+            }
+        });
+    }
 }
 
 function getAppRates(type){

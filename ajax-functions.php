@@ -307,6 +307,8 @@ function indppl_get_products_by_brand_ajax(){
                 ),
             ),
         ),
+        'orderby' => 'title',
+        'order'   => 'ASC',
     );
     $products = new WP_Query($args);
     ob_start();
@@ -2670,3 +2672,20 @@ function indppl_auth_users_ajax(){
 }
 add_action('wp_ajax_indppl_auth_users_ajax', 'indppl_auth_users_ajax');
 add_action('wp_ajax_nopriv_indppl_auth_users_ajax', 'indppl_auth_users_ajax');
+
+function indppl_delete_container_ajax(){
+    if($_POST['version_check'] == '1.0'){
+        if(isset($_POST['id'])){
+            $id = $_POST['id'];
+        }
+        if(isset($_POST['store_id'])){
+            $store_id = $_POST['store_id'];
+        }
+        $result = indppl_delete_apprate($store_id, $id);
+        wp_delete_post($id);
+        echo $id;
+    }
+    die();
+}
+add_action('wp_ajax_indppl_delete_container_ajax', 'indppl_delete_container_ajax');
+add_action('wp_ajax_nopriv_indppl_delete_container_ajax', 'indppl_delete_container_ajax');
