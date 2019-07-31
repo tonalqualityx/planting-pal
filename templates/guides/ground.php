@@ -21,7 +21,18 @@ $inst_checked = ' checked="checked" ';
 ?> 
 
 
-<h2>In Ground Planting Guide</h2>
+<div class="indppl-instructions">
+  <div class="indppl-instructions-text">
+    <h2>In Ground Planting Guide Builder</h2>
+    <p>For each step in the planting guide, choose from the text and graphics provided or create your own. Then, select the products being used in each step - its also recommended to include product-specific info here too. As you're building, check how your planting guide looks in the preview window.</p>
+  </div>
+  <div class="indppl-video">
+    <video></video>
+  </div>
+</div>
+<div class="planting-guide-preview-title ppl-med-green-bg">
+    <h3 class="white-text text-center">Planting Guide Preview Window</h3>
+</div>
 <div id="planting-guide" class="planting-guide-preview planting-guide" data-type="ground" data-store="<?php echo $store ; ?>">
     <div class="overflow">
         <div class="store-info">
@@ -130,12 +141,13 @@ $inst_checked = ' checked="checked" ';
         ?>
         <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >
             <h3><?php echo $section; ?></h3>
-            <p>Customize this step by selecting an option below:</p>
+            <h4>Text and Graphics</h4>
+            <p>Choose from the pre-written text and graphics for this step or use your own.</p>
             <ul class="style-free" data-products="products-<?php echo $i; ?>">
 
                 <li class="planting-guide-instructions indppl-flex indppl-align-center indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option A</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content'>
                         <?php echo $options['a-instructions']; ?>
@@ -145,7 +157,7 @@ $inst_checked = ' checked="checked" ';
 
                 <li class="planting-guide-instructions  indppl-flex indppl-align-center indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option B</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content'>
                         <?php echo $options['b-instructions']; ?>
@@ -171,7 +183,8 @@ $inst_checked = ' checked="checked" ';
                     </li>
                 <?php } ?>
             </ul>
-            <p>Products used in this step:</p>
+            <h4>Product Recommendations</h4>
+            <p>Choose the products you'd like to appear in this step of the planting guide. Customize the text to provide your customers with the product-specific instructions or tips. For example, if the product is best applied in the morning or should only be 1/4" thick - say that here.</p>
             <div id="products-<?php echo $i; ?>" class="step-product-select">
                 <?php 
                 $displayed = array();

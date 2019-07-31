@@ -128,6 +128,10 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
     background: #254921!important;
 }
 
+.ppl-med-green-bg {
+  background: #4a8943;
+}
+
 .indpple-dark-green-bg {
   background: #488a41;
   color: white;
@@ -829,7 +833,10 @@ div.ui-datepicker{
 .slide-in-products-container .container {
   background: white;
   margin-top:50px;
-  padding-bottom: 15px 15px 50px 15px;
+  margin-bottom: 50px;
+  padding: 25px 25px 50px 25px;
+  position: relative;
+  min-height: fit-content;
 }
 
 .slide-in-products-inside-container, .pots-apprates-container{
@@ -1286,6 +1293,28 @@ GUIDES STYLES
   max-height: 200px;
 }
 
+.planting-guide-options h3 {
+  border-bottom: 3px solid #4a8943;
+  color: #4a8943;
+  line-height: 1;
+  margin-top: 40px;
+  font-size: 2em;
+}
+
+.planting-guide-options h4 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 20px 0 0 0;
+}
+
+.planting-guide-options > p {
+  font-size: 1.25em;
+}
+
+.planting-guide-options  ul {
+  margin-bottom: 60px;
+}
+
 .planting-guide-options .planting-guide-instructions .planting-guide-option-input{
   width: 15%;
   min-width: 15%;
@@ -1298,7 +1327,28 @@ GUIDES STYLES
 }
 
 .planting-guide-options .planting-guide-instructions .planting-guide-option-input input{
-  margin-right: 10px;
+  /* margin-right: 10px; */
+  display:none;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+  padding: 5px 20px 2px;
+  border-radius: 12px;
+  border: 2px solid #999ca2;
+  font-size: 0.9em;
+  transition: all 0.35s ease-in-out;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input label:hover {
+  background: #beeb5c;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input input:checked + label {
+  background: #9ecb3c;
 }
 
 .planting-guide-preview {
@@ -1308,7 +1358,25 @@ GUIDES STYLES
   max-height: 400px;
   overflow: hidden;
   padding: 0;
-  padding-right: 0;
+  padding-top: 40px;
+}
+
+.planting-guide-preview-title {
+  margin-bottom: 0;
+  padding: 10px;
+  width: calc(100% - 2px);
+  transform: translateY(calc(100% + 1px)) translateX(1px);
+  z-index: 9999999999999999999999999;
+  position: relative;
+  height: 40px;
+}
+
+.planting-guide-preview-title h3 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0;
+  margin-top: 3px;
+  line-height: 1;
 }
 
 .planting-guide-sent-text{
