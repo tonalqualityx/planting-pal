@@ -2134,7 +2134,11 @@ jQuery(document).ready(function( $ ) {
         }
     }
 
-
+    $('body').on('click', ".planting-guide-option-input label", function(){
+        console.log('sdfsd');
+        $(this).parents('ul').find(".instructions-content").removeClass('active');
+        $(this).parents('li').find(".instructions-content").addClass('active');
+    });
 });
 
 // start of functions
@@ -2317,7 +2321,7 @@ function indpplAddProduct(type){
     
                 indpplDelLoading();
             }
-        })
+        });
     })(jQuery);
 }
 

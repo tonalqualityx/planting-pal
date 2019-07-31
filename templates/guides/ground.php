@@ -149,9 +149,12 @@ $inst_checked = ' checked="checked" ';
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content'>
-                        <?php echo $options['a-instructions']; ?>
+                    <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content <?php if($a != ''){echo " active";} ?>'>
                         <img src="<?php echo $options['a-image']; ?>">
+                        <div class="instructions-content-text">
+                            <?php echo $options['a-instructions']; ?>
+                        </div>
+                        
                     </div>
                 </li>
 
@@ -159,9 +162,11 @@ $inst_checked = ' checked="checked" ';
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content'>
-                        <?php echo $options['b-instructions']; ?>
+                    <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content <?php if($b != ''){echo " active";} ?>'>
                         <img src="<?php echo $options['b-image']; ?>">
+                        <div class="instructions-content-text">
+                            <?php echo $options['b-instructions']; ?>
+                        </div>
                     </div>
                 </li>
                 <?php if(in_array('paidaccountpro',$sub)){ ?>

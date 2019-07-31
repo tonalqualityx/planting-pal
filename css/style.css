@@ -1285,8 +1285,30 @@ GUIDES STYLES
 }
 
 .planting-guide-instructions .instructions-content {
+  display: flex;
+  justtify-content: space-between;
+  align-items: flex-start;
+  transition: all 0.35s ease-in-out;
+}
+
+.planting-guide-instructions .instructions-content .instructions-content-text {
   border: 1px solid #afafaf;
   padding: 5px 25px;
+  width: 70%;
+}
+
+.planting-guide-instructions .instructions-content img {
+  width: 25%;
+  padding: 5px 15px;
+  margin: auto;
+}
+
+.planting-guide-instructions .instructions-content.active {
+  background: #eff7ed;
+}
+
+.planting-guide-instructions .instructions-content.active .instructions-content-text {
+  border-color: #eff7ed;
 }
 
 .planting-guide-instructions img {
