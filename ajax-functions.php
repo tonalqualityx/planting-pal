@@ -307,6 +307,8 @@ function indppl_get_products_by_brand_ajax(){
                 ),
             ),
         ),
+        'orderby' => 'title',
+        'order'   => 'ASC',
     );
     $products = new WP_Query($args);
     ob_start();

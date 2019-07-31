@@ -652,7 +652,13 @@ p.round-button-error{
 .container-limit:hover{
   text-decoration: none;
 }
-.checkmark {
+.indppl-product-pots-edit, .indppl-product-delete, .indppl-product-edit{
+  color:#e6561a;
+}
+.indppl-product-pots-edit:hover, .indppl-product-delete:hover, .indppl-product-edit:hover{
+  color:#f26226;
+}
+.checkmark, .checkmark-products {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -662,6 +668,12 @@ p.round-button-error{
   stroke-miterlimit: 10;
   stroke-dashoffset: 0;
   margin: 0;
+}
+.checkmark-products{
+  height: 18px;
+}
+.products-table{
+  width: 100%;
 }
 .container-available-check{
   position: relative;
@@ -700,6 +712,9 @@ p.round-button-error{
   justify-content: center;
   align-items: center;
 }
+#add_new_brand_select, #add_new_brand_select{
+  font-weight: 600;
+}
 .del-container-message-container h3{
   text-align: center;
 }
@@ -709,7 +724,6 @@ input[type='text'].indppl-container-edit-title::placeholder{
 input[type='text'].indppl-container-edit-title:-ms-input-placeholder{
   color: red;
 }
-
 input[type='text'].indppl-container-edit-title::-ms-input-placeholder{
   color: red;
 }

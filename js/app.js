@@ -361,7 +361,7 @@ jQuery(document).ready(function( $ ) {
                     var status = $('#user-status').val();
                     // console.log(status);
                     if(status == 'paidaccountpro'){
-                        $('.product-create-product').append('<option id="add_new_brand_select" value="new">Add Product</option>');
+                        $('.product-create-product option:first').after('<option id="add_new_brand_select" value="new">Create New Product</option>');
                     }
                     indpplDelLoading();
                 }
@@ -420,7 +420,7 @@ jQuery(document).ready(function( $ ) {
                         if(value != array['dry_wet'][2]){
                             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + name + '</option>');
                         }
-                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + name + '</option>');
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '">' + name + '</option>');
                     })
                 }
                 if(array['cups']){
@@ -804,13 +804,27 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.indppl-product-delete', function(e){
         e.preventDefault();
-        var load = indpplAddSmallLoading();
-        $(this).parent().parent().append(load);
+        // var load = indpplAddSmallLoading();
+        // $(this).parent().parent().append(load);
         var store_id = $(this).data('store');
         var type = $(this).data('type');
         var product_id = $(this).data('product');
-        var elem = $(this);
+        var elem = JSON.stringify($(this));
+        var brand = $(this).parent().next().text();
+        var product = $(this).parent().next().next().text();
+        
+        $('body').prepend("<div class='indppl-loading-background'><div class='store-delete-modal'><div class='store-delete-modal-inside'><h4 class='store-delete-header'>You are about to delete</h4><h4 class='store-delete-header'>" + brand + " " + product + "</h4><h3 class='store-delete-header'>Are you Sure?</h3><div class='ind-flex store-delete-button-container'><a href='#' class='indppl-button button-primary indppl-delete-product-yes' data-store=" + store_id + " data-type=" + type + " data-product="+ product_id + ">YES</a><a href='#' class='indppl-button button-primary indppl-delete-product-no'>NO</a></div></div></div></div>");
+    })
+    
+    $('body').on('click', '.indppl-delete-product-yes', function(e){
+        e.preventDefault();
+        indpplAddLoading();
+        var store_id = $(this).data('store');
+        var type = $(this).data('type');
+        var product_id = $(this).data('product');
+        var elem = $('.indppl-product-delete[data-product=' + product_id + ']');
         var version_check = 1.0;
+        
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -824,12 +838,16 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                $(elem).parent().parent().remove();
+                $(elem).closest('tr').remove();
                 // console.log(e);
-                indpplDelSmallLoading();
+                indpplDelLoading();
             }
         })
-    })
+    });
+
+    $('body').on('click', '.indppl-delete-product-no', function(e){
+        $('.indppl-loading-background').remove();
+    });
 
     $('body').on('change', '.some-kind-of-wonderful', function(e){
         e.preventDefault();
@@ -2479,7 +2497,7 @@ function indpplEditProduct(type, store_id, product_id){
                         $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
                         
                     }
-                    $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '" selected>' + value + '</option>');
+                    $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '">' + value + '</option>');
                 })
             }
             if(array['cups']){
