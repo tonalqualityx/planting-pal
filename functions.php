@@ -491,11 +491,31 @@ function indppl_delete_apprate($store_id, $args = null) {
         } else {
             // We have just one item to remove
             // Version 1.1
+            // used to remove containers
+            $type = array('ground', 'pots', 'beds');
+            foreach($type as $key => $value){
+                foreach($apprates[$value] as $k => $v){
+                    foreach($v as $ki => $data){
+                        foreach($data as $id => $container_info){
+                            // foreach($container_info as $id => $tooo){
+                                if($id == $args){
+                                    unset($apprates[$value][$k][$ki][$id]);
+                                    // var_dump($apprates[$value][$v][$data][$id]);
+                                }
+                            // }
+                        }
+                    }
+                }
+            }
+            $newapprates = json_encode($apprates);
+            // var_dump($newapprates);
+            $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
+            $results = array('apprates' => $newapprates, 'update' => $update);
         }
 
     }
 
-    return $results;
+    // return $results;
 }
 
 function dummy_data() {
@@ -860,7 +880,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         </svg></div>';
     
     ?>
-    <tr class='indppl-table-color-offset'>
+    <tr class='indppl-table-color-offset indppl-containers-row'>
         <td class='padding-left-40 position-absolute check-box-container'><?php
         $fix_relative_issue = '';
             if(in_array($id, $relation_array)){
@@ -1174,6 +1194,7 @@ function update_package_table($store_id, $product_id, $type){
                 <?php
                 foreach($pro_container as $k => $v){
                     // echo 'inside-foreach';
+                    $default_app_unit = get_post_meta($v['intermediary'], 'wpcf-apprate-unit-holdover', true);
                     if($id == $v['child']){
                         
                         // echo $v['intermediary'];
@@ -1213,9 +1234,10 @@ function update_package_table($store_id, $product_id, $type){
                     $app_qty = 0;
                     $wet_dry = get_post_meta($product_id, 'wpcf-dryliquid', true);
                     if($wet_dry = 'dry'){
-                        $app_unit = 'lb';
+                        // $app_unit = 'lb';
+                        $app_unit = $default_app_unit;
                     }else{
-                        $app_unit = 'gal';
+                        $app_unit = $default_app_unit;
                     }
                     if(array_key_exists('amount', $app_rates[$type][$product_id]['containers'][$id])){
                         $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
