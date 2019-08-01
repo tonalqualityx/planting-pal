@@ -1476,56 +1476,67 @@ function indppl_get_pot_apprates_ajax(){
                 <th></th>
                 <th></th>
                 <th></th>
-                <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th>
+                <!-- <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th> -->
             </tr>
             <?php
             $counter = 0;
             foreach($app_rates[$type]['filler'] as $key => $value){
                 // if(isset($value['filler'])){
-                    $title = get_the_title($key);
-                    $brand = get_the_terms($key, 'brand', true);
-                    $brand = $brand[0]->name;
-                    $primary = '';
-                    $img = get_post_meta($key, 'wpcf-product-image', true);
-                    if(!$img){
-                        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
-                    }
-                    $default = $app_rates[$type]['filler'][$key]['primary'];
-                    if($default == "true"){
-                        $primary = 'checked';
-                    }
-                    // var_dump($brand);
-                    ?>
-                    <tr class='pots-apprates-filler-inside-container'>
-                        <td class='pots-apprates-filler-cell'>
-                            <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
-                        </td>
-                        <td class='pots-apprates-filler-cell'>
-                            <span class='pots-apprates-filler-percent'>%</span>
-                        </td>
-                        <td class='pots-apprates-filler-cell'>
-                            <img class='height-50 ind-centered' src="<?php echo $img; ?>">
-                        </td>
-                        <td class='pots-apprates-filler-cell'>
-                            <div class='pots-apprates-brand-title'>
-                                <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
-                                <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
-                            </div>
+                $title = get_the_title($key);
+                $brand = get_the_terms($key, 'brand', true);
+                $brand = $brand[0]->name;
+                $primary = '';
+                $img = get_post_meta($key, 'wpcf-product-image', true);
+                if(!$img){
+                    $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                }
+                $default = $app_rates[$type]['filler'][$key]['primary'];
+                if($default == "true"){
+                    $primary = 'checked';
+                }
+                // var_dump($brand);
+                ?>
+                <tr class='pots-apprates-filler-inside-container'>
+                    <td class='pots-apprates-filler-cell'>
+                        <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <span class='pots-apprates-filler-percent'>%</span>
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <img class='height-50 ind-centered' src="<?php echo $img; ?>">
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <div class='pots-apprates-brand-title'>
+                            <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                            <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                        </div>
 
-                        </td>
-                        <td class=''>
-                            <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio' <?php echo $primary; ?>>
-                        </td>
-                    </tr>
-                    <?php
-                    $counter++;
+                    </td>
+                    <td class=''>
+                        <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio' <?php echo $primary; ?>>
+                    </td>
+                </tr>
+                <?php
+                $counter++;
                 // }
-
+                
+            }
+            if(count($app_rates[$type]['filler']) > 1){
+            ?>
+            <div class='indppl-filler-hint-container'>
+                <div class='indppl-filler-hint-inner-container'>
+                    <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
+                    <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
+                    <p class='indppl-hint-text'>If your customer needs 8 qts or less of potting soil, Planting Pal will recomend the Primary Filler instead of the multiple product formula.</p>
+                </div>
+            </div>
+            <?php
             }
             if(empty($app_rates[$type]['filler'])){
                 ?>
                 <tr>
-                    <th class='color-red'>There are no Products Setup for This section.</th>
+                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                 </tr>
                 <?php
             }else{
@@ -1624,11 +1635,24 @@ function indppl_get_pot_apprates_ajax(){
             if(empty($app_rates[$type]['blended'])){
                 ?>
                 <tr>
-                    <th class='color-red'>There are no Products Setup for This section.</th>
+                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                 </tr>
                 <?php
             }
             ?>
+            <div class='indppl-hint-container'>
+                <div class='indppl-hint-inner-container'>
+                    <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
+                    <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
+                    <p class='indppl-hint-text'>Typical application rates for products in this section are:<br />
+                    <span class='indppl-hint-text-bold'>Organic Fertilizer: </span><span>1 cup per cuft of soil</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Chemical Fertilizer: </span><span>1 tbsp per cuft of soil</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Microbe Fertilizer: </span><span>0.25 tsp per cuft of soil</span>
+                    </p>
+                </div>
+            </div>
         </table>
         <p>Typical Application Rates:</p>
         <p>Organic Fertilizer - 1 Cup per cuft of soil</p>
@@ -1721,11 +1745,24 @@ function indppl_get_pot_apprates_ajax(){
             if(empty($app_rates[$type]['surface'])){
                 ?>
                 <tr>
-                    <th class='color-red'>There are no Products Setup for This section.</th>
+                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                 </tr>
                 <?php
             }
             ?>
+            <div class='indppl-hint-container'>
+                <div class='indppl-hint-inner-container'>
+                    <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
+                    <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
+                    <p class='indppl-hint-text'>Typical application rates for products in this section are:<br />
+                    <span class='indppl-hint-text-bold'>Organic Fertilizer: </span><span>1 cup per sqft</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Chemical Fertilizer: </span><span>1 lb per 100 sqft</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Microbe Fertilizer: </span><span>0.25 tsp per 10 sqft</span>
+                    </p>
+                </div>
+            </div>
         </table>
         <p>Typical Application Rates:</p>
         <p>Organic Fertilizer - 1 cup per 10 sqft</p>
@@ -1750,7 +1787,7 @@ function indppl_get_pot_apprates_ajax(){
                 }else{
                     ?>
                     <tr class='margin-bottom-20 display-block'>
-                        <th class='color-red'>There are no Products Setup for This section.</th>
+                        <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                     </tr> 
                     <?php
                 }
