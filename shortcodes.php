@@ -925,6 +925,13 @@ function pp_store_containers(){
 add_shortcode('pp-store-containers', 'pp_store_containers');
 
 function pp_store_products(){
+    if(isset($_GET['store-id'])){
+        $store_id = $_GET['store-id'];
+    }else if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    // var_dump($store_id);
+    $apprates = indppl_apprates($store_id);
     ?>
         <div class='indppl-products-main-container'>
 
@@ -941,7 +948,14 @@ function pp_store_products(){
                 <?php echo indppl_get_current_products("pots"); ?>
             </div>
             <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='pots'>+ Add Product</a>
-            <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='pots'>Application rates</a>
+            <?php
+            // var_dump($apprates);
+            if(count($apprates['pots']) > 0){
+                ?>
+                <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='pots'>Application rates</a>
+                <?php
+            }
+            ?>
 
             <h3 class='indppl-products-title indppl-dark-green'>Raised Bed Plantings</h3>
             <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for raised bed planting recommendations. For this section, be sure to add all the products before adjusting application rates.</p>
@@ -949,7 +963,14 @@ function pp_store_products(){
                 <?php echo indppl_get_current_products("beds"); ?>
             </div>
             <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='beds'>+ Add Product</a>
-            <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='beds'>Application rates</a>
+            <?php
+            // var_dump($apprates);
+            if(count($apprates['pots']) > 0){
+                ?>
+                <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='beds'>Application rates</a>
+                <?php
+            }
+            ?>
         </div>
     <?php
 }

@@ -810,8 +810,8 @@ jQuery(document).ready(function( $ ) {
         var type = $(this).data('type');
         var product_id = $(this).data('product');
         var elem = JSON.stringify($(this));
-        var brand = $(this).parent().next().text();
-        var product = $(this).parent().next().next().text();
+        var brand = $(this).closest('tr').children().first().text();
+        var product = $(this).closest('tr').children().first().next().text();
         
         $('body').prepend("<div class='indppl-loading-background'><div class='store-delete-modal'><div class='store-delete-modal-inside'><h4 class='store-delete-header'>You are about to delete</h4><h4 class='store-delete-header'>" + brand + " " + product + "</h4><h3 class='store-delete-header'>Are you Sure?</h3><div class='ind-flex store-delete-button-container'><a href='#' class='indppl-button button-primary indppl-delete-product-yes' data-store=" + store_id + " data-type=" + type + " data-product="+ product_id + ">YES</a><a href='#' class='indppl-button button-primary indppl-delete-product-no'>NO</a></div></div></div></div>");
     })
