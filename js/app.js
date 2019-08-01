@@ -2251,619 +2251,620 @@ jQuery(document).ready(function( $ ) {
     }
 
 
-});
 
-// start of functions
-function validateEmail($email) {
-    var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    return emailReg.test( $email );
-}
 
-function validatePhone(phone){
-    phone = phone.replace(/[^0-9]/g,'');
-    if (phone.length != 10){
-        return false;
-    }else{
-        return true;
+    // start of functions
+    function validateEmail($email) {
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        return emailReg.test( $email );
     }
-}
 
-function get100Percent(){
-    
-
-    var total = 0;
-    jQuery('.pots-apprates-filler').each(function(){
-        total = total + Number(jQuery(this).val());
-    })
-    if(total == 100){
-        jQuery('.pots-apprates-filler-total').removeClass('color-red');
-        jQuery('.pots-apprates-filler-total').addClass('color-green');
-        jQuery('.pots-apprates-filler-message').removeClass('color-red');
-        jQuery('.pots-apprates-filler-message').addClass('color-green');
-        jQuery('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
-    }else{
-        if(jQuery('.pots-apprates-filler-total').hasClass('color-green')){
-            jQuery('.pots-apprates-filler-total').removeClass('color-green');
-            jQuery('.pots-apprates-filler-total').addClass('color-red');
-            jQuery('.pots-apprates-filler-message').removeClass('color-green');
-            jQuery('.pots-apprates-filler-message').addClass('color-red');
-            jQuery('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
+    function validatePhone(phone){
+        phone = phone.replace(/[^0-9]/g,'');
+        if (phone.length != 10){
+            return false;
+        }else{
+            return true;
         }
     }
-    $('.pots-apprates-filler-total').text(total);
-};
 
-function getProductInfo(){
-    var version_check = 1.0;
-    (function($){
+    function get100Percent(){
+        
 
-        var store_id = $('#store-id').val();
+        var total = 0;
+        jQuery('.pots-apprates-filler').each(function(){
+            total = total + Number(jQuery(this).val());
+        })
+        if(total == 100){
+            jQuery('.pots-apprates-filler-total').removeClass('color-red');
+            jQuery('.pots-apprates-filler-total').addClass('color-green');
+            jQuery('.pots-apprates-filler-message').removeClass('color-red');
+            jQuery('.pots-apprates-filler-message').addClass('color-green');
+            jQuery('.pots-apprates-filler-message').html('<p>Good Work! This mix adds up to 100%.</p>');
+        }else{
+            if(jQuery('.pots-apprates-filler-total').hasClass('color-green')){
+                jQuery('.pots-apprates-filler-total').removeClass('color-green');
+                jQuery('.pots-apprates-filler-total').addClass('color-red');
+                jQuery('.pots-apprates-filler-message').removeClass('color-green');
+                jQuery('.pots-apprates-filler-message').addClass('color-red');
+                jQuery('.pots-apprates-filler-message').html("<p>Oops! This mix doesn't add up to 100%.</p><p>Please check your numbers and try again.</p>");
+            }
+        }
+        $('.pots-apprates-filler-total').text(total);
+    };
+
+    function getProductInfo(){
+        var version_check = 1.0;
+        (function($){
+
+            var store_id = $('#store-id').val();
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_product_save_exit_ajax',
+                    store_id: store_id,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function(e){
+                    // console.log(e);
+                    $('#indppl-tab-3 #pp-store-products').empty();
+                    $('#indppl-tab-3 #pp-store-products').append(e);
+                }
+            });
+        })(jQuery);
+    }
+
+    function greyOutAllUnchecked(){
+        jQuery('.container-not-available-in-store').each(function(){
+            jQuery(this).parent().parent().parent().parent().prepend("<div class='greyed-out-section'></div>");
+        })
+    }
+
+    function indppl_get_units($type){
+        if($type == undefined){
+            $type = 'dry';
+        }
+        if($type == 'dry'){
+            return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
+        }else if($type == 'bag'){
+            return {'ppc': 'plants per bag / container', 'cpp': 'bags / containers per plant'};
+        }else{
+            return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt-l': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
+        }  
+    }
+
+
+    function check_on_load_and_click(){
+        (function($){
+
+            var add = 0;
+            var user_status = $('#user-status').val();
+            // console.log(user_status);
+            add = $('.indppl-container-edit-title').length;
+            // console.log(add);
+            if(user_status == 'paidaccountpro' && add > 24){
+                $('.add-container-btn').remove();
+            }else if(user_status != 'paidaccountpro' && add > 4){
+                $('.add-container-btn').remove();
+        
+            }
+        })(jQuery);
+        
+    }
+
+    function checkIfEach(){
+        var notEach = true;
+        $('.indppl-product-create-size-btn').each(function(){
+            if($(this).data('unit') == 'each' && $(this).is(':visible')){
+                $('.indppl-add-product-usage-type').addClass('hide');
+                notEach = false;
+            }
+        })
+        if(notEach == true){
+            $('.indppl-add-product-usage-type').removeClass('hide');
+        }
+    }
+
+    function check_on_load(){
+        (function($){
+            var user_status = $('#user-status').val();
+            if(user_status != 'paidaccountpro'){
+                $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="/my-account/subscription-info/?action=subscriptions" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
+            }
+        })(jQuery);
+    }
+
+    function getLocation() {
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            gps = [lat, lon];
+            return gps;
+            });
+        }
+    }
+
+    function indpplAddLoading(location, primary, secondary, background){
+        console.log(location);
+        if(location == undefined){
+            location = 'body';
+        }
+        if(primary == undefined){
+            primary = 'white';
+        }
+        if(secondary == undefined){
+            secondary = 'white';
+        }
+        if(background == undefined){
+            background = 'indppl-loading-background'; 
+        }
+        jQuery(location).append("<div class='indppl-loading-background'><div class=" + background + "><div id='indppl-loading-icon'><svg class='image' width='100' height='100'><path d='M5,50 a1,1 0 0,0 90,0' fill='none' stroke-opacity='0.9' stroke='" + primary + "' stroke-width='9'/></svg><svg class='image-rev' width='100' height='100'><path d='M2,50 a1,1 0 0,1 96,0' fill='none' stroke-opacity='0.7' stroke='" + secondary + "' stroke-width='3.6'/></svg><svg class='image-rev-2' width='100' height='100'><path d='M10,50 a40,40 0 0,0  40,40' stroke-width='6' stroke-opacity='0.7' stroke='" + secondary + "' fill='none'</></svg></div></div></div>");
+    }
+
+    function indpplDelLoading(){
+        jQuery('.indppl-loading-background').remove();
+    }
+    function indpplAddProduct(type){
+        var version_check = 1.0;
+        (function($){
+
+            $('body').prepend("<div class='slide-in-products-container'></div>");
+            setTimeout(function(){
+                $('.slide-in-products-container').addClass('left-0');
+                indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+            }, 20);
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_add_new_product_ajax',
+                    type: type,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function(e){
+                    // console.log(e);
+                    $('.slide-in-products-container').prepend(e);
+        
+                    indpplDelLoading();
+                }
+            })
+        })(jQuery);
+    }
+
+    function indpplEditProduct(type, store_id, product_id){
+        $('body').prepend("<div class='slide-in-products-container'></div>");
+        setTimeout(function(){
+            $('.slide-in-products-container').addClass('left-0');
+            indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
+        }, 20)
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
             method: 'POST',
             data: {
-                action: 'indppl_product_save_exit_ajax',
+                action: 'indppl_get_product_info_ajax',
+                type: type,
                 store_id: store_id,
+                product_id: product_id,
+                version_check: version_check,
+                edit: true,
+            },
+            type: 'POST',
+            success: function(e){
+                array = JSON.parse(e);
+                console.log(array['console']);
+                $('.product-create-brand-cut-off').children().each(function(){
+                    $(this).empty();
+                })
+                if(array['container']){
+                    $('.slide-in-products-container').append(array['container']);
+                    $('#product-create-product').hide();
+                    $('#product-create-brand').hide();
+                    $('#product-create-brand').append('<option value=' + array['brand'] + ' selected></option>')
+                    $('#product-create-product').append('<option value=' + product_id + ' selected></option>')
+                    // $('#product-create-form').prev().html('Edit ' + array['product'] + ' by ' + array['brand']);
+                }
+                // if(array["standard_unit"]){
+                //     $('.product-create-standard-unit-container').append(array["standard_unit"]);
+                // }
+                if(array['size']){
+                    $('.product-create-size-container').append(array['size']);
+                }
+                if(array['new_size']){
+                    $('.product-create-new-size-container').append(array['new_size']);
+                }
+                if(array['dry_wet']){
+                    $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
+                    units = indppl_get_units(array['dry_wet'][1]);
+                    // console.log(array['dry_wet'][2]);
+                    if(array['dry_wet'][1] == 'wet'){
+                        $('.product-create-fraction-bag').addClass('hide');
+                        $('.product-create-5-cups-container').addClass('hide');
+                    }
+                    if(type == 'beds'){
+                        delete units['each'];
+                    }
+                    $.each(units, function(index, value){
+                        // console.log(value);
+                        if(value != array['dry_wet'][2]){
+                            $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
+                            
+                        }
+                        $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '">' + value + '</option>');
+                    })
+                }
+                if(array['cups']){
+                    $('.product-create-5-cups-container').append(array['cups']);
+
+                }
+                // console.log(array['app_rate']);
+                // if(array['app_rate']){
+                //     $('.product-create-app-rate-container').append(array['app_rate']);
+                // }
+                if(array['app_rates_chart']){
+                    $('.product-create-app-rates-chart-container').append(array['app_rates_chart']);
+                }
+                var units = indppl_get_units(array['dry_wet'][1]);
+                // console.log(units);
+                $('.indppl-product-create-chart-app-unit').each(function(){
+                    var select = $(this).data('unit');
+                    var elem = $(this);
+                    // console.log(select);
+                    $.each(units, function(index, value){
+                        if(select == index){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                    });
+                    // console.log(unit);
+                });
+                if(array['next_btn']){
+                    $('.product-create-save-done-container').append(array['next_btn']);
+                }
+                if(array['fraction']){
+                    $('.product-create-fraction-bag').append(array['fraction']);
+                }
+                if(array['default']){
+                    if(array['default'] == 1){
+                        $('.product-create-fraction-bag').hide();
+                    }
+                }
+                if(array['usage_type']){
+                    $('.product-create-usage-type').append(array['usage_type']);
+                }
+                
+                indpplDelLoading();
+            }
+
+        })
+        
+    }
+
+    function indpplAddSmallLoading(){
+        var host = window.location.protocol + '//' + window.location.host + "/";
+        if(window.location.host ==  "127.0.0.1"){
+            host = host + "plantpal/";
+        }
+        var img = host + "wp-content/plugins/planting-pal/assets/img/small_loading.png";
+        var send = "<img class='spining-loader' src='" + img + "'>";
+        return send;
+    }
+
+    function indpplDelSmallLoading(){
+        $('.spining-loader').remove();
+    }
+
+    function updateAppRates(elem){
+        var img = indpplAddSmallLoading();
+        jQuery(elem).parent().parent().append(img);
+        if(jQuery(elem).hasClass('indppl-product-create-chart-app-rate-num')){
+            var cont_id = jQuery(elem).attr('name');
+            var num = jQuery(elem).attr('value');
+            var unit = jQuery(elem).next().val();
+            if(!jQuery.isNumeric(num)){
+                jQuery(elem).attr('value', 1);
+            }
+        }else if(jQuery(elem).hasClass('indppl-product-create-chart-app-unit')){
+            var cont_id = jQuery(elem).attr('name');
+            var num = jQuery(elem).prev().attr('value');
+            var unit = jQuery(elem).val();
+            if(!jQuery.isNumeric(num)){
+                jQuery(elem).prev().attr('value' , 1);
+            }
+        }
+        if(num == null || !jQuery.isNumeric(num)){
+            num = 1;
+        }
+        if(unit == null){
+            unit = 'lb';
+        }
+        // console.log(num);
+        // console.log(unit);
+        var type = jQuery('#indppl-modal-product-type').val();
+        var product_id = jQuery('#product-create-product').val();
+        var brand = jQuery('#product-create-brand').val();
+        var store_id = jQuery('#store-id').val();
+        var current_pack = {};
+        var i = 0;
+        var version_check = 1.0;
+        jQuery('.indppl-product-create-size-btn').each(function(){
+            if(jQuery(this).hasClass('indppl-background-green')){
+                current_pack[i] = {};
+                current_pack[i]['size'] = jQuery(this).data('size');
+                current_pack[i]['unit'] = jQuery(this).data('unit');
+                i++;
+            }
+        });
+        // console.log(unit);
+        jQuery.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_update_app_rates_ajax',
+                type: type,
+                store_id: store_id,
+                product_id: product_id,
+                brand: brand,
+                current_pack: current_pack,
+                container_id: cont_id,
+                container_num: num,
+                container_unit: unit,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function(e){
+                console.log(e);
+                array = JSON.parse(e);
+                // console.log(elem);
+                console.log(array['console']);
+                jQuery.each(array['app_rates'], function(index, value){
+                    // console.log(index);
+
+                jQuery(elem).parent().siblings().eq(1+index).text(value + " Plants");
+                });
+                indpplDelSmallLoading();
+            }
+        });
+        
+    }
+
+    function updateBagAppRates(elem){
+        var elem = elem;
+        var load = indpplAddSmallLoading();
+        $(elem).parent().parent().append(load);
+        var store_id = $('#store-id').val();
+        var type = $('#indppl-modal-product-type').val();
+        var product_id = $('#product-create-product').val();
+        var val = $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
+        var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
+        var product_num = $('#indppl-how-much-header').first().data('num');
+        var product_unit = $('.bag-apprates-title').first().data('unit');
+        var cont_id = $(elem).parent().parent().find('.bag-apprates-container-title').data('id');
+        var version_check = 1.0;
+        if(val == null || !$.isNumeric(val)){
+            val = 1;
+            $(elem).parent().children().val(1);
+        }
+        console.log('--------');
+        console.log(elem);
+        console.log(cont_id);
+        console.log(product_num);
+        console.log(product_unit);
+        console.log(val);
+        jQuery.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_update_bag_app_rates_ajax',
+                type: type,
+                store_id: store_id,
+                product_id: product_id,
+                val: val,
+                ppc: ppc,
+                product_num: product_num,
+                product_unit: product_unit,
+                cont_id: cont_id,
                 version_check: version_check,
             },
             type: 'POST',
             success: function(e){
                 // console.log(e);
-                $('#indppl-tab-3 #pp-store-products').empty();
-                $('#indppl-tab-3 #pp-store-products').append(e);
+                $('.product-create-app-rates-chart-container').empty();
+                $('.product-create-app-rates-chart-container').html(e);
+                var bagunits = indppl_get_units('bag');
+                $('.indppl-product-create-chart-bag-unit').each(function(){
+                    var select = $(this).data('unit');
+                    var elem = $(this);
+                    // console.log(select);
+                    
+                    $.each(bagunits, function(index, value){
+                        if(select == index || (select == 'tbl' && index == 'tbls')){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
+                    });
+                    // console.log(unit);
+                });
+                indpplDelSmallLoading();
             }
         });
-    })(jQuery);
-}
-
-function greyOutAllUnchecked(){
-    jQuery('.container-not-available-in-store').each(function(){
-        jQuery(this).parent().parent().parent().parent().prepend("<div class='greyed-out-section'></div>");
-    })
-}
-
-function indppl_get_units($type){
-    if($type == undefined){
-        $type = 'dry';
     }
-    if($type == 'dry'){
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
-    }else if($type == 'bag'){
-        return {'ppc': 'plants per bag / container', 'cpp': 'bags / containers per plant'};
-    }else{
-        return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'floz': 'Fluid Ounce', 'qt-l': 'Quart', 'gal': 'Gallon', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup'};
-    }  
-}
 
+    function monitorProgress(store){
+        var store = store;
 
-function check_on_load_and_click(){
-    (function($){
-
-        var add = 0;
-        var user_status = $('#user-status').val();
-        // console.log(user_status);
-        add = $('.indppl-container-edit-title').length;
-        // console.log(add);
-        if(user_status == 'paidaccountpro' && add > 24){
-            $('.add-container-btn').remove();
-        }else if(user_status != 'paidaccountpro' && add > 4){
-            $('.add-container-btn').remove();
-    
-        }
-    })(jQuery);
-    
-}
-
-function checkIfEach(){
-    var notEach = true;
-    $('.indppl-product-create-size-btn').each(function(){
-        if($(this).data('unit') == 'each' && $(this).is(':visible')){
-            $('.indppl-add-product-usage-type').addClass('hide');
-            notEach = false;
-        }
-    })
-    if(notEach == true){
-        $('.indppl-add-product-usage-type').removeClass('hide');
-    }
-}
-
-function check_on_load(){
-    (function($){
-        var user_status = $('#user-status').val();
-        if(user_status != 'paidaccountpro'){
-            $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="/my-account/subscription-info/?action=subscriptions" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
-        }
-    })(jQuery);
-}
-
-function getLocation() {
-    if(navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-        var lat = position.coords.latitude;
-        var lon = position.coords.longitude;
-        gps = [lat, lon];
-        return gps;
+        $(document).ajaxComplete(function (event, jqxhr, settings){
+            // console.log(settings);
+            // console.log(jqxhr);
+            // console.log(event);
+            var args = settings.data;
+            if(args.search('stopAjaxComplete' ) < 0){
+                $(".log").text("Triggered ajaxComplete handler.");
+                // console.log(store);
+                jQuery.ajax({
+                    url:indppl_ajax.ajaxurl,
+                    dataType: 'text',
+                    method: 'POST',
+                    data: {
+                        action: 'indppl_store_progress_bar_ajax',
+                        store_id: store,
+                        stopAjaxComplete : true,
+                    },
+                    type: 'POST',
+                    success: function(results){
+                        $('.indppl-progress-container').html(results);
+                    }
+                });
+            }
         });
     }
-}
 
-function indpplAddLoading(location, primary, secondary, background){
-    console.log(location);
-    if(location == undefined){
-        location = 'body';
-    }
-    if(primary == undefined){
-        primary = 'white';
-    }
-    if(secondary == undefined){
-        secondary = 'white';
-    }
-    if(background == undefined){
-        background = 'indppl-loading-background'; 
-    }
-    jQuery(location).append("<div class='indppl-loading-background'><div class=" + background + "><div id='indppl-loading-icon'><svg class='image' width='100' height='100'><path d='M5,50 a1,1 0 0,0 90,0' fill='none' stroke-opacity='0.9' stroke='" + primary + "' stroke-width='9'/></svg><svg class='image-rev' width='100' height='100'><path d='M2,50 a1,1 0 0,1 96,0' fill='none' stroke-opacity='0.7' stroke='" + secondary + "' stroke-width='3.6'/></svg><svg class='image-rev-2' width='100' height='100'><path d='M10,50 a40,40 0 0,0  40,40' stroke-width='6' stroke-opacity='0.7' stroke='" + secondary + "' fill='none'</></svg></div></div></div>");
-}
+    function containerSubmit(){
+        indpplAddLoading();
+        $first_time = $('.ind-first-time').length;
+        console.log($first_time);
+        if($('.indppl-update-apps').length > 0 && $first_time == 0){
+            alert("We've added your containers, please verify the amounts are correct in your in ground application rates.");
+        }
+        var empty = false;
+        var empty_elem;
+        $('.indppl-container-edit-title').each(function(){
+            console.log($(this).val());
+            if($(this).val() == ""){
+                empty = true;
+                empty_elem = $(this);
+                indpplDelLoading();
+            }
+        });
+        if(empty == true){
+            $(empty_elem).attr('placeholder', 'Required');
+        }else{
+            $('.container-available').each(function(){
+                $(this).removeClass('indppl-update-apps');
+            });
+            var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
+            var available = [];
+            var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
+            var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
+            var store_id = $('#store-id').val();
+            var not_available = [];
+            var remove_dot = [];
+            var new_array = {};
+            var array_num = 0;
+            var version_check = 1.0;
+            $(".indppl-checked").each(function(){
+                available.push($(this).find('input').data('container'));
+            });
+            $(".indppl-unchecked").each(function(){
+                not_available.push($(this).find('input').data('container'));
+            });
+            $('.indppl-remove-dot').each(function(){
+                remove_dot.push($(this).attr('name'));
+            });
+            $('.indppl-container-edit-title').each(function(){
+                if($(this).attr('name') == "new-container"){
+                    new_array[array_num] = {};
+                    new_array[array_num]['name'] = $(this).val();
+                    $(this).parent().parent().find('input').each(function(){
+                        if($(this).is(':checked')){
+                            season = $(this).attr('name');
+                            season_array = season.split('-');
+                            new_array[array_num][season] = season_array[1];
+                        }
+                    });
+                    // $(this).attr('name', 'dead');
+                    array_num++;
+                }
+            });
 
-function indpplDelLoading(){
-    jQuery('.indppl-loading-background').remove();
-}
-function indpplAddProduct(type){
-    var version_check = 1.0;
-    (function($){
+            // console.log(available);
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_save_container_data_ajax',
+                    date: date,
+                    default_container: default_container,
+                    non_default: non_default,
+                    store_id: store_id,
+                    available: available,
+                    not_available: not_available,
+                    new_array: new_array,
+                    remove_dot: remove_dot,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function(e){
+                    getProductInfo();
+                    // console.log(e);
+                    var new_array = jQuery.parseJSON(e);
+                    console.log(new_array['update']);
+                    var i = 0;
+                    $('.container-add-new').each(function(){
+                        $(this).attr('name', "indppl-container-title");
+                        $(this).addClass('container-title');
+                        $(this).removeClass('container-add-new');
+                        $(this).parent().removeClass()
+                        $(this).parent().addClass("padding-left-40 position-absolute check-box-container");
+                        $(this).parent().prepend('<div class="container-available indppl-checked"><input type="checkbox" id="' + new_array[i] + '-container-available" class="display-none" data-container="' + new_array[i] + '" name="' + new_array[i] + '-container-available" checked=""><label class="margin-0 container-available-check" for="' + new_array[i] + '-container-available"><div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div></label></div>');
+                        $(this).parent().parent().find('input').each(function(){
+                            if($(this).is(':checkbox')){
+                                var season = $(this).attr('name');
+                                season_array = season.split('-');
+                                $(this).attr('name', new_array[i] + "-" + season_array[1]);
+                                $(this).attr('id', new_array[i] + '-' + season_array[1]);
+                                $(this).next().attr('for', new_array[i] + '-' + season_array[1]);
+                            }
+                        });
+                        i++;
+                    });
+                    greyOutAllUnchecked();
+                    indpplDelLoading();
+                }
+            });
+        }
+    }
 
+    function getAppRates(type){
+        
         $('body').prepend("<div class='slide-in-products-container'></div>");
         setTimeout(function(){
             $('.slide-in-products-container').addClass('left-0');
             indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
         }, 20);
+        var store_id = $('#store-id').val();
+        var version_check = 1.0;
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
             method: 'POST',
             data: {
-                action: 'indppl_add_new_product_ajax',
+                action: 'indppl_get_pot_apprates_ajax',
+                store_id: store_id,
                 type: type,
                 version_check: version_check,
             },
             type: 'POST',
             success: function(e){
                 // console.log(e);
-                $('.slide-in-products-container').prepend(e);
-    
+                $('.slide-in-products-container').append(e);
+                get100Percent();
                 indpplDelLoading();
             }
         })
-    })(jQuery);
-}
-
-function indpplEditProduct(type, store_id, product_id){
-    $('body').prepend("<div class='slide-in-products-container'></div>");
-    setTimeout(function(){
-        $('.slide-in-products-container').addClass('left-0');
-        indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
-    }, 20)
-    var version_check = 1.0;
-    $.ajax({
-        url:indppl_ajax.ajaxurl,
-        dataType: 'text',
-        method: 'POST',
-        data: {
-            action: 'indppl_get_product_info_ajax',
-            type: type,
-            store_id: store_id,
-            product_id: product_id,
-            version_check: version_check,
-            edit: true,
-        },
-        type: 'POST',
-        success: function(e){
-            array = JSON.parse(e);
-            console.log(array['console']);
-            $('.product-create-brand-cut-off').children().each(function(){
-                $(this).empty();
-            })
-            if(array['container']){
-                $('.slide-in-products-container').append(array['container']);
-                $('#product-create-product').hide();
-                $('#product-create-brand').hide();
-                $('#product-create-brand').append('<option value=' + array['brand'] + ' selected></option>')
-                $('#product-create-product').append('<option value=' + product_id + ' selected></option>')
-                // $('#product-create-form').prev().html('Edit ' + array['product'] + ' by ' + array['brand']);
-            }
-            // if(array["standard_unit"]){
-            //     $('.product-create-standard-unit-container').append(array["standard_unit"]);
-            // }
-            if(array['size']){
-                $('.product-create-size-container').append(array['size']);
-            }
-            if(array['new_size']){
-                $('.product-create-new-size-container').append(array['new_size']);
-            }
-            if(array['dry_wet']){
-                $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
-                units = indppl_get_units(array['dry_wet'][1]);
-                // console.log(array['dry_wet'][2]);
-                if(array['dry_wet'][1] == 'wet'){
-                    $('.product-create-fraction-bag').addClass('hide');
-                    $('.product-create-5-cups-container').addClass('hide');
-                }
-                if(type == 'beds'){
-                    delete units['each'];
-                }
-                $.each(units, function(index, value){
-                    // console.log(value);
-                    if(value != array['dry_wet'][2]){
-                        $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + index + '">' + value + '</option>');
-                        
-                    }
-                    $('.product-create-standard-unit-add').append('<option class="product-create-standard-unit-add-option" value="' + index + '">' + value + '</option>');
-                })
-            }
-            if(array['cups']){
-                $('.product-create-5-cups-container').append(array['cups']);
-
-            }
-            // console.log(array['app_rate']);
-            // if(array['app_rate']){
-            //     $('.product-create-app-rate-container').append(array['app_rate']);
-            // }
-            if(array['app_rates_chart']){
-                $('.product-create-app-rates-chart-container').append(array['app_rates_chart']);
-            }
-            var units = indppl_get_units(array['dry_wet'][1]);
-            // console.log(units);
-            $('.indppl-product-create-chart-app-unit').each(function(){
-                var select = $(this).data('unit');
-                var elem = $(this);
-                // console.log(select);
-                $.each(units, function(index, value){
-                    if(select == index){
-                        selected = `selected`;
-                    }else{
-                        selected = ``;
-                    }
-                    $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
-                });
-                // console.log(unit);
-            });
-            if(array['next_btn']){
-                $('.product-create-save-done-container').append(array['next_btn']);
-            }
-            if(array['fraction']){
-                $('.product-create-fraction-bag').append(array['fraction']);
-            }
-            if(array['default']){
-                if(array['default'] == 1){
-                    $('.product-create-fraction-bag').hide();
-                }
-            }
-            if(array['usage_type']){
-                $('.product-create-usage-type').append(array['usage_type']);
-            }
-            
-            indpplDelLoading();
-        }
-
-    })
-    
-}
-
-function indpplAddSmallLoading(){
-    var host = window.location.protocol + '//' + window.location.host + "/";
-    if(window.location.host ==  "127.0.0.1"){
-        host = host + "plantpal/";
     }
-    var img = host + "wp-content/plugins/planting-pal/assets/img/small_loading.png";
-    var send = "<img class='spining-loader' src='" + img + "'>";
-    return send;
-}
-
-function indpplDelSmallLoading(){
-    $('.spining-loader').remove();
-}
-
-function updateAppRates(elem){
-    var img = indpplAddSmallLoading();
-    jQuery(elem).parent().parent().append(img);
-    if(jQuery(elem).hasClass('indppl-product-create-chart-app-rate-num')){
-        var cont_id = jQuery(elem).attr('name');
-        var num = jQuery(elem).attr('value');
-        var unit = jQuery(elem).next().val();
-        if(!jQuery.isNumeric(num)){
-            jQuery(elem).attr('value', 1);
-        }
-    }else if(jQuery(elem).hasClass('indppl-product-create-chart-app-unit')){
-        var cont_id = jQuery(elem).attr('name');
-        var num = jQuery(elem).prev().attr('value');
-        var unit = jQuery(elem).val();
-        if(!jQuery.isNumeric(num)){
-            jQuery(elem).prev().attr('value' , 1);
-        }
-    }
-    if(num == null || !jQuery.isNumeric(num)){
-        num = 1;
-    }
-    if(unit == null){
-        unit = 'lb';
-    }
-    // console.log(num);
-    // console.log(unit);
-    var type = jQuery('#indppl-modal-product-type').val();
-    var product_id = jQuery('#product-create-product').val();
-    var brand = jQuery('#product-create-brand').val();
-    var store_id = jQuery('#store-id').val();
-    var current_pack = {};
-    var i = 0;
-    var version_check = 1.0;
-    jQuery('.indppl-product-create-size-btn').each(function(){
-        if(jQuery(this).hasClass('indppl-background-green')){
-            current_pack[i] = {};
-            current_pack[i]['size'] = jQuery(this).data('size');
-            current_pack[i]['unit'] = jQuery(this).data('unit');
-            i++;
-        }
-    });
-    // console.log(unit);
-    jQuery.ajax({
-        url:indppl_ajax.ajaxurl,
-        dataType: 'text',
-        method: 'POST',
-        data: {
-            action: 'indppl_update_app_rates_ajax',
-            type: type,
-            store_id: store_id,
-            product_id: product_id,
-            brand: brand,
-            current_pack: current_pack,
-            container_id: cont_id,
-            container_num: num,
-            container_unit: unit,
-            version_check: version_check,
-        },
-        type: 'POST',
-        success: function(e){
-            console.log(e);
-            array = JSON.parse(e);
-            // console.log(elem);
-            console.log(array['console']);
-            jQuery.each(array['app_rates'], function(index, value){
-                // console.log(index);
-
-               jQuery(elem).parent().siblings().eq(1+index).text(value + " Plants");
-            });
-            indpplDelSmallLoading();
-        }
-    });
-    
-}
-
-function updateBagAppRates(elem){
-    var elem = elem;
-    var load = indpplAddSmallLoading();
-    $(elem).parent().parent().append(load);
-    var store_id = $('#store-id').val();
-    var type = $('#indppl-modal-product-type').val();
-    var product_id = $('#product-create-product').val();
-    var val = $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
-    var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
-    var product_num = $('#indppl-how-much-header').first().data('num');
-    var product_unit = $('.bag-apprates-title').first().data('unit');
-    var cont_id = $(elem).parent().parent().find('.bag-apprates-container-title').data('id');
-    var version_check = 1.0;
-    if(val == null || !$.isNumeric(val)){
-        val = 1;
-        $(elem).parent().children().val(1);
-    }
-    console.log('--------');
-    console.log(elem);
-    console.log(cont_id);
-    console.log(product_num);
-    console.log(product_unit);
-    console.log(val);
-    jQuery.ajax({
-        url:indppl_ajax.ajaxurl,
-        dataType: 'text',
-        method: 'POST',
-        data: {
-            action: 'indppl_update_bag_app_rates_ajax',
-            type: type,
-            store_id: store_id,
-            product_id: product_id,
-            val: val,
-            ppc: ppc,
-            product_num: product_num,
-            product_unit: product_unit,
-            cont_id: cont_id,
-            version_check: version_check,
-        },
-        type: 'POST',
-        success: function(e){
-            // console.log(e);
-            $('.product-create-app-rates-chart-container').empty();
-            $('.product-create-app-rates-chart-container').html(e);
-            var bagunits = indppl_get_units('bag');
-            $('.indppl-product-create-chart-bag-unit').each(function(){
-                var select = $(this).data('unit');
-                var elem = $(this);
-                // console.log(select);
-                
-                $.each(bagunits, function(index, value){
-                    if(select == index || (select == 'tbl' && index == 'tbls')){
-                        selected = `selected`;
-                    }else{
-                        selected = ``;
-                    }
-                    $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
-                });
-                // console.log(unit);
-            });
-            indpplDelSmallLoading();
-        }
-    });
-}
-
-function monitorProgress(store){
-    var store = store;
-
-    $(document).ajaxComplete(function (event, jqxhr, settings){
-        // console.log(settings);
-        // console.log(jqxhr);
-        // console.log(event);
-        var args = settings.data;
-        if(args.search('stopAjaxComplete' ) < 0){
-            $(".log").text("Triggered ajaxComplete handler.");
-            // console.log(store);
-            jQuery.ajax({
-                url:indppl_ajax.ajaxurl,
-                dataType: 'text',
-                method: 'POST',
-                data: {
-                    action: 'indppl_store_progress_bar_ajax',
-                    store_id: store,
-                    stopAjaxComplete : true,
-                },
-                type: 'POST',
-                success: function(results){
-                    $('.indppl-progress-container').html(results);
-                }
-            });
-        }
-    });
-}
-
-function containerSubmit(){
-    indpplAddLoading();
-    $first_time = $('.ind-first-time').length;
-    console.log($first_time);
-    if($('.indppl-update-apps').length > 0 && $first_time == 0){
-        alert("We've added your containers, please verify the amounts are correct in your in ground application rates.");
-    }
-    var empty = false;
-    var empty_elem;
-    $('.indppl-container-edit-title').each(function(){
-        console.log($(this).val());
-        if($(this).val() == ""){
-            empty = true;
-            empty_elem = $(this);
-            indpplDelLoading();
-        }
-    });
-    if(empty == true){
-        $(empty_elem).attr('placeholder', 'Required');
-    }else{
-        $('.container-available').each(function(){
-            $(this).removeClass('indppl-update-apps');
-        });
-        var date = $("#container-select-form").find('input').filter('.container-date').serializeArray();
-        var available = [];
-        var default_container = $("#container-select-form").find('input').filter('.indppl-default-container').serializeArray();
-        var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
-        var store_id = $('#store-id').val();
-        var not_available = [];
-        var remove_dot = [];
-        var new_array = {};
-        var array_num = 0;
-        var version_check = 1.0;
-        $(".indppl-checked").each(function(){
-            available.push($(this).find('input').data('container'));
-        });
-        $(".indppl-unchecked").each(function(){
-            not_available.push($(this).find('input').data('container'));
-        });
-        $('.indppl-remove-dot').each(function(){
-            remove_dot.push($(this).attr('name'));
-        });
-        $('.indppl-container-edit-title').each(function(){
-            if($(this).attr('name') == "new-container"){
-                new_array[array_num] = {};
-                new_array[array_num]['name'] = $(this).val();
-                $(this).parent().parent().find('input').each(function(){
-                    if($(this).is(':checked')){
-                        season = $(this).attr('name');
-                        season_array = season.split('-');
-                        new_array[array_num][season] = season_array[1];
-                    }
-                });
-                // $(this).attr('name', 'dead');
-                array_num++;
-            }
-        });
-
-        // console.log(available);
-        $.ajax({
-            url:indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_save_container_data_ajax',
-                date: date,
-                default_container: default_container,
-                non_default: non_default,
-                store_id: store_id,
-                available: available,
-                not_available: not_available,
-                new_array: new_array,
-                remove_dot: remove_dot,
-                version_check: version_check,
-            },
-            type: 'POST',
-            success: function(e){
-                getProductInfo();
-                // console.log(e);
-                var new_array = jQuery.parseJSON(e);
-                console.log(new_array['update']);
-                var i = 0;
-                $('.container-add-new').each(function(){
-                    $(this).attr('name', "indppl-container-title");
-                    $(this).addClass('container-title');
-                    $(this).removeClass('container-add-new');
-                    $(this).parent().removeClass()
-                    $(this).parent().addClass("padding-left-40 position-absolute check-box-container");
-                    $(this).parent().prepend('<div class="container-available indppl-checked"><input type="checkbox" id="' + new_array[i] + '-container-available" class="display-none" data-container="' + new_array[i] + '" name="' + new_array[i] + '-container-available" checked=""><label class="margin-0 container-available-check" for="' + new_array[i] + '-container-available"><div class="container-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg></div></label></div>');
-                    $(this).parent().parent().find('input').each(function(){
-                        if($(this).is(':checkbox')){
-                            var season = $(this).attr('name');
-                            season_array = season.split('-');
-                            $(this).attr('name', new_array[i] + "-" + season_array[1]);
-                            $(this).attr('id', new_array[i] + '-' + season_array[1]);
-                            $(this).next().attr('for', new_array[i] + '-' + season_array[1]);
-                        }
-                    });
-                    i++;
-                });
-                greyOutAllUnchecked();
-                indpplDelLoading();
-            }
-        });
-    }
-}
-
-function getAppRates(type){
-    
-    $('body').prepend("<div class='slide-in-products-container'></div>");
-    setTimeout(function(){
-        $('.slide-in-products-container').addClass('left-0');
-        indpplAddLoading('.slide-in-products-container', 'grey', 'grey', 'white-bg-for-loading');
-    }, 20);
-    var store_id = $('#store-id').val();
-    var version_check = 1.0;
-    $.ajax({
-        url:indppl_ajax.ajaxurl,
-        dataType: 'text',
-        method: 'POST',
-        data: {
-            action: 'indppl_get_pot_apprates_ajax',
-            store_id: store_id,
-            type: type,
-            version_check: version_check,
-        },
-        type: 'POST',
-        success: function(e){
-            // console.log(e);
-            $('.slide-in-products-container').append(e);
-            get100Percent();
-            indpplDelLoading();
-        }
-    })
-}
+});
