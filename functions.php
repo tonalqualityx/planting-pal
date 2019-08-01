@@ -1823,6 +1823,7 @@ function indppl_get_product_info(){
             <!-- <h2><?php echo $heading; ?></h2> -->
             <form id='product-create-form' method="post" action='#' class="form-horizontal">
                 <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
+                <div class='create-product-header-instructions'></div>
                 <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
                     <option value='' disabled selected>Select Brand</option>
                     <?php
@@ -1853,21 +1854,23 @@ function indppl_get_product_info(){
                 <div class='product-create-brand-cut-off'>
                     <div class='product-create-first-part-container product-create-add-product-name'>
                     </div>
-                    <div class='product-create-first-part-container product-create-dry-wet-container'>
-                    </div>
-                    <div class='product-create-standard-unit-container'>
+                    <div class='product-create-first-part-container product-create-size-container'>
                     </div>
                     <div class='product-create-first-part-container product-create-new-size-container'>
                     </div>
-                    <div class='product-create-first-part-container product-create-size-container'>
+                    <div class='product-create-first-part-container product-more-things-header'>
+                    </div> 
+                    <div class='product-create-first-part-container product-create-dry-wet-container'>
                     </div>
-                    <div class='product-create-first-part-container product-create-app-rate-container'>
+                    <div class='product-create-first-part-container product-create-fraction-bag'>
                     </div>
                     <div class='product-create-first-part-container product-create-5-cups-container'>
                     </div>
                     <div class='product-create-first-part-container product-create-usage-type'>
                     </div>
-                    <div class='product-create-first-part-container product-create-fraction-bag'>
+                    <div class='product-create-standard-unit-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-app-rate-container'>
                     </div>
                     <div class='product-create-first-part-container product-create-save-done-container'>
                     </div>

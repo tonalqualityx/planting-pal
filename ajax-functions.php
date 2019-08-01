@@ -459,9 +459,11 @@ function indppl_get_product_info_ajax(){
     }else{
         ob_start();
         ?>
-        <h3 class='product-create-dry-wet-title'>Select Dry or liquid for this product</h3>
-        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >Dry
-        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >Liquid
+        <h4 class='indppl-sub-header'>Is this product dry or liquid?</h4>
+        <label for='product-create-dry' class=' <?php if($dryliquid == 'dry'){ ?>indppl-green-button-selected<?php }else{ ?>indppl-green-button-not-selected<?php } ?>' >Dry</label>
+        <input type='radio' class='hide product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >
+        <label for='product-create-wet' class=' <?php if($dryliquid == 'wet'){ ?>indppl-green-button-selected<?php }else{ ?>indppl-green-button-not-selected<?php } ?>'>Liquid</label>
+        <input type='radio' class='hide product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >
         <?php
         $dry_wet = ob_get_clean();
         ob_start();
@@ -500,7 +502,7 @@ function indppl_get_product_info_ajax(){
     $pack_units[] = [$fivecups, 'lb'];
     ob_start();
     ?>
-    <h3>Select the sizes you stock:</h3>
+    <h3 class='green-text'>Which Sizes Do You Stock?</h3>
     <?php
     if($product_related && $product_id != 'new'){
         foreach ($product_related as $key => $value) {
@@ -518,7 +520,9 @@ function indppl_get_product_info_ajax(){
                 }
                 $in_store = '';
                 if(in_array($value, $store_related)){
-                    $in_store = 'indppl-background-green';
+                    $in_store = 'indppl-size-selected';
+                }else{
+                    $in_store = 'indppl-size-not-selected';
                 }
                 // echo $author;
                 // echo $default_package;
@@ -541,8 +545,8 @@ function indppl_get_product_info_ajax(){
 
     ob_start();
     ?>
-    <h3>Create a new size:</h3>
-    <div class='indppl-product-create-size-num-inside-container'>
+    <a href='#' class='indppl-orange indppl-create-new-size'>+ Create a new size</a>
+    <div class='indppl-product-create-size-num-inside-container indppl-hide'>
         <input type='number' class='indppl-product-create-size-num' id='indpll-product-create-size-num' min='0' name='indppl-product-create-size-num'>
         <select class='product-create-standard-unit-add' id='product-create-standard-unit-add' name='product-create-standard-unit-add'>
             <option class='product-create-standard-unit-add-option' value='' disabled selected>Select Unit</option>
@@ -571,7 +575,8 @@ function indppl_get_product_info_ajax(){
         ob_start();
         $weight_array = ['lb', 'g', 'kg', 'oz'];
         ?>
-        <h3>How much does 5 level cups of this product weigh?</h3>
+        <h4 class='indppl-sub-header'>How much does 5 level cups of this product weigh?</h4>
+        <p>(We'll use this to calculate 'How much to use' on the planting guide)</p>
         <div class='product-create-5-cups-inside-container'>
             <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='<?php echo $fivecups; ?>'>
             <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
@@ -631,7 +636,7 @@ function indppl_get_product_info_ajax(){
         <?php
     }else{
         ?>
-        <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next">
+        <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next: Enter Application Rates">
         <?php
 
     }
@@ -690,12 +695,39 @@ function indppl_get_product_info_ajax(){
         $fraction = get_post_meta($product_id, 'wpcf-fraction', true);
         ?>
         <div class='indppl-add-product-fraction-bag'>
-        <h3 class='product-create-fraction-bag-title'>When you recommend applying this product, is it by:</h3>
-            <input type='radio' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag <br />
-            <input type='radio' class='product-create-other' name='product-create-fraction-bag' id='product-create-other' <?php if(!$fraction){ ?>checked<?php }?> value='1'>Other  ie. cups, tablespoons, etc
+        <h4 class='indppl-sub-header product-create-fraction-bag-title'>How do you recommend this product?</h4>
+            <label for='product-create-fraction-bag' class='<?php if($fraction){ ?>indppl-green-button-selected<?php } else { ?> indppl-green-button-not-selected <?php } ?> '>Fraction of a bag</label>
+            <input type='radio' class='product-create-fraction-bag indppl-hide' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >
+            <label for='product-create-other' class='<?php if(!$fraction){ ?>indppl-green-button-selected<?php } else { ?> indppl-green-button-not-selected <?php } ?> '>Other (ie. cups, tsp, tbls etc)</label>
+            <input type='radio' class='product-create-other indppl-hide' name='product-create-fraction-bag' id='product-create-other' <?php if(!$fraction){ ?>checked<?php }?> value='1'>
         </div>
         <?php
     $fraction_bag = ob_get_clean();
+
+    ob_start();
+    if($type == 'ground'){
+        $header = 'Product Setup for In-Ground Plantings';
+        $instruction_text = "Planting Pal works best by selecting the 'All Purpose' version for each product type (ie all purpose fertilizer vs. rose fertilizer). If necessary, plant-specific substitutions can be made when using the app. If you don't see the product you need listed in the dropdown, you can create your own!";
+        $video = '<iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>';
+    }else{
+        $header = 'Product Setup for ' . $type . 'Plantings';
+        // temporary until we look at the designs
+    }
+    ?>
+    
+    <div class="indppl-instructions">
+        <div class="indppl-instructions-text">
+            <h2><?php echo $header; ?></h2>
+            <p><?php echo $instruction_text; ?></p>
+        </div>
+        <div class="indppl-video">
+            <?php echo $video; ?>
+            <h4 class='orange-text indppl-watch-video'>Watch: how to use this page</h4>
+        </div>
+    </div>
+    <?php
+    $instructions = ob_get_clean();
+
 
     // $console = $usage_type;
     $send_array['standard_unit'] = $standard_unit;
@@ -709,6 +741,7 @@ function indppl_get_product_info_ajax(){
     $send_array['fraction'] = $fraction_bag;
     $send_array['default'] = $default;
     $send_array['console'] = $console;
+    $send_array['instructions'] = $instructions;
     if($container){
         $send_array['container'] = $container;
         $brand = get_the_terms($product_id, 'brand', true);

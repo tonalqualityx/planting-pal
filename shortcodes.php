@@ -965,7 +965,7 @@ function pp_store_products(){
             <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='beds'>+ Add Product</a>
             <?php
             // var_dump($apprates);
-            if(count($apprates['pots']) > 0){
+            if(count($apprates['beds']) > 0){
                 ?>
                 <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='beds'>Application rates</a>
                 <?php

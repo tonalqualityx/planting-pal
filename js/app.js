@@ -392,6 +392,10 @@ jQuery(document).ready(function( $ ) {
                 $('.product-create-brand-cut-off').children().each(function(){
                     $(this).empty();
                 })
+                if(array['instructions']){
+                    $('.create-product-header-instructions').empty();
+                    $('.create-product-header-instructions').append(array['instructions']);
+                }
                 if(array["standard_unit"]){
                     $('.product-create-standard-unit-container').append(array["standard_unit"]);
                 }
@@ -401,6 +405,7 @@ jQuery(document).ready(function( $ ) {
                 if(array['new_size']){
                     $('.product-create-new-size-container').append(array['new_size']);
                 }
+                $('.product-more-things-header').append("<h3 class='product-create-dry-wet-title green-text'>A Couple More Things</h3>");
                 if(array['dry_wet']){
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
@@ -498,6 +503,7 @@ jQuery(document).ready(function( $ ) {
             $('.product-create-5-cups-container').removeClass('hide'); 
         }
     })
+
     $('body').on('click', '#indppl-product-create-new-size-btn', function(e){
         e.preventDefault();
         var size = $('#indpll-product-create-size-num').val();
@@ -510,18 +516,24 @@ jQuery(document).ready(function( $ ) {
                 create_new = false;
             }
         })
+        var weight = ['lb', 'oz', 'g', 'kg'];
         console.log(create_new);
         if(create_new == true){
+            if($.inArray(unit, weight)){
+                $('.product-create-5-cups-container').hide();
+            }else{
+                $('.product-create-5-cups-container').show();
+            }
             var name = unit;
             if(unit == 'qt-l' || unit == 'qt-d'){
                 name = 'Quart';
             }
-            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-background-green" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
+            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-size-selected" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
         }
         checkIfEach();
 
     })
-    $('body').on('mouseenter', '.indppl-background-green', function(){
+    $('body').on('mouseenter', '.indppl-size-selected', function(){
         if($(this).hasClass('indppl-non-default-package')){
             $(this).append('<span class="indppl-x">X</span>');
         }
@@ -532,7 +544,7 @@ jQuery(document).ready(function( $ ) {
         if($(this).parent().hasClass('indppl-non-default-package')){
             // console.log('inside');
             
-            $(this).parent().removeClass('indppl-background-green');
+            $(this).parent().removeClass('indppl-size-selected').addClass('indppl-size-not-selected');
             $(this).parent().hide();
             e.stopPropagation();
         }else{
@@ -540,7 +552,13 @@ jQuery(document).ready(function( $ ) {
         }
             
     })
-    $('body').on('mouseleave', '.indppl-background-green', function(){
+    $('body').on('mouseleave', '.indppl-size-selected', function(){
+        setTimeout(function(){
+
+            $(".indppl-x").remove();
+        }, 100);
+    })
+    $('body').on('mouseleave', '.indppl-size-not-selected', function(){
         setTimeout(function(){
 
             $(".indppl-x").remove();
@@ -548,10 +566,10 @@ jQuery(document).ready(function( $ ) {
     })
     $('body').on('click', '.indppl-product-create-size-btn', function(e){
         e.preventDefault();
-        if(!$(this).hasClass('indppl-background-green')){
-            $(this).addClass('indppl-background-green');
+        if(!$(this).hasClass('indppl-size-selected')){
+            $(this).addClass('indppl-size-selected').removeClass('indppl-size-not-selected');
         }else{
-            $(this).removeClass('indppl-background-green');
+            $(this).removeClass('indppl-size-selected').addClass('indppl-size-not-selected');
         }
     })
     $('body').on('click', '.product-create-submit', function(e){
@@ -559,14 +577,22 @@ jQuery(document).ready(function( $ ) {
         indpplAddLoading();
         $('.indppl-form-required').remove();
         var required = true;
-        console.log($('.indppl-add-product-name').val());
+        // console.log($('.indppl-add-product-name').val());
         if($('.indppl-add-product-name').val() == ""){
             $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
             required = false;
         }
-        if(!$('.indppl-background-green')[0]){
-            $('.indppl-product-create-size-num-inside-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
+        if(!$('.indppl-size-selected')[0]){
+            $('.product-create-new-size-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
             required = false;
+        }
+        console.log($('.product-create-5-cups-container').is(':visible'));
+        if($('.product-create-5-cups-inside-container').is(':visible') && $('.product-create-5-cups-container').is(':visible')){
+            console.log($('#indpll-product-create-cups-num').val());
+            if($('#indpll-product-create-cups-num').val() == ""){
+                $('.product-create-5-cups-inside-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
+                required = false;
+            }
         }
         if(required == false){
             indpplDelLoading();
@@ -604,6 +630,9 @@ jQuery(document).ready(function( $ ) {
                 first_package['unit'] = $('.bag-apprates-title').data('unit');
             }
         }
+        if($(this).is('#product-create-next')){
+            $('.create-product-header-instructions').hide();
+        }
         
         var cups_num = $('.indppl-product-create-cups-num').val();
         var cups_unit = $('#product-create-5-cups').children("option:selected").val();
@@ -620,7 +649,7 @@ jQuery(document).ready(function( $ ) {
         if($(this).is('#product-create-next')){
             var next = true;
             $('.indppl-product-create-size-btn').each(function(){
-                if($(this).hasClass('indppl-background-green')){
+                if($(this).hasClass('indppl-size-selected')){
                     if($(this).hasClass('indppl-new-package')){
                         new_pack[i] = {};
                         new_pack[i]['size'] = $(this).data('size');
@@ -668,6 +697,7 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 // console.log(type);
+
                 if(type == 'pots'){
                     getProductInfo();
                     $('.slide-in-products-container').removeClass('left-0');
@@ -685,7 +715,7 @@ jQuery(document).ready(function( $ ) {
                     
                     if(array['pack_id_array']){
                         var count = 0;
-                        $('.indppl-background-green').each(function(){
+                        $('.indppl-size-selected').each(function(){
                             if($(this).data('id') == "0"){
                                 console.log($(this).data('size'));
                                 $(this).data('id', array['pack_id_array'][count]);
@@ -786,7 +816,8 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         $('.product-create-app-rates-chart-container').slideToggle();
         $('.product-create-first-part-container').slideToggle();
-        $('.indppl-background-green').removeClass('indppl-new-package');
+        $('.indppl-size-selected').removeClass('indppl-new-package');
+        $('.create-product-header-instructions').show();
         var is_default = $('#indppl-ground-default-product').data('default');
         if(is_default == 1){
             $('.indppl-add-product-fraction-bag').hide();
@@ -872,7 +903,7 @@ jQuery(document).ready(function( $ ) {
             $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
             required = false;
         }
-        if(!$('.indppl-background-green')[0]){
+        if(!$('.indppl-size-selected')[0]){
             $('.indppl-product-create-size-num-inside-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
             required = false;
         }
@@ -886,7 +917,7 @@ jQuery(document).ready(function( $ ) {
         var product_id = $('#product-create-product').val();
         var product_unit = $('#product-create-standard-unit').data('unit');
         if(!product_unit){
-            product_unit = $('.indppl-background-green').data('unit');
+            product_unit = $('.indppl-size-selected').data('unit');
         }
         var product_dryliquid = $('.product-create-dry-wet').val();
         var product_input = $("#product-create-form").find('input').filter('.some-kind-of-wonderful').serializeArray();
@@ -920,7 +951,7 @@ jQuery(document).ready(function( $ ) {
         var i = 0;
         var version_check = 1.0;
         $('.indppl-product-create-size-btn').each(function(){
-            if($(this).hasClass('indppl-background-green')){
+            if($(this).hasClass('indppl-size-selected')){
                 if($(this).hasClass('indppl-new-package')){
                     new_pack[i] = {};
                     new_pack[i]['size'] = $(this).data('size');
@@ -2127,6 +2158,18 @@ jQuery(document).ready(function( $ ) {
         });
     });
 
+    $('body').on('click', '.indppl-green-button-not-selected', function(){
+        $(this).parent().find('.indppl-green-button-selected').addClass('indppl-green-button-not-selected');
+        $(this).parent().find('.indppl-green-button-selected').removeClass('indppl-green-button-selected');
+        $(this).removeClass('indppl-green-button-not-selected').addClass('indppl-green-button-selected');
+    });
+
+    $('body').on('click', '.indppl-create-new-size', function(e){
+        e.preventDefault();
+        $('.indppl-product-create-size-num-inside-container').removeClass('indppl-hide');
+        $(this).hide();
+    })
+
     if($("#keep-going-container").length > 0) {
         setTimeout(function(){
             // $(document).scrollTop( $("#keep-going-container").offset().top ); 
@@ -2597,7 +2640,7 @@ jQuery(document).ready(function( $ ) {
         var i = 0;
         var version_check = 1.0;
         jQuery('.indppl-product-create-size-btn').each(function(){
-            if(jQuery(this).hasClass('indppl-background-green')){
+            if(jQuery(this).hasClass('indppl-size-selected')){
                 current_pack[i] = {};
                 current_pack[i]['size'] = jQuery(this).data('size');
                 current_pack[i]['unit'] = jQuery(this).data('unit');
