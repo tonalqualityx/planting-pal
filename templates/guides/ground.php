@@ -145,12 +145,14 @@ $inst_checked = ' checked="checked" ';
             <p>Choose from the pre-written text and graphics for this step or use your own.</p>
             <ul class="style-free" data-products="products-<?php echo $i; ?>">
 
-                <li class="planting-guide-instructions indppl-flex indppl-align-center indppl-no-wrap">
+                <li class="planting-guide-instructions indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content <?php if($a != ''){echo " active";} ?>'>
-                        <img src="<?php echo $options['a-image']; ?>">
+                            <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
+                                <img src="<?php echo $options['a-image']; ?>">
+                            <?php } ?>
                         <div class="instructions-content-text">
                             <?php echo $options['a-instructions']; ?>
                         </div>
@@ -158,12 +160,14 @@ $inst_checked = ' checked="checked" ';
                     </div>
                 </li>
 
-                <li class="planting-guide-instructions  indppl-flex indppl-align-center indppl-no-wrap">
+                <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content <?php if($b != ''){echo " active";} ?>'>
-                        <img src="<?php echo $options['b-image']; ?>">
+                        <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
+                            <img src="<?php echo $options['b-image']; ?>">
+                        <?php } ?>
                         <div class="instructions-content-text">
                             <?php echo $options['b-instructions']; ?>
                         </div>
@@ -171,7 +175,7 @@ $inst_checked = ' checked="checked" ';
                 </li>
                 <?php if(in_array('paidaccountpro',$sub)){ ?>
 
-                    <li class="planting-guide-instructions  indppl-flex indppl-align-center indppl-no-wrap">
+                    <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
                         <div class="planting-guide-option-input indppl-flex">
                             <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true"> <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
                         </div>

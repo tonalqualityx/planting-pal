@@ -52,6 +52,10 @@ img{
   align-items: stretch;
 }
 
+.indppl-align-start {
+  align-items: flex-start;
+}
+
 .indppl-justify-center {
   justify-content: center;
 }
@@ -989,7 +993,7 @@ PRODUCT MANAGEMENT
   display: flex;
   justify-content: space-between;
   width: 80%;
-  margin-content: 20px;
+  /* margin: 20px; */
   padding-bottom: 30px;
 }
 
@@ -1286,7 +1290,7 @@ GUIDES STYLES
 
 .planting-guide-instructions .instructions-content {
   display: flex;
-  justtify-content: space-between;
+  justify-content: space-between;
   align-items: flex-start;
   transition: all 0.35s ease-in-out;
 }
@@ -1298,8 +1302,8 @@ GUIDES STYLES
 }
 
 .planting-guide-instructions .instructions-content img {
-  width: 25%;
-  padding: 5px 15px;
+  width: auto;
+  padding: 5px 0;
   margin: auto;
 }
 
