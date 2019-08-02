@@ -871,12 +871,12 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
     $check_box = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
     $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
     $available = '<div class="indppl-dot-container"><svg height="24" width="24">
-        <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/>
-        <circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>
+        <circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/>
+        <circle cx="12" cy="12" r="6" stroke="#a9d56a" stroke-width="2" fill="#a9d56a" fill-opacity="1"/>
         Sorry, your browser does not support inline SVG. 
     </svg></div>';
     $not_available = '<div class="indppl-no-dot-container"><svg height="24" width="24">
-        <circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.
+        <circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.
         </svg></div>';
     
     ?>
@@ -910,7 +910,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
                 $defualt_or_not_class = 'indppl-non-default-container';
             }
         ?></td>
-        <td>
+        <td class='text-align-center indppl-season-boarders'>
             <?php
             if(is_array($int_array)){
                 if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-spring', $int_array)){
@@ -923,7 +923,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
             }
             ?>
         </td>
-        <td>
+        <td class='text-align-center indppl-season-boarders'>
             <?php
             if(is_array($int_array)){
                 if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-summer', $int_array)){
@@ -936,7 +936,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
             }
             ?>
         </td>
-        <td>
+        <td class='text-align-center indppl-season-boarders'>
             <?php
             if(is_array($int_array)){
                 if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-fall', $int_array)){
@@ -949,7 +949,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
             }
             ?>
         </td>
-        <td>
+        <td class='text-align-center indppl-season-boarders'>
             <?php
             if(is_array($int_array)){
                 if(in_array($id, $relation_array) && array_key_exists('wpcf-available-in-winter', $int_array)){
@@ -1150,26 +1150,33 @@ function update_package_table($store_id, $product_id, $type){
         </div>
     </div>
     <table class='product-create-chart-table'>
-    <tr>
+    <!-- <tr>
         <th colspan='2'>Choose Application Rates</th>
             <th colspan='5'>
             <p>Application Rates Automatically Calculated for Other Sizes</p>
             <p>Use the numbers below to fine tune your application rate on the left</p>
         </th>
-    </tr>
+    </tr> -->
     <tr>
-        <th colspan='2'></th>
+        <th class='in-ground-header in-ground-plant-size'>Plant Container Size</th>
+        <th class='in-ground-header in-ground-how-much'><p style='margin:0;'>How Much?</p><p style='margin:0;'>Per Plant Container Size</p></th>
         <?php
-
+        $counter = 1;
         foreach($product_related as $key => $value){
             if(in_array($value, $store_related)){
                 $name = get_post_meta($value, 'wpcf-unit', true);
                 if($name == 'qt-d' || $name == 'qt-l'){
                     $name = 'Quart';
                 }
+                if($counter == 1){
+                    $class='dark-grey-header';
+                }else{
+                    $class='light-grey-header';
+                }
                 ?>
-                <th colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></th>
+                <th class='<?php echo $class; ?>' colspan='1'><?php echo get_post_meta($value, 'wpcf-size', true) . " " . $name; ?></th>
                 <?php
+                $counter++;
             }
         }
         ?>
@@ -1194,11 +1201,11 @@ function update_package_table($store_id, $product_id, $type){
         $package = get_post_meta($pack_id, 'wpcf-unit', true);
         $default = get_post_meta($id, 'wpcf-default-container', true);
         ?>
-        <tr>
+        <tr class='in-ground-not-bag'>
             <td>
-                <?php echo $title; ?>
+                <h4 class='in-ground-chart-title'><?php echo $title; ?></h4>
             </td>
-            <td>
+            <td style='text-align:center;'>
                 <?php
                 foreach($pro_container as $k => $v){
                     // echo 'inside-foreach';
@@ -1231,7 +1238,7 @@ function update_package_table($store_id, $product_id, $type){
                         }
                         ?>
                         <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
-                            
+                        <option value='' disabled selected>Select Unit</option>
                         </select>
                         <?php
                     }
@@ -1257,6 +1264,7 @@ function update_package_table($store_id, $product_id, $type){
                     ?>
                     <input type='text' class='some-kind-of-wonderful indppl-product-create-chart-app-rate-num' name=<?php echo $id; ?> value=<?php echo $app_qty; ?>>
                     <select class='some-kind-of-wonderful indppl-product-create-chart-app-unit' name=<?php echo $id; ?> data-unit=<?php echo $app_unit; ?>>
+                        <option value='' disabled selected>Select Unit</option>
                         
                     </select>
                     <?php
@@ -1292,7 +1300,7 @@ function update_package_table($store_id, $product_id, $type){
                     // echo $;
                     
                     ?>
-                    <td><?php echo round($final, 2) . " Plants ";  ?></td>
+                    <td><p class='green-text text-align-center margin-0 plant-num-text'><?php echo round($final, 2); ?></p><p class='white-text green-bg text-align-center margin-0'>plants</p></td>
                     <?php
                 }
             }
@@ -1310,8 +1318,8 @@ function update_package_table($store_id, $product_id, $type){
     <div class="product-create-submit-container">
         <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/>
         <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
-        <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="Save and add another product"/>
-        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/>
+        <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="+ Add Another Product"/>
+        <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit hide" value="Exit"/>
     </div>
     <?php
     $app_rates_chart = ob_get_clean();
@@ -2545,4 +2553,40 @@ function indppl_user_is_auth($user_id, $store){
     }
 
     return false;
+}
+
+function indppl_instructions($args = array()){
+    if(isset($args['header'])){
+        $header = $args['header'];
+    }
+    if(isset($args['text'])){
+        $text = $args['text'];
+    }
+    if(isset($args['video'])){
+        $video = $args['video'];
+    }
+    if(isset($args['header-class'])){
+        $header_class = $args['header-class'];
+    }else{
+        $header_class = 'indppl-instruction-header';
+    }
+    if(isset($args['text-class'])){
+        $text_class = $args['text-class'];
+    }else{
+        $text_class = 'indppl-instruction-text';
+    }
+    ob_start();
+    ?>
+    <div class="indppl-instructions">
+        <div class="indppl-instructions-text">
+            <h2 class='<?php echo $header_class; ?>'><?php echo $header; ?></h2>
+            <p class='<?php echo $text_class; ?>'><?php echo $text; ?></p>
+        </div>
+        <div class="indppl-video">
+            <?php echo $video; ?>
+            <p class='orange-text indppl-watch-video'>Watch: how to use this page</p>
+        </div>
+    </div>
+    <?php
+    return ob_get_clean();
 }
