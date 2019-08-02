@@ -52,6 +52,10 @@ img{
   align-items: stretch;
 }
 
+.indppl-align-start {
+  align-items: flex-start;
+}
+
 .indppl-justify-center {
   justify-content: center;
 }
@@ -158,6 +162,10 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
 
 .ppl-green-bg {
     background: #254921!important;
+}
+
+.ppl-med-green-bg {
+  background: #4a8943;
 }
 
 .indpple-dark-green-bg {
@@ -922,7 +930,13 @@ div.ui-datepicker{
 }
 
 .slide-in-products-container .container {
-  padding-bottom: 50px;
+  background: white;
+  margin-top:50px;
+  margin-bottom: 50px;
+  padding: 25px 25px 50px 25px;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .slide-in-products-inside-container, .pots-apprates-container{
@@ -1074,7 +1088,7 @@ PRODUCT MANAGEMENT
   display: flex;
   justify-content: space-between;
   width: 80%;
-  margin-content: 20px;
+  /* margin: 20px; */
   padding-bottom: 30px;
 }
 
@@ -1370,12 +1384,66 @@ GUIDES STYLES
 }
 
 .planting-guide-instructions .instructions-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: all 0.35s ease-in-out;
+}
+
+.planting-guide-instructions .instructions-content .instructions-content-text, .instructions-content textarea {
   border: 1px solid #afafaf;
   padding: 5px 25px;
+  width: 70%;
+}
+
+.planting-guide-instructions .instructions-content img {
+  width: auto;
+  padding: 5px 0;
+  margin: auto;
+}
+
+.planting-guide-instructions .instructions-content.active {
+  background: #eff7ed;
+}
+
+.planting-guide-instructions .instructions-content.active .instructions-content-text {
+  border-color: #eff7ed;
 }
 
 .planting-guide-instructions img {
   max-height: 200px;
+}
+
+.planting-guide-instructions .indppl-btn {
+  padding-left: 25px;
+  padding-right: 25px;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.planting-guide-instructions 
+
+.planting-guide-options h3 {
+  border-bottom: 3px solid #4a8943;
+  color: #4a8943;
+  line-height: 1;
+  margin-top: 40px;
+  font-size: 2em;
+}
+
+.planting-guide-options h4 {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 20px 0 0 0;
+}
+
+.planting-guide-options > p {
+  font-size: 1.25em;
+}
+
+.planting-guide-options  ul {
+  margin-bottom: 60px;
 }
 
 .planting-guide-options .planting-guide-instructions .planting-guide-option-input{
@@ -1390,7 +1458,28 @@ GUIDES STYLES
 }
 
 .planting-guide-options .planting-guide-instructions .planting-guide-option-input input{
-  margin-right: 10px;
+  /* margin-right: 10px; */
+  display:none;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+  padding: 5px 20px 2px;
+  border-radius: 12px;
+  border: 2px solid #999ca2;
+  font-size: 0.9em;
+  transition: all 0.35s ease-in-out;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input label:hover {
+  background: #beeb5c;
+}
+
+.planting-guide-options .planting-guide-instructions .planting-guide-option-input input:checked + label {
+  background: #9ecb3c;
 }
 
 .planting-guide-preview {
@@ -1400,7 +1489,25 @@ GUIDES STYLES
   max-height: 400px;
   overflow: hidden;
   padding: 0;
-  padding-right: 0;
+  padding-top: 40px;
+}
+
+.planting-guide-preview-title {
+  margin-bottom: 0;
+  padding: 10px;
+  width: calc(100% - 2px);
+  transform: translateY(calc(100% + 1px)) translateX(1px);
+  z-index: 9999999999999999999999999;
+  position: relative;
+  height: 40px;
+}
+
+.planting-guide-preview-title h3 {
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0;
+  margin-top: 3px;
+  line-height: 1;
 }
 
 .planting-guide-sent-text{
@@ -1418,6 +1525,12 @@ GUIDES STYLES
 
 .indppl-custom-guide-instructions {
   flex-grow: 9999;
+  padding: 15px;
+}
+
+.custom-image {
+  display: block;
+  margin: auto;
 }
 
 .store-address, .margin-left-10{
@@ -1447,8 +1560,8 @@ GUIDES STYLES
   flex-basis: 5%;
 }
 
-.planting-guide-products label {
-  flex-basis: 15%;
+.planting-guide-products > label {
+  flex-basis: 5%;
 }
 inddpl-
 .planting-guide-products textarea {
@@ -2132,6 +2245,17 @@ GUAGE CSS
   font-size: 14px;
 }
 
+/* mobile to desktop */
+@media only screen and (min-width: 768px){
+  .guide-product-instructions img.indppl-step-img, .indppl-step-img{
+    width: 50%;
+    margin: auto;
+  }
+  .pb-remove-button{
+    top: 10px;
+  }
+}
+
 @media screen and (min-width: 850px){
   .no-small {
     display: block;
@@ -2140,15 +2264,5 @@ GUAGE CSS
   #dashboard-content {
     /* padding: 50px; */
     margin: 15px 50px 25px 50px;
-  }
-}
-
-/* mobile to desktop */
-@media only screen and (min-width: 768px){
-  .guide-product-instructions img.indppl-step-img{
-    width: 50%;
-  }
-  .pb-remove-button{
-    top: 10px;
   }
 }

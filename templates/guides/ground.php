@@ -18,10 +18,26 @@ $sub = indppl_user_status();
 
 $saved_defaults = array();
 $inst_checked = ' checked="checked" ';
+
+// set checkmarks
+$check_box  = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
+$check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
+
 ?> 
 
 
-<h2>In Ground Planting Guide</h2>
+<div class="indppl-instructions">
+  <div class="indppl-instructions-text">
+    <h2>In Ground Planting Guide Builder</h2>
+    <p>For each step in the planting guide, choose from the text and graphics provided or create your own. Then, select the products being used in each step - its also recommended to include product-specific info here too. As you're building, check how your planting guide looks in the preview window.</p>
+  </div>
+  <div class="indppl-video">
+    <video></video>
+  </div>
+</div>
+<div class="planting-guide-preview-title ppl-med-green-bg">
+    <h3 class="white-text text-center">Planting Guide Preview Window</h3>
+</div>
 <div id="planting-guide" class="planting-guide-preview planting-guide" data-type="ground" data-store="<?php echo $store ; ?>">
     <div class="overflow">
         <div class="store-info">
@@ -67,11 +83,11 @@ $inst_checked = ' checked="checked" ';
                 } else {
                     $saved_data[$sec]['description'] = '';
                     echo $options['a-instructions'];
-                    echo "<img src='{$options['a-image']}'>";
+                    echo "<img src='{$options['a-image']}' class='indppl-step-img'>";
                 }
                 echo "</p>";
                 if($saved_data[$sec]->image){
-                    echo "<img src='{$saved_data[$sec]->image}'>";
+                    echo "<img src='{$saved_data[$sec]->image}' class='indppl-step-img'>";
                     $saved_defaults[$sec]['image'] = $saved_data[$sec]->image;
                 }
                 echo "</div>";
@@ -130,48 +146,68 @@ $inst_checked = ' checked="checked" ';
         ?>
         <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >
             <h3><?php echo $section; ?></h3>
-            <p>Customize this step by selecting an option below:</p>
+            <h4>Text and Graphics</h4>
+            <p>Choose from the pre-written text and graphics for this step or use your own.</p>
             <ul class="style-free" data-products="products-<?php echo $i; ?>">
 
-                <li class="planting-guide-instructions indppl-flex indppl-align-center indppl-no-wrap">
+                <li class="planting-guide-instructions indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option A</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content'>
-                        <?php echo $options['a-instructions']; ?>
-                        <img src="<?php echo $options['a-image']; ?>">
+                    <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content <?php if($a != ''){echo " active";} ?>'>
+                            <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
+                                <img src="<?php echo $options['a-image']; ?>">
+                            <?php } ?>
+                        <div class="instructions-content-text">
+                            <?php echo $options['a-instructions']; ?>
+                        </div>
+                        
                     </div>
                 </li>
 
-                <li class="planting-guide-instructions  indppl-flex indppl-align-center indppl-no-wrap">
+                <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option B</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content'>
-                        <?php echo $options['b-instructions']; ?>
-                        <img src="<?php echo $options['b-image']; ?>">
+                    <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content <?php if($b != ''){echo " active";} ?>'>
+                        <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
+                            <img src="<?php echo $options['b-image']; ?>" >
+                        <?php } ?>
+                        <div class="instructions-content-text">
+                            <?php echo $options['b-instructions']; ?>
+                        </div>
                     </div>
                 </li>
                 <?php if(in_array('paidaccountpro',$sub)){ ?>
 
-                    <li class="planting-guide-instructions  indppl-flex indppl-align-center indppl-no-wrap">
+                    <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
+
                         <div class="planting-guide-option-input indppl-flex">
-                            <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true"> <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
+                            <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true">
+                            <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
                         </div>
-                        <div class='indppl-custom-guide-instructions'>
-                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
-                            <label for="<?php echo $format_section; ?>-image">Upload an Image for This Step</label>
+
+                        <div class='indppl-custom-guide-instructions instructions-content'>
+
                             <div id="<?php echo $format_section; ?>-uploaded">
-                                <?php if($c != ''){
-                                    echo "<img src='{$saved_defaults[$i]['image']}'>";
-                                }?>
+                                <p style="margin-top:0;font-weight:bold;">Upload planting graphic:</p>
+                                <label for="<?php echo $format_section; ?>-image" class="indppl-btn indppl-file-upload">Browse</label>
+                                <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-custom-image" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>" class="hide">
+                                <div id="<?php echo $format_section; ?>-custom-image">
+                                    <?php if($c != ''){
+                                        echo "<img src='{$saved_defaults[$i]['image']}'>";
+                                    }?>
+                                </div>      
                             </div>
-                            <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-uploaded" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>">
+
+                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
                         </div>
+
                     </li>
                 <?php } ?>
             </ul>
-            <p>Products used in this step:</p>
+            <h4>Product Recommendations</h4>
+            <p>Choose the products you'd like to appear in this step of the planting guide. Customize the text to provide your customers with the product-specific instructions or tips. For example, if the product is best applied in the morning or should only be 1/4" thick - say that here.</p>
             <div id="products-<?php echo $i; ?>" class="step-product-select">
                 <?php 
                 $displayed = array();
@@ -189,10 +225,14 @@ $inst_checked = ' checked="checked" ';
                         }
                         ?>
                         
-                        <div class="indppl-flex planting-guide-products indppl-align-center indppl-no-wrap">
-                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
-                            <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $prod_brand . " " . $product->post_title; ?></label>
-                            <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                        <div class="indppl-flex planting-guide-products indppl-align-start indppl-no-wrap">
+                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" class="hide" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
+                            <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $check_box ?> <span><?php echo $check_mark; ?></span></label>
+
+                            <div>
+                                <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $prod_brand . " " . $product->post_title; ?></label>
+                                <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                            </div>
                         </div>
                     <?php }
 
