@@ -840,7 +840,8 @@ div.ui-datepicker{
   margin-bottom: 50px;
   padding: 25px 25px 50px 25px;
   position: relative;
-  min-height: fit-content;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .slide-in-products-inside-container, .pots-apprates-container{
@@ -1295,7 +1296,7 @@ GUIDES STYLES
   transition: all 0.35s ease-in-out;
 }
 
-.planting-guide-instructions .instructions-content .instructions-content-text {
+.planting-guide-instructions .instructions-content .instructions-content-text, .instructions-content textarea {
   border: 1px solid #afafaf;
   padding: 5px 25px;
   width: 70%;
@@ -1318,6 +1319,16 @@ GUIDES STYLES
 .planting-guide-instructions img {
   max-height: 200px;
 }
+
+.planting-guide-instructions .indppl-btn {
+  padding-left: 25px;
+  padding-right: 25px;
+  display: block;
+  text-align: center;
+  cursor: pointer;
+}
+
+.planting-guide-instructions 
 
 .planting-guide-options h3 {
   border-bottom: 3px solid #4a8943;
@@ -1420,6 +1431,12 @@ GUIDES STYLES
 
 .indppl-custom-guide-instructions {
   flex-grow: 9999;
+  padding: 15px;
+}
+
+.custom-image {
+  display: block;
+  margin: auto;
 }
 
 .store-address, .margin-left-10{
@@ -1449,8 +1466,8 @@ GUIDES STYLES
   flex-basis: 5%;
 }
 
-.planting-guide-products label {
-  flex-basis: 15%;
+.planting-guide-products > label {
+  flex-basis: 5%;
 }
 inddpl-
 .planting-guide-products textarea {
@@ -2099,6 +2116,17 @@ GUAGE CSS
   font-size: 14px;
 }
 
+/* mobile to desktop */
+@media only screen and (min-width: 768px){
+  .guide-product-instructions img.indppl-step-img, .indppl-step-img{
+    width: 50%;
+    margin: auto;
+  }
+  .pb-remove-button{
+    top: 10px;
+  }
+}
+
 @media screen and (min-width: 850px){
   .no-small {
     display: block;
@@ -2107,15 +2135,5 @@ GUAGE CSS
   #dashboard-content {
     /* padding: 50px; */
     margin: 15px 50px 25px 50px;
-  }
-}
-
-/* mobile to desktop */
-@media only screen and (min-width: 768px){
-  .guide-product-instructions img.indppl-step-img{
-    width: 50%;
-  }
-  .pb-remove-button{
-    top: 10px;
   }
 }

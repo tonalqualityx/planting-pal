@@ -143,7 +143,7 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 indpplDelLoading();
-                console.log(e);
+                // console.log(e);
                 if(e == 0){
                     $(elem).prev('p').text("Your store is not live. If you have filled out all the information below you can make your store live with this button.");
                     $(elem).html("Make Public");
@@ -169,7 +169,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.container-available-in-store', function(){
         $(this).parents('.indppl-table-color-offset').find('.indppl-dot-container').each(function(){
             // if($(this).find('.indppl-no-dot-container')){
-                console.log('out');
+                // console.log('out');
                 $(this).html('<svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg>')
             // }
             if(!$(this).parent().prev().hasClass('indppl-remove-dot')){
@@ -212,10 +212,15 @@ jQuery(document).ready(function( $ ) {
     });
     $('body').on('click', '#container-submit', function(e){
         e.preventDefault();
-        containerSubmit();
-        
-            
+        containerSubmit();  
     });
+
+    $("body").keyup(function(e){
+        if(e.keyCode == 27){
+            closeModal();
+        }
+    });
+
     $('body').on('click', '.indppl-add-product-btn', function(e){
         e.preventDefault();
         var type = $(this).data('type');
@@ -266,7 +271,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
                 $(".create-brand-button-container").hide();
                 $("#product-add-new-brand").hide();
                 $('#product-create-product').empty();
@@ -308,7 +313,7 @@ jQuery(document).ready(function( $ ) {
                 },
                 type: 'POST',
                 success: function(e){
-                    console.log(e);
+                    // console.log(e);
                     $('.product-create-brand-cut-off').children().each(function(){
                         $(this).empty();
                     })
@@ -343,7 +348,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
                 array = JSON.parse(e);
                 $('.product-create-brand-cut-off').children().each(function(){
                     $(this).empty();
@@ -466,7 +471,7 @@ jQuery(document).ready(function( $ ) {
                 create_new = false;
             }
         })
-        console.log(create_new);
+        // console.log(create_new);
         if(create_new == true){
             var name = unit;
             if(unit == 'qt-l' || unit == 'qt-d'){
@@ -515,7 +520,7 @@ jQuery(document).ready(function( $ ) {
         indpplAddLoading();
         $('.indppl-form-required').remove();
         var required = true;
-        console.log($('.indppl-add-product-name').val());
+        // console.log($('.indppl-add-product-name').val());
         if($('.indppl-add-product-name').val() == ""){
             $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
             required = false;
@@ -567,7 +572,7 @@ jQuery(document).ready(function( $ ) {
         var i = 0;
         var version_check = 1.0;
         // console.log(product_input);
-        console.log(product_dryliquid);
+        // console.log(product_dryliquid);
         if($(this).is('#product-create-next')){
             var next = true;
             $('.indppl-product-create-size-btn').each(function(){
@@ -625,20 +630,20 @@ jQuery(document).ready(function( $ ) {
                     setTimeout(function(){
                         $('.slide-in-products-container').remove();
                     }, 1000);
-                    console.log('ummm');
+                    // console.log('ummm');
                     indpplDelLoading();
                     indpplAddProduct(type);
                 }else{
                     // console.log(e);
                     array = JSON.parse(e);
-                    console.log(array);
-                    console.log(array['console']);
+                    // console.log(array);
+                    // console.log(array['console']);
                     
                     if(array['pack_id_array']){
                         var count = 0;
                         $('.indppl-background-green').each(function(){
                             if($(this).data('id') == "0"){
-                                console.log($(this).data('size'));
+                                // console.log($(this).data('size'));
                                 $(this).data('id', array['pack_id_array'][count]);
                                 count++;
                             }
@@ -717,7 +722,7 @@ jQuery(document).ready(function( $ ) {
                     if(array['update']){
                         $(array['update']).each(function(){
                             var id = $(this)[0];
-                            console.log(id);
+                            // console.log(id);
                             $('.bag-apprates-container-title').each(function(){
                                 if($(this).data('id') == id){
                                     $(this).addClass('color-red');
@@ -847,9 +852,9 @@ jQuery(document).ready(function( $ ) {
         var package_array = [];
         var package_remove = [];
         var new_pack = {};
-        console.log("filler: " + filler);
-        console.log("blended: " + blend);
-        console.log("surface: " + surface);
+        // console.log("filler: " + filler);
+        // console.log("blended: " + blend);
+        // console.log("surface: " + surface);
         var i = 0;
         var version_check = 1.0;
         $('.indppl-product-create-size-btn').each(function(){
@@ -900,7 +905,7 @@ jQuery(document).ready(function( $ ) {
             success: function(e){
                 // var array = JSON.parse(e);
                 // console.log(array['console']);
-                console.log(e);
+                // console.log(e);
                 if($(elem).attr('id') == 'product-create-pots-finish'){
                     getProductInfo();
                     $('.slide-in-products-container').removeClass('left-0');
@@ -1005,7 +1010,7 @@ jQuery(document).ready(function( $ ) {
         var content = $("#" + $(this).data('content')).html();
         if(content == ''){
             image = $("#" + $(this).data('target') + "-uploaded").html();
-            console.log(image);
+            // console.log(image);
             content = '<p>' + $('#' + $(this).data('content')).val() + '</p>' + image;
         }
         var target = $(this).data('target');
@@ -1039,11 +1044,12 @@ jQuery(document).ready(function( $ ) {
     $('body').on('change', '.indppl-custom-guide-instructions input[type=file]', function(e){
         indpplAddLoading();
         var target = $(this).data('target');
+        // console.log(target);
         var option = $(this).data('option');
         var section = $(this).data('section');
         var fd = new FormData();
         var file = $(this).prop('files')[0];
-        console.log(section);
+        // console.log(section);
         fd.append('file', file);
         fd.append('version_check', 1.0);
         fd.append('action', 'indppl_upload_guide_image_ajax');
@@ -1057,13 +1063,15 @@ jQuery(document).ready(function( $ ) {
             // processData: true,
             type: 'POST',
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 indpplDelLoading();
                 var image = "<img src='" + response + "' class='custom-image'>";
                 $(target).html(image);
                 $(section).find(".custom-image").remove();
                 $(section + " > p").after(image);
                 $(option).prop('checked', true);
+                $(option).parents('ul').find(".instructions-content").removeClass('active');
+                $(option).parents('li').find(".instructions-content").addClass('active');
             }
         });
     });
@@ -1092,7 +1100,7 @@ jQuery(document).ready(function( $ ) {
                         custom = true;
                         content = $('#' + $(this).data('content')).val();
                         image = $("#" + $(this).data('target') + "-uploaded img").attr('src');
-                        console.log(image);
+                        // console.log(image);
                     } else {
                         content =  $(this).data('content');
                     }
@@ -1189,7 +1197,7 @@ jQuery(document).ready(function( $ ) {
                     email : email
                 }, 
                 success : function(response) {
-                    console.log(response);
+                    // console.log(response);
                     $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
                     $('.keep-going').hide();
                     $('.email-address-add').hide();
@@ -1205,11 +1213,11 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.sponsor-link', function(e){
         e.preventDefault();
-        console.log('triggered');
+        // console.log('triggered');
         var content = $(this).parent().find('.sponsor-copy').html();
         var brand = $(this).siblings('.product-name').find('.brand').text();
         var product = $(this).siblings('.product-name').find('.product').text();
-        console.log(product);
+        // console.log(product);
         var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
         if(!image || image == 'undefined'){
             content = $(this).next('.sponsor-copy').html();
@@ -1226,8 +1234,8 @@ jQuery(document).ready(function( $ ) {
         if(!product || product == 'undefined'){
             product = $(this).parents('.sponsorship').next().children().last().html();
         }
-        console.log(brand);
-        console.log(product);
+        // console.log(brand);
+        // console.log(product);
         $('body').prepend("<div class='sponsored-modal'>" + image + "<p class='brand'>" + brand + "</p><h4>" + product + "</h4><p>" + content + "</p></div>");
     });
 
@@ -1261,7 +1269,7 @@ jQuery(document).ready(function( $ ) {
                 blend_array[$(this).data('product')] = {'amount': $(this).val()};
                 blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
             });
-            console.log(blend_array);
+            // console.log(blend_array);
             var surface_array = {}
             $('.surface-num').each(function(){
                 surface_array[$(this).data('product')] = {'amount': $(this).val()};
@@ -1292,7 +1300,7 @@ jQuery(document).ready(function( $ ) {
                 },
                 type: 'POST',
                 success: function(e){
-                    console.log(e);
+                    // console.log(e);
                     indpplDelLoading();
                     $('.slide-in-products-container').removeClass('left-0');
                     setTimeout(function(){
@@ -1321,7 +1329,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
                 $('.slide-in-sponsor-container .container').append(e); 
                 indpplDelLoading();
             }
@@ -1343,7 +1351,7 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('submit', '#store-management-form', function(e){
         var phone = validatePhone($('#phone').val());
-        console.log(phone);
+        // console.log(phone);
         if(phone == false){
             e.preventDefault();
             alert('Phone number must be 10 digits.');
@@ -1385,7 +1393,7 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 array = JSON.parse(e);
-                console.log(array['refresh']);
+                // console.log(array['refresh']);
                 $('.indppl-add-sponsor-main-container').html(array['refresh']);
                 $('#add-sponsor-img').attr('src', array['img']);
                 indpplDelLoading();
@@ -1421,7 +1429,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
                 $('.slide-in-sponsor-container .container').append(e); 
                 indpplDelLoading();
             }
@@ -1445,7 +1453,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                console.log(e);
+                // console.log(e);
                 $('.indppl-add-sponsor-main-container').html(e);
                 indpplDelLoading();
                 $('.sponsor-modal-close').hide();
@@ -1553,7 +1561,7 @@ jQuery(document).ready(function( $ ) {
     // Remove authorized duplicator
     $("body").on('click', '.remove-auth', function (e) {
         e.preventDefault();
-        console.log('sdfsfsdfsdf');
+        // console.log('sdfsfsdfsdf');
         indpplAddLoading();
         var auth = $(this).data('id');
         var entry = $(this);
@@ -1570,7 +1578,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 $('.indppl-loading-background').remove();
                 if(response == 'success'){
                     entry.parent().remove();
@@ -1715,7 +1723,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 $('.indppl-my-stores-container').replaceWith(response);
                 indpplDelLoading();
             }
@@ -1739,7 +1747,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if(response){
                     $(elem).replaceWith("<a href='#' class='orange-text text-center indppl-store-deactivate' data-store=" + id + " style='display: block; margin - top: 5px;'>Deactivate</a>");
                     $('#status-' + id).removeClass('grey-text').addClass('green-text').text('Online');
@@ -1766,7 +1774,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if(response){
                     $(elem).replaceWith("<a href='#' data-store=" + id + " class='orange-text text-center indppl-live-store' style='display: block; margin - top: 5px;'>Go Live</a>");
                     $('#status-' + id).removeClass('green-text').addClass('grey-text').text('Offline');
@@ -1832,7 +1840,7 @@ jQuery(document).ready(function( $ ) {
         var over_height_elem;
         $('.ground-shopping-list').find('.rounded-input').each(function(){
             // console.log($.isNumeric($(this).val()));
-            console.log(ground);
+            // console.log(ground);
             if($(this).val() > 0 && $.isNumeric($(this).val()) && ground == false){
                 ground = true;
                 return false;
@@ -1867,7 +1875,7 @@ jQuery(document).ready(function( $ ) {
         $(".indppl-pots-partial").each(function(){
             if($(this).is(':checked')){
                 var pots_need = $(this).parent().parent().parent().find('.rounded-input3').val();
-                console.log(pots_need);
+                // console.log(pots_need);
                 if(!pots_need >= 1 && pots_need != null){
                     required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
                     
@@ -1876,12 +1884,12 @@ jQuery(document).ready(function( $ ) {
                     return false;
                 }else{
                     var height = $(this).parents('.tacos').find('.height').val();
-                    console.log(height);
-                    console.log(pots_need);
+                    // console.log(height);
+                    // console.log(pots_need);
                     if(pots_need > height){
                         over_height = true;
                         over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
-                        console.log(over_height_elem);
+                        // console.log(over_height_elem);
                     }
                 }
             }
@@ -1893,10 +1901,10 @@ jQuery(document).ready(function( $ ) {
         var beds_load = true;
         var beds_empty = true;
         $('.rb-form').find('.rounded-input.beds').each(function(){
-            console.log($(this).val());
+            // console.log($(this).val());
             var count = 0;
             $(this).parent().parent().find('.rounded-input2').each(function(){
-                console.log($(this).val());
+                // console.log($(this).val());
                 if($(this).val() >= 1){
                     count++;
                     beds_empty = false;
@@ -1923,7 +1931,7 @@ jQuery(document).ready(function( $ ) {
                 var beds_need = $(this).parent().parent().parent().find('.rounded-input3').val();
                 if(!beds_need >= 1 && beds_need != null){
                     beds_required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
-                    console.log('testing' + beds_need);
+                    // console.log('testing' + beds_need);
                     beds_load = false;
                     bed_partial_empty = false;
                     return false;
@@ -1939,7 +1947,7 @@ jQuery(document).ready(function( $ ) {
         if(bed_partial_empty == false){
             beds_empty = false;
         }
-        console.log('ground: ' + ground + " Pots: " + pots_load + " beds: " + beds_load + " pots empty: " + pots_empty + " beds empty: " + beds_empty);
+        // console.log('ground: ' + ground + " Pots: " + pots_load + " beds: " + beds_load + " pots empty: " + pots_empty + " beds empty: " + beds_empty);
         if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true)) || 
         (pots_load == true && (beds_empty == true || beds_load == true)) ||
         (beds_load == true && (pots_empty == true || pots_load == true) && over_height == false)){
@@ -1967,7 +1975,7 @@ jQuery(document).ready(function( $ ) {
                 $(this).after('<p class="next-button-error">Fill in all required fields</p>');
             }
             if(over_height == true){
-                console.log(over_height_elem);
+                // console.log(over_height_elem);
                 $(over_height_elem).prev().replaceWith('<p class="round-button-error">Cannot exceed height</p>')
             }
 
@@ -2134,8 +2142,9 @@ jQuery(document).ready(function( $ ) {
         }
     }
 
-    $('body').on('click', ".planting-guide-option-input label", function(){
-        console.log('sdfsd');
+    $('body').on('change', ".planting-guide-option-input input", function(){
+        // console.log;
+        // console.log($(this));
         $(this).parents('ul').find(".instructions-content").removeClass('active');
         $(this).parents('li').find(".instructions-content").addClass('active');
     });
@@ -2277,7 +2286,7 @@ function getLocation() {
 }
 
 function indpplAddLoading(location, primary, secondary, background){
-    console.log(location);
+    // console.log(location);
     if(location == undefined){
         location = 'body';
     }
@@ -2347,7 +2356,7 @@ function indpplEditProduct(type, store_id, product_id){
         type: 'POST',
         success: function(e){
             array = JSON.parse(e);
-            console.log(array['console']);
+            // console.log(array['console']);
             $('.product-create-brand-cut-off').children().each(function(){
                 $(this).empty();
             })
@@ -2511,10 +2520,10 @@ function updateAppRates(elem){
         },
         type: 'POST',
         success: function(e){
-            console.log(e);
+            // console.log(e);
             array = JSON.parse(e);
             // console.log(elem);
-            console.log(array['console']);
+            // console.log(array['console']);
             jQuery.each(array['app_rates'], function(index, value){
                 // console.log(index);
 
@@ -2543,12 +2552,12 @@ function updateBagAppRates(elem){
         val = 1;
         $(elem).parent().children().val(1);
     }
-    console.log('--------');
-    console.log(elem);
-    console.log(cont_id);
-    console.log(product_num);
-    console.log(product_unit);
-    console.log(val);
+    // console.log('--------');
+    // console.log(elem);
+    // console.log(cont_id);
+    // console.log(product_num);
+    // console.log(product_unit);
+    // console.log(val);
     jQuery.ajax({
         url:indppl_ajax.ajaxurl,
         dataType: 'text',
@@ -2623,7 +2632,7 @@ function monitorProgress(store){
 function containerSubmit(){
     indpplAddLoading();
     $first_time = $('.ind-first-time').length;
-    console.log($first_time);
+    // console.log($first_time);
     if($('.indppl-update-apps').length > 0 && $first_time == 0){
         alert("We've added your containers, please verify the amounts are correct in your in ground application rates.");
     }
@@ -2687,7 +2696,7 @@ function containerSubmit(){
             getProductInfo();
             // console.log(e);
             var new_array = jQuery.parseJSON(e);
-            console.log(new_array['update']);
+            // console.log(new_array['update']);
             var i = 0;
             $('.container-add-new').each(function(){
                 $(this).attr('name', "indppl-container-title");

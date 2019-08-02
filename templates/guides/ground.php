@@ -18,6 +18,11 @@ $sub = indppl_user_status();
 
 $saved_defaults = array();
 $inst_checked = ' checked="checked" ';
+
+// set checkmarks
+$check_box  = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
+$check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
+
 ?> 
 
 
@@ -78,11 +83,11 @@ $inst_checked = ' checked="checked" ';
                 } else {
                     $saved_data[$sec]['description'] = '';
                     echo $options['a-instructions'];
-                    echo "<img src='{$options['a-image']}'>";
+                    echo "<img src='{$options['a-image']}' class='indppl-step-img'>";
                 }
                 echo "</p>";
                 if($saved_data[$sec]->image){
-                    echo "<img src='{$saved_data[$sec]->image}'>";
+                    echo "<img src='{$saved_data[$sec]->image}' class='indppl-step-img'>";
                     $saved_defaults[$sec]['image'] = $saved_data[$sec]->image;
                 }
                 echo "</div>";
@@ -166,7 +171,7 @@ $inst_checked = ' checked="checked" ';
                     </div>
                     <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content <?php if($b != ''){echo " active";} ?>'>
                         <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
-                            <img src="<?php echo $options['b-image']; ?>">
+                            <img src="<?php echo $options['b-image']; ?>" >
                         <?php } ?>
                         <div class="instructions-content-text">
                             <?php echo $options['b-instructions']; ?>
@@ -176,19 +181,28 @@ $inst_checked = ' checked="checked" ';
                 <?php if(in_array('paidaccountpro',$sub)){ ?>
 
                     <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
+
                         <div class="planting-guide-option-input indppl-flex">
-                            <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true"> <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
+                            <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true">
+                            <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
                         </div>
-                        <div class='indppl-custom-guide-instructions'>
-                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
-                            <label for="<?php echo $format_section; ?>-image">Upload an Image for This Step</label>
+
+                        <div class='indppl-custom-guide-instructions instructions-content'>
+
                             <div id="<?php echo $format_section; ?>-uploaded">
-                                <?php if($c != ''){
-                                    echo "<img src='{$saved_defaults[$i]['image']}'>";
-                                }?>
+                                <p style="margin-top:0;font-weight:bold;">Upload planting graphic:</p>
+                                <label for="<?php echo $format_section; ?>-image" class="indppl-btn indppl-file-upload">Browse</label>
+                                <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-custom-image" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>" class="hide">
+                                <div id="<?php echo $format_section; ?>-custom-image">
+                                    <?php if($c != ''){
+                                        echo "<img src='{$saved_defaults[$i]['image']}'>";
+                                    }?>
+                                </div>      
                             </div>
-                            <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-uploaded" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>">
+
+                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
                         </div>
+
                     </li>
                 <?php } ?>
             </ul>
@@ -211,10 +225,14 @@ $inst_checked = ' checked="checked" ';
                         }
                         ?>
                         
-                        <div class="indppl-flex planting-guide-products indppl-align-center indppl-no-wrap">
-                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
-                            <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $prod_brand . " " . $product->post_title; ?></label>
-                            <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                        <div class="indppl-flex planting-guide-products indppl-align-start indppl-no-wrap">
+                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" class="hide" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
+                            <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $check_box ?> <span><?php echo $check_mark; ?></span></label>
+
+                            <div>
+                                <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $prod_brand . " " . $product->post_title; ?></label>
+                                <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                            </div>
                         </div>
                     <?php }
 
