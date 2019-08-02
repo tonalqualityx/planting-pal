@@ -105,6 +105,10 @@ img{
   color: #f26226;
 }
 
+a.orange-text:hover {
+  color: #e25216;
+}
+
 .slide-in-products-container input[type=submit]{
   border: none;
 }
@@ -1402,7 +1406,24 @@ GUIDES STYLES
   margin: auto;
 }
 
-.planting-guide-instructions .instructions-content.active {
+.product-instructions-section {
+  padding: 3px 15px 15px;
+  flex-grow: 999;
+}
+
+.product-instructions-section .product-instructions-brand {
+  font-weight: 100;
+}
+
+.product-instructions-section .product-instructions-input {
+  flex-basis: 75%;
+}
+
+.product-instructions-blurb {
+  font-size: 0.8em;
+}
+
+.planting-guide-instructions .instructions-content.active, .product-instructions-section.active {
   background: #eff7ed;
 }
 
@@ -1526,6 +1547,10 @@ GUIDES STYLES
 .indppl-custom-guide-instructions {
   flex-grow: 9999;
   padding: 15px;
+}
+
+.guide-controls {
+  margin-right: 10px;
 }
 
 .custom-image {

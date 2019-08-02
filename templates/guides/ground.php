@@ -152,14 +152,18 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
 
                 <li class="planting-guide-instructions indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>> <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>>
+                        <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-a" class='instructions-content <?php if($a != ''){echo " active";} ?>'>
+                    <div class='instructions-content <?php if($a != ''){echo " active";} ?>'>
                             <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
                                 <img src="<?php echo $options['a-image']; ?>">
                             <?php } ?>
-                        <div class="instructions-content-text">
-                            <?php echo $options['a-instructions']; ?>
+                        <div id="content-<?php echo $options['id']; ?>-a" class="instructions-content-text">
+                            <?php echo $options['a-instructions']; ?> 
+                            <?php if($a != ''){ ?>
+                                <a href="#" class="instructions-edit orange-text">Edit Text</a>
+                            <?php } ?>
                         </div>
                         
                     </div>
@@ -169,11 +173,11 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     <div class="planting-guide-option-input indppl-flex">
                         <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
                     </div>
-                    <div id="content-<?php echo $options['id']; ?>-b" class='instructions-content <?php if($b != ''){echo " active";} ?>'>
+                    <div class='instructions-content <?php if($b != ''){echo " active";} ?>'>
                         <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
                             <img src="<?php echo $options['b-image']; ?>" >
                         <?php } ?>
-                        <div class="instructions-content-text">
+                        <div id="content-<?php echo $options['id']; ?>-b" class="instructions-content-text" >
                             <?php echo $options['b-instructions']; ?>
                         </div>
                     </div>
@@ -187,7 +191,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                             <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
                         </div>
 
-                        <div class='indppl-custom-guide-instructions instructions-content'>
+                        <div class='indppl-custom-guide-instructions instructions-content <?php if ($c != '') {echo " active";}?>'>
 
                             <div id="<?php echo $format_section; ?>-uploaded">
                                 <p style="margin-top:0;font-weight:bold;">Upload planting graphic:</p>
@@ -200,7 +204,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                                 </div>      
                             </div>
 
-                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:100px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
+                            <textarea id="content-<?php echo $options['id']; ?>-custom" style="height:200px;" data-custom="true" data-target="<?php echo $format_section; ?>"><?php if($c_text != $a_text && $c_text != $b_text){ echo $c_text;} ?></textarea>
                         </div>
 
                     </li>
@@ -226,12 +230,20 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                         ?>
                         
                         <div class="indppl-flex planting-guide-products indppl-align-start indppl-no-wrap">
-                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" class="hide" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
-                            <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $check_box ?> <span><?php echo $check_mark; ?></span></label>
+                            <input type='checkbox' name="step-<?php echo $i; ?>[use-<?php echo $key; ?>]" id="use-<?php echo $key; ?>-<?php echo $i; ?>" class="guide-product-select hide" data-step="<?php echo $i; ?>" data-product="<?php echo $key; ?>" data-target="<?php echo $format_section; ?>" data-instructions="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" <?php echo $checked; ?>>
+                            <label for="use-<?php echo $key . '-' . $i; ?>" class="product-check" ><?php echo $checked == '' ? $check_box : $check_mark; ?></label>
 
-                            <div>
-                                <label for="use-<?php echo $key . '-' . $i; ?>"><?php echo $prod_brand . " " . $product->post_title; ?></label>
-                                <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                            <div class="product-instructions-section indppl-flex <?php echo $checked == '' ? '' : 'active'; ?>">
+                                <div class="product-instructions-input">
+                                    <label for="use-<?php echo $key . '-' . $i; ?>">
+                                        <?php echo "<span class='product-instructions-brand'>$prod_brand</span>, $product->post_title"; ?>
+                                        <br /><span class="product-instructions-blurb">Product specific instructions or tips:</span>
+                                    </label>
+                                    <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
+                                </div>
+                                <div class="product-instructions-sponsored-image">
+
+                                </div>
                             </div>
                         </div>
                     <?php }
@@ -241,10 +253,10 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
             <?php
             $i++;
             if($i > 1){ ?>
-                <a href="#" id="guide-back" class="indppl-button guide-controls" data-target="section-<?php echo prev($sections)['id']; next($sections); ?>" data-header="<?php echo $format_section; ?>-header">Back</a> 
+                <a href="#" id="guide-back" class="orange-text guide-controls" data-target="section-<?php echo prev($sections)['id']; next($sections); ?>" data-header="<?php echo $format_section; ?>-header">Back</a> 
             <?php }
             if($i < $count){ ?>
-                <a href="#" id="guide-next" class="indppl-button guide-controls" data-target="section-<?php echo next($sections)['id']; ?>" data-header="<?php echo $format_section; ?>-header">Next</a>
+                <a href="#" id="guide-next" class="indppl-button guide-controls" data-target="section-<?php echo next($sections)['id']; ?>" data-header="<?php echo $format_section; ?>-header">NEXT: <?php echo key($sections); ?></a>
             <?php } else { ?>
                 <a href="#" id="guide-save" class="indppl-button" >Save</a>
 

@@ -8,6 +8,11 @@ if(typeof ind_base_url !== 'undefined'){
 }
 
 jQuery(document).ready(function( $ ) {
+
+    // Let's set some stuff up for use whenever we need it!
+    var checkBox = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
+    var checkMark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
+
     $('body').on('click', '.geo-submit', function(e){
         e.preventDefault();
         var zip = $('#zip-for-location').val();
@@ -1106,16 +1111,19 @@ jQuery(document).ready(function( $ ) {
         
     });
 
-    $("body").on('click', '.planting-guide-instructions input[type=radio]', function() {
-        var content = $("#" + $(this).data('content')).html();
+    $("body").on('click', '.planting-guide-instructions label', function() {
+
+        var theInput = $(this).prev('input');
+        console.log(theInput);
+        var content = $("#" + theInput.data('content')).html();
+
         if(content == ''){
-            image = $("#" + $(this).data('target') + "-uploaded").html();
-            // console.log(image);
-            content = '<p>' + $('#' + $(this).data('content')).val() + '</p>' + image;
+            image = $("#" + theInput.data('target') + "-uploaded").html();
+            content = '<p>' + $('#' + theInput.data('content')).val() + '</p>' + image;
         }
-        var target = $(this).data('target');
+        var target = theInput.data('target');
         $("#" + target).html(content);
-        var products = $(this).parents('ul').data('products');
+        var products = theInput.parents('ul').data('products');
         productsToStep(products);
     });
 
@@ -2928,4 +2936,18 @@ jQuery(document).ready(function( $ ) {
             }
         })
     }
+
+    $('body').on('change', '.guide-product-select', function(e) {
+
+        var fill = checkBox;
+
+        if($(this).is(':checked')){
+            fill = checkMark
+        }
+
+        $(this).parent('.planting-guide-products').find('.product-instructions-section').toggleClass('active');
+        
+        $(this).next('label').html(fill);
+    });
+
 });
