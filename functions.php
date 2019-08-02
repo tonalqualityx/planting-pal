@@ -43,10 +43,10 @@ function geofind($lat, $lon, $radius) {
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
     $configData = json_decode($json, true);
-
+    // var_dump($configData);
     $i = 0;
     foreach ($ob as $taco) {
-        $allzips[] = $configData["code"][$i]["postalcode"];
+        $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
         $i++;
     }
     return $allzips;
@@ -59,10 +59,10 @@ function geozip($zipcode, $radius) {
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
     $configData = json_decode($json, true);
-
+    // var_dump($configData);
     $i = 0;
     foreach ($ob as $taco) {
-        $allzips[] = $configData["code"][$i]["postalcode"];
+        $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
         $i++;
     }
     return $allzips;
@@ -491,11 +491,31 @@ function indppl_delete_apprate($store_id, $args = null) {
         } else {
             // We have just one item to remove
             // Version 1.1
+            // used to remove containers
+            $type = array('ground', 'pots', 'beds');
+            foreach($type as $key => $value){
+                foreach($apprates[$value] as $k => $v){
+                    foreach($v as $ki => $data){
+                        foreach($data as $id => $container_info){
+                            // foreach($container_info as $id => $tooo){
+                                if($id == $args){
+                                    unset($apprates[$value][$k][$ki][$id]);
+                                    // var_dump($apprates[$value][$v][$data][$id]);
+                                }
+                            // }
+                        }
+                    }
+                }
+            }
+            $newapprates = json_encode($apprates);
+            // var_dump($newapprates);
+            $update = update_post_meta($store_id, 'wpcf-apprates', $newapprates);
+            $results = array('apprates' => $newapprates, 'update' => $update);
         }
 
     }
 
-    return $results;
+    // return $results;
 }
 
 function dummy_data() {
@@ -860,7 +880,7 @@ function indppl_build_container_relation_output($id, $title, $relation_array, $i
         </svg></div>';
     
     ?>
-    <tr class='indppl-table-color-offset'>
+    <tr class='indppl-table-color-offset indppl-containers-row'>
         <td class='padding-left-40 position-absolute check-box-container'><?php
         $fix_relative_issue = '';
             if(in_array($id, $relation_array)){
@@ -1014,12 +1034,20 @@ function indppl_get_current_products($type){
     ob_start();
     $app_rates = indppl_apprates($store_id);
     ?>
-    <table>
-        <th class='product-list-width'></th>
+    <table class='products-table'>
         <th class='product-list-width'>Brand</th>
         <th class='product-list-width'>Product Name</th>
         <th class='product-list-width'>Sizes</th>
-
+        <?php
+        if($type == 'pots' || $type == 'beds'){
+            ?>
+            <th class='product-list-width'>Bulk Filler/Substrate</th>
+            <th class='product-list-width'>Additive Blended-in</th>
+            <th class='product-list-width'>Additive Surface Applied</th>
+            <?php
+        }
+        ?>
+        <th class='product-list-width'></th>
         <?php
         $product_array = $app_rates[$type];
         $no_duplicates = array();
@@ -1174,6 +1202,7 @@ function update_package_table($store_id, $product_id, $type){
                 <?php
                 foreach($pro_container as $k => $v){
                     // echo 'inside-foreach';
+                    $default_app_unit = get_post_meta($v['intermediary'], 'wpcf-apprate-unit-holdover', true);
                     if($id == $v['child']){
                         
                         // echo $v['intermediary'];
@@ -1213,9 +1242,10 @@ function update_package_table($store_id, $product_id, $type){
                     $app_qty = 0;
                     $wet_dry = get_post_meta($product_id, 'wpcf-dryliquid', true);
                     if($wet_dry = 'dry'){
-                        $app_unit = 'lb';
+                        // $app_unit = 'lb';
+                        $app_unit = $default_app_unit;
                     }else{
-                        $app_unit = 'gal';
+                        $app_unit = $default_app_unit;
                     }
                     if(array_key_exists('amount', $app_rates[$type][$product_id]['containers'][$id])){
                         $app_qty = $app_rates[$type][$product_id]['containers'][$id]['amount'];
@@ -1793,11 +1823,16 @@ function indppl_get_product_info(){
             <!-- <h2><?php echo $heading; ?></h2> -->
             <form id='product-create-form' method="post" action='#' class="form-horizontal">
                 <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
+                <div class='create-product-header-instructions'></div>
                 <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
                     <option value='' disabled selected>Select Brand</option>
                     <?php
                     $brands = get_terms('brand');
                     // var_dump($brands);
+                    $get_user_status = indppl_user_status(get_current_user_id());
+                    if(in_array('paidaccountpro', $get_user_status)){
+                        ?> <option id='add_new_brand_select' value="new">Create New Brand</option> <?php
+                    }
                     foreach($brands as $key => $value){
                         $custom = get_term_meta($value->term_id, 'wpcf-custom-brand', true);
                         if($custom){
@@ -1809,10 +1844,6 @@ function indppl_get_product_info(){
                             ?> <option value="<?php echo $value->slug; ?>"><?php echo $value->name; ?> </option><?php
                         }
                     }
-                    $get_user_status = indppl_user_status(get_current_user_id());
-                    if(in_array('paidaccountpro', $get_user_status)){
-                        ?> <option value="new">Add Brand</option> <?php
-                    }
                     
                     // var_dump($brands);
                     ?>
@@ -1823,21 +1854,23 @@ function indppl_get_product_info(){
                 <div class='product-create-brand-cut-off'>
                     <div class='product-create-first-part-container product-create-add-product-name'>
                     </div>
-                    <div class='product-create-first-part-container product-create-dry-wet-container'>
-                    </div>
-                    <div class='product-create-standard-unit-container'>
+                    <div class='product-create-first-part-container product-create-size-container'>
                     </div>
                     <div class='product-create-first-part-container product-create-new-size-container'>
                     </div>
-                    <div class='product-create-first-part-container product-create-size-container'>
+                    <div class='product-create-first-part-container product-more-things-header'>
+                    </div> 
+                    <div class='product-create-first-part-container product-create-dry-wet-container'>
                     </div>
-                    <div class='product-create-first-part-container product-create-app-rate-container'>
+                    <div class='product-create-first-part-container product-create-fraction-bag'>
                     </div>
                     <div class='product-create-first-part-container product-create-5-cups-container'>
                     </div>
                     <div class='product-create-first-part-container product-create-usage-type'>
                     </div>
-                    <div class='product-create-first-part-container product-create-fraction-bag'>
+                    <div class='product-create-standard-unit-container'>
+                    </div>
+                    <div class='product-create-first-part-container product-create-app-rate-container'>
                     </div>
                     <div class='product-create-first-part-container product-create-save-done-container'>
                     </div>
@@ -1879,20 +1912,7 @@ function indppl_get_products($store_id, $key, $type){
         );
         ?>
         <tr class='indppl-table-color-offset'>
-            <td>
-                <?php
-                if($type == 'pots' || $type == 'beds'){
-                    ?>
-                    <a href="#" class="indppl-product-pots-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
-                    <?php
-                }else{
-                    ?>
-                    <a href="#" class="indppl-product-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
-                    <?php
-                }
-                ?>
-                <a href="#" class="indppl-product-delete" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>delete</a>
-            </td>
+            
             <td>
                 <?php echo $brand[0]->name; ?>
             </td>
@@ -1911,6 +1931,61 @@ function indppl_get_products($store_id, $key, $type){
                 ?>
             </td>
             <?php
+            if($type == 'pots' || $type == 'beds'){
+                $filler = get_post_meta($pid, 'wpcf-use-blended-filler', true);
+                $additive = get_post_meta($pid, 'wpcf-use-blended-additive', true);
+                $surface = get_post_meta($pid, 'wpcf-use-surface', true);
+                $apprates = indppl_apprates($store_id);
+                // var_dump($apprates);
+                if(isset($apprates[$type]['filler'])){
+                    if(array_key_exists($pid, $apprates[$type]['filler'])){
+                        $filler = true;
+                    }else{
+                        $filler = false;
+                    }
+                }
+                if(isset($apprates[$type]['blended'])){
+                    if(array_key_exists($pid, $apprates[$type]['blended'])){
+                        $additive = true;
+                    }else{
+                        $additive = false;
+                    }
+                }
+                if(isset($apprates[$type]['surface'])){
+                    if(array_key_exists($pid, $apprates[$type]['surface'])){
+                        $surface = true;
+                    }else{
+                        $surface = false;
+                    }
+                }
+                ?>
+                <td>
+                    <?php if($filler){
+                        ?>
+                        <svg class="checkmark-products" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 25"><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>
+                        <?php
+                    }
+                    ?>
+                </td>
+                <td>
+                    <?php if($additive){
+                        ?>
+                        <svg class="checkmark-products" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 25"><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>
+                        <?php
+                    }
+                    ?>
+                </td>
+                <td>
+                    <?php if($surface){
+                        ?>
+                        <!-- <path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path> -->
+                        <svg class="checkmark-products" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 25"><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>
+                        <?php
+                    }
+                    ?>
+                </td>
+                <?php
+            }
             if($type == 'ground'){
             ?>
                 <td>
@@ -1927,6 +2002,20 @@ function indppl_get_products($store_id, $key, $type){
             <?php
             }
             ?>
+            <td>
+                <?php
+                if($type == 'pots' || $type == 'beds'){
+                    ?>
+                    <a href="#" class="indppl-product-pots-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
+                    <?php
+                }else{
+                    ?>
+                    <a href="#" class="indppl-product-edit" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>edit</a>
+                    <?php
+                }
+                ?>
+                <a href="#" class="indppl-product-delete" data-store=<?php echo $store_id; ?> data-product=<?php echo $pid; ?> data-type=<?php echo $type; ?>>delete</a>
+            </td>
         </tr>
         <?php  
     

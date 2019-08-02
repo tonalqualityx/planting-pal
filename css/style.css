@@ -27,7 +27,7 @@ img{
 #keep-going-container{
   padding-bottom: 40px;
 }
-.strong {
+.strong, .indppl-sub-header {
   font-weight: 800;
 }
 
@@ -67,7 +67,39 @@ img{
 .margin-auto {
     margin: auto;
 }
-
+#indppl-create-dry, #indppl-create-wet{
+  min-width: 300px;
+  text-align: center;
+  /* background: #9cca3a; */
+  border-radius: 15px;
+  /* max-width: 50%; */
+}
+.indppl-green-button-selected, .indppl-size-selected{
+  min-width: 300px;
+  text-align: center;
+  background: #9cca3a;
+  border: 2px #9cca3a solid;
+  color: black;
+  border-radius: 15px;
+  cursor: pointer;
+  /* max-width: 50%; */
+}
+.indppl-green-button-not-selected, .indppl-size-not-selected{
+  min-width: 300px;
+  text-align: center;
+  background: transparent;
+  border: 2px #9a9ca3 solid;
+  color: #9a9ca3;
+  border-radius: 15px;
+  cursor: pointer;
+  /* max-width: 50%; */
+}
+.indppl-size-selected, .indppl-size-not-selected{
+  width: unset;
+  min-width: unset;
+  padding: 5px 15px;
+  font-weight: 600;
+}
 .orange-text {
   /* color: #f79f2c; */
   color: #f26226;
@@ -168,7 +200,9 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
 .indppl-light-green, body h1.indppl-light-green, body h2.indppl-light-green, body h3.indppl-light-green {
   color: #9cca3a;
 }
-
+.indppl-light-green-bg{
+  background: #9cca3a;
+}
 .indppl-orange {
   color: #f26226;
 }
@@ -660,7 +694,13 @@ p.round-button-error{
 .container-limit:hover{
   text-decoration: none;
 }
-.checkmark {
+.indppl-product-pots-edit, .indppl-product-delete, .indppl-product-edit{
+  color:#e6561a;
+}
+.indppl-product-pots-edit:hover, .indppl-product-delete:hover, .indppl-product-edit:hover{
+  color:#f26226;
+}
+.checkmark, .checkmark-products {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -670,6 +710,12 @@ p.round-button-error{
   stroke-miterlimit: 10;
   stroke-dashoffset: 0;
   margin: 0;
+}
+.checkmark-products{
+  height: 18px;
+}
+.products-table{
+  width: 100%;
 }
 .container-available-check{
   position: relative;
@@ -686,9 +732,58 @@ p.round-button-error{
 }
 .container-title{
   position: relative;
+  margin-top: 6px;
 }
 .container-title-fix{
   top: -33px;
+}
+.container-delete{
+  position: absolute;
+  font-weight: 600;
+  cursor: pointer;
+  left: 100%;
+  padding: 5px;
+}
+.del-container-message-container{
+  position: fixed;
+  width: 100%;
+  display: flex;
+  height: 100%;
+  background: #0000007d;
+  z-index: 4;
+  justify-content: center;
+  align-items: center;
+}
+#add_new_brand_select, #add_new_brand_select{
+  font-weight: 600;
+}
+.del-container-message-container h3{
+  text-align: center;
+}
+input[type='text'].indppl-container-edit-title::placeholder{
+  color: red;
+}
+input[type='text'].indppl-container-edit-title:-ms-input-placeholder{
+  color: red;
+}
+input[type='text'].indppl-container-edit-title::-ms-input-placeholder{
+  color: red;
+}
+.ind-yes-no{
+  display: flex;
+  justify-content: space-around;
+  font-size: 1.5em;
+  font-weight: 600;
+}
+.del-container-message-inside-container{
+  background: white;
+  max-width: 500px;
+  min-width: 300px;
+  border: 1px black solid;
+  border-radius: 15px;
+  max-height: 500px;
+  min-height: 300px;
+  padding: 10px;
 }
 .position-absolute{
   position: absolute;
@@ -881,19 +976,18 @@ div.ui-datepicker{
   right: 15px;
   top: 15px;
   width: 24px;
-  font-size: 15px;
+  font-size: 20px;
   padding: 4px 5px;
   height: 24px;
   text-align: center;
-  border: black solid 1px;
-  border-radius: 50%;
   text-decoration: none;
   color: black;
+  font-weight: bold;
   
 }
 .modal-close:hover, .sponsor-modal-close:hover{
-  background: rgba(0, 0, 0, 0.49);
-  color: white;
+  /* background: rgba(0, 0, 0, 0.49); */
+  color: #4e4e4e;
   text-decoration: none;
 }
 .left-0{
@@ -922,10 +1016,10 @@ PRODUCT MANAGEMENT
 }
 
 .indppl-product-create-size-btn{
-  padding: 5px 20px;
+  /* padding: 5px 20px;
   color: black;
   text-decoration: none;
-  border: black 1px solid;
+  border: black 1px solid; */
 }
 .indppl-product-create-size-btn:hover{
   text-decoration: none;
@@ -961,7 +1055,7 @@ PRODUCT MANAGEMENT
 .indppl-x{
   position: relative;
   top: -6px;
-  right: -18px;
+  right: -8px;
   color: black;
 }
 .x-date-overlap-modal{
@@ -1019,7 +1113,7 @@ PRODUCT MANAGEMENT
   width: 25%!important;
   display: inline-block!important;
 }
-.product-create-app-rates-chart-container, .hide{
+.product-create-app-rates-chart-container, .hide, .indppl-hide{
   display: none;
 }
 .indppl-product-list td, .indppl-product-list th{
@@ -1604,7 +1698,38 @@ input.rounded-input {
 .ig-select label {
   color: #CCFF7C;
 }
-
+.indppl-filler-hint-container, .indppl-hint-container{
+  position: absolute;
+  width: 300px;
+  right: 40px;
+  border: 2px #9e9e9e solid;
+  border-radius: 15px;
+  box-shadow: 2px 2px 3px 0 rgba(0,0,0,0.50);
+}
+.indppl-hint-container{
+  width: 400px;
+}
+.indppl-hint-img{
+  position: absolute;
+  top: 7px;
+  width: 26px;
+  left: 20px;
+}
+.indppl-hint-header{
+  padding-left: 58px;
+  color: white;
+  margin-top: 0;
+  border-top-left-radius: 13px;
+  border-top-right-radius: 13px;
+  margin-bottom: 20px;
+  font-size: 2em;
+}
+.indppl-hint-text{
+  padding: 0px 20px;
+}
+.indppl-hint-text-bold{
+  font-weight: 600;
+}
 /********
 APP PAGES
 ********/
@@ -1912,7 +2037,11 @@ Instructions
 .indppl-video {
   width: 25%;
 }
-
+.indppl-watch-video{
+  text-align: center;
+  font-size: 1em;
+  font-weight: 600;
+}
 .indppl-add-store-text-container {
   width: auto;
   margin-left: 11px;

@@ -13,12 +13,8 @@ function indppl_planting_pal_home_ajax(){
     if(isset($_POST['zip'])){
         $zip = $_POST['zip'];
     }
-    if(isset($zip)){
-        // echo $radius;
-        $return = planting_pal_home(null, null, $radius, $zip);
-    }else{
-        $return = planting_pal_home($lat, $lon, $radius);
-    }
+    $return = planting_pal_home($lat, $lon, $radius, $zip);
+    
 
     // do_shortcode('[planting_pal_home]');
     echo $return;
@@ -311,6 +307,8 @@ function indppl_get_products_by_brand_ajax(){
                 ),
             ),
         ),
+        'orderby' => 'title',
+        'order'   => 'ASC',
     );
     $products = new WP_Query($args);
     ob_start();
@@ -461,9 +459,11 @@ function indppl_get_product_info_ajax(){
     }else{
         ob_start();
         ?>
-        <h3 class='product-create-dry-wet-title'>Select Dry or liquid for this product</h3>
-        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >Dry
-        <input type='radio' class='product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >Liquid
+        <h4 class='indppl-sub-header'>Is this product dry or liquid?</h4>
+        <label for='product-create-dry' class=' <?php if($dryliquid == 'dry'){ ?>indppl-green-button-selected<?php }else{ ?>indppl-green-button-not-selected<?php } ?>' >Dry</label>
+        <input type='radio' class='hide product-create-dry-wet' name='product-create-dry-wet' id='product-create-dry' <?php if($dryliquid == 'dry'){ ?>checked<?php }?> value='dry' >
+        <label for='product-create-wet' class=' <?php if($dryliquid == 'wet'){ ?>indppl-green-button-selected<?php }else{ ?>indppl-green-button-not-selected<?php } ?>'>Liquid</label>
+        <input type='radio' class='hide product-create-dry-wet' name='product-create-dry-wet' id='product-create-wet' <?php if($dryliquid == 'wet'){ ?>checked<?php }?> value='wet' >
         <?php
         $dry_wet = ob_get_clean();
         ob_start();
@@ -502,7 +502,7 @@ function indppl_get_product_info_ajax(){
     $pack_units[] = [$fivecups, 'lb'];
     ob_start();
     ?>
-    <h3>Select the sizes you stock:</h3>
+    <h3 class='green-text'>Which Sizes Do You Stock?</h3>
     <?php
     if($product_related && $product_id != 'new'){
         foreach ($product_related as $key => $value) {
@@ -520,7 +520,9 @@ function indppl_get_product_info_ajax(){
                 }
                 $in_store = '';
                 if(in_array($value, $store_related)){
-                    $in_store = 'indppl-background-green';
+                    $in_store = 'indppl-size-selected';
+                }else{
+                    $in_store = 'indppl-size-not-selected';
                 }
                 // echo $author;
                 // echo $default_package;
@@ -543,8 +545,8 @@ function indppl_get_product_info_ajax(){
 
     ob_start();
     ?>
-    <h3>Create a new size:</h3>
-    <div class='indppl-product-create-size-num-inside-container'>
+    <a href='#' class='indppl-orange indppl-create-new-size'>+ Create a new size</a>
+    <div class='indppl-product-create-size-num-inside-container indppl-hide'>
         <input type='number' class='indppl-product-create-size-num' id='indpll-product-create-size-num' min='0' name='indppl-product-create-size-num'>
         <select class='product-create-standard-unit-add' id='product-create-standard-unit-add' name='product-create-standard-unit-add'>
             <option class='product-create-standard-unit-add-option' value='' disabled selected>Select Unit</option>
@@ -573,7 +575,8 @@ function indppl_get_product_info_ajax(){
         ob_start();
         $weight_array = ['lb', 'g', 'kg', 'oz'];
         ?>
-        <h3>How much does 5 level cups of this product weigh?</h3>
+        <h4 class='indppl-sub-header'>How much does 5 level cups of this product weigh?</h4>
+        <p>(We'll use this to calculate 'How much to use' on the planting guide)</p>
         <div class='product-create-5-cups-inside-container'>
             <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='<?php echo $fivecups; ?>'>
             <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
@@ -633,7 +636,7 @@ function indppl_get_product_info_ajax(){
         <?php
     }else{
         ?>
-        <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next">
+        <input type="submit" name="product-create-next" data-exit="true" id="product-create-next" class="product-create-submit" value="Next: Enter Application Rates">
         <?php
 
     }
@@ -692,12 +695,39 @@ function indppl_get_product_info_ajax(){
         $fraction = get_post_meta($product_id, 'wpcf-fraction', true);
         ?>
         <div class='indppl-add-product-fraction-bag'>
-        <h3 class='product-create-fraction-bag-title'>When you recommend applying this product, is it by:</h3>
-            <input type='radio' class='product-create-fraction-bag' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >Fraction of a bag <br />
-            <input type='radio' class='product-create-other' name='product-create-fraction-bag' id='product-create-other' <?php if(!$fraction){ ?>checked<?php }?> value='1'>Other  ie. cups, tablespoons, etc
+        <h4 class='indppl-sub-header product-create-fraction-bag-title'>How do you recommend this product?</h4>
+            <label for='product-create-fraction-bag' class='<?php if($fraction){ ?>indppl-green-button-selected<?php } else { ?> indppl-green-button-not-selected <?php } ?> '>Fraction of a bag</label>
+            <input type='radio' class='product-create-fraction-bag indppl-hide' name='product-create-fraction-bag' id='product-create-fraction-bag' <?php if($fraction){ ?>checked<?php }?> value='1' >
+            <label for='product-create-other' class='<?php if(!$fraction){ ?>indppl-green-button-selected<?php } else { ?> indppl-green-button-not-selected <?php } ?> '>Other (ie. cups, tsp, tbls etc)</label>
+            <input type='radio' class='product-create-other indppl-hide' name='product-create-fraction-bag' id='product-create-other' <?php if(!$fraction){ ?>checked<?php }?> value='1'>
         </div>
         <?php
     $fraction_bag = ob_get_clean();
+
+    ob_start();
+    if($type == 'ground'){
+        $header = 'Product Setup for In-Ground Plantings';
+        $instruction_text = "Planting Pal works best by selecting the 'All Purpose' version for each product type (ie all purpose fertilizer vs. rose fertilizer). If necessary, plant-specific substitutions can be made when using the app. If you don't see the product you need listed in the dropdown, you can create your own!";
+        $video = '<iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>';
+    }else{
+        $header = 'Product Setup for ' . $type . 'Plantings';
+        // temporary until we look at the designs
+    }
+    ?>
+    
+    <div class="indppl-instructions">
+        <div class="indppl-instructions-text">
+            <h2><?php echo $header; ?></h2>
+            <p><?php echo $instruction_text; ?></p>
+        </div>
+        <div class="indppl-video">
+            <?php echo $video; ?>
+            <h4 class='orange-text indppl-watch-video'>Watch: how to use this page</h4>
+        </div>
+    </div>
+    <?php
+    $instructions = ob_get_clean();
+
 
     // $console = $usage_type;
     $send_array['standard_unit'] = $standard_unit;
@@ -711,6 +741,7 @@ function indppl_get_product_info_ajax(){
     $send_array['fraction'] = $fraction_bag;
     $send_array['default'] = $default;
     $send_array['console'] = $console;
+    $send_array['instructions'] = $instructions;
     if($container){
         $send_array['container'] = $container;
         $brand = get_the_terms($product_id, 'brand', true);
@@ -1436,7 +1467,7 @@ function indppl_get_pot_apprates_ajax(){
     <div class='pots-apprates-container'>
         <div id='pots-and-beds-type' data-type='<?php echo $type; ?>'></div>
         <a href='#' class='modal-close'>X</a>
-        <h2>Pots / Containers Application Rates</h2>
+        <h2><?php echo ucfirst($type); ?> / Containers Application Rates</h2>
         <p>Bulk Filler / Substrate(ie Potting Soil)</p>
         <p>Enter the percentage of each product to be used. Percentages must total 100%.</p>
         <table class='pots-apprates-filler-container'>
@@ -1445,56 +1476,67 @@ function indppl_get_pot_apprates_ajax(){
                 <th></th>
                 <th></th>
                 <th></th>
-                <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th>
+                <!-- <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th> -->
             </tr>
             <?php
             $counter = 0;
             foreach($app_rates[$type]['filler'] as $key => $value){
                 // if(isset($value['filler'])){
-                    $title = get_the_title($key);
-                    $brand = get_the_terms($key, 'brand', true);
-                    $brand = $brand[0]->name;
-                    $primary = '';
-                    $img = get_post_meta($key, 'wpcf-product-image', true);
-                    if(!$img){
-                        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
-                    }
-                    $default = $app_rates[$type]['filler'][$key]['primary'];
-                    if($default == "true"){
-                        $primary = 'checked';
-                    }
-                    // var_dump($brand);
-                    ?>
-                    <tr class='pots-apprates-filler-inside-container'>
-                        <td class='pots-apprates-filler-cell'>
-                            <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
-                        </td>
-                        <td class='pots-apprates-filler-cell'>
-                            <span class='pots-apprates-filler-percent'>%</span>
-                        </td>
-                        <td class='pots-apprates-filler-cell'>
-                            <img class='height-50 ind-centered' src="<?php echo $img; ?>">
-                        </td>
-                        <td class='pots-apprates-filler-cell'>
-                            <div class='pots-apprates-brand-title'>
-                                <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
-                                <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
-                            </div>
+                $title = get_the_title($key);
+                $brand = get_the_terms($key, 'brand', true);
+                $brand = $brand[0]->name;
+                $primary = '';
+                $img = get_post_meta($key, 'wpcf-product-image', true);
+                if(!$img){
+                    $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                }
+                $default = $app_rates[$type]['filler'][$key]['primary'];
+                if($default == "true"){
+                    $primary = 'checked';
+                }
+                // var_dump($brand);
+                ?>
+                <tr class='pots-apprates-filler-inside-container'>
+                    <td class='pots-apprates-filler-cell'>
+                        <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <span class='pots-apprates-filler-percent'>%</span>
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <img class='height-50 ind-centered' src="<?php echo $img; ?>">
+                    </td>
+                    <td class='pots-apprates-filler-cell'>
+                        <div class='pots-apprates-brand-title'>
+                            <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                            <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                        </div>
 
-                        </td>
-                        <td class=''>
-                            <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio' <?php echo $primary; ?>>
-                        </td>
-                    </tr>
-                    <?php
-                    $counter++;
+                    </td>
+                    <td class=''>
+                        <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio' <?php echo $primary; ?>>
+                    </td>
+                </tr>
+                <?php
+                $counter++;
                 // }
-
+                
+            }
+            if(count($app_rates[$type]['filler']) > 1){
+            ?>
+            <div class='indppl-filler-hint-container'>
+                <div class='indppl-filler-hint-inner-container'>
+                    <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
+                    <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
+                    <p class='indppl-hint-text'>If your customer needs 8 qts or less of potting soil, Planting Pal will recomend the Primary Filler instead of the multiple product formula.</p>
+                </div>
+            </div>
+            <?php
             }
             if(empty($app_rates[$type]['filler'])){
                 ?>
                 <tr>
-                    <th class='color-red'>There are no Products Setup for This section.</th>
+                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                 </tr>
                 <?php
             }else{
@@ -1593,11 +1635,24 @@ function indppl_get_pot_apprates_ajax(){
             if(empty($app_rates[$type]['blended'])){
                 ?>
                 <tr>
-                    <th class='color-red'>There are no Products Setup for This section.</th>
+                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                 </tr>
                 <?php
             }
             ?>
+            <div class='indppl-hint-container'>
+                <div class='indppl-hint-inner-container'>
+                    <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
+                    <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
+                    <p class='indppl-hint-text'>Typical application rates for products in this section are:<br />
+                    <span class='indppl-hint-text-bold'>Organic Fertilizer: </span><span>1 cup per cuft of soil</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Chemical Fertilizer: </span><span>1 tbsp per cuft of soil</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Microbe Fertilizer: </span><span>0.25 tsp per cuft of soil</span>
+                    </p>
+                </div>
+            </div>
         </table>
         <p>Typical Application Rates:</p>
         <p>Organic Fertilizer - 1 Cup per cuft of soil</p>
@@ -1690,11 +1745,24 @@ function indppl_get_pot_apprates_ajax(){
             if(empty($app_rates[$type]['surface'])){
                 ?>
                 <tr>
-                    <th class='color-red'>There are no Products Setup for This section.</th>
+                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                 </tr>
                 <?php
             }
             ?>
+            <div class='indppl-hint-container'>
+                <div class='indppl-hint-inner-container'>
+                    <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
+                    <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
+                    <p class='indppl-hint-text'>Typical application rates for products in this section are:<br />
+                    <span class='indppl-hint-text-bold'>Organic Fertilizer: </span><span>1 cup per sqft</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Chemical Fertilizer: </span><span>1 lb per 100 sqft</span>
+                    <br />
+                    <span class='indppl-hint-text-bold'>Microbe Fertilizer: </span><span>0.25 tsp per 10 sqft</span>
+                    </p>
+                </div>
+            </div>
         </table>
         <p>Typical Application Rates:</p>
         <p>Organic Fertilizer - 1 cup per 10 sqft</p>
@@ -1719,7 +1787,7 @@ function indppl_get_pot_apprates_ajax(){
                 }else{
                     ?>
                     <tr class='margin-bottom-20 display-block'>
-                        <th class='color-red'>There are no Products Setup for This section.</th>
+                        <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
                     </tr> 
                     <?php
                 }
@@ -2674,3 +2742,20 @@ function indppl_auth_users_ajax(){
 }
 add_action('wp_ajax_indppl_auth_users_ajax', 'indppl_auth_users_ajax');
 add_action('wp_ajax_nopriv_indppl_auth_users_ajax', 'indppl_auth_users_ajax');
+
+function indppl_delete_container_ajax(){
+    if($_POST['version_check'] == '1.0'){
+        if(isset($_POST['id'])){
+            $id = $_POST['id'];
+        }
+        if(isset($_POST['store_id'])){
+            $store_id = $_POST['store_id'];
+        }
+        $result = indppl_delete_apprate($store_id, $id);
+        wp_delete_post($id);
+        echo $id;
+    }
+    die();
+}
+add_action('wp_ajax_indppl_delete_container_ajax', 'indppl_delete_container_ajax');
+add_action('wp_ajax_nopriv_indppl_delete_container_ajax', 'indppl_delete_container_ajax');
