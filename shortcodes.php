@@ -742,7 +742,7 @@ function pp_store_containers(){
             <tr>
                 <th>Select all plant sizes you carry</th>
                 <th class='contianer-date-col'>
-                    Spring
+                    <h4 class='container-season'>Spring</h4>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             starts
@@ -804,7 +804,7 @@ function pp_store_containers(){
                     </div>
                 </th>
                 <th class='contianer-date-col'>
-                    Summer
+                <h4 class='container-season'>Summer</h4>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             starts
@@ -821,7 +821,7 @@ function pp_store_containers(){
                     </div>
                 </th>
                 <th class='contianer-date-col'>
-                    Fall
+                <h4 class='container-season'>Fall</h4>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             starts
@@ -838,7 +838,7 @@ function pp_store_containers(){
                     </div>
                 </th>
                 <th class='contianer-date-col'>
-                    Winter
+                <h4 class='container-season'>Winter</h4>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             starts
@@ -915,8 +915,10 @@ function pp_store_containers(){
             }
             ?>
         </table>
-        <a href='#' class='add-container-btn button button-primary'>Add Container</a>
-        <p class="container-submit"><input type="submit" name="container-submit" id="container-submit" class="button button-primary" value="Save Changes"/></p>
+        <div class='container-button-container'>
+            <a href='#' class='add-container-btn indppl-button'>+ Add New Plant Container Size</a>
+            <p class="container-submit"><input type="submit" name="container-submit" id="container-submit" class="button button-primary" value="Save Changes"/></p>
+        </div>
     </form>
     <?php
     $return = ob_get_clean();

@@ -1467,179 +1467,238 @@ function indppl_get_pot_apprates_ajax(){
     <div class='pots-apprates-container'>
         <div id='pots-and-beds-type' data-type='<?php echo $type; ?>'></div>
         <a href='#' class='modal-close'>X</a>
-        <h2><?php echo ucfirst($type); ?> / Containers Application Rates</h2>
-        <p>Bulk Filler / Substrate(ie Potting Soil)</p>
-        <p>Enter the percentage of each product to be used. Percentages must total 100%.</p>
-        <table class='pots-apprates-filler-container'>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <!-- <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th> -->
-            </tr>
-            <?php
-            $counter = 0;
-            foreach($app_rates[$type]['filler'] as $key => $value){
-                // if(isset($value['filler'])){
-                $title = get_the_title($key);
-                $brand = get_the_terms($key, 'brand', true);
-                $brand = $brand[0]->name;
-                $primary = '';
-                $img = get_post_meta($key, 'wpcf-product-image', true);
-                if(!$img){
-                    $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
-                }
-                $default = $app_rates[$type]['filler'][$key]['primary'];
-                if($default == "true"){
-                    $primary = 'checked';
-                }
-                // var_dump($brand);
-                ?>
-                <tr class='pots-apprates-filler-inside-container'>
-                    <td class='pots-apprates-filler-cell'>
-                        <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
-                    </td>
-                    <td class='pots-apprates-filler-cell'>
-                        <span class='pots-apprates-filler-percent'>%</span>
-                    </td>
-                    <td class='pots-apprates-filler-cell'>
-                        <img class='height-50 ind-centered' src="<?php echo $img; ?>">
-                    </td>
-                    <td class='pots-apprates-filler-cell'>
-                        <div class='pots-apprates-brand-title'>
-                            <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
-                            <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
-                        </div>
+        <?php
+        if($type == 'pots'){
+            $header = 'Pot Application Rates';
+            $text = 'pot';
+            $apprate_text = "These product(s) make up the largest volume and are what you recommend to fill pots with. Many times, this section will only have one product - your preferred potting soil. But if you're into mixing products together or even recommend creating potting soil from scratch, you can do that here too.";
+        }else{
+            $header = 'Raised Bed Application Rates';
+            $text = 'raised bed';
+            $apprate_text = "These product(s) make up the largest volume and are what you recommend to fill raised beds with. Many times, this section will only have one product - your preferred raised bed soil. But if you're into mixing products together or even recommend creating raised bed soil from scratch, you can do that here too.";
+        }
+        $instructions = array(
+            'header' => $header,
+            'text' => 'Tell us how much of each product you recoomend for ' . $text . " plantings. Make sure you select all products first before completeing this screen. We'll use these application rates to create a customized shopping list in the app AND show exactly how much to use for each size plant on the planting guide.",
+            'video' => '<iframe width="238" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+        );
+        echo indppl_instructions($instructions);
+        ?>
+        <h2 class='green-text apprates-header'>Bulk Filler / Substrate</h2>
+        <p><?php echo $apprate_text; ?></p>
+        <div class='three-two'>
 
-                    </td>
-                    <td class=''>
-                        <input type='radio' class='pots-apprates-filler-radio' name='pots-apprates-filler-radio' <?php echo $primary; ?>>
-                    </td>
+            <table class='pots-apprates-filler-container'>
+                <tr>
+                    <th></th>
+                    <th class=''></th>
+                    <th class='indppl-apprate-sub-header'><?php echo ucwords($text); ?> Soil Formula</th>
+                    <?php if(count($app_rates[$type]['filler']) > 1){
+                        ?>
+                        <th class='indppl-apprate-sub-header header-left-15'>Primary Filler</th>
+                        <?php
+                    }
+                    ?>
+                    
+                    <!-- <th class='max-width-500'>Primary Filler - If the amount recommended is small and split between two filler/substrates, which one product would you recommend?</th> -->
                 </tr>
                 <?php
-                $counter++;
-                // }
-                
-            }
-            if(count($app_rates[$type]['filler']) > 1){
-            ?>
-            <div class='indppl-filler-hint-container'>
-                <div class='indppl-filler-hint-inner-container'>
-                    <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
-                    <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
-                    <p class='indppl-hint-text'>If your customer needs 8 qts or less of potting soil, Planting Pal will recomend the Primary Filler instead of the multiple product formula.</p>
-                </div>
-            </div>
-            <?php
-            }
-            if(empty($app_rates[$type]['filler'])){
-                ?>
-                <tr>
-                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
-                </tr>
-                <?php
-            }else{
-                ?>
-                <tr>
-                    <td>
-                        <div class='pots-apprates-filler-total color-red'>0</div>
-                    </td>
-                    <td>
-                        <div class='pots-apprates-filler-percent'>%</div>
-                    </td>
-                    <td>
-
-                    </td>
-                    <td>
-                        <div class='pots-apprates-filler-message color-red'>
-                            <p>Oops! This mix doesn't add up to 100%.</p>
-                            <p>Please check your numbers and try again.</p>
-                        </div>
-                    </td>
-                </tr>
-            <?php
-            }
-            ?>
-        </table>
-        
-        <h4 class='margin-top-30'>Additives Blended in with Potting Soil</h4>
-        <table>
-            <?php
-            foreach($app_rates[$type]['blended'] as $key => $value){
-                // var_dump($value);
-                // var_dump("<br /><br />");
-                // if(isset($value['blended'])){
+                $counter = 0;
+                foreach($app_rates[$type]['filler'] as $key => $value){
+                    // if(isset($value['filler'])){
                     $title = get_the_title($key);
                     $brand = get_the_terms($key, 'brand', true);
                     $brand = $brand[0]->name;
-                    // defaults
+                    $primary = '';
                     $img = get_post_meta($key, 'wpcf-product-image', true);
                     if(!$img){
                         $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
                     }
-                    $dilution = get_post_meta($key, 'wpcf-blended-additive-dilution', true);
-                    $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
-                    // apprates_array
-                    
-                    // if($get_apps == true){
-                        if(isset($app_rates[$type]['blended'][$key]['amount'])){
-                            $dilution = $app_rates[$type]['blended'][$key]['amount'];
-                            $unit = $app_rates[$type]['blended'][$key]['unit'];
-                        }
-                    // }
-                    
-                    $select_array = array(
-                        'cup' => 'Cups',
-                        'tbls' => 'Tablespoons',
-                        'tsp' => 'Teaspoons',
-                    );
+                    $default = $app_rates[$type]['filler'][$key]['primary'];
+                    if($default == "true"){
+                        $primary = 'checked';
+                    }
+                    // var_dump($brand);
                     ?>
-                    <tr>
-                        <td class='pots-apprates-blended-cell'>
-                            <input type="number" min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='blended-num'>
-                        </td>
-                        <td class='pots-apprates-blended-cell'>
-                            <select name='blended-select-<?php echo $key; ?>' class='blended-select'>
-                                <?php
-                                foreach($select_array as $k => $v){
-                                    $selected='';
-                                    if($unit == $k){
-                                        $selected = 'selected';
-                                    }
-                                    ?>
-                                    <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
-                                    <?php
-                                }
-                                ?>
-                            </select>
-                        </td>
-                        <td class='pots-apprates-blended-cell'>
-                            per cuft of soil
-                        </td>
-                        <td class='pots-apprates-blended-cell'>
+                    <tr class='pots-apprates-filler-inside-container'>
+                        <td class='pots-apprates-filler-cell'>
                             <img class='height-50 ind-centered' src="<?php echo $img; ?>">
                         </td>
-                        <td class='pots-apprates-blended-cell'>
+                        <td class='pots-apprates-filler-cell'>
                             <div class='pots-apprates-brand-title'>
                                 <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
                                 <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
                             </div>
+                            
                         </td>
+                        <td class='pots-apprates-filler-cell'>
+                            <input type='number' min='0' max='100' data-product='<?php echo $key; ?>' name='filler-<?php echo $key; ?>' class='pots-apprates-filler' value='<?php echo $percent_array[$counter]; ?>'>
+                            <span class='pots-apprates-filler-percent'>%</span>
+                        </td>
+                        <?php if(count($app_rates[$type]['filler']) > 1){
+                            ?>
+                            <td class='text-align-center'>
+                                <input type='radio' class='pots-apprates-filler-radio hide' id='pots-apprates-filler-radio-<?php echo $key; ?>' name='pots-apprates-filler-radio' <?php echo $primary; ?>>
+                                <label class='indppl-apprate-primary-radio' for='pots-apprates-filler-radio-<?php echo $key; ?>'>
+                                    <svg class='apprate-primary-select' height="24" width="24">
+                                        <circle cx="12" cy="12" r="10" stroke="#6a6e77" stroke-width="2" fill-opacity="0"></circle>
+                                        <circle class='apprate-circle-fill <?php if($primary == ''){ echo 'hide'; } ?>' cx="12" cy="12" r="6" stroke="#9ecb3c" stroke-width="2" fill="#9ecb3c" fill-opacity="1"></circle>
+                                        Sorry, your browser does not support inline SVG. 
+                                    </svg>
+                                </label>
+                            </td>
+                            <?php
 
-
+                        }else{
+                            ?>
+                            <td></td>
+                            <?php
+                        }
+                        ?>
                     </tr>
                     <?php
-                // }
-            }
-            if(empty($app_rates[$type]['blended'])){
+                    $counter++;
+                    // }
+                    
+                }
+                if(empty($app_rates[$type]['filler'])){
+                    ?>
+                    <tr>
+                        <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
+                    </tr>
+                    <?php
+                }else{
+                    ?>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <div class='apprates-filler-100-container'>
+                                <div class='pots-apprates-filler-total color-red'>0</div>
+                                <div class='pots-apprates-filler-percent'>%</div>
+                            </div>
+                        </td>
+                        <!-- <td>
+                            
+                            </td> -->
+                            <!-- <td>
+                                <div class='pots-apprates-filler-message color-red'>
+                                    <p>Oops! This mix doesn't add up to 100%.</p>
+                                    <p>Please check your numbers and try again.</p>
+                                </div>
+                            </td> -->
+                        </tr>
+                        <?php
+                }
                 ?>
-                <tr>
-                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
-                </tr>
+            </table>
+            <?php
+            if(count($app_rates[$type]['filler']) > 1 && $type == 'pots'){
+                    ?>
+                <div class='indppl-filler-hint-container'>
+                    <div class='indppl-filler-hint-inner-container'>
+                        <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
+                        <p class='indppl-hint-header indpple-dark-green-bg lobster'>Hint:</p>
+                        <p class='indppl-hint-text'>If your customer needs 8 qts or less of potting soil, Planting Pal will recomend the Primary Filler instead of the multiple product formula.</p>
+                    </div>
+                </div>
                 <?php
             }
             ?>
+        </div>
+        <?php
+        if($type == 'pots'){
+            $text_type = 'potting';
+        }else{
+            $text_type = 'raised bed';
+        }
+        ?>
+        <h4 class='margin-top-30 green-text apprates-header'>Additives Blended-in with <?php echo ucwords($text_type); ?> Soil</h4>
+        <p>These product(s) are blended into your <?php echo $text_type; ?> soil formula you selected above.</p>
+        <div class='three-two'>
+            <table>
+                <tr>
+                    <th></th>
+                    <th class=''></th>
+                    <th colspan="3" class='indppl-apprate-sub-header'>Recommended Application Rates</th>
+
+                </tr>
+                <?php
+                foreach($app_rates[$type]['blended'] as $key => $value){
+                    // var_dump($value);
+                    // var_dump("<br /><br />");
+                    // if(isset($value['blended'])){
+                        $title = get_the_title($key);
+                        $brand = get_the_terms($key, 'brand', true);
+                        $brand = $brand[0]->name;
+                        // defaults
+                        $img = get_post_meta($key, 'wpcf-product-image', true);
+                        if(!$img){
+                            $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                        }
+                        $dilution = get_post_meta($key, 'wpcf-blended-additive-dilution', true);
+                        $unit = get_post_meta($key, 'wpcf-blended-additive-unit', true);
+                        // apprates_array
+                        
+                        // if($get_apps == true){
+                            if(isset($app_rates[$type]['blended'][$key]['amount'])){
+                                $dilution = $app_rates[$type]['blended'][$key]['amount'];
+                                $unit = $app_rates[$type]['blended'][$key]['unit'];
+                            }
+                        // }
+                        
+                        $select_array = array(
+                            'cup' => 'Cups',
+                            'tbls' => 'Tablespoons',
+                            'tsp' => 'Teaspoons',
+                        );
+                        ?>
+                        <tr>
+                            <td class='pots-apprates-blended-cell'>
+                                <img class='height-50 ind-centered' src="<?php echo $img; ?>">
+                            </td>
+                            <td class='pots-apprates-blended-cell'>
+                                <div class='pots-apprates-brand-title'>
+                                    <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                                    <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                                </div>
+                            </td>
+                            <td class='pots-apprates-blended-cell'>
+                                <input type="number" min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='blended-num'>
+                            </td>
+                            <td class='pots-apprates-blended-cell'>
+                                <select name='blended-select-<?php echo $key; ?>' class='blended-select'>
+                                    <?php
+                                    foreach($select_array as $k => $v){
+                                        $selected='';
+                                        if($unit == $k){
+                                            $selected = 'selected';
+                                        }
+                                        ?>
+                                        <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                            <td class='pots-apprates-blended-cell'>
+                                per cuft of soil
+                            </td>
+
+
+                        </tr>
+                        <?php
+                    // }
+                }
+                if(empty($app_rates[$type]['blended'])){
+                    ?>
+                    <tr>
+                        <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
             <div class='indppl-hint-container'>
                 <div class='indppl-hint-inner-container'>
                     <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
@@ -1653,103 +1712,119 @@ function indppl_get_pot_apprates_ajax(){
                     </p>
                 </div>
             </div>
-        </table>
-        <p>Typical Application Rates:</p>
+            
+        </div>
+        <!-- <p>Typical Application Rates:</p>
         <p>Organic Fertilizer - 1 Cup per cuft of soil</p>
         <p>Chemical Fertilizer - 1 tbs per cuft of soil</p>
-        <p>Microbe Products - .25 tsp per cuft of soil</p>
-
-        <h4 class='margin-top-30'>Additives Surface Applied after planting</h4>
-        <table>
-            <?php
-            foreach($app_rates[$type]['surface'] as $key => $value){
-                // if(isset($value['surface'])){
-                    $title = get_the_title($key);
-                    $brand = get_the_terms($key, 'brand', true);
-                    $brand = $brand[0]->name;
-                    // defaults
-                    $dilution = get_post_meta($key, 'wpcf-surface-dilution', true);
-                    $img = get_post_meta($key, 'wpcf-product-image', true);
-                    if(!$img){
-                        $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
-                    }
-                    $units = get_post_meta($key, 'wpcf-surface-units', true);
-                    $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
-                    // apprates_array
-                    // if($get_apps == true){
-                    if(array_key_exists('amount', $app_rates[$type]['surface'][$key])){
-                        $dilution = $app_rates[$type]['surface'][$key]['amount'];
-                        $units = $app_rates[$type]['surface'][$key]['unit'];
-                        $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
-                    }
-                    // }
-
-                    $select_unit = array(
-                        'cup' => 'Cups',
-                        'tbls' => 'Tablespoons',
-                        'tsp' => 'Teaspoons',
-                    );
-                    $select_sqft = array(
-                        '1' => 'Per 1 sqft',
-                        '10' => 'Per 10 sqft',
-                        '100' => 'Per 100 sqft',
-                    );
-                    ?>
-                    <tr>
-                        <td class='pots-apprates-surface-cell'>
-                            <input type='number' min='0' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='surface-num'>
-                        </td>
-                        <td class='pots-apprates-surface-cell'>
-                            <select name='surface-select-<?php echo $key; ?>' class='surface-select'>
-                                <?php
-                                foreach($select_unit as $k => $v){
-                                    $selected='';
-                                    if($units == $k){
-                                        $selected = 'selected';
-                                    }
-                                    ?>
-                                    <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
-                                    <?php
-                                }
-                                ?>
-                            </select>
-                        </td>
-                        <td class='pots-apprates-surface-cell'>
-                            <select name='surface-select-sqft-<?php echo $key; ?>' class='surface-select-sqft'>
-                                <?php
-                                foreach($select_sqft as $k => $v){
-                                    $selected='';
-                                    if($per_unit == $k){
-                                        $selected = 'selected';
-                                    }
-                                    ?>
-                                    <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
-                                    <?php
-                                }
-                                ?>
-                            </select>
-                        </td>
-                        <td class='pots-apprates-surface-cell'>
-                            <img class='height-50 ind-centered' src="<?php echo $img; ?>">
-                        </td>
-                        <td class='pots-apprates-surface-cell'>
-                            <div class='pots-apprates-brand-title'>
-                                <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
-                                <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php
-                // }
-            }
-            if(empty($app_rates[$type]['surface'])){
-                ?>
+        <p>Microbe Products - .25 tsp per cuft of soil</p> -->
+        <?php
+        if($type == 'pots'){
+            $applied_text = 'potted plants';
+        }else{
+            $applied_text = 'raised beds';
+        }
+        ?>
+        <h4 class='margin-top-30 green-text apprates-header'>Additives Surface Applied after planting</h4>
+        <p>These product(s) are after planting to the surface of <?php echo $applied_text; ?>.</p>
+        <div class='three-two'>
+            <table>
                 <tr>
-                    <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
+                    <th></th>
+                    <th class=''></th>
+                    <th colspan="3" class='indppl-apprate-sub-header'>Recommended Application Rates</th>
+
                 </tr>
                 <?php
-            }
-            ?>
+                foreach($app_rates[$type]['surface'] as $key => $value){
+                    // if(isset($value['surface'])){
+                        $title = get_the_title($key);
+                        $brand = get_the_terms($key, 'brand', true);
+                        $brand = $brand[0]->name;
+                        // defaults
+                        $dilution = get_post_meta($key, 'wpcf-surface-dilution', true);
+                        $img = get_post_meta($key, 'wpcf-product-image', true);
+                        if(!$img){
+                            $img =  home_url() . "/wp-content/uploads/2019/03/big-carrot.png";
+                        }
+                        $units = get_post_meta($key, 'wpcf-surface-units', true);
+                        $per_unit = get_post_meta($key, 'wpcf-surface-per-amount', true);
+                        // apprates_array
+                        // if($get_apps == true){
+                        if(array_key_exists('amount', $app_rates[$type]['surface'][$key])){
+                            $dilution = $app_rates[$type]['surface'][$key]['amount'];
+                            $units = $app_rates[$type]['surface'][$key]['unit'];
+                            $per_unit = $app_rates[$type]['surface'][$key]['per-sqft'];
+                        }
+                        // }
+
+                        $select_unit = array(
+                            'cup' => 'Cups',
+                            'tbls' => 'Tablespoons',
+                            'tsp' => 'Teaspoons',
+                        );
+                        $select_sqft = array(
+                            '1' => 'Per 1 sqft',
+                            '10' => 'Per 10 sqft',
+                            '100' => 'Per 100 sqft',
+                        );
+                        ?>
+                        <tr>
+                            <td class='pots-apprates-surface-cell'>
+                                <img class='height-50 ind-centered' src="<?php echo $img; ?>">
+                            </td>
+                            <td class='pots-apprates-surface-cell'>
+                                <div class='pots-apprates-brand-title'>
+                                    <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
+                                    <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
+                                </div>
+                            </td>
+                            <td class='pots-apprates-surface-cell'>
+                                <input type='number' min='0' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='surface-num'>
+                            </td>
+                            <td class='pots-apprates-surface-cell'>
+                                <select name='surface-select-<?php echo $key; ?>' class='surface-select'>
+                                    <?php
+                                    foreach($select_unit as $k => $v){
+                                        $selected='';
+                                        if($units == $k){
+                                            $selected = 'selected';
+                                        }
+                                        ?>
+                                        <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                            <td class='pots-apprates-surface-cell'>
+                                <select name='surface-select-sqft-<?php echo $key; ?>' class='surface-select-sqft'>
+                                    <?php
+                                    foreach($select_sqft as $k => $v){
+                                        $selected='';
+                                        if($per_unit == $k){
+                                            $selected = 'selected';
+                                        }
+                                        ?>
+                                        <option value="<?php echo $k; ?>" <?php echo $selected; ?> ><?php echo $v; ?></option> 
+                                        <?php
+                                    }
+                                    ?>
+                                </select>
+                            </td>
+                        </tr>
+                        <?php
+                    // }
+                }
+                if(empty($app_rates[$type]['surface'])){
+                    ?>
+                    <tr>
+                        <th class='color-red max-width-500'>There are currently no products selected for this section. To add a product to this section, add or edit a product under the <?php echo $type; ?> category on the products page.</th>
+                    </tr>
+                    <?php
+                }
+                ?>
+            </table>
             <div class='indppl-hint-container'>
                 <div class='indppl-hint-inner-container'>
                     <img class='indppl-hint-img' src='<?php echo home_url(); ?>\wp-content\plugins\planting-pal\assets\img\planting-pal-carrot.png'>
@@ -1763,25 +1838,33 @@ function indppl_get_pot_apprates_ajax(){
                     </p>
                 </div>
             </div>
-        </table>
-        <p>Typical Application Rates:</p>
+
+        </div>
+        <!-- <p>Typical Application Rates:</p>
         <p>Organic Fertilizer - 1 cup per 10 sqft</p>
         <p>Chemical Fertilizer - 1 tsp per 10 sqft</p>
-        <p>Microbe Products - .25 tsp per 10 sqft</p>
+        <p>Microbe Products - .25 tsp per 10 sqft</p> -->
 
         <?php
         if($type == 'pots'){
             ?>
-            <h4 class='margin-top-30'>Products used as 'Eaches'</h4>
-            <p>These products will be recommended based on the width of your customer's pot/container:</p>
+            <h4 class='margin-top-30 green-text apprates-header'>Products Recommended in Eaches</h4>
+            <p>These are typically self-contained products like fertilizer spikes or paks that are sold individually or multi-packs. Enter the number of 'Eaches' you recommend based on the width of the pot.</p>
             <table>
+                <tr>
+                    <th></th>
+                    <th class=''></th>
+                    <th colspan="3" class='indppl-apprate-sub-header border-bottom-off'># Eaches Per Pot Size</th>
+                </tr>
                 <?php
                 if(!empty($app_rates[$type]['each'])){
                     ?>
                     <tr>
-                        <th style="text-align: center">&lt;8" wide</th>
-                        <th style="text-align: center">8-24" wide</th>
-                        <th style="text-align: center">&gt;24" wide</th>
+                        <th></th>
+                        <th></th>
+                        <th class='indppl-apprate-sub-eaches-header' style="text-align: center">&lt;8" wide</th>
+                        <th class='indppl-apprate-sub-eaches-header header-left-15' style="text-align: center">8-24" wide</th>
+                        <th class='indppl-apprate-sub-eaches-header header-left-15' style="text-align: center">&gt;24" wide</th>
                     </tr>
                     <?php
                 }else{
@@ -1813,15 +1896,6 @@ function indppl_get_pot_apprates_ajax(){
                     ?>
                     <tr>
                         <td class='pots-apprates-each-cell'>
-                            <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' value='<?php echo $each_small; ?>' placeholder='#eaches'>
-                        </td>
-                        <td class='pots-apprates-each-cell'>
-                            <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' value='<?php echo $each_medium; ?>' placeholder='#eaches'>
-                        </td>
-                        <td class='pots-apprates-each-cell'>
-                            <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
-                        </td>
-                        <td class='pots-apprates-each-cell'>
                             <img class='height-50 ind-centered' src="<?php echo $img; ?>">
                         </td>
                         <td class='pots-apprates-each-cell'>
@@ -1829,6 +1903,15 @@ function indppl_get_pot_apprates_ajax(){
                                 <h4 class='pots-apprates-brand'><?php echo $brand; ?></h4>
                                 <h3 class='pots-apprates-title'><?php echo $title; ?></h3>
                             </div>
+                        </td>
+                        <td class='pots-apprates-each-cell'>
+                            <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' value='<?php echo $each_small; ?>' placeholder='#eaches'>
+                        </td>
+                        <td class='pots-apprates-each-cell'>
+                            <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' value='<?php echo $each_medium; ?>' placeholder='#eaches'>
+                        </td>
+                        <td class='pots-apprates-each-cell'>
+                            <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
                         </td>
                     </tr>
                     <?php
@@ -1839,7 +1922,8 @@ function indppl_get_pot_apprates_ajax(){
         }
         ?>
         <div class='pots-apprates-save-container'>
-            <a href='#' class='pots-apprates-save-btn indppl-button'>SAVE</a>
+            <a href='#' class='orange-text apprates-close'>Back</a>
+            <a href='#' class='pots-apprates-save-btn indppl-button'>Save & Exit</a>
         </div>
     </div>
     <?php

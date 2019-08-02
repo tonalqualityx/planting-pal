@@ -210,18 +210,17 @@ jQuery(document).ready(function( $ ) {
     });
     $('body').on('click', '.indppl-dot-container', function(e){
         $(this).parent().prev().addClass('indppl-remove-dot');
-        $(this).replaceWith('<div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div>');
+        $(this).replaceWith('<div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div>');
 
     });
     $('body').on('click', '.indppl-no-dot-container', function(e){
         $(this).parent().prev().removeClass('indppl-remove-dot');
-        $(this).replaceWith('<div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>Sorry, your browser does not support inline SVG.</svg></div>');
+        $(this).replaceWith('<div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#a9d56a" stroke-width="2" fill="#a9d56a" fill-opacity="1"/>Sorry, your browser does not support inline SVG.</svg></div>');
     });
     $('body').on('click', '.container-available-in-store', function(){
         $(this).parents('.indppl-table-color-offset').find('.indppl-dot-container').each(function(){
             // if($(this).find('.indppl-no-dot-container')){
-                // console.log('out');
-                $(this).html('<svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg>')
+                $(this).html('<svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg>')
             // }
             if(!$(this).parent().prev().hasClass('indppl-remove-dot')){
                 $(this).parent().prev().addClass('indppl-remove-dot');
@@ -241,7 +240,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.container-not-available-in-store', function(){
         $(this).parents('.indppl-table-color-offset').find('.indppl-no-dot-container').each(function(){
             if($(this).find('.indppl-dot-container')){
-                $(this).html('<svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#1ab1ec" stroke-width="2" fill="#1ab1ec" fill-opacity="0.6"/>Sorry, your browser does not support inline SVG.</svg>')
+                $(this).html('<svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#a9d56a" stroke-width="2" fill="#a9d56a" fill-opacity="1"/>Sorry, your browser does not support inline SVG.</svg>')
             }
             if($(this).parent().prev().hasClass('indppl-remove-dot')){
                 $(this).parent().prev().removeClass('indppl-remove-dot');
@@ -298,9 +297,11 @@ jQuery(document).ready(function( $ ) {
     // $('body').on('click', '.slide-in-products-container', function(e){
     //     $('.slide-in-products-container').remove();
     // })
+    var container_id = 1;
     $('body').on('click', '.add-container-btn', function(e){
         e.preventDefault();
-        $(this).prev().append('<tr class="indppl-table-color-offset"><td class="padding-bottom-5"><input type="text" name="new-container"         class="container-add-new indppl-container-edit-title" placeholder="Name"></td><td><input type="checkbox" name="new-spring" class="display-none indppl-non-default-container" id="new-spring"/><label class="margin-0" for="new-spring"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-summer" class="display-none indppl-non-default-container" id="new-summer"/><label class="margin-0" for="new-summer"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-fall" class="display-none indppl-non-default-container" id="new-fall"/><label class="margin-0" for="new-fall"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td><input type="checkbox" name="new-winter" class="display-none indppl-non-default-container" id="new-winter"/><label class="margin-0" for="new-winter"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#1ab1ec" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td></tr>');
+        $('.indppl-containers-table').append('<tr id="contianer_tr_id_' + container_id + '" class="indppl-containers-row indppl-table-color-offset"><td class="padding-bottom-5"><input type="text" style="width: 75%!important;" name="new-container"         class="container-add-new indppl-container-edit-title" placeholder="Name"></td><td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-spring" class="display-none indppl-non-default-container" id="new-spring"/><label class="margin-0" for="new-spring"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-summer" class="display-none indppl-non-default-container" id="new-summer"/><label class="margin-0" for="new-summer"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-fall" class="display-none indppl-non-default-container" id="new-fall"/><label class="margin-0" for="new-fall"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-winter" class="display-none indppl-non-default-container" id="new-winter"/><label class="margin-0" for="new-winter"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td></tr>');
+        container_id++;
     });
     $('body').on('click', function(){
         check_on_load_and_click();
@@ -2130,8 +2131,11 @@ jQuery(document).ready(function( $ ) {
         // console.log($(this).find('.indppl-container-edit-title'));
         if($(this).find('.indppl-container-edit-title').length > 0){
             var id = $(this).find('.container-available').children(0).data('container');
-            console.log(id);
-            $(this).last().children().last().append('<a class="container-delete" data-id=' + id + '>X</a>');
+            if(typeof id === 'undefined'){
+                id = $(this).attr('id');
+            }
+            // console.log(id);
+            $(this).last().children().last().append('<a class="container-delete" data-id=' + id + '>Delete</a>');
         }
     });
 
@@ -2154,26 +2158,33 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         indpplAddLoading();
         var id = $(this).data('id');
-        var store_id = $('#store-id').val();
-        var version_check = 1.0;
-        elem = $(this);
-        $.ajax({
-            url: indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_delete_container_ajax',
-                id: id,
-                store_id: store_id,
-                version_check: version_check,
-            },
-            type: 'POST',
-            success: function (response) {
-                $('#' + response + '-container-available').parents('.indppl-containers-row').remove();
-                $('.del-container-message-container').remove();
-                indpplDelLoading();
-            }
-        });
+        if($.type(id) === "string"){
+            console.log(id);
+            $('#' + id).remove();
+            $('.del-container-message-container').remove();
+            indpplDelLoading();
+        }else{
+            var store_id = $('#store-id').val();
+            var version_check = 1.0;
+            elem = $(this);
+            $.ajax({
+                url: indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_delete_container_ajax',
+                    id: id,
+                    store_id: store_id,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function (response) {
+                    $('#' + response + '-container-available').parents('.indppl-containers-row').remove();
+                    $('.del-container-message-container').remove();
+                    indpplDelLoading();
+                }
+            });
+        }
     });
 
     $('body').on('click', '.indppl-green-button-not-selected', function(){
@@ -2194,6 +2205,19 @@ jQuery(document).ready(function( $ ) {
             $('html, body').animate({scrollTop:$("#keep-going-container").offset().top}, 1200);
         }, 1000);
     }
+
+    $('body').on('click', '.indppl-apprate-primary-radio', function(){
+        $('.apprate-circle-fill').addClass('hide');
+        $(this).find('.apprate-circle-fill').removeClass('hide');
+    });
+
+    $('body').on('click', '.apprates-close', function(e){
+        e.preventDefault();
+        $('.slide-in-products-container').removeClass('left-0');
+        setTimeout(function(){
+            $('.slide-in-products-container').remove();
+        }, 1000);
+    })
 
     function bagControlsNEG(elem){
         hold_end = false;
@@ -2440,7 +2464,7 @@ jQuery(document).ready(function( $ ) {
         (function($){
             var user_status = $('#user-status').val();
             if(user_status != 'paidaccountpro'){
-                $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="/my-account/subscription-info/?action=subscriptions" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
+                $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="/garden-center-pricing/" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
             }
         })(jQuery);
     }
