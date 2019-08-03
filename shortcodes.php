@@ -978,8 +978,9 @@ add_shortcode('pp-store-products', 'pp_store_products');
 
 function indppl_store_guides(){
     $user = get_current_user_id(  );
-    $stati = indppl_user_status($user);
     $store = htmlspecialchars($_GET['store-id']);
+    $store_owner = get_the_author_meta('ID', $store);
+    $stati = indppl_user_status($store_owner);
     $pots_text = "Pot Planting Guide";
     $beds_text = "Raised Bed Planting Guide";
     
