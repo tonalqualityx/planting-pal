@@ -100,7 +100,7 @@ img{
   padding: 5px 15px;
   font-weight: 600;
 }
-.orange-text {
+.orange-text, a.orange-text:visited, a.orange-text:active {
   /* color: #f79f2c; */
   color: #f26226;
 }
@@ -118,6 +118,10 @@ a.orange-text:hover {
   color: white;
 }
 
+.grey-bg {
+  background: grey!important;
+}
+
 .indppl-btn, .slide-in-products-container input[type=submit] {
   padding: 7px 15px;
   border-radius: 25px;
@@ -128,10 +132,10 @@ a.orange-text:hover {
   border: none!important;
 }
 
-.indppl-btn:hover, .product-create-submit:hover, .product-create-submit:hover, .slide-in-products-container input[type=submit]:hover, .slide-in-products-container input[type=submit]:focus, a.orange-bg:hover{
+.indppl-btn:hover, .indppl-btn:active, .indppl-btn:visited, .product-create-submit:hover, .product-create-submit:hover, .slide-in-products-container input[type=submit]:hover, .slide-in-products-container input[type=submit]:focus, a.orange-bg:hover{
   color: white;
   background: #e25216;
-  text-decoration: none;
+  text-decoration: none!important;
   border: none;
 }
 
@@ -540,6 +544,9 @@ ul.style-free {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 9999;
   position: fixed;
 }
 .store-delete-modal-inside, .container-date-overlap-modal-inside{
@@ -1511,6 +1518,7 @@ GUIDES STYLES
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  width: 100%;
   transition: all 0.35s ease-in-out;
 }
 
@@ -1563,7 +1571,23 @@ GUIDES STYLES
   cursor: pointer;
 }
 
-.planting-guide-instructions 
+.indppl-text-editor textarea {
+  width: 100%;
+  height: 200px;
+}
+
+.indppl-text-editor button {
+  margin-right: 10px;
+}
+
+.instructions-edit {
+  visibility: hidden;
+  margin-top: 0;
+}
+
+.active .instructions-edit {
+  visibility: visible;
+} 
 
 .planting-guide-options h3 {
   border-bottom: 3px solid #4a8943;
@@ -2400,6 +2424,7 @@ GUAGE CSS
   .guide-product-instructions img.indppl-step-img, .indppl-step-img{
     width: 50%;
     margin: auto;
+    display: block;
   }
   .pb-remove-button{
     top: 10px;

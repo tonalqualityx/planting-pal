@@ -14,7 +14,9 @@ $saved_data = get_post_meta($store, 'wpcf-planting-guide-ground-options', TRUE);
 $saved_data = str_replace(array("\'", "u201d","u2019"), array("'",'\"',"'"), $saved_data);
 $saved_data = json_decode($saved_data);
 
-$sub = indppl_user_status();
+$store_owner = get_the_author_meta('ID', $store);
+$sub = indppl_user_status($store_owner);
+$pro = in_array('paidaccountpro',$sub) ? true : false;
 
 $saved_defaults = array();
 $inst_checked = ' checked="checked" ';
@@ -157,13 +159,11 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     </div>
                     <div class='instructions-content <?php if($a != ''){echo " active";} ?>'>
                             <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
-                                <img src="<?php echo $options['a-image']; ?>">
+                                <img id="content-<?php echo $options['id']; ?>-a-image" src="<?php echo $options['a-image']; ?>">
                             <?php } ?>
-                        <div id="content-<?php echo $options['id']; ?>-a" class="instructions-content-text">
+                        <div id="content-<?php echo $options['id']; ?>-a" class="instructions-content-text ">
                             <?php echo $options['a-instructions']; ?> 
-                            <?php if($a != ''){ ?>
-                                <a href="#" class="instructions-edit orange-text">Edit Text</a>
-                            <?php } ?>
+                            <a href="#" class="instructions-edit orange-text">Edit Text</a>
                         </div>
                         
                     </div>
@@ -175,16 +175,17 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     </div>
                     <div class='instructions-content <?php if($b != ''){echo " active";} ?>'>
                         <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
-                            <img src="<?php echo $options['b-image']; ?>" >
+                            <img src="<?php echo $options['b-image']; ?>" id="content-<?php echo $options['id']; ?>-b-image" >
                         <?php } ?>
                         <div id="content-<?php echo $options['id']; ?>-b" class="instructions-content-text" >
                             <?php echo $options['b-instructions']; ?>
+                            <a href="#" class="instructions-edit orange-text">Edit Text</a>
                         </div>
                     </div>
                 </li>
-                <?php if(in_array('paidaccountpro',$sub)){ ?>
+                <?php if($pro){ ?>
 
-                    <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
+                    <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap indppl-custom">
 
                         <div class="planting-guide-option-input indppl-flex">
                             <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true">
@@ -197,9 +198,9 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                                 <p style="margin-top:0;font-weight:bold;">Upload planting graphic:</p>
                                 <label for="<?php echo $format_section; ?>-image" class="indppl-btn indppl-file-upload">Browse</label>
                                 <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-custom-image" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>" class="hide">
-                                <div id="<?php echo $format_section; ?>-custom-image">
+                                <div id="<?php echo $format_section; ?>-custom-image" class="custom-image-container ">
                                     <?php if($c != ''){
-                                        echo "<img src='{$saved_defaults[$i]['image']}'>";
+                                        echo "<img src='{$saved_defaults[$i]['image']}' id='content-{$options['id']}-custom-image'>";
                                     }?>
                                 </div>      
                             </div>
@@ -265,4 +266,9 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
         </div>
         <?php $hide = 'display-none'; ?>
     <?php } ?>
+
+    <script>
+        // Set some variables
+        var indpplP = <?php echo $pro ? 'true' : 'false'; ?>
+    </script>
 </div>
