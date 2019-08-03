@@ -1114,8 +1114,11 @@ jQuery(document).ready(function( $ ) {
     $("body").on('click', '.planting-guide-instructions label', function() {
 
         var theInput = $(this).prev('input');
-        console.log(theInput);
+        console.log(theInput.data('content'));
         var content = $("#" + theInput.data('content')).html();
+        var image = $("#" + theInput.data('content') + "-image").attr('src');
+        console.log(image);
+        content = content + "<img src='" + image + "' class='indppl-step-img'>";
 
         if(content == ''){
             image = $("#" + theInput.data('target') + "-uploaded").html();
@@ -2231,6 +2234,8 @@ jQuery(document).ready(function( $ ) {
 
         } else {
             // Sales Pitch
+            var message = "<div class='store-delete-modal indppl-loading-background'><div class='store-delete-modal-inside'><h3>Feature Not Available</h3><p>This feature is not available at your current subscription level.</p><p>When you upgrade to pro you'll have access to edit this text, plus many other tools to boost your sales!<a href='/pricing' class='indppl-btn'>Upgrade Now</a> <a href='#' class='indppl-btn grey-bg indppl-delete-product-no'>Later</a></div></div>";
+            $('body').append(message);
         }
     });
 
@@ -2260,6 +2265,9 @@ jQuery(document).ready(function( $ ) {
 
     });
 
+    $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-password-strength-area');
+    $('#mepr_coupon_code-22').remove();
+    
     // FUNCTIONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     function bagControlsNEG(elem){

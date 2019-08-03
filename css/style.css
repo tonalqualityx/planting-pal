@@ -540,6 +540,9 @@ ul.style-free {
   align-items: center;
   height: 100vh;
   width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: 9999;
   position: fixed;
 }
 .store-delete-modal-inside, .container-date-overlap-modal-inside{
@@ -2296,6 +2299,7 @@ GUAGE CSS
   .guide-product-instructions img.indppl-step-img, .indppl-step-img{
     width: 50%;
     margin: auto;
+    display: block;
   }
   .pb-remove-button{
     top: 10px;

@@ -159,9 +159,9 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     </div>
                     <div class='instructions-content <?php if($a != ''){echo " active";} ?>'>
                             <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
-                                <img src="<?php echo $options['a-image']; ?>">
+                                <img id="content-<?php echo $options['id']; ?>-a-image" src="<?php echo $options['a-image']; ?>">
                             <?php } ?>
-                        <div id="content-<?php echo $options['id']; ?>-a" class="instructions-content-text">
+                        <div id="content-<?php echo $options['id']; ?>-a" class="instructions-content-text ">
                             <?php echo $options['a-instructions']; ?> 
                             <a href="#" class="instructions-edit orange-text">Edit Text</a>
                         </div>
@@ -175,7 +175,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     </div>
                     <div class='instructions-content <?php if($b != ''){echo " active";} ?>'>
                         <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
-                            <img src="<?php echo $options['b-image']; ?>" >
+                            <img src="<?php echo $options['b-image']; ?>" id="content-<?php echo $options['id']; ?>-b-image" >
                         <?php } ?>
                         <div id="content-<?php echo $options['id']; ?>-b" class="instructions-content-text" >
                             <?php echo $options['b-instructions']; ?>
@@ -198,9 +198,9 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                                 <p style="margin-top:0;font-weight:bold;">Upload planting graphic:</p>
                                 <label for="<?php echo $format_section; ?>-image" class="indppl-btn indppl-file-upload">Browse</label>
                                 <input type="file" name="<?php echo $format_section; ?>-image" id="<?php echo $format_section; ?>-image" data-target="#<?php echo $format_section; ?>-custom-image" data-option="#radio-<?php echo $options['id']; ?>-custom" data-section="#<?php echo $format_section; ?>" class="hide">
-                                <div id="<?php echo $format_section; ?>-custom-image" class="custom-image-container">
+                                <div id="<?php echo $format_section; ?>-custom-image" class="custom-image-container ">
                                     <?php if($c != ''){
-                                        echo "<img src='{$saved_defaults[$i]['image']}'>";
+                                        echo "<img src='{$saved_defaults[$i]['image']}' id='content-{$options['id']}-custom-image'>";
                                     }?>
                                 </div>      
                             </div>
