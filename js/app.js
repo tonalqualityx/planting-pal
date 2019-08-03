@@ -2740,7 +2740,7 @@ jQuery(document).ready(function( $ ) {
         var val = $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
         var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
         var product_num = $('#indppl-how-much-header').first().data('num');
-        var product_unit = $('.bag-apprates-title').first().data('unit');
+        var product_unit = $('#indppl-how-much-header').first().data('unit');
         var cont_id = $(elem).parent().parent().find('.bag-apprates-container-title').data('id');
         var version_check = 1.0;
         if(val == null || !$.isNumeric(val)){
