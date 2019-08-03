@@ -1115,8 +1115,11 @@ jQuery(document).ready(function( $ ) {
     $("body").on('click', '.planting-guide-instructions label', function() {
 
         var theInput = $(this).prev('input');
-        console.log(theInput);
+        console.log(theInput.data('content'));
         var content = $("#" + theInput.data('content')).html();
+        var image = $("#" + theInput.data('content') + "-image").attr('src');
+        console.log(image);
+        content = content + "<img src='" + image + "' class='indppl-step-img'>";
 
         if(content == ''){
             image = $("#" + theInput.data('target') + "-uploaded").html();
@@ -2206,6 +2209,78 @@ jQuery(document).ready(function( $ ) {
         }, 1000);
     }
 
+    $('body').on('change', '.guide-product-select', function(e) {
+
+        var fill = checkBox;
+
+        if($(this).is(':checked')){
+            fill = checkMark
+        }
+
+        $(this).parent('.planting-guide-products').find('.product-instructions-section').toggleClass('active');
+        
+        $(this).next('label').html(fill);
+    });
+
+    $('body').on('click', '.instructions-edit', function(e){
+        e.preventDefault();
+        if(indpplP){
+            // Create a textarea & add the current text to it
+            var theText = $(this).parent('.instructions-content-text').find('p');
+            var theHeight = theText.height();
+            var editTools = "<div class='indppl-text-editor indppl-flex hide'><textarea style='height: " + theHeight + "px; '></textarea><button class='indppl-btn guide-save'>Save</button ><button class='indppl-btn grey-bg'>Cancel</button></div>";
+            
+            $(this).parent('.instructions-content-text').prepend(editTools);
+            
+            var editorSection = $(this).parent('.instructions-content-text').find('.indppl-text-editor');
+            var editor = $(this).parent('.instructions-content-text').find('.indppl-text-editor textarea');
+            editor.val(theText.text());
+
+            // Hide the current text
+            theText.addClass('hide');
+            $(this).addClass('hide');
+            
+            // Reveal textarea with save & cancel buttons
+            editorSection.removeClass('hide');
+
+        } else {
+            // Sales Pitch
+            var message = "<div class='store-delete-modal indppl-loading-background'><div class='store-delete-modal-inside'><h3>Feature Not Available</h3><p>This feature is not available at your current subscription level.</p><p>When you upgrade to pro you'll have access to edit this text, plus many other tools to boost your sales!<a href='/pricing' class='indppl-btn'>Upgrade Now</a> <a href='#' class='indppl-btn grey-bg indppl-delete-product-no'>Later</a></div></div>";
+            $('body').append(message);
+        }
+    });
+
+    $('body').on('click', '.indppl-text-editor button', function(){
+        if($(this).hasClass('guide-save')){
+
+            // Set the text
+            var newContent = $(this).parent('.indppl-text-editor').find('textarea').val();
+            var target = $(this).parents('ul').find('.indppl-custom textarea');
+            target.val(newContent);
+
+            // Copy the image
+
+            var image = $(this).parents('.instructions-content').find('img').clone();
+            $(this).parents('ul').find('.custom-image-container').html(image);
+
+            $(this).parents('ul').find('.indppl-custom .planting-guide-option-input label').trigger('click');
+
+            alert('Your changes will be saved to the custom section.');
+
+        }
+
+        // Cleanup
+        $(this).parents('.instructions-content-text').find('p').removeClass('hide');
+        $(this).parents('.instructions-content-text').find('.instructions-edit').removeClass('hide');
+        $(this).parent('.indppl-text-editor').remove();
+
+    });
+
+    $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-password-strength-area');
+    $('#mepr_coupon_code-22').remove();
+    
+    // FUNCTIONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     $('body').on('click', '.indppl-apprate-primary-radio', function(){
         $('.apprate-circle-fill').addClass('hide');
         $(this).find('.apprate-circle-fill').removeClass('hide');
@@ -2218,6 +2293,7 @@ jQuery(document).ready(function( $ ) {
             $('.slide-in-products-container').remove();
         }, 1000);
     })
+
 
     function bagControlsNEG(elem){
         hold_end = false;
@@ -2960,18 +3036,5 @@ jQuery(document).ready(function( $ ) {
             }
         })
     }
-
-    $('body').on('change', '.guide-product-select', function(e) {
-
-        var fill = checkBox;
-
-        if($(this).is(':checked')){
-            fill = checkMark
-        }
-
-        $(this).parent('.planting-guide-products').find('.product-instructions-section').toggleClass('active');
-        
-        $(this).next('label').html(fill);
-    });
 
 });
