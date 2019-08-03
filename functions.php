@@ -1552,17 +1552,17 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 // var_dump($conversion);
                                 $conversion = $conversion[0]['standard-amount'];
                                 // $conversion = getVolume($qty, $unit, $package_unit); 
-                                if($conversion >= $package_size){
-                                    $final = $conversion / $package_size;
-                                    $final_1 = round($package_size / $conversion, 2);
-                                    $final_2 = round($final, 2);
-                                    $pp_dilema = 'cpp';
-                                }else{
+                                // if($conversion >= $package_size){
+                                //     $final = $conversion / $package_size;
+                                //     $final_1 = round($package_size / $conversion, 2);
+                                //     $final_2 = round($final, 2);
+                                //     $pp_dilema = 'cpp';
+                                // }else{
                                     $final = $package_size / $conversion;
                                     $final_1 = round($final, 2);
                                     $final_2 = round($conversion / $package_size, 2);
                                     $pp_dilema = 'ppc';
-                                }
+                                // }
                                 
                             }
                             // var_dump($conversion);
@@ -1697,17 +1697,17 @@ function update_bag_package_table($store_id, $product_id, $type){
                             }
     
                             // var_dump($non_default_app_rate);
-                            if($conversion >= $package_size){
-                                $final = $conversion / $package_size;
-                                $final_1 = round($package_size / $conversion, 2);
-                                $final_2 = round($final, 2);
-                                $pp_dilema = 'cpp';
-                            }else{
+                            // if($conversion >= $package_size){
+                            //     $final = $conversion / $package_size;
+                            //     $final_1 = round($package_size / $conversion, 2);
+                            //     $final_2 = round($final, 2);
+                            //     $pp_dilema = 'cpp';
+                            // }else{
                                 $final = $package_size / $conversion;
                                 $final_1 = round($final, 2);
                                 $final_2 = round($conversion / $package_size, 2);
                                 $pp_dilema = 'ppc';
-                            }
+                            // }
                         }
                         $app_qty = round($final, 2);
                         if($app_qty == INF){
