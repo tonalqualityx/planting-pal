@@ -1180,8 +1180,6 @@ function indppl_update_app_rates_ajax(){
             'amount' => $container_num,
         ),
     );
-    // var_dump($cups);
-    // var_dump($container_unit);
     $console = $cups;
     foreach($current_pack as $key => $value){
         $conversion = indppl_normalize($items, $value['unit'], $cups, $cups_unit);

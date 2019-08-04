@@ -300,7 +300,7 @@ jQuery(document).ready(function( $ ) {
     var container_id = 1;
     $('body').on('click', '.add-container-btn', function(e){
         e.preventDefault();
-        $('.indppl-containers-table').append('<tr id="contianer_tr_id_' + container_id + '" class="indppl-containers-row indppl-table-color-offset"><td class="padding-bottom-5"><input type="text" style="width: 75%!important;" name="new-container"         class="container-add-new indppl-container-edit-title" placeholder="Name"></td><td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-spring" class="display-none indppl-non-default-container" id="new-spring"/><label class="margin-0" for="new-spring"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-summer" class="display-none indppl-non-default-container" id="new-summer"/><label class="margin-0" for="new-summer"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-fall" class="display-none indppl-non-default-container" id="new-fall"/><label class="margin-0" for="new-fall"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" name="new-winter" class="display-none indppl-non-default-container" id="new-winter"/><label class="margin-0" for="new-winter"><div class="indppl-no-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> Sorry, your browser does not support inline SVG.</svg></div></label></td></tr>');
+        $('.indppl-containers-table').append('<tr id="contianer_tr_id_' + container_id + '" class="indppl-containers-row indppl-table-color-offset"><td class="padding-bottom-5"><input type="text" style="width: 75%!important;" name="new-container-'+ container_id +'"         class="container-add-new indppl-container-edit-title" placeholder="Name"></td><td class="text-align-center indppl-season-boarders"><input type="checkbox" checked name="new-spring-'+ container_id +'" class="display-none indppl-non-default-container" id="new-spring-'+ container_id +'"/><label class="margin-0" for="new-spring-'+ container_id +'"><div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/><circle cx="12" cy="12" r="6" stroke="#a9d56a" stroke-width="2" fill="#a9d56a" fill-opacity="1"></circle> Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" checked name="new-summer-'+ container_id +'" class="display-none indppl-non-default-container" id="new-summer-'+ container_id +'"/><label class="margin-0" for="new-summer-'+ container_id +'"><div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> <circle cx="12" cy="12" r="6" stroke="#a9d56a" stroke-width="2" fill="#a9d56a" fill-opacity="1"></circle>Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" checked name="new-fall-'+ container_id +'" class="display-none indppl-non-default-container" id="new-fall-'+ container_id +'"/><label class="margin-0" for="new-fall-'+ container_id +'"><div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> <circle cx="12" cy="12" r="6" stroke="#a9d56a" stroke-width="2" fill="#a9d56a" fill-opacity="1"></circle>Sorry, your browser does not support inline SVG.</svg></div></label></td>        <td class="text-align-center indppl-season-boarders"><input type="checkbox" checked name="new-winter-'+ container_id +'" class="display-none indppl-non-default-container" id="new-winter-'+ container_id +'"/><label class="margin-0" for="new-winter-'+ container_id +'"><div class="indppl-dot-container"><svg height="24" width="24"><circle cx="12" cy="12" r="10" stroke="#6a6e76" stroke-width="2" fill-opacity="0"/> <circle cx="12" cy="12" r="6" stroke="#a9d56a" stroke-width="2" fill="#a9d56a" fill-opacity="1"></circle>Sorry, your browser does not support inline SVG.</svg></div></label></td></tr>');
         container_id++;
     });
     $('body').on('click', function(){
@@ -2772,7 +2772,7 @@ jQuery(document).ready(function( $ ) {
                 i++;
             }
         });
-        // console.log(unit);
+        console.log(num);
         jQuery.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -2798,7 +2798,7 @@ jQuery(document).ready(function( $ ) {
                 jQuery.each(array['app_rates'], function(index, value){
                     // console.log(index);
 
-                jQuery(elem).parent().siblings().eq(1+index).text(value + " Plants");
+                    jQuery(elem).parent().siblings().eq(1+index).html(`<p class="green-text text-align-center margin-0 plant-num-text">`+value+`</p><p class="white-text green-bg text-align-center margin-0">plants</p>`);
                 });
                 indpplDelSmallLoading();
             }
@@ -2943,7 +2943,7 @@ jQuery(document).ready(function( $ ) {
                 remove_dot.push($(this).attr('name'));
             });
             $('.indppl-container-edit-title').each(function(){
-                if($(this).attr('name') == "new-container"){
+                if($(this).attr('name').indexOf("new-container") >= 0){
                     new_array[array_num] = {};
                     new_array[array_num]['name'] = $(this).val();
                     $(this).parent().parent().find('input').each(function(){
@@ -2958,7 +2958,7 @@ jQuery(document).ready(function( $ ) {
                 }
             });
 
-            // console.log(available);
+            // console.log(new_array);
             $.ajax({
                 url:indppl_ajax.ajaxurl,
                 dataType: 'text',
