@@ -1215,6 +1215,7 @@ jQuery(document).ready(function( $ ) {
                         // console.log(image);
                     } else {
                         content =  $(this).data('content');
+                        image = $("#" + $(this).data('content') + "-image").attr('src');
                     }
                 }
             });
@@ -1230,7 +1231,7 @@ jQuery(document).ready(function( $ ) {
             });
             if(!custom){
                 description = $('#' + content + " p").text();
-                image = $('#' + content + " img").attr('src');
+                // image = $('#' + content + " img").attr('src');
             } else {
                 description = content;
             }
