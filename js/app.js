@@ -1200,6 +1200,7 @@ jQuery(document).ready(function( $ ) {
         var title = '';
         var custom = false;
         var image = '';
+        var option = '';
         $('.planting-guide-options').each(function(){
             content = '';
             step = $(this).data('step');
@@ -1217,6 +1218,7 @@ jQuery(document).ready(function( $ ) {
                         content =  $(this).data('content');
                         image = $("#" + $(this).data('content') + "-image").attr('src');
                     }
+                    option = $(this).data('option');
                 }
             });
             var products = new Array();
@@ -1235,7 +1237,7 @@ jQuery(document).ready(function( $ ) {
             } else {
                 description = content;
             }
-            steps.push({title: title, step : step, description : description, products : products, image : image });
+            steps.push({title: title, step : step, description : description, products : products, image : image, option : option });
         });
         
         $.ajax({
