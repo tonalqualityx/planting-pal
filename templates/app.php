@@ -11,12 +11,12 @@ the_post();
 
 <body class="ppl-green-bg">
 
-    <div class="container">
+    <!-- <div class="container"> -->
         <?php the_content(); ?>
-    </div>
+    <!-- </div> -->
     <?php if(wp_is_mobile()){ ?>
         <div class="desktop-link" style="width:100%;text-align:center;">
-            <a href="<?php echo home_url(); ?>?desktop=true">View Desktop Site</a>
+            <a class='orange-text' href="<?php echo home_url(); ?>?desktop=true">View Desktop Site</a>
         </div>
     <?php } ?>
 </body>
