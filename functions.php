@@ -1356,6 +1356,22 @@ function update_bag_package_table($store_id, $product_id, $type){
        'post_id',
        'child'
     );
+    $standard_unit = get_post_meta($product_id, 'wpcf-unit', true);
+    $normalize_array = array();
+   foreach($product_related as $key => $value){
+       $amount = get_post_meta($value, 'wpcf-size', true);
+       $unit = get_post_meta($value, 'wpcf-unit', true);
+       $normalize_array[] = array('amount' => $amount, 'unit' => $unit, 'package' => $value);
+    }
+    $sorted_products = indppl_normalize($normalize_array, $standard_unit);
+    $temp_sorted = array();
+    usort($sorted_products, function($a, $b){
+        return $b['standard-amount'] <=> $a['standard-amount'];
+    });
+    foreach($sorted_products as $key => $value){
+        $temp_sorted[] = $value['package'];
+    }
+    $order_array = $temp_sorted;
     $store_related = toolset_get_related_posts(
         $store_id,
         'store-package',
@@ -1373,7 +1389,6 @@ function update_bag_package_table($store_id, $product_id, $type){
         'default-apprate',
         ['role_to_return' => 'all']
     );
-    // var_dump($pro_container);
 
     if($type == 'ground'){
         $header = 'In-Ground';
@@ -1421,20 +1436,20 @@ function update_bag_package_table($store_id, $product_id, $type){
         <!-- <th colspan='2' class='indppl-green-underline' id='indppl-how-much-header'>'How Much' Adjusted</th> -->
         <!-- <th colspan='1'>Largest Product</th> -->
         <?php
-        $order_array = array();
+        // $order_array = array();
 
-        foreach($product_related as $key => $value){
-            if(in_array($value, $store_related)){
-                // var_dump($value);
-                if(array_key_exists(get_post_meta($value, 'wpcf-size', true), $order_array)){
-                    $order_array[get_post_meta($value, 'wpcf-size', true)+1] = $value;
-                }else{
-                    $order_array[get_post_meta($value, 'wpcf-size', true)] = $value;
-                }
+        // foreach($product_related as $key => $value){
+        //     if(in_array($value, $store_related)){
+        //         // var_dump($value);
+        //         if(array_key_exists(get_post_meta($value, 'wpcf-size', true), $order_array)){
+        //             $order_array[get_post_meta($value, 'wpcf-size', true)+1] = $value;
+        //         }else{
+        //             $order_array[get_post_meta($value, 'wpcf-size', true)] = $value;
+        //         }
                 
-            }
-        }
-        krsort($order_array);
+        //     }
+        // }
+        // krsort($order_array);
         $class_count = 0;
         foreach($order_array as $key => $value){
             $name = get_post_meta($value, 'wpcf-unit', true);
