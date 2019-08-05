@@ -135,15 +135,6 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
         $a = '';
         $b = '';
         $c = '';
-        // if($c_text == $a_text || $c_text == ''){
-        //     $a = $inst_checked;
-        // } elseif($c_text == $b_text){
-        //     $a = '';
-        //     $b = $inst_checked;
-        // } elseif($saved_defaults[$i] != $a_text){
-        //     $a = '';
-        //     $c = $inst_checked;
-        // }
 
         if(is_array($saved_data)){
             $selected_option = $saved_data[$i]->option;
@@ -176,9 +167,9 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                         <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
                     </div>
                     <div class='instructions-content <?php if($a != ''){echo " active";} ?>'>
-                            <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
-                                <img id="content-<?php echo $options['id']; ?>-a-image" src="<?php echo $options['a-image']; ?>">
-                            <?php } ?>
+                        <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
+                            <img id="content-<?php echo $options['id']; ?>-a-image" src="<?php echo $options['a-image']; ?>">
+                        <?php } ?>
                         <div id="content-<?php echo $options['id']; ?>-a" class="instructions-content-text ">
                             <?php echo $options['a-instructions']; ?> 
                             <a href="#" class="instructions-edit orange-text">Edit Text</a>
@@ -189,7 +180,8 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
 
                 <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" data-option="b" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" data-option="b" class='guide-step-description' <?php echo $b; ?>>
+                        <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
                     </div>
                     <div class='instructions-content <?php if($b != ''){echo " active";} ?>'>
                         <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
