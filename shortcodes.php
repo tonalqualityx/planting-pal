@@ -2,19 +2,25 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 
 function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
-	ob_start(); ?>
-    <body class="location-body ppl-green-bg">
+    ob_start(); ?>
+    <div class='white-background'>
+        <div class='container'>
+            <img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/logo-1.png" id='logo-header'>
+            
+        </div>
+    </div>
+    <div class="location-body light-blue-bg store-locate-container">
         <!-- <div class="desktopWarning">
             <p class="desktopWarning-p">This site is optimized for mobile phones in portrait layout.</p><i class="material-icons d-block portrait-only">screen_lock_portrait</i></div> -->
-        <div class="container">
+        <div class="container store-locate-inside-container indppl-light-green-bg">
             <div class='zip-search-container'>
                 <div class="row wizard-start">
-                    <div class="col"><img src="<?php echo INDPPL_ROOT_URL ?>assets/img/wizard-location.png"></div>
+                    <div class="col lets-get-started-img"><img src="<?php echo INDPPL_ROOT_URL ?>assets/img/lets-get-started.png"></div>
                 </div>
                 <div class="row search-form">
                     <div class="col" id='app-location-submitter'>
                         <form action="<?php site_url(); ?>" method="post">
-                        <h4 style='color: white;'>Type a store name or your zip</h4>
+                        <h4 class='find-garden-center'>Find a Garden Center</h4>
                         <div class='side-by-side'>
                             <!-- <select class='form-control' id='geo-radius'>
                                 <option value='5' selected>5 Miles</option>
@@ -27,9 +33,13 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
                         </div>
                         <div class='fix-position-geo'>
                             <input class="form-control rounded-input4" id='zip-for-location' type="text" name="zip" placeholder="Zip or Store Name">
-                            <img src="<?php echo home_url() . '/wp-content/plugins/planting-pal/assets/img/gps.png'; ?>" id="location-icon">
+                            <img class='hide' src="
+                            <?php 
+                            echo home_url() . '/wp-content/plugins/planting-pal/assets/img/gps.png'; 
+                            ?>
+                            " id="location-icon">
+                            <a href="#" class="geo-submit orange-bg">FIND</a>
                         </div>
-                        <input type="image" src="<?php echo INDPPL_ROOT_URL ?>assets/img/enter-geo.png" alt="Submit" border="0" class="geo-submit">
                     </form>
                 </div>
             </div>
@@ -129,21 +139,22 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
     // The Loop
     if ( $the_query->have_posts() ) {
         ?>
-        <div class='flex-left-justify'><?php
+        <div class='flex-left-justify min-width-90'><?php
         $i =0;
         $store_array = array();
         while ( $the_query->have_posts() ) {
             $the_query->the_post();
             $id = get_the_ID();
-            $zip = get_post_meta($id, 'wpcf-zip', true);
-            foreach($zip_array as $key => $value){
-                if($value['zip'] == $zip){
-                    $distance = $value['distance'];
+            $post_zip = get_post_meta($id, 'wpcf-zip', true);
+            if(isset($zip_array) && count($zip_array) > 0){
+                foreach($zip_array as $key => $value){
+                    if($value['zip'] == $post_zip){
+                        $distance = $value['distance'];
+                    }
                 }
             }
             $store_array[$id] = $distance;
         }
-        
         // var_dump($the_query);
         // var_dump('<br /><br />');
         // var_dump($store_array);
@@ -153,29 +164,54 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
             $add = get_post_meta($id, 'wpcf-address1', true);
             $city = get_post_meta($id, 'wpcf-city', true);
             $state = get_post_meta($id, 'wpcf-state', true);
-            $zip = get_post_meta($id, 'wpcf-zip', true);
+            $store_zip = get_post_meta($id, 'wpcf-zip', true);
             $distance = $value;
             $phone = get_post_meta($id, 'wpcf-phone', true);
             $url = get_post_meta($id, 'wpcf-weburl', true);
-            $is_pro = get_post_meta($id, 'wpcf-ispro', true);
+            $author = get_the_author_meta("ID");
+            $pro_array = indppl_user_status($author);
+            if(in_array('paidaccountpro', $pro_array)){
+                $is_pro = true;
+            }else{
+                $is_pro = false;
+            }
             $title = get_the_title($id);
+            $img = get_post_meta($id, 'wpcf-logo', true);
             ?>
             <div class='single-store-app-container'>
+                <div class='app-store-img'>
+                    <img src=<?php echo $img; ?>>
+                </div>
                 <div class='app-store-info'>
                     <h3 class='results-store'><a href='<?php echo get_permalink($id); ?>'><?php echo $title; ?></a></h3>
                     <p class='store-list-text'><?php echo $add; ?></p>
-                    <p class='store-list-text'><?php echo $city . ", " . $state . " " . $zip; ?></p>
+                    <p class='store-list-text'><?php echo $city . ", " . $state . " " . $store_zip; ?></p>
                     <?php
 
                     if($is_pro == 1){
                         ?>
-                        <p class='store-list-text'><a href=tel:<?php echo $phone; ?>><?php echo phone_number_format($phone); ?></a> <a href='<?php echo $url; ?>' target='_blank'>Website</a></p>
+                        <p class='store-list-text'>
+                            <a class='orange-text' href=tel:<?php echo $phone; ?>><?php echo phone_number_format($phone); ?></a>
+                            <a class='orange-text' href='<?php echo $url; ?>' target='_blank'>Website</a></p>
                         <?php
                     }
                     ?>
                 </div>
                 <div class='app-store-distance'>
-                    <p class='store-distance store-list-text'><?php echo round($distance, 2); ?> mi</p>
+                    <?php if($distance > 0){
+                        ?>
+                        <p class='store-distance store-list-text'><?php echo round($distance, 2); ?> mi</p>
+                        <?php
+                    }else if($store_zip == $zip || $zip_array[0]['zip'] == $store_zip){
+                        ?>
+                        <p class='store-distance store-list-text'>In Town</p>
+                        <?php
+                    }else{
+                        ?>
+                        <p class='store-distance store-list-text'>Greater than 30mi</p>
+                        <?php
+                    }
+                    ?>
                 </div>
                     
             </div>
@@ -191,7 +227,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
         if($the_query->found_posts > $pagination){
         ?>
             <div class='indppl-pagination-container'>
-                <a href='#' id='indppl-app-pagination' data-page="<?php echo $pagination + 5; ?>">Load More</a>
+                <a href='#' id='indppl-app-pagination' class='indppl-button' data-page="<?php echo $pagination + 5; ?>">Load More</a>
             </div>
 
         <?php
@@ -210,7 +246,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
     
     ?>
         <script src="<?php echo INDPPL_ROOT_URL ?>assets/bootstrap/js/bootstrap.min.js"></script>
-    </body>
+    </div>
     <!-- </html> -->
     <?php
     

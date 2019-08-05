@@ -15,6 +15,10 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.geo-submit', function(e){
         e.preventDefault();
+        geoSubmit();
+    })
+
+    function geoSubmit(){
         var zip = $('#zip-for-location').val();
         // var radius = $('#geo-radius-custom').val();
         // if(parseInt(radius) > 30){
@@ -47,7 +51,7 @@ jQuery(document).ready(function( $ ) {
                 }
             });
         }, 200);
-    })
+    }
 
     $('body').on('click', '#indppl-app-pagination', function(e){
         e.preventDefault();
@@ -1589,6 +1593,9 @@ jQuery(document).ready(function( $ ) {
         if(e.which == 13 && $('.slide-in-products-inside-container').length > 0){
             e.preventDefault();
             e.stopPropagation();
+        }
+        if(e.which == 13 && $('#zip-for-location').focus()){
+            geoSubmit();
         }
     });
 
