@@ -132,19 +132,28 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
         $c_text = str_replace('</p>', '', $c_text);
 
 
-        $a = $inst_checked;
+        $a = '';
         $b = '';
         $c = '';
-        if($c_text == $a_text || $c_text == ''){
+
+        if(is_array($saved_data)){
+            $selected_option = $saved_data[$i]->option;
+            switch($selected_option){
+                case 'b' : 
+                    $b = $inst_checked;
+                    break;
+                case 'c' :
+                    $c = $inst_checked;
+                    break;
+                default:
+                    $a = $inst_checked;
+                    break;
+            }
+        } else {
             $a = $inst_checked;
-        } elseif($c_text == $b_text){
-            $a = '';
-            $b = $inst_checked;
-        } elseif($saved_defaults[$i] != $a_text){
-            $a = '';
-            $c = $inst_checked;
         }
         
+
         ?>
         <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >
             <h3><?php echo $section; ?></h3>
@@ -154,13 +163,13 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
 
                 <li class="planting-guide-instructions indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" <?php echo $a; ?>>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-a" class='guide-step-description' data-content='content-<?php echo $options['id']; ?>-a' data-target="<?php echo $format_section; ?>" data-option="a" <?php echo $a; ?>>
                         <label for="radio-<?php echo $options['id']; ?>-a" >Option #1</label>
                     </div>
                     <div class='instructions-content <?php if($a != ''){echo " active";} ?>'>
-                            <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
-                                <img id="content-<?php echo $options['id']; ?>-a-image" src="<?php echo $options['a-image']; ?>">
-                            <?php } ?>
+                        <?php if($options['a-image'] && $options['a-image'] != ''){ ?>
+                            <img id="content-<?php echo $options['id']; ?>-a-image" src="<?php echo $options['a-image']; ?>">
+                        <?php } ?>
                         <div id="content-<?php echo $options['id']; ?>-a" class="instructions-content-text ">
                             <?php echo $options['a-instructions']; ?> 
                             <a href="#" class="instructions-edit orange-text">Edit Text</a>
@@ -171,7 +180,8 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
 
                 <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap">
                     <div class="planting-guide-option-input indppl-flex">
-                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $b; ?>> <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
+                        <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-b" data-content='content-<?php echo $options['id']; ?>-b' data-target="<?php echo $format_section; ?>" data-option="b" class='guide-step-description' <?php echo $b; ?>>
+                        <label for="radio-<?php echo $options['id']; ?>-b" >Option #2</label>
                     </div>
                     <div class='instructions-content <?php if($b != ''){echo " active";} ?>'>
                         <?php if($options['b-image'] && $options['b-image'] != ''){ ?>
@@ -188,7 +198,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     <li class="planting-guide-instructions  indppl-flex indppl-align-start indppl-no-wrap indppl-custom">
 
                         <div class="planting-guide-option-input indppl-flex">
-                            <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true">
+                            <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true" data-option="c">
                             <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
                         </div>
 
@@ -217,16 +227,28 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                 <?php 
                 $displayed = array();
                 foreach($apprates['ground'] as $key => $value){
+                    $checked = '';
+                    $product_instructions = ''; 
                     if(!in_array($key,$displayed)){
                         $displayed[] = $key;
                         $product = get_post($key);
                         $prod_brand = get_the_terms($key, 'brand');
                         $prod_brand = $prod_brand[0]->name;
-                        $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
-                        // If there are product instructions, let's just check the box
-                        $checked = '';
-                        if($product_instructions != ''){
-                            $checked = 'checked="checked"';
+                        if(isset($saved_data[$i]->products)){
+                            // var_dump($saved_data);
+                            foreach($saved_data[$i]->products as $saved_prod_instructions){
+                                if($saved_prod_instructions->id == $key){
+                                    $product_instructions = $saved_prod_instructions->instructions;
+                                    $checked = 'checked="checked"';
+                                }
+                            }
+                        } else {
+                            $product_instructions = get_post_meta($key, 'wpcf-step-' . $i . '-instructions', TRUE);
+                            // If there are product instructions, let's just check the box
+                            $checked = '';
+                            if($product_instructions != ''){
+                                $checked = 'checked="checked"';
+                            }
                         }
                         ?>
                         
@@ -243,7 +265,11 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                                     <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
                                 </div>
                                 <div class="product-instructions-sponsored-image">
-
+                                    <?php $sponsorship = check_sponsorship($key);
+                                    // var_dump($sponsorship);
+                                    if($sponsorship){
+                                        echo "<img src='{$sponsorship['image']}'>";
+                                    } ?>
                                 </div>
                             </div>
                         </div>

@@ -2590,3 +2590,17 @@ function indppl_instructions($args = array()){
     <?php
     return ob_get_clean();
 }
+
+// Check the sponsorship status of a given product...
+function check_sponsorship($product_id){
+    $sponsorship = toolset_get_related_post($product_id, 'sponsorship-product');
+    if($sponsorship){
+        $response = array(
+            'image' => get_post_meta($sponsorship, 'wpcf-sponsorship-image', true),
+        );
+    } else {
+        $response = false;
+    }
+
+    return $response;
+}
