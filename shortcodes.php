@@ -62,19 +62,19 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
                 $zips_only[] = $value['zip'];
                 $distance_array[] = round($value['distance'], 2);
             }
-            $args['meta_query'] = array(
-                'relation' => 'AND',
-                array(
-                    'key' => 'wpcf-zip',
-                    'value'   => $zips_only,
-                    'compare' => 'IN',
-                ),
-                array(
-                    'key' => 'wpcf-issetup',
-                    'value' => '1',
-                    'compare' => '=',
-                ),
-            );
+            // $args['meta_query'] = array(
+            //     'relation' => 'AND',
+            //     array(
+            //         'key' => 'wpcf-zip',
+            //         'value'   => $zips_only,
+            //         'compare' => 'IN',
+            //     ),
+            //     array(
+            //         'key' => 'wpcf-issetup',
+            //         'value' => '1',
+            //         'compare' => '=',
+            //     ),
+            // );
         }
     }else if($zip == null && $lat){
         $distance_array = array();
@@ -143,6 +143,10 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
             }
             $store_array[$id] = $distance;
         }
+        
+        // var_dump($the_query);
+        // var_dump('<br /><br />');
+        // var_dump($store_array);
         asort($store_array);
         foreach($store_array as $key => $value){
             $id = $key;
