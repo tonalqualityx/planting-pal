@@ -111,6 +111,10 @@ img{
   color: #f26226;
 }
 
+.border-bottom-grey {
+  border-bottom: 1px solid #cfcfcf;
+}
+
 a.orange-text:hover {
   color: #e25216;
 }
@@ -1959,10 +1963,11 @@ APP PAGES
 }
 .indppl-app-split > * {
   width: 50%;
-  text-align: center;
+  text-align: right;
 }
 
-.indppl-app-split > * > *, .ind-centered{
+/* .indppl-app-split > * > *, */
+.ind-centered{
   margin: auto;
 }
 
@@ -1996,6 +2001,7 @@ APP PAGES
 .empty-filled input, .ind-centered{
   display: block;
 }
+
 .indppl-product-create-img{
   max-width: 250px;
   width: auto;
@@ -2091,12 +2097,13 @@ body #logo-header {
   max-width: 1020px;
   margin: auto;
 }
+
 #buttons.row{
-  border-bottom-left-radius: 15px;
+  /* border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   border-bottom: 1px solid #6a6e77;
   border-left: 1px solid #6a6e77;
-  border-right: 1px solid #6a6e77;
+  border-right: 1px solid #6a6e77; */
 }
 #list-container{
   border-right: 1px solid #6a6e77;
@@ -2107,13 +2114,23 @@ body #logo-header {
 .container.shop-list{
   max-width: 100%;
 }
+
 .row.type-header-2{
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   border-top: 1px solid #6a6e77;
   border-left: 1px solid #6a6e77;
   border-right: 1px solid #6a6e77;
+  overflow: hidden;
+  margin: auto;
 }
+
+.ig-select {
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  margin-bottom: 20px;
+}
+
 img.keep-going {
   margin: auto;
   width: 66px;
@@ -2473,6 +2490,15 @@ GUAGE CSS
 .gauge-small {
   font-size: 14px;
 }
+
+/**********
+PLANTS FORM
+***********/
+
+.plant-form-header-image {
+  position: absolute;
+}
+
 
 /* mobile to desktop */
 @media only screen and (min-width: 768px){

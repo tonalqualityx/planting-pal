@@ -16,9 +16,6 @@ $beds = $beds['beds'];
 
 ?>
 <div class="row guide-top" >
-        <div class="col">
-            <p class="text-uppercase text-center text-white d-flex justify-content-center align-items-center" style="font-size: 9px;margin-top: 7px;margin-bottom: 10px;"><strong>AMENDMENT CALCULATOR &amp; PLANTING GUIDE</strong><br></p>
-        </div>
     </div>
     <div class="row no-gutters" id="buttons">
         <div class="col">
@@ -53,19 +50,19 @@ $beds = $beds['beds'];
         <input type="hidden" name="storeid" value="<?=$storeid?>">
         <input type="hidden" name="next-step" value="shopping_list">
 
-        <div class="row type-header">
+        <div class="row type-header-2">
             <div class="col">
                 <p><strong>In-Ground Plantings</strong><br></p>
             </div>
         </div>
-        <div class="ig-select" style="padding-bottom: 25px;">
+        <div class="ig-select container" style="padding-bottom: 25px;">
             <div class="container">
                 <div class="indppl-app-split indppl-flex qty-plant-header">
                     <div class="">
-                        <p>QTY</p>
+                        <p style="margin-bottom:0;text-align:left; margin-left:17px;">QTY</p>
                     </div>
                     <div class="">
-                        <p>Plant Size</p>
+                        <p style="margin-bottom:0; text-align:right;margin-right:7px;">Plant Container Size</p>
                     </div>
                 </div>
             </div>
@@ -140,7 +137,7 @@ $beds = $beds['beds'];
 
                     <div class="indppl-app-split indppl-flex">
                         <div id="qty" class='ground-shopping-list'>
-                            <input type="number" min="0" class="rounded-input margin-auto" name="ground[<?php echo $container->ID; ?>]" min="0" value='<?php echo $list[$container->ID]; ?>'>
+                            <input type="number" min="0" class="rounded-input" name="ground[<?php echo $container->ID; ?>]" min="0" value='<?php echo $list[$container->ID]; ?>'>
                         </div>
                         <div class="" id="plant-size">
                             <p class="plant-size-format"><?php echo $container->post_title; ?></p>
@@ -155,14 +152,15 @@ $beds = $beds['beds'];
         if($pro){ ?>
 
 
-            <div class="indppl-flex indpl-app-split row type-header">
+            <div class="indppl-flex indpl-app-split row type-header-2" style="margin:auto;">
                 <div class="col">
                     <p id="pot"><strong>Pot Plantings</strong><br></p>
+                    <img src="" class='plant-form-header-image'>
                 </div>
             </div>
-            <div class="ig-select">
+            <div class="ig-select container">
                 <div class="container">
-                    <div class="indppl-app-split indppl-flex qty-plant-header">
+                    <div class="indppl-app-split indppl-flex qty-plant-header" >
                         <div class="">
                             <p>QTY</p>
                         </div>
@@ -245,12 +243,12 @@ $beds = $beds['beds'];
                     </div>
                 </div>
             </div>
-            <div class="row type-header">
+            <div class="row type-header-2">
                 <div class="col">
                     <p id="bed"><strong>Raised bed Plantings</strong><br></p>
                 </div>
             </div>
-            <div class=" ig-select">
+            <div class=" ig-select container">
                 <div class="container">
                     <div class="indppl-app-split indppl-flex qty-plant-header">
                         <div class="">
