@@ -18,7 +18,7 @@
 
 #logo-header {
   max-width: 300px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   display: block;
 }
 
@@ -337,7 +337,8 @@
 }
 
 .container.shop-list {
-  background-color: #93cd44;
+  /* background-color: #93cd44; */
+  background: #9cca3a;
   /*margin-left: -15px;*/
   /*margin-right: -15px;*/
   padding-left: 0;
@@ -350,34 +351,49 @@
   z-index: 0;
   display: block;
   margin: 0;
+  font-size: 2em;
+  text-align: center;
 }
-
+.keep-going-text{
+  margin: 0;
+  font-weight: 600;
+}
 .email-address-add {
   border: 1px solid #ABACB2;
-  box-shadow: 0 3px 11px 0 rgba(0,0,0,0.23), inset 3px 3px 4px 0 rgba(0,0,0,0.50);
+  box-shadow: 2px 4px 6px 0px rgba(0,0,0,0.30)!important;
   max-width: 275px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: -44px;
+  /* margin-top: -44px; */
   z-index: 1;
   display: block;
-  text-align: center;
+  text-align: left;
   position: relative;
+  /* margin:0; */
 }
 
 .send-guide {
-  margin: 0 auto;
+  margin: auto;
   display: block;
-  padding-top: 15px;
+  /* padding-top: 15px; */
+  margin-top: 5px;
+  text-align: center;
+  text-transform: none;
+  max-width: 250px;
+
 }
 
 .products:nth-child(even) {
-  background-color: #8bbf38;
+  /* background-color: #8bbf38; */
   margin-left: -15px;
   margin-right: -15px;
-  border-style: solid;
+  /* border-style: solid;
   border-width: 1px 0 1px 0;
-  border-color: #D8D8D8;
+  border-color: #D8D8D8; */
+}
+
+.products:nth-child(n+2){
+  border-top: 5px solid #838384;
 }
 
 .products:nth-child(odd) {
@@ -400,13 +416,20 @@
   margin-right: -15px;
 }
 
+.qty-title{
+  color: white;
+  text-align: center;
+  margin:0;
+  font-weight: 600;
+}
 .qty-bag {
-  color: #fff;
+  color: #000;
   text-align: center;
   font-family: 'Open Sans';
   font-weight: bold;
   vertical-align: middle;
-  font-size: 22px;
+  font-size: 25px;
+  margin: 0;
 }
 
 .col.product-details {
@@ -431,11 +454,11 @@
 }
 
 .bigger {
-  font-size: 17px;
-  line-height: 19px;
+  font-size: 1.5em;
+  /* line-height: 19px; */
 }
 .smaller{
-  font-size: 13px;
+  font-size: 1.2em;
   margin-bottom: 8px;
 }
 
@@ -521,7 +544,11 @@ body {
     align-items: center;
   }
 }
-
+@media only screen and (min-width: 998px){
+  #indppl-form-go-back{
+    font-size: 18px;
+  }
+}
 @media only screen and (min-width: 1024px){
   .next-button {
     left: unset;

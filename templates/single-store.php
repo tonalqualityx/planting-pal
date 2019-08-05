@@ -146,7 +146,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                             case 'surface':
                             
                             // Calculate the surface rates
-                            $fill_rate = ($rates['amount'] * $sqft)/$rates['per-sqft'];
+                            $fill_rate = (intval($rates['amount']) * $sqft)/intval($rates['per-sqft']);
                             $unit_args = array(array('unit' => $rates['unit'], 'amount' => $fill_rate));
                             $normalized = indppl_normalize($unit_args, $standard, $cups);
                             $need = $normalized[0]['standard-amount'];
@@ -157,11 +157,11 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                             
                             // Multiply the eaches
                             if($pots['width'][$i] < 8){
-                                $need = $pots['qty'][$i] * $rates['small']; 
+                                $need = intval($pots['qty'][$i]) * intval($rates['small']); 
                             } elseif($pots['width'][$i] >= 8 && $pots['width'][$i] < 24){
-                                $need = $pots['qty'][$i] * $rates['medium'];
+                                $need = intval($pots['qty'][$i]) * intval($rates['medium']);
                             } elseif($pots['width'][$i] >= 24){
-                                $need = $pots['qty'][$i] * $rates['large'];
+                                $need = intval($pots['qty'][$i]) * intval($rates['large']);
                             }
                             break;
                     }
@@ -336,7 +336,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
         // echo "<h2>{$val['need']}</h2>";
         foreach($ref as $pack_key => $pack) {
 
-            if($val['need'] >= $pack['standard-amount']){
+            if($val['need'] >= $pack['standard-amount'] && $pack['standard-amount'] != 0){
                 $pack_count = $val['need']/$pack['standard-amount'];
                 $whole = floor($pack_count);
                 $dec = $pack_count - $whole;
@@ -387,7 +387,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                 // echo "<h3>$pack_count $pack_name {$val['name']}</h3> ";
                 break;
 
-            } else {
+            } else if($pack['standard-amount'] != 0){
 
                 if($pack_key == $last_pack){
 
@@ -407,6 +407,8 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     );
 
                 }
+            }else{
+                // nothing
             }
         }
 
@@ -423,12 +425,13 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     <!-- <div class="desktopWarning">
         <p class="desktopWarning-p">This site is optimized for mobile phones in portrait layout.</p><i class="material-icons d-block portrait-only">screen_lock_portrait</i>
     </div> -->
-    <div class="container"><img src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/general-logo-x2.png" id="logo-header"></div>
+    <div class="container"><img src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/logo-1.png" id="logo-header"></div>
     <?php include(INDPPL_ROOT_PATH . "/templates/template_parts/" . $display . ".php"); ?>
     <?php if(wp_is_mobile()){ ?>
         <div class="desktop-link" style="width:100%;text-align:center;">
-            <a href="<?php echo home_url(); ?>?desktop=true">View Desktop Site</a>
+            <a href="<?php echo home_url(); ?>?desktop=true" class='orange-text'>View Desktop Site</a>
         </div>
     <?php } ?>
+    <?php include INDPPL_ROOT_PATH . "templates/footer.php"; ?>
     <?php echo wp_footer(); ?>
 </body>

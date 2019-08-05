@@ -1310,8 +1310,9 @@ jQuery(document).ready(function( $ ) {
                 }, 
                 success : function(response) {
                     // console.log(response);
-                    $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
-                    $('.keep-going').hide();
+                    // $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
+                    $('.keep-going').text("Sent!");
+                    $('.keep-going-text').text("Now, be sure to get everything on your shopping list. Together, we'll go over how, where, when and how much to use when its time to plants.");
                     $('.email-address-add').hide();
                     $('#get-planting-guide').hide();
                     indpplDelLoading();
