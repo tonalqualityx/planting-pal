@@ -2160,7 +2160,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.container-delete', function(e){
         e.preventDefault();
         var id = $(this).data('id');
-        $('body').prepend('<div class="del-container-message-container"><div class="del-container-message-inside-container"><h3>Are you sure  you want to delete this container?</h3><div class="ind-yes-no"><a href="#" class="del-container-yes" data-id=' + id + '>Yes</a><a href="#" class="del-container-no">No</a></div></div></div>');
+        $('body').prepend('<div class="del-container-message-container"><div class="del-container-message-inside-container"><h3>Are you sure  you want to delete this container?</h3><div class="ind-yes-no"><a href="#" class="del-container-yes indppl-button" data-id=' + id + '>Yes</a><a href="#" class="del-container-no indppl-button">No</a></div></div></div>');
     });
 
     $('body').on('click', '.del-container-no', function(e){
