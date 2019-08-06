@@ -48,10 +48,10 @@ if ($storeid == '') {
         <div class="container">
             <div class="indppl-app-split indppl-flex qty-plant-header">
                 <div class="">
-                    <p style="margin-bottom:0;text-align:left; margin-left:17px;">QTY</p>
+                    <p class="indppl-plantform-subtitles">QTY</p>
                 </div>
                 <div class="">
-                    <p style="margin-bottom:0; text-align:right;margin-right:7px;">Plant Container Size</p>
+                    <p class="indppl-plantform-subtitles">Plant Container Size</p>
                 </div>
             </div>
         </div>
@@ -144,22 +144,11 @@ if ($storeid == '') {
         <div class="indppl-flex indpl-app-split row type-header-2  plants-form-header" style="margin:auto;">
             <div class="col">
                 <h3 class="white-text">Pot Plantings</h3>
-            <p class="light-green-text">Enter the size & quantity of pots</p>
+                <p class="light-green-text">Enter the size & quantity of pots</p>
                 <img src="<?php echo INDPPL_ROOT_URL . 'assets/img/pot-header.jpg'; ?>" class='plant-form-header-image'>
             </div>
         </div>
         <div class="ig-select container">
-            <div class="container">
-                <div class="indppl-app-split indppl-flex qty-plant-header" >
-                    <div class="">
-                        <p>QTY</p>
-                    </div>
-                    <div class="">
-                        <p>Pot Size (inches)</p>
-                    </div>
-                </div>
-            </div>
-            <hr class="light-rule">
 
             <div class="container">
                 <?php
@@ -172,39 +161,41 @@ if ($storeid == '') {
                     ob_start();
                     ?>
                     <div class="pots-form pb-first">
+                        <h3>Pot #<span class="counter" data-count="1">1</span></h3>
                         <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                             <div class="">
                                 <p style='margin-bottom: 35px;'></p>
                                 <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
+                                <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
                             <div class=" tacos">
                                 <div class="indppl-flex">
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots" value='<?php echo $pots["length"][$key]; ?>'>
-                                        <label>Length</label>
+                                        <label class="dark-green-text">Length</label>
                                     </div>
-                                    <p class="by-the-by">x</p>
+                                    <p class="by-the-by green-text">x</p>
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth" value='<?php echo $pots["width"][$key]; ?>'>
-                                        <label>Width</label>
+                                        <label class="dark-green-text">Width</label>
                                     </div>
-                                    <p class="by-the-by">x</p>
+                                    <p class="by-the-by green-text">x</p>
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="height rounded-input2 pots" value='<?php echo $pots["height"][$key]; ?>'>
-                                        <label>Height</label>
+                                        <label class="dark-green-text">Height</label>
                                     </div>                            
                                 </div>
-                                <div class="indppl-flex ">
+                                <div class="indppl-flex partial-container">
                                     <div class=" empty-filled indppl-flex margin-right-0">
-                                        <input class="pots" type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
-                                        <label class="form-check-label" for="formCheck-1">Empty</label>
+                                        <input class="pots indppl-pots-empty fill-empty" type="radio" id="pstatus_e-<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
+                                        <label class="form-check-label empty-label ppl-green-bg white-text indppl-pots-empty fill-empty" for="pstatus_e-<?php echo $key; ?>">Empty</label>
                                     </div>
                                     <div class=" empty-filled indppl-flex margin-right-0">
-                                        <input class="indppl-pots-partial pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
-                                        <label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                        <input class="indppl-pots-partial pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_p-<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
+                                        <label class="form-check-label partial-label" for="pstatus_p-<?php echo $key; ?>">Partially Filled</label>
                                     </div>
                                 </div>
                                 <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
@@ -229,28 +220,18 @@ if ($storeid == '') {
             </div>
             <div class="row">
                 <div class="col">
-                    <p id="pot_add" class="cursor">+ Add More</p>
+                    <p id="pot_add" class="cursor orange-text">+ Add Another Pot</p>
                 </div>
             </div>
         </div>
         <div class="row type-header-2  plants-form-header">
             <div class="col">
-                <p id="bed"><strong>Raised bed Plantings</strong><br></p>
+            <h3 class="white-text">Raised Bed Plantings</h3>
+                <p class="light-green-text">Enter the size & quantity of raised beds</p>
+                <img src="<?php echo INDPPL_ROOT_URL . 'assets/img/bed-header.jpg'; ?>" class='plant-form-header-image'>
             </div>
         </div>
         <div class=" ig-select container">
-            <div class="container">
-                <div class="indppl-app-split indppl-flex qty-plant-header">
-                    <div class="">
-                        <p>QTY</p>
-                    </div>
-                    <div class="">
-                        <p>Raised Bed Size</p>
-                    </div>
-                </div>
-            </div>
-            
-            <hr class="light-rule">
 
             <div class="container">
             <?php
@@ -263,44 +244,47 @@ if ($storeid == '') {
                     ob_start();
                     ?>
                     <div class="rb-form pb-first">
+                        <h3>Raised Bed #<span class="counter" data-count="1">1</span></h3>
+
                         <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
                             <div class="" >
                                 <p style='margin-bottom: 35px;'></p>
                                 <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
+                                <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
                             <div class="tacos">
                                 <div class="indppl-flex">
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2" value='<?php echo $beds["length"][$key]; ?>'>
-                                        <label>Length</label>
+                                        <label class="dark-green-text">Length</label>
                                     </div>
-                                    <p class="by-the-by">x</p>
+                                    <p class="by-the-by dark-green-text">x</p>
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" name="beds[width][]" placeholder="W&quot;" class="rounded-input2" value='<?php echo $beds["width"][$key]; ?>'>
-                                        <label>Width</label>
+                                        <label class="dark-green-text">Width</label>
                                     </div>
-                                    <p class="by-the-by">x</p>
+                                    <p class="by-the-by dark-green-text">x</p>
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="height rounded-input2" value='<?php echo $beds["height"][$key]; ?>'>
-                                        <label>Height</label>
+                                        <label class="dark-green-text">Height</label>
                                     </div>
                                 </div>
                                 <div class="indppl-flex ">
                                     <div class="empty-filled indppl-flex margin-right-0">
-                                        <input class="pots" <?php if(!$beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" checked value="empty">
-                                        <label class="form-check-label" for="formCheck-1">Empty</label>
+                                        <input class="pots fill-empty" <?php if(!$beds["need"][$key]){ echo "checked"; } ?> type="radio" id="rbstatus_e-<?php echo $key; ?>"  name="rbstatus_<?php echo $key; ?>" checked value="empty">
+                                        <label class="form-check-label empty-label ppl-green-bg white-text fill-empty" for="rbstatus_e-<?php echo $key; ?>">Empty</label>
                                     </div>
                                     <div class="empty-filled indppl-flex margin-right-0">
-                                        <input class="indppl-beds-partial pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                        <input class="indppl-beds-partial pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" id="rbstatus_p-<?php echo $key; ?>"  name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label partial-label" for="rbstatus_p-<?php echo $key; ?>">Partially Filled</label>
                                     </div>
                                 </div>
                                 <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
                                     <p style='margin-bottom: 35px;'></p>
                                     <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
-                                    <label class="soil-need">Inches of soil needed</label>
+                                    <label class="soil-need dark-green-text">Inches of soil needed</label>
                                 </div>
                             </div>
                         </div>
@@ -313,7 +297,7 @@ if ($storeid == '') {
             </div>
             <div class="row">
                     <div class="col">
-                        <p id="rb_add" class="cursor">+ Add More</p>
+                        <p id="rb_add" class="cursor orange-text">+ Add Another Raised Bed</p>
                     </div>
                 </div>
             </div>
@@ -345,15 +329,21 @@ $(document).ready(function(){
                var index = Number(split_id[1]) + 1;
 
                // Create clone
-               var p_newel = $('.pots-form:last').clone(true);
+               var p_newel = $('.pots-form:last-of-type').clone(true);
+               var count = $(p_newel).find('.counter').data('count');
+               count++;
+               $(p_newel).find('.counter').data('count', count);
+               $(p_newel).find('.counter').html(count);
                $(p_newel).removeClass('pb-first');
                // Set id of new element
                $(p_newel).find('input[type=number]:nth-child(1)').attr("id","qty_"+index);
                $(p_newel).find('input[type=number]:nth-child(2)').attr("id","plength_"+index);
                $(p_newel).find('input[type=number]:nth-child(3)').attr("id","pwidth_"+index);
                $(p_newel).find('input[type=number]:nth-child(4)').attr("id","pheight_"+index);
-               $(p_newel).find('input[type=radio]:nth-child(1)').attr("id","pstatus_"+index);
-               $(p_newel).find('input[type=radio]:nth-child(2)').attr("id","pstatus_"+index);
+               $(p_newel).find('input[type=radio].indppl-pots-partial').attr("id","pstatus_p-"+index);
+               $(p_newel).find('.empty-label').attr("for", "pstatus_e-"+index);
+               $(p_newel).find('input[type=radio].indppl-pots-empty').attr("id","pstatus_e-"+index);
+               $(p_newel).find('.partial-label').attr("for", "pstatus_p-"+index);
                $(p_newel).find('input[type=number]:nth-child(7)').attr("id","pneed_"+index);
 
                // Set Name to new element
@@ -393,13 +383,20 @@ $(document).ready(function(){
                    $(r_newel).removeClass('pb-first');
             //    }
 
+                var count = $(r_newel).find('.counter').data('count');
+                count++;
+                $(r_newel).find('.counter').data('count', count);
+                $(r_newel).find('.counter').html(count);    
+
                // Set id of new element
                $(r_newel).find('.offset-1 input[type=number]:nth-child(1)').attr("id","rbqty_"+index);
                $(r_newel).find('.tacos  input[type=number]:nth-child(1)').attr("id","plength_"+index);
                $(r_newel).find('.pwidth input[type=number]:nth-child(1)').attr("id","pwidth_"+index);
                $(r_newel).find('.tacos  input[type=number]:nth-child(2)').attr("id","pheight_"+index);
-               $(r_newel).find('input[type=radio]:nth-child(1)').attr("id","pstatus_"+index);
-               $(r_newel).find('input[type=radio]:nth-child(2)').attr("id","pstatus_"+index);
+               $(r_newel).find('.indppl-beds-partial').attr("id","rbstatus_p-"+index);
+               $(r_newel).find('.empty-label').attr("for", "rbstatus_e-"+index);
+               $(r_newel).find('input.fill-empty').attr("id","rbstatus_e-"+index);
+               $(r_newel).find('.partial-label').attr("for", "rbstatus_p-"+index);
                $(r_newel).find('input[type=number]:nth-child(7)').attr("id","pneed_"+index);
 
                // Set Name to new element

@@ -108,7 +108,7 @@ img{
 }
 .orange-text, a.orange-text:visited, a.orange-text:active {
   /* color: #f79f2c; */
-  color: #f26226;
+  color: #f26226!important;
 }
 
 .border-bottom-grey {
@@ -116,7 +116,7 @@ img{
 }
 
 a.orange-text:hover {
-  color: #e25216;
+  color: #e25216!important;
 }
 
 .slide-in-products-container input[type=submit]{
@@ -167,19 +167,23 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
 }
 
 .white-text {
-  color: white;
+  color: white!important;
 }
 
 .grey-text {
-  color: #838384;
+  color: #838384!important;
 }
 
 .green-text, .green-color {
-  color: #449040;
+  color: #449040!important;
 }
 
 .light-green-text {
   color: #9fcb3b;
+}
+
+.dark-green-text {
+  color: #254921!important;
 }
 
 .green-bg{
@@ -1981,7 +1985,7 @@ APP PAGES
 }
 
 .by-the-by {
-  margin: 0 10px 25px;
+  margin: 0 5px 0 15px;
 }
 
 .tacos .indppl-flex{
@@ -2133,6 +2137,37 @@ body #logo-header {
 
 #plants-form .type-header-2 {
   text-align: left;
+}
+
+#plants-form .indppl-plantform-subtitles {
+  margin-bottom:0;
+}
+
+#plants-form div:first-child > .indppl-plantform-subtitles {
+  text-align:left;
+  margin-left:17px;
+}
+
+#plants-form div:nth-child(2) > .indppl-plantform-subtitles {
+  text-align: right;
+  margin-right: 17px;
+}
+
+#plants-form .form-check-label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-weight: 700;
+  padding: 5px 20px 2px;
+  border-radius: 12px;
+  background: white;
+  color: grey;
+  transition: all 0.35s ease-in-out;
+}
+
+#plants-form input[type=radio] {
+  display: none;
 }
 
 .ig-select {
@@ -2524,7 +2559,7 @@ PLANTS FORM
     font-size: 2em;
   }
   .plant-form-header-image {
-    display: default;
+    display: block;
   }
 }
 
