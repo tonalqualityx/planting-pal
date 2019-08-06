@@ -152,7 +152,7 @@ if ($storeid == '') {
         </div>
         <div class="ig-select container">
 
-            <div class="container">
+            <div class="">
                 <?php
                 if(!$pots){
                     $pots = array('qty' => array(
@@ -235,7 +235,7 @@ if ($storeid == '') {
         </div>
         <div class=" ig-select container">
 
-            <div class="container">
+            <div class="">
             <?php
                 if(!$beds){
                     $beds = array('qty' => array(
