@@ -279,6 +279,10 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
 .lets-get-started-img{
   margin-top: -40px;
 }
+.lets-get-started-img img{
+  /* margin-top: -40px; */
+  width: 500px;
+}
 ul.style-free {
   list-style: none;
   margin-left: 0;
