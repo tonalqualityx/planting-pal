@@ -2628,7 +2628,9 @@ GUAGE CSS
 /**********
 PLANTS FORM
 ***********/
-
+.ground-store-button{
+  cursor: pointer;
+}
 .plants-form-header h3 {
   font-size: 1.5em;
   margin-bottom: 0;
