@@ -150,7 +150,7 @@ if ($storeid == '') {
         </div>
         <div class="ig-select container">
 
-            <div class="container">
+            <div class="">
                 <?php
                 if(!$pots){
                     $pots = array('qty' => array(
@@ -233,7 +233,7 @@ if ($storeid == '') {
         </div>
         <div class=" ig-select container">
 
-            <div class="container">
+            <div class="">
             <?php
                 if(!$beds){
                     $beds = array('qty' => array(
@@ -310,7 +310,7 @@ if ($storeid == '') {
         <div class="container footer">
             <div class="row">
                 <div class="col"><input type="image"  border="0" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/next-button.png" class="next-button">
-                <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p>
+                <!-- <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p> -->
             </div>
         </div>
     </div>
