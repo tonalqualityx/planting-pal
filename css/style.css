@@ -2188,6 +2188,12 @@ img.keep-going {
 }
 .rb-form, .pots-form{
   position: relative;
+  max-width: 100%;
+  padding: 1% 5%;
+}
+
+div .rb-form:nth-child(n+2), div .pots-form:nth-child(n+2){
+  border-top: 2px solid #cfcfcf;
 }
 
 /* sponsorships */
