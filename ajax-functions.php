@@ -709,9 +709,10 @@ function indppl_get_product_info_ajax(){
         $header = 'Product Setup for In-Ground Plantings';
         $instruction_text = "Planting Pal works best by selecting the 'All Purpose' version for each product type (ie all purpose fertilizer vs. rose fertilizer). If necessary, plant-specific substitutions can be made when using the app. If you don't see the product you need listed in the dropdown, you can create your own!";
         $video = '<iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>';
-    }else{
-        $header = 'Product Setup for ' . $type . 'Plantings';
-        // temporary until we look at the designs
+    }else if($type == 'pots'){
+        $header = 'Product Setup for Potted Plants';
+    }else if($type == 'beds'){
+        $header = 'Product Setup for Raised Beds';
     }
     ?>
     
