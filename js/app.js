@@ -1460,8 +1460,17 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.empty-filled .pots', function(){
 
         var check = $(this).val();
+        
+        $(this).parents('.indppl-flex').find('label').removeClass("ppl-green-bg");
+        $(this).parents('.indppl-flex').find('label').removeClass("white-text");
+        if(!$(this).hasClass("fill-empty")){
+            $(this).next(".partial-label").addClass("ppl-green-bg white-text");
+        } else {
+            $(this).next('.empty-label').addClass("ppl-green-bg white-text");
+        }
         if(check == 'partial'){
             $(this).parents('.indppl-flex').next('.inches-needed').removeClass('hide');
+            console.log($(this));
         } else {
             $(this).parents('.indppl-flex').next('.inches-needed').addClass('hide');
             $(this).parents('.indppl-flex').next('.inches-needed').children('input').val('0');

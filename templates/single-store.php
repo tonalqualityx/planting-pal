@@ -425,7 +425,11 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
     <!-- <div class="desktopWarning">
         <p class="desktopWarning-p">This site is optimized for mobile phones in portrait layout.</p><i class="material-icons d-block portrait-only">screen_lock_portrait</i>
     </div> -->
-    <div class="container"><img src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/logo-1.png" id="logo-header"></div>
+    <div class="border-bottom-grey">
+        <div class="container">
+            <img src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/logo-1.png" id="logo-header">
+        </div>
+    </div>
     <?php include(INDPPL_ROOT_PATH . "/templates/template_parts/" . $display . ".php"); ?>
     <?php if(wp_is_mobile()){ ?>
         <div class="desktop-link" style="width:100%;text-align:center;">
