@@ -2298,8 +2298,6 @@ jQuery(document).ready(function( $ ) {
 
     $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-password-strength-area');
     $('#mepr_coupon_code-22').remove();
-    
-    // FUNCTIONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     $('body').on('click', '.indppl-apprate-primary-radio', function(){
         $('.apprate-circle-fill').addClass('hide');
@@ -2314,6 +2312,99 @@ jQuery(document).ready(function( $ ) {
         }, 1000);
     })
 
+    if($('.indppl-small-header').length > 0){
+        $('body').on('click', '.pots-store-button', function(e){
+            e.preventDefault();
+            scrollToDiv($('#pots'));
+        });
+        $('body').on('click', '.beds-store-button', function(e){
+            e.preventDefault();
+            scrollToDiv($('#beds'));
+        });
+        $('body').on('click', '.ground-store-button', function(e){
+            e.preventDefault();
+            scrollToDiv($('#ground'));
+        });
+        if($(window).width() > 768){
+            var header_height = 267;
+        }else{
+            var header_height = 190;
+        }
+        var base_url = $('.indppl-ground-img').data('url');
+        $('.floating-header').addClass('indppl-follow-header');
+        var previousScroll = 0;
+        $(document).scroll(function(){
+            var currentScroll = $(this).scrollTop();
+            var footer = document.querySelector('.indppl-footer');
+            footer = offset(footer).top;
+            var next_button = document.querySelector('.next-button');
+            next_button = offset(next_button).top;
+            if($(window).width() > 768){
+                if(currentScroll + screen.height - 200 >= footer){
+                    $('.next-button').addClass('next-button-bottom');
+                }
+                if(currentScroll + screen.height - 200 < footer){
+                    $('.next-button').removeClass('next-button-bottom');
+                }
+            }else{
+                if(currentScroll + screen.height >= footer - 10){
+                    $('.next-button').addClass('next-button-bottom');
+                }
+                if(currentScroll + screen.height < footer + $('.indppl-footer').height()){
+                    $('.next-button').removeClass('next-button-bottom');
+                }
+            }
+            var pots = document.querySelector('.indppl-pots-header');
+            pots = offset(pots).top;
+            pots = pots - header_height - 100;
+            var beds = document.querySelector('.indppl-beds-header');
+            beds = offset(beds).top;
+            beds = beds - header_height - 100;
+            var top = document.body.scrollTop;
+            if(top > beds){
+                $('.indppl-ground-img').attr('src', base_url + 'inground.png');
+                $('.indppl-pots-img').attr('src', base_url + 'pot.png');
+                $('.indppl-beds-img').attr('src', base_url + 'raisedbed-orange.png');
+                $('.indppl-planting-types-text:eq(0)').removeClass('orange-text').addClass('grey-text');
+                $('.indppl-planting-types-text:eq(1)').removeClass('orange-text').addClass('grey-text');
+                $('.indppl-planting-types-text:eq(2)').removeClass('grey-text').addClass('orange-text');
+            }else if(top > pots){
+                // console.log("pots: " + pots + ", top: " + top);
+                $('.indppl-ground-img').attr('src', base_url + 'inground.png');
+                $('.indppl-beds-img').attr('src', base_url + 'raisedbed.png');
+                $('.indppl-pots-img').attr('src', base_url + 'pot-orange.png');
+                $('.indppl-planting-types-text:eq(0)').removeClass('orange-text').addClass('grey-text');
+                $('.indppl-planting-types-text:eq(2)').removeClass('orange-text').addClass('grey-text');
+                $('.indppl-planting-types-text:eq(1)').removeClass('grey-text').addClass('orange-text');
+                // console.log(ground_img);
+            }else if(top < pots){
+                $('.indppl-ground-img').attr('src', base_url + 'inground-orange.png');
+                $('.indppl-pots-img').attr('src', base_url + 'pot.png');
+                $('.indppl-beds-img').attr('src', base_url + 'raisedbed.png');
+                $('.indppl-planting-types-text:eq(2)').removeClass('orange-text').addClass('grey-text');
+                $('.indppl-planting-types-text:eq(1)').removeClass('orange-text').addClass('grey-text');
+                $('.indppl-planting-types-text:eq(0)').removeClass('grey-text').addClass('orange-text');
+            }
+            previousScroll = currentScroll;
+        });
+    }
+    function scrollToDiv(element){
+        if($(window).width() > 768){
+            var height = 267;
+        }else{
+            var height = 190;
+        }
+        $('html,body').animate({scrollTop: $(element).offset().top-height},'slow');
+    };
+    function offset(el) {
+        var rect = el.getBoundingClientRect(),
+        scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+    }
+
+    
+    // FUNCTIONS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     function bagControlsNEG(elem){
         hold_end = false;

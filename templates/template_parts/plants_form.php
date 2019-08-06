@@ -20,25 +20,27 @@ if ($storeid == '') {
 };
 ?>
 <div id="buttons" style="width: 100%;"></div>
-<div id="app-header" class="types">
-    <div class="row no-gutters">
-        <div class="col-4 selections"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/inground.png" id="type">
-            <p><strong>In-Ground</strong><br><strong>Plantings</strong><br></p>
-        </div>
-        <div class="col-4 selections"><a href="#pot"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/pot.png" id="type"></a>
-            <p><strong>Pot </strong><br><strong>Plantings</strong><br></p>
-        </div>
-        <div class="col-4 selections"><a href="#bed"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/raisedbed.png" id="type"></a>
-            <p><strong>Raised Bed Plantings</strong><br></p>
+<!-- <div>
+    <div id="app-header" class="types">
+        <div class="row no-gutters">
+            <div class="col-4 selections"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/inground-orange.png" id="type">
+                <p><strong>In-Ground</strong><br><strong>Plantings</strong><br></p>
+            </div>
+            <div class="col-4 selections"><a href="#pot"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/pot.png" id="type"></a>
+                <p><strong>Pot </strong><br><strong>Plantings</strong><br></p>
+            </div>
+            <div class="col-4 selections"><a href="#bed"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/raisedbed.png" id="type"></a>
+                <p><strong>Raised Bed Plantings</strong><br></p>
+            </div>
         </div>
     </div>
-</div>
+</div> -->
 <form action="" method="post" id="plants-form">
 
     <input type="hidden" name="storeid" value="<?=$storeid?>">
     <input type="hidden" name="next-step" value="shopping_list">
 
-    <div class="row type-header-2  plants-form-header">
+    <div id='ground' class="row type-header-2 indppl-ground-header plants-form-header">
         <div class="col">
             <h3 class="white-text">In-Ground Plantings</h3>
             <p class="light-green-text">Enter the size & quantity of plants below</p>
@@ -141,7 +143,7 @@ if ($storeid == '') {
     if($pro){ ?>
 
 
-        <div class="indppl-flex indpl-app-split row type-header-2  plants-form-header" style="margin:auto;">
+        <div id='pots' class="indppl-flex indpl-app-split row type-header-2 indppl-pots-header plants-form-header" style="margin:auto;">
             <div class="col">
                 <h3 class="white-text">Pot Plantings</h3>
                 <p class="light-green-text">Enter the size & quantity of pots</p>
@@ -224,7 +226,7 @@ if ($storeid == '') {
                 </div>
             </div>
         </div>
-        <div class="row type-header-2  plants-form-header">
+        <div id='beds' class="row type-header-2 indppl-beds-header plants-form-header">
             <div class="col">
             <h3 class="white-text">Raised Bed Plantings</h3>
                 <p class="light-green-text">Enter the size & quantity of raised beds</p>
@@ -309,8 +311,8 @@ if ($storeid == '') {
         <?php } ?>
         <div class="container footer">
             <div class="row">
-                <div class="col"><input type="image"  border="0" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/next-button.png" class="next-button">
-                <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p>
+                <div class="col"><a href='#' class="indppl-button next-button">NEXT</a>
+                <!-- <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p> -->
             </div>
         </div>
     </div>

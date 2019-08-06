@@ -217,7 +217,8 @@
   /* max-width: 200px; */
 }
 #app-header img{
-  max-width: 50px;
+  /* max-width: 50px; */
+  max-height: 30px;
 }
 
 .row.qty-plant-header {
@@ -539,6 +540,7 @@ body {
 @media only screen and (min-width: 768px){
   #app-header img{
     max-width: 100%;
+    max-height: unset;
   }
   .tacos .indppl-flex {
     justify-content: center;

@@ -564,7 +564,14 @@ ul.style-free {
   box-shadow: 2px 3px 3px 0px rgba(0,0,0,0.5);
   margin: 20px 0;
 }
-
+.indppl-small-header{
+  height: 60px;
+}
+.indppl-small-header img{
+  margin-top: -25px;
+  width: 300px;
+  max-width: 50vw!important;
+}
 .flex-half{
   width: 50%;
   display: flex;
@@ -758,6 +765,15 @@ span.padding-right-5{
   font-weight: 800;
   text-decoration: none;
   font-size: 1.2em;
+}
+.next-button{
+  max-width: 50vw;
+  width: 300px;
+  text-align: center;
+}
+.next-button-bottom{
+  position: absolute!important;
+  bottom: -90px!important;
 }
 p.round-button-error{
   font-weight: 800;
@@ -1516,6 +1532,17 @@ tr.in-ground-not-bag td:nth-child(n+4){
 .max-width-500{
   max-width: 500px;
 }
+.indppl-follow-header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: white;
+  max-width: 100%!important;
+  margin: 0!important;
+  padding-top: 15px;
+}
 .pots-apprates-filler-percent{
   font-weight: 600;
   font-size: 2em;
@@ -2151,7 +2178,9 @@ SHOPPING LIST
   flex-wrap: unset;
   flex-direction: row-reverse;
 }
-
+.indppl-planting-types-text{
+  font-size: 8px;
+}
 body #logo-header {
   margin-bottom: 15px;
 }
@@ -2606,6 +2635,9 @@ PLANTS FORM
   right: 0;
   display: none;
 }
+.indppl-ground-header{
+  margin-top: 190px!important;
+}
 
 /* big mobile */
 @media screen and (min-width: 640px){
@@ -2626,6 +2658,15 @@ PLANTS FORM
   }
   .pb-remove-button{
     top: 10px;
+  }
+  .indppl-ground-header{
+    margin-top: 267px!important;
+  }
+  .indppl-planting-types-text{
+    font-size: 14px;
+  }
+  .indppl-small-header{
+    height: 90px;
   }
 }
 
