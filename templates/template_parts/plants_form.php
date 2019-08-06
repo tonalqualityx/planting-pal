@@ -14,334 +14,324 @@ $beds = stripslashes($beds);
 $beds = json_decode($beds, true);
 $beds = $beds['beds'];
 
+if ($storeid == '') {
+    echo '<br><br><p align="center">Sorry we could not find that store. <a href="/">Please go back to search.</a></center>';
+    exit;
+};
 ?>
-<div class="row guide-top" >
+<div id="buttons" style="width: 100%;"></div>
+<div id="app-header" class="types">
+    <div class="row no-gutters">
+        <div class="col-4 selections"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/inground.png" id="type">
+            <p><strong>In-Ground</strong><br><strong>Plantings</strong><br></p>
+        </div>
+        <div class="col-4 selections"><a href="#pot"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/pot.png" id="type"></a>
+            <p><strong>Pot </strong><br><strong>Plantings</strong><br></p>
+        </div>
+        <div class="col-4 selections"><a href="#bed"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/raisedbed.png" id="type"></a>
+            <p><strong>Raised Bed Plantings</strong><br></p>
+        </div>
     </div>
-    <div class="row no-gutters" id="buttons">
+</div>
+<form action="" method="post" id="plants-form">
+
+    <input type="hidden" name="storeid" value="<?=$storeid?>">
+    <input type="hidden" name="next-step" value="shopping_list">
+
+    <div class="row type-header-2  plants-form-header">
         <div class="col">
-            <p class="d-none button">Retailer</p>
-        </div>
-        <div class="col button2">
-            <p class="d-none button">manufacturer</p>
+            <h3 class="white-text">In-Ground Plantings</h3>
+            <p class="light-green-text">Enter the size & quantity of plants below</p>
         </div>
     </div>
-    <?php
-    if ($storeid == '') {
-      echo '<br><br><p align="center">Sorry we could not find that store. <a href="/">Please go back to search.</a></center>';
-      exit;
-    };
-    ?>
-    <div id="buttons" style="width: 100%;"></div>
-    <div id="app-header" class="types">
-        <div class="row no-gutters">
-            <div class="col-4 selections"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/inground.png" id="type">
-                <p><strong>In-Ground</strong><br><strong>Plantings</strong><br></p>
-            </div>
-            <div class="col-4 selections"><a href="#pot"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/pot.png" id="type"></a>
-                <p><strong>Pot </strong><br><strong>Plantings</strong><br></p>
-            </div>
-            <div class="col-4 selections"><a href="#bed"><img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/raisedbed.png" id="type"></a>
-                <p><strong>Raised Bed Plantings</strong><br></p>
+    <div class="ig-select container" style="padding-bottom: 25px;">
+        <div class="container">
+            <div class="indppl-app-split indppl-flex qty-plant-header">
+                <div class="">
+                    <p style="margin-bottom:0;text-align:left; margin-left:17px;">QTY</p>
+                </div>
+                <div class="">
+                    <p style="margin-bottom:0; text-align:right;margin-right:7px;">Plant Container Size</p>
+                </div>
             </div>
         </div>
+        <hr class="light-rule">
+
+        <div class="container">
+            <?php 
+            //Get the containers!
+            
+            
+            $args = array(
+                'query_by_role' => 'parent',
+                'role_to_return' => 'other',
+                'return' => 'post_id',
+                'args' => [
+                    'meta_key' => 'wpcf-display-number',
+                ],
+                'orderby' => 'meta_value_num',
+                'order' => 'ASC',
+            );
+            
+            $pro = FALSE;
+            $author = $post->post_author;
+            $stati = indppl_user_status($author);
+            if(in_array('paidaccountpro', $stati)){
+                $pro = TRUE; // Make life easier later...
+                $now = date('m/d');
+                $store_meta = get_post_meta($storeid);
+                $spring_start = date('m/d',strtotime($store_meta['wpcf-spring-start'][0]));
+                $spring_end = date('m/d', strtotime($store_meta['wpcf-spring-end'][0]));
+                $summer_start = date('m/d',strtotime($store_meta['wpcf-summer-start'][0]));
+                $summer_end = date('m/d', strtotime($store_meta['wpcf-summer-end'][0]));
+                $fall_start = date('m/d',strtotime($store_meta['wpcf-fall-start'][0]));
+                $fall_end = date('m/d', strtotime($store_meta['wpcf-fall-end'][0]));
+                $winter_start = date('m/d',strtotime($store_meta['wpcf-winter-start'][0]));
+                $winter_end = date('m/d', strtotime($store_meta['wpcf-winter-end'][0]));
+                
+                $available = 'wpcf-available-in-spring';
+                if($now >= $spring_start && $now <= $spring_end){
+                    $available = 'wpcf-available-in-spring';
+                } elseif($now >= $summer_start && $now <= $summer_end){
+                    $available = 'wpcf-available-in-summer';
+                } elseif($now >= $fall_start && $now <= $fall_end){
+                    $available = 'wpcf-available-in-fall';
+                } elseif($now >= $winter_start && $now <= $winter_end){
+                    $available = 'wpcf-available-in-winter';
+                }
+                $args['role_to_return'] = 'intermediary';
+                $args['return'] = 'post_object';
+                $args['args'] = ['meta_key' => $available, 'meta_value' => 1];
+                $relationships = toolset_get_related_posts($storeid, 'store-container', $args);
+                $containers = array();
+                $i = 1000;
+                foreach($relationships as $relation){
+                    $cont_id = explode(' - ', $relation->post_title);
+                    $display_order = get_post_meta($cont_id[1], 'wpcf-display-number', TRUE);
+                    if($display_order && $display_order != ''){
+                        $containers[$display_order] = $cont_id[1];
+                    } else {
+                        $containers[$i] = $cont_id[1];
+                    }
+                    $i++;
+                }
+                ksort($containers);
+            } else {
+                $containers = toolset_get_related_posts($storeid, 'store-container', $args);
+            }
+            
+
+            
+            foreach($containers as $cont){ $container = get_post($cont); ?>
+
+                <div class="indppl-app-split indppl-flex">
+                    <div id="qty" class='ground-shopping-list'>
+                        <input type="number" min="0" class="rounded-input" name="ground[<?php echo $container->ID; ?>]" min="0" value='<?php echo $list[$container->ID]; ?>'>
+                    </div>
+                    <div class="" id="plant-size">
+                        <p class="plant-size-format"><?php echo $container->post_title; ?></p>
+                    </div>
+                </div>
+                
+            <?php } ?>
+        </div>
     </div>
-    <form action="" method="post">
 
-        <input type="hidden" name="storeid" value="<?=$storeid?>">
-        <input type="hidden" name="next-step" value="shopping_list">
+    <?php 
+    if($pro){ ?>
 
-        <div class="row type-header-2">
+
+        <div class="indppl-flex indpl-app-split row type-header-2  plants-form-header" style="margin:auto;">
             <div class="col">
-                <p><strong>In-Ground Plantings</strong><br></p>
+                <h3 class="white-text">Pot Plantings</h3>
+            <p class="light-green-text">Enter the size & quantity of pots</p>
+                <img src="<?php echo INDPPL_ROOT_URL . 'assets/img/pot-header.jpg'; ?>" class='plant-form-header-image'>
             </div>
         </div>
-        <div class="ig-select container" style="padding-bottom: 25px;">
+        <div class="ig-select container">
             <div class="container">
-                <div class="indppl-app-split indppl-flex qty-plant-header">
+                <div class="indppl-app-split indppl-flex qty-plant-header" >
                     <div class="">
-                        <p style="margin-bottom:0;text-align:left; margin-left:17px;">QTY</p>
+                        <p>QTY</p>
                     </div>
                     <div class="">
-                        <p style="margin-bottom:0; text-align:right;margin-right:7px;">Plant Container Size</p>
+                        <p>Pot Size (inches)</p>
                     </div>
                 </div>
             </div>
             <hr class="light-rule">
 
             <div class="container">
-                <?php 
-                //Get the containers!
-                
-                
-                $args = array(
-                    'query_by_role' => 'parent',
-                    'role_to_return' => 'other',
-                    'return' => 'post_id',
-                    'args' => [
-                        'meta_key' => 'wpcf-display-number',
-                    ],
-                    'orderby' => 'meta_value_num',
-                    'order' => 'ASC',
-                );
-                
-                $pro = FALSE;
-                $author = $post->post_author;
-                $stati = indppl_user_status($author);
-                if(in_array('paidaccountpro', $stati)){
-                    $pro = TRUE; // Make life easier later...
-                    $now = date('m/d');
-                    $store_meta = get_post_meta($storeid);
-                    $spring_start = date('m/d',strtotime($store_meta['wpcf-spring-start'][0]));
-                    $spring_end = date('m/d', strtotime($store_meta['wpcf-spring-end'][0]));
-                    $summer_start = date('m/d',strtotime($store_meta['wpcf-summer-start'][0]));
-                    $summer_end = date('m/d', strtotime($store_meta['wpcf-summer-end'][0]));
-                    $fall_start = date('m/d',strtotime($store_meta['wpcf-fall-start'][0]));
-                    $fall_end = date('m/d', strtotime($store_meta['wpcf-fall-end'][0]));
-                    $winter_start = date('m/d',strtotime($store_meta['wpcf-winter-start'][0]));
-                    $winter_end = date('m/d', strtotime($store_meta['wpcf-winter-end'][0]));
-                    
-                    $available = 'wpcf-available-in-spring';
-                    if($now >= $spring_start && $now <= $spring_end){
-                        $available = 'wpcf-available-in-spring';
-                    } elseif($now >= $summer_start && $now <= $summer_end){
-                        $available = 'wpcf-available-in-summer';
-                    } elseif($now >= $fall_start && $now <= $fall_end){
-                        $available = 'wpcf-available-in-fall';
-                    } elseif($now >= $winter_start && $now <= $winter_end){
-                        $available = 'wpcf-available-in-winter';
-                    }
-                    $args['role_to_return'] = 'intermediary';
-                    $args['return'] = 'post_object';
-                    $args['args'] = ['meta_key' => $available, 'meta_value' => 1];
-                    $relationships = toolset_get_related_posts($storeid, 'store-container', $args);
-                    $containers = array();
-                    $i = 1000;
-                    foreach($relationships as $relation){
-                        $cont_id = explode(' - ', $relation->post_title);
-                        $display_order = get_post_meta($cont_id[1], 'wpcf-display-number', TRUE);
-                        if($display_order && $display_order != ''){
-                            $containers[$display_order] = $cont_id[1];
-                        } else {
-                            $containers[$i] = $cont_id[1];
-                        }
-                        $i++;
-                    }
-                    ksort($containers);
-                } else {
-                    $containers = toolset_get_related_posts($storeid, 'store-container', $args);
-                }
-                
-
-                
-                foreach($containers as $cont){ $container = get_post($cont); ?>
-
-                    <div class="indppl-app-split indppl-flex">
-                        <div id="qty" class='ground-shopping-list'>
-                            <input type="number" min="0" class="rounded-input" name="ground[<?php echo $container->ID; ?>]" min="0" value='<?php echo $list[$container->ID]; ?>'>
-                        </div>
-                        <div class="" id="plant-size">
-                            <p class="plant-size-format"><?php echo $container->post_title; ?></p>
-                        </div>
-                    </div>
-                    
-                <?php } ?>
-            </div>
-        </div>
-
-        <?php 
-        if($pro){ ?>
-
-
-            <div class="indppl-flex indpl-app-split row type-header-2" style="margin:auto;">
-                <div class="col">
-                    <p id="pot"><strong>Pot Plantings</strong><br></p>
-                    <img src="" class='plant-form-header-image'>
-                </div>
-            </div>
-            <div class="ig-select container">
-                <div class="container">
-                    <div class="indppl-app-split indppl-flex qty-plant-header" >
-                        <div class="">
-                            <p>QTY</p>
-                        </div>
-                        <div class="">
-                            <p>Pot Size (inches)</p>
-                        </div>
-                    </div>
-                </div>
-                <hr class="light-rule">
-
-                <div class="container">
-                    <?php
-                    if(!$pots){
-                        $pots = array('qty' => array(
-                            '1' => ''
-                        ));
-                    }
-                    foreach($pots['qty'] as $key => $value){
-                        ob_start();
-                        ?>
-                        <div class="pots-form pb-first">
-                            <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                                <div class="">
-                                    <p style='margin-bottom: 35px;'></p>
-                                    <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
-                                </div>
-                                <div class=" tacos">
-                                    <div class="indppl-flex">
-                                        <div>
-                                            <p style='margin-bottom: 35px;'></p>
-                                            <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots" value='<?php echo $pots["length"][$key]; ?>'>
-                                            <label>Length</label>
-                                        </div>
-                                        <p class="by-the-by">x</p>
-                                        <div>
-                                            <p style='margin-bottom: 35px;'></p>
-                                            <input type="number" min="0" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth" value='<?php echo $pots["width"][$key]; ?>'>
-                                            <label>Width</label>
-                                        </div>
-                                        <p class="by-the-by">x</p>
-                                        <div>
-                                            <p style='margin-bottom: 35px;'></p>
-                                            <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="height rounded-input2 pots" value='<?php echo $pots["height"][$key]; ?>'>
-                                            <label>Height</label>
-                                        </div>                            
-                                    </div>
-                                    <div class="indppl-flex ">
-                                        <div class=" empty-filled indppl-flex margin-right-0">
-                                            <input class="pots" type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
-                                            <label class="form-check-label" for="formCheck-1">Empty</label>
-                                        </div>
-                                        <div class=" empty-filled indppl-flex margin-right-0">
-                                            <input class="indppl-pots-partial pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
-                                            <label class="form-check-label" for="formCheck-2">Partially Filled</label>
-                                        </div>
-                                    </div>
-                                    <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
-                                        <p style='margin-bottom: 35px;'></p>    
-                                        <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots" value='<?php echo $pots["need"][$key]; ?>'>
-                                        <label class="soil-need">Inches of soil needed</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="indppl-flex indppl-justify-center max-600">
-                                    
-                                    
-                                </div>
-                            </div>
-                        </div>
-                        <?php
-                        $return .= ob_get_clean();
-                    }
-                    echo $return;
-                    ?>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <p id="pot_add" class="cursor">+ Add More</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row type-header-2">
-                <div class="col">
-                    <p id="bed"><strong>Raised bed Plantings</strong><br></p>
-                </div>
-            </div>
-            <div class=" ig-select container">
-                <div class="container">
-                    <div class="indppl-app-split indppl-flex qty-plant-header">
-                        <div class="">
-                            <p>QTY</p>
-                        </div>
-                        <div class="">
-                            <p>Raised Bed Size</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <hr class="light-rule">
-
-                <div class="container">
                 <?php
-                    if(!$beds){
-                        $beds = array('qty' => array(
-                            '1' => ''
-                        ));
-                    }
-                    foreach($beds['qty'] as $key => $value){
-                        ob_start();
-                        ?>
-                        <div class="rb-form pb-first">
-                            <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                                <div class="" >
-                                    <p style='margin-bottom: 35px;'></p>
-                                    <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
-                                </div>
-                                <div class="tacos">
-                                    <div class="indppl-flex">
-                                        <div>
-                                            <p style='margin-bottom: 35px;'></p>
-                                            <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2" value='<?php echo $beds["length"][$key]; ?>'>
-                                            <label>Length</label>
-                                        </div>
-                                        <p class="by-the-by">x</p>
-                                        <div>
-                                            <p style='margin-bottom: 35px;'></p>
-                                            <input type="number" min="0" name="beds[width][]" placeholder="W&quot;" class="rounded-input2" value='<?php echo $beds["width"][$key]; ?>'>
-                                            <label>Width</label>
-                                        </div>
-                                        <p class="by-the-by">x</p>
-                                        <div>
-                                            <p style='margin-bottom: 35px;'></p>
-                                            <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="height rounded-input2" value='<?php echo $beds["height"][$key]; ?>'>
-                                            <label>Height</label>
-                                        </div>
-                                    </div>
-                                    <div class="indppl-flex ">
-                                        <div class="empty-filled indppl-flex margin-right-0">
-                                            <input class="pots" <?php if(!$beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" checked value="empty">
-                                            <label class="form-check-label" for="formCheck-1">Empty</label>
-                                        </div>
-                                        <div class="empty-filled indppl-flex margin-right-0">
-                                            <input class="indppl-beds-partial pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
-                                        </div>
-                                    </div>
-                                    <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
+                if(!$pots){
+                    $pots = array('qty' => array(
+                        '1' => ''
+                    ));
+                }
+                foreach($pots['qty'] as $key => $value){
+                    ob_start();
+                    ?>
+                    <div class="pots-form pb-first">
+                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
+                            <div class="">
+                                <p style='margin-bottom: 35px;'></p>
+                                <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
+                            </div>
+                            <div class=" tacos">
+                                <div class="indppl-flex">
+                                    <div>
                                         <p style='margin-bottom: 35px;'></p>
-                                        <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
-                                        <label class="soil-need">Inches of soil needed</label>
+                                        <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots" value='<?php echo $pots["length"][$key]; ?>'>
+                                        <label>Length</label>
                                     </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <p style='margin-bottom: 35px;'></p>
+                                        <input type="number" min="0" id="pwidth_1" name="pots[width][]" placeholder="W&quot;" class="rounded-input2 pwidth" value='<?php echo $pots["width"][$key]; ?>'>
+                                        <label>Width</label>
+                                    </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <p style='margin-bottom: 35px;'></p>
+                                        <input type="number" min="0" id="pheight_1" name="pots[height][]" placeholder="H&quot;" class="height rounded-input2 pots" value='<?php echo $pots["height"][$key]; ?>'>
+                                        <label>Height</label>
+                                    </div>                            
+                                </div>
+                                <div class="indppl-flex ">
+                                    <div class=" empty-filled indppl-flex margin-right-0">
+                                        <input class="pots" type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
+                                        <label class="form-check-label" for="formCheck-1">Empty</label>
+                                    </div>
+                                    <div class=" empty-filled indppl-flex margin-right-0">
+                                        <input class="indppl-pots-partial pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
+                                        <label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                    </div>
+                                </div>
+                                <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
+                                    <p style='margin-bottom: 35px;'></p>    
+                                    <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots" value='<?php echo $pots["need"][$key]; ?>'>
+                                    <label class="soil-need">Inches of soil needed</label>
                                 </div>
                             </div>
-                        </div> 
-                        <?php
-                        $return_bed .= ob_get_clean();
-                    }
-                    echo $return_bed;
-                    ?>
-                </div>
-                <div class="row">
-                        <div class="col">
-                            <p id="rb_add" class="cursor">+ Add More</p>
+                        </div>
+                        <div class="row">
+                            <div class="indppl-flex indppl-justify-center max-600">
+                                
+                                
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <?php
+                    $return .= ob_get_clean();
+                }
+                echo $return;
+                ?>
             </div>
-
-            <div class="rbedBox_add"></div>
-
-
-            <?php } ?>
-            <div class="container footer">
-                <div class="row">
-                    <div class="col"><input type="image"  border="0" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/next-button.png" class="next-button">
-                    <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p>
+            <div class="row">
+                <div class="col">
+                    <p id="pot_add" class="cursor">+ Add More</p>
                 </div>
             </div>
         </div>
-    </form>
-    <script type="text/javascript">
+        <div class="row type-header-2  plants-form-header">
+            <div class="col">
+                <p id="bed"><strong>Raised bed Plantings</strong><br></p>
+            </div>
+        </div>
+        <div class=" ig-select container">
+            <div class="container">
+                <div class="indppl-app-split indppl-flex qty-plant-header">
+                    <div class="">
+                        <p>QTY</p>
+                    </div>
+                    <div class="">
+                        <p>Raised Bed Size</p>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="light-rule">
+
+            <div class="container">
+            <?php
+                if(!$beds){
+                    $beds = array('qty' => array(
+                        '1' => ''
+                    ));
+                }
+                foreach($beds['qty'] as $key => $value){
+                    ob_start();
+                    ?>
+                    <div class="rb-form pb-first">
+                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
+                            <div class="" >
+                                <p style='margin-bottom: 35px;'></p>
+                                <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
+                            </div>
+                            <div class="tacos">
+                                <div class="indppl-flex">
+                                    <div>
+                                        <p style='margin-bottom: 35px;'></p>
+                                        <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2" value='<?php echo $beds["length"][$key]; ?>'>
+                                        <label>Length</label>
+                                    </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <p style='margin-bottom: 35px;'></p>
+                                        <input type="number" min="0" name="beds[width][]" placeholder="W&quot;" class="rounded-input2" value='<?php echo $beds["width"][$key]; ?>'>
+                                        <label>Width</label>
+                                    </div>
+                                    <p class="by-the-by">x</p>
+                                    <div>
+                                        <p style='margin-bottom: 35px;'></p>
+                                        <input type="number" min="0" name="beds[height][]" placeholder="H&quot;" class="height rounded-input2" value='<?php echo $beds["height"][$key]; ?>'>
+                                        <label>Height</label>
+                                    </div>
+                                </div>
+                                <div class="indppl-flex ">
+                                    <div class="empty-filled indppl-flex margin-right-0">
+                                        <input class="pots" <?php if(!$beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" checked value="empty">
+                                        <label class="form-check-label" for="formCheck-1">Empty</label>
+                                    </div>
+                                    <div class="empty-filled indppl-flex margin-right-0">
+                                        <input class="indppl-beds-partial pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label" for="formCheck-2">Partially Filled</label>
+                                    </div>
+                                </div>
+                                <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
+                                    <p style='margin-bottom: 35px;'></p>
+                                    <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
+                                    <label class="soil-need">Inches of soil needed</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <?php
+                    $return_bed .= ob_get_clean();
+                }
+                echo $return_bed;
+                ?>
+            </div>
+            <div class="row">
+                    <div class="col">
+                        <p id="rb_add" class="cursor">+ Add More</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rbedBox_add"></div>
+
+
+        <?php } ?>
+        <div class="container footer">
+            <div class="row">
+                <div class="col"><input type="image"  border="0" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/next-button.png" class="next-button">
+                <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p>
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
 
 $(document).ready(function(){
     

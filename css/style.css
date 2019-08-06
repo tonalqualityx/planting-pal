@@ -177,6 +177,11 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
 .green-text, .green-color {
   color: #449040;
 }
+
+.light-green-text {
+  color: #9fcb3b;
+}
+
 .green-bg{
   background: #449040;
 }
@@ -2122,7 +2127,12 @@ body #logo-header {
   border-left: 1px solid #6a6e77;
   border-right: 1px solid #6a6e77;
   overflow: hidden;
+  position: relative;
   margin: auto;
+}
+
+#plants-form .type-header-2 {
+  text-align: left;
 }
 
 .ig-select {
@@ -2495,10 +2505,28 @@ GUAGE CSS
 PLANTS FORM
 ***********/
 
-.plant-form-header-image {
-  position: absolute;
+.plants-form-header h3 {
+  font-size: 1.5em;
+  margin-bottom: 0;
 }
 
+.plant-form-header-image {
+  position: absolute;
+  top: -15px;
+  max-height: calc(100% + 15px);
+  right: 0;
+  display: none;
+}
+
+/* big mobile */
+@media screen and (min-width: 640px){
+  .plants-form-header h3 {
+    font-size: 2em;
+  }
+  .plant-form-header-image {
+    display: default;
+  }
+}
 
 /* mobile to desktop */
 @media only screen and (min-width: 768px){
