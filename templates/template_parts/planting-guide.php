@@ -97,7 +97,7 @@ $store_link = str_replace("//", "", $website); ?>
                             }
                         }
                         if($partial){
-                            echo "<p>For partially filled {$term}, thoroughly blend the existing soil with the new soil.</p>";
+                            echo "<div><p>For partially filled {$term}, thoroughly blend the existing soil with the new soil.</p></div>";
                         }
                     }
                     

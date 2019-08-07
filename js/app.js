@@ -1961,7 +1961,7 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('click', '.next-button', function(e){
-        // e.preventDefault();
+        e.preventDefault();
         $('.next-button-error').remove();
         $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
         var pots_load = true;
@@ -2083,6 +2083,7 @@ jQuery(document).ready(function( $ ) {
         if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true)) || 
         (pots_load == true && (beds_empty == true || beds_load == true)) ||
         (beds_load == true && (pots_empty == true || pots_load == true) && over_height == false)){
+            $("#plants-form").submit();
         }else{
             e.preventDefault();
             if(!ground && pots_empty && beds_empty){
