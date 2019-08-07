@@ -27,7 +27,6 @@ if($type == 'ground'){ // If guide is in ground
                 case 'bag':
 
                     // If by bag then parse how much of the bag to use for this portion (based on bag size)
-
                     $cur_unit = $guide_rates[$type][$product['id']][$parse_by][$gid]['unit'];
                     $cur_amount = $guide_rates[$type][$product['id']][$parse_by][$gid]['amount'];
 

@@ -2185,8 +2185,9 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
     // Setup the basics
 
     $meta = get_post_meta($store);
-    $total = 4;
-    $sub = indppl_user_status(get_current_user_id(  ));
+    $store_owner = get_the_author_meta('ID', $store);
+    $total = 3;
+    $sub = indppl_user_status($store_owner);
     $pro = FALSE;
     if(in_array('paidaccountpro', $sub)){
         $pro = TRUE;
@@ -2196,6 +2197,7 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
     $containers = toolset_get_related_posts($store, 'store-container', ['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child'] );
     $apprates = json_decode($meta['wpcf-apprates'][0], TRUE);
     $bar = '';
+
 
     $steps = array();
 

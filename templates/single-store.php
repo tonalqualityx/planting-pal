@@ -289,11 +289,18 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
         $brand = get_the_terms( $key, 'brand' );
         $brand = $brand[0]->name;
         $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
+        $store_packages = toolset_get_related_posts($storeid, 'store-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id']);
         $normalized_packs = array();
-
+        $stocked_packages = array();
+        
+        foreach($packages as $package){
+            if(in_array($package,$store_packages)){
+                $stocked_packages[] = $package;
+            }
+        }
         // Create a conversion array and fill it with all the package sizes for conversion
         $convert = array();
-        foreach($packages as $package) {
+        foreach($stocked_packages as $package) {
             $amount = get_post_meta($package, 'wpcf-size', TRUE);
             $unit = get_post_meta($package, 'wpcf-unit', TRUE);
             if($unit == 'each') {
