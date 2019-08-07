@@ -312,6 +312,7 @@ if ($storeid == '') {
         <div class="container footer">
             <div class="row">
                 <div class="col"><a href='#' class="indppl-button next-button">NEXT</a>
+                <input type="submit" id="plants-form-submit" class="hide">
                 <!-- <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p> -->
             </div>
         </div>

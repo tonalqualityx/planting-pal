@@ -972,6 +972,10 @@ function pp_store_products(){
     }else if(isset($_POST['store_id'])){
         $store_id = $_POST['store_id'];
     }
+
+    $store_owner = get_the_author_meta('ID', $store_id);
+    $stati       = indppl_user_status($store_owner);
+    $pro         = in_array('paidaccountpro', $stati) ? true : false;
     // var_dump($store_id);
     $apprates = indppl_apprates($store_id);
     ?>
@@ -984,35 +988,39 @@ function pp_store_products(){
             </div>
             <a href="#" class='indppl-add-product-btn indppl-btn' data-type='ground'>+ Add Product</a>
 
-            <h3 class='indppl-products-title indppl-dark-green'>Pot Plantings</h3>
-            <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for pot planting recommendations. For this section, be sure to add all the products before adjusting application rates.</p>
-            <div class='indppl-product-list'>
-                <?php echo indppl_get_current_products("pots"); ?>
-            </div>
-            <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='pots'>+ Add Product</a>
-            <?php
-            // var_dump($apprates);
-            if(count($apprates['pots']) > 0){
-                ?>
-                <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='pots'>Application rates</a>
-                <?php
-            }
-            ?>
+            <?php if($pro){ ?>
 
-            <h3 class='indppl-products-title indppl-dark-green'>Raised Bed Plantings</h3>
-            <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for raised bed planting recommendations. For this section, be sure to add all the products before adjusting application rates.</p>
-            <div class='indppl-product-list'>
-                <?php echo indppl_get_current_products("beds"); ?>
-            </div>
-            <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='beds'>+ Add Product</a>
-            <?php
-            // var_dump($apprates);
-            if(count($apprates['beds']) > 0){
-                ?>
-                <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='beds'>Application rates</a>
+                <h3 class='indppl-products-title indppl-dark-green'>Pot Plantings</h3>
+                <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for pot planting recommendations. For this section, be sure to add all the products before adjusting application rates.</p>
+                <div class='indppl-product-list'>
+                    <?php echo indppl_get_current_products("pots"); ?>
+                </div>
+                <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='pots'>+ Add Product</a>
                 <?php
-            }
-            ?>
+                // var_dump($apprates);
+                if(count($apprates['pots']) > 0){
+                    ?>
+                    <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='pots'>Application rates</a>
+                    <?php
+                }
+                ?>
+
+                <h3 class='indppl-products-title indppl-dark-green'>Raised Bed Plantings</h3>
+                <p class="indppl-products-instructions">Add, edit & delete your 'ingredient list' for raised bed planting recommendations. For this section, be sure to add all the products before adjusting application rates.</p>
+                <div class='indppl-product-list'>
+                    <?php echo indppl_get_current_products("beds"); ?>
+                </div>
+                <a href="#" class='indppl-add-product-pots-btn indppl-btn' data-type='beds'>+ Add Product</a>
+                <?php
+                // var_dump($apprates);
+                if(count($apprates['beds']) > 0){
+                    ?>
+                    <a href="#" class='indppl-application-rates-pots-btn indppl-btn' data-type='beds'>Application rates</a>
+                    <?php
+                }
+                ?>
+                
+            <?php } ?>
         </div>
     <?php
 }
@@ -1023,6 +1031,8 @@ function indppl_store_guides(){
     $store = htmlspecialchars($_GET['store-id']);
     $store_owner = get_the_author_meta('ID', $store);
     $stati = indppl_user_status($store_owner);
+    $pro = in_array('paidaccountpro', $stati) ? true : false;
+
     $pots_text = "Pot Planting Guide";
     $beds_text = "Raised Bed Planting Guide";
     

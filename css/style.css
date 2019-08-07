@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lobster|Open+Sans&display=swap');
 
 /*********
   FONTS
@@ -771,11 +771,20 @@ span.padding-right-5{
   text-decoration: none;
   font-size: 1.2em;
 }
-.next-button{
+.next-button,
+.next-button:focus,
+.next-button:active,
+input[type=submit].next-button:focus,
+input[type=submit].next-button:active{
   max-width: 50vw;
   width: 300px;
   text-align: center;
 }
+
+input[type=submit].next-button:hover{
+  
+}
+
 .next-button-bottom{
   position: absolute!important;
   bottom: -90px!important;

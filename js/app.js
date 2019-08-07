@@ -1961,7 +1961,7 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('click', '.next-button', function(e){
-        // e.preventDefault();
+        e.preventDefault();
         $('.next-button-error').remove();
         $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
         var pots_load = true;
@@ -2083,6 +2083,7 @@ jQuery(document).ready(function( $ ) {
         if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true)) || 
         (pots_load == true && (beds_empty == true || beds_load == true)) ||
         (beds_load == true && (pots_empty == true || pots_load == true) && over_height == false)){
+            $("#plants-form").submit();
         }else{
             e.preventDefault();
             if(!ground && pots_empty && beds_empty){
@@ -2982,35 +2983,6 @@ jQuery(document).ready(function( $ ) {
         });
     }
 
-    function monitorProgress(store){
-        var store = store;
-
-        $(document).ajaxComplete(function (event, jqxhr, settings){
-            // console.log(settings);
-            // console.log(jqxhr);
-            // console.log(event);
-            var args = settings.data;
-            if(args.search('stopAjaxComplete' ) < 0){
-                $(".log").text("Triggered ajaxComplete handler.");
-                // console.log(store);
-                jQuery.ajax({
-                    url:indppl_ajax.ajaxurl,
-                    dataType: 'text',
-                    method: 'POST',
-                    data: {
-                        action: 'indppl_store_progress_bar_ajax',
-                        store_id: store,
-                        stopAjaxComplete : true,
-                    },
-                    type: 'POST',
-                    success: function(results){
-                        $('.indppl-progress-container').html(results);
-                    }
-                });
-            }
-        });
-    }
-
     function containerSubmit(){
         indpplAddLoading();
         $first_time = $('.ind-first-time').length;
@@ -3149,3 +3121,32 @@ jQuery(document).ready(function( $ ) {
     }
 
 });
+
+function monitorProgress(store) {
+    var store = store;
+
+    jQuery(document).ajaxComplete(function (event, jqxhr, settings) {
+        // console.log(settings);
+        // console.log(jqxhr);
+        // console.log(event);
+        var args = settings.data;
+        if (args.search('stopAjaxComplete') < 0) {
+            jQuery(".log").text("Triggered ajaxComplete handler.");
+            // console.log(store);
+            jQuery.ajax({
+                url: indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_store_progress_bar_ajax',
+                    store_id: store,
+                    stopAjaxComplete: true,
+                },
+                type: 'POST',
+                success: function (results) {
+                    jQuery('.indppl-progress-container').html(results);
+                }
+            });
+        }
+    });
+}
