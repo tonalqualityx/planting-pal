@@ -61,71 +61,108 @@ $store_link = str_replace("//", "", $website); ?>
     </div>
     <div class="planting-guide-header indppl-flex indppl-justify-center">
         <img src="">
-        <h1 style="text-align: center;"><?php echo $type_label; ?>Planting Guide</h1>
+        <h1 class="lobster" style="text-align: center;"><?php echo $type_label; ?>Planting Guide</h1>
     </div>
     <div class="planting-guide-content">
         <div class='guide-product-instructions'>
-            <?php foreach($guide_options as $step){
-                echo "<h3 class='orange-text'>{$step['title']}</h3>";
-                echo "<div class='guide-step-instructions'>{$step['description']}</div>";
-                if(($type == 'pots' || $type == 'beds') && $step['step'] == 1  ){
-                    $partial = false;
-                    foreach($plants[$type]['need'] as $cur_need){
-                        if($cur_need != '' && $cur_need != 0){
-                            $partial = true;
-                            $term = $type;
-                            if($type == 'beds') {
-                                $term = 'raised beds';
+            <?php 
+            $i = 0;
+            foreach($guide_options as $step){
+                $step_title = explode(":", $step['title']);
+                if(isset($step_title[1])){
+                    $step_num = $step_title[0] . ":";
+                    $step_title_text = $step_title[1];
+                } else {
+                    $step_num = "Step {$i}:";
+                    $step_title_text = $step_title[0];
+                }
+                echo "<div class='guide-step-section'>";
+                    echo "<div class='green-header indppl-dark-green-bg'>";
+                    echo "<h4 class='white-text'>{$step_num}</h4>";
+                    echo "<h3 class='white-text'>{$step_title_text}</h3>";
+                    echo "</div>";
+                    if($step['image'] && $step['image'] != ''){
+                        echo "<img class='indppl-step-img' src='{$step['image']}'></img>";
+                    }
+                    echo "<div class='guide-step-instructions'><p>{$step['description']}</p></div>";
+                    if(($type == 'pots' || $type == 'beds') && $step['step'] == 1  ){
+                        $partial = false;
+                        foreach($plants[$type]['need'] as $cur_need){
+                            if($cur_need != '' && $cur_need != 0){
+                                $partial = true;
+                                $term = $type;
+                                if($type == 'beds') {
+                                    $term = 'raised beds';
+                                }
                             }
                         }
+                        if($partial){
+                            echo "<p>For partially filled {$term}, thoroughly blend the existing soil with the new soil.</p>";
+                        }
                     }
-                    if($partial){
-                        echo "<p>For partially filled {$term}, thoroughly blend the existing soil with the new soil.</p>";
-                    }
-                }
-                if($step['image'] && $step['image'] != ''){
-                    echo "<img class='indppl-step-img' src='{$step['image']}'></img>";
-                }
+                    
+                    echo "<div><p><strong>Product(s) used in this step:</strong></p></div>";
 
-                // THIS PART SHOULD BE A SHORTCODE THAT GETS CALLED EVERY TIME
-                // indppl_guide_products($step['products']);
-                // var_dump($step['products']);
-                // $step_products = array();
-                // foreach($step['products'] as $product){
-                //     // var_dump($product);
-                //     $step_products[] = array('product' => $product['id'], 'label' => 'test', 'instructions' => $product['instructions']);
-                // }
-                // indppl_guide_products($step_products);
-                foreach($step['products'] as $product){
-                    $prod_name = get_the_title($product['id']);
-                    $brands       = get_the_terms($product['id'], 'brand');
-                    $brand        = $brands[0];
-                    $sponsorship  = toolset_get_related_post($product['id'], 'sponsorship-product');
-                    $image        = get_post_meta($product['id'], 'wpcf-product-image', TRUE);
-                    $sponsor_copy = '';?>
-                    <div class='indppl-flex indppl-align-center guide-product-template'>
-                        <?php if ($sponsorship) {
-                        $sponsor_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
-                        $sponsor_copy  = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
-                        $sponsor_link  = get_post_meta($sponsorship, 'wpcf-sponsor-url', TRUE);
-                        $image         = $sponsor_image; ?>
-                        <?php }
-                        if ($image && $image != '') {?>
-                            <div class='product-guide-image'><img src="<?php echo $image; ?>" alt="<?php echo $prod_title; ?>"></div>
-                        <?php }?>
-                        <div class='product-guide-step-instructions'>
-                            <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $prod_name; ?></span></span> <?php echo $product["instructions"]; ?>
-                            <?php if($pro){ include INDPPL_ROOT_PATH . '/templates/guides/apprates.php'; } ?>
+                        $pi = 0;
+                        foreach($step['products'] as $product){
+                            if($pi){ ?>
+                                <div>
+                                    <hr class="product-separator" />
+                                </div>
+                            <?php }
+                            $pi++;
+                            $prod_name = get_the_title($product['id']);
+                            $brands       = get_the_terms($product['id'], 'brand');
+                            $brand        = $brands[0];
+                            $sponsorship  = toolset_get_related_post($product['id'], 'sponsorship-product');
+                            $image        = get_post_meta($product['id'], 'wpcf-product-image', TRUE);
+                            $sponsor_copy = '';?>
+                        <div class='indppl-flex indppl-align-center guide-product-template'>
+                            <?php if ($sponsorship) {
+                                $sponsor_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
+                                $sponsor_copy  = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
+                                $sponsor_link  = get_post_meta($sponsorship, 'wpcf-sponsor-url', TRUE);
+                                $image         = $sponsor_image; ?>
+                            
+                                <div class='product-guide-image'>
+                                    <img src="<?php echo $image; ?>" alt="<?php echo $prod_title; ?>">
+                                </div>
 
-                            <?php if ($sponsorship) {?>
-                                <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a> <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
-                                <!-- <p>
-                                </p> -->
                             <?php }?>
+
+                            <div class='product-guide-step-instructions'>
+                                <div class='product-name'>
+                                    <div class='brand'><?php echo $brand->name; ?></div> 
+                                    <div class='strong product'><p><?php echo $prod_name; ?></p></div>
+                                </div> 
+                                <?php echo $product["instructions"]; ?>
+                                <?php if($pro){ 
+                                    include INDPPL_ROOT_PATH . '/templates/guides/apprates.php'; 
+                                    echo "</p>";
+                                }
+                                
+                                if($sponsorship){ ?>
+                                    <p>
+                                        <a href="#" class='sponsor-link orange-text'>+ Learn more about this product</a>
+                                        <span class="product-name hide">
+                                            <span class="brand"><?php echo $brand->name; ?></span>
+                                            <span class="product"><?php echo $prod_name; ?></span>
+                                        </span>
+                                        <?php 
+                                        if (!preg_match('^(http|https):\/\/', $sponsor_link)) {
+                                            $sponsor_url = "http://" . $sponsor_link;
+                                        } else {
+                                            $sponsor_url = preg_replace('^(http|https):\/\/', 'http://', $sponsor_link);
+                                        } ?>
+                                        <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_url; ?>' target="_blank">Learn More...</a></span> 
+                                    </p>
+                                <?php } ?>
+                            </div>
+                            
                         </div>
-                        
-                    </div>
-                <?php }
+                    <?php }
+                echo "</div>";
+                $i++;
             } ?>
         </div>
     </div>
