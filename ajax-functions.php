@@ -870,15 +870,19 @@ function indppl_save_product_ajax(){
             // $first_package['unit'] = unit of first package
             // $console = $product_unit;
             if($product_unit[$key]['value'] == 'cpp'){
-                $app_rate = $value['value'] * $first_package['num'];
+                $app_rate = intval($value['value']) * intval($first_package['num']);
             }else{
-                $app_rate = $first_package['num'] / $value['value'];
+                if(!$value['value'] == 0){
+                    $app_rate = $first_package['num'] / $value['value'];
+                }else{
+                    $app_rate = 0;
+                }
             }
-            // $console = $app_rate;
+            $console = $app_rate;
             if($app_rate == 0){
                 $args[$product_id]['bag'][$value['name']] = array(
                     'amount' => $app_rate,
-                    'unit' => 0,
+                    'unit' => $first_package['unit'],
                 );
             }else{
                 $args[$product_id]['bag'][$value['name']] = array(
@@ -973,11 +977,11 @@ function indppl_save_product_ajax(){
                 }
             }
         }
-        $console = $update;
+        // $console = $update;
     }else{
         $old_update = get_post_meta($store_id, 'wpcf-apprate-update', true);
         $old_update = json_decode($old_update, true);
-        $console = $old_update;
+        // $console = $old_update;
         $old_update[$product_id] = false;
     
         update_post_meta($store_id, 'wpcf-apprate-update', json_encode($old_update));
@@ -2145,6 +2149,102 @@ function indppl_update_bag_app_rates_ajax(){
 }
 add_action( 'wp_ajax_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax' );
 add_action('wp_ajax_nopriv_indppl_update_bag_app_rates_ajax', 'indppl_update_bag_app_rates_ajax');
+
+function indppl_update_bag_app_rates_single_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['val'])){
+        $val = $_POST['val'];
+    }
+    if(isset($_POST['ppc'])){
+        $ppc = $_POST['ppc'];
+    }
+    if(isset($_POST['product_num'])){
+        $product_num = $_POST['product_num'];
+    }
+    if(isset($_POST['product_unit'])){
+        $product_unit = $_POST['product_unit'];
+    }
+    if(isset($_POST['cont_id'])){
+        $cont_id = $_POST['cont_id'];
+    }
+    if(isset($_POST['package_array'])){
+        $package_array = $_POST['package_array'];
+    }
+    if($val == 0){
+        $app_rate = 0;
+    }else{
+        $app_rate = $product_num / $val;
+    }
+
+    $args[$product_id]['bag'][$cont_id] = array(
+        'amount' => $app_rate,
+        'unit' => $product_unit,
+    );
+    $save = indppl_apprates($store_id, $type, $args, true);
+
+    $bag = 1 / $val;
+    $package_return_array = [];
+    foreach($package_array as $key => $value){
+        if($value['unit'] != $product_unit){
+            $norm_args = array(
+                array(
+                    'unit' => $value['unit'],
+                    'amount' => intval($value['num']),
+                ),
+            );
+            $normal = indppl_normalize($norm_args, $product_unit);
+            $num = $normal[0]['standard-amount'];
+        }else{
+            $num = $value['num'];
+        }
+        $package_num = $product_num / $num;
+        $package_num = $val / $package_num;
+        if($package_num < 1){
+            if($package_num != 0){
+                $package_num = 1 / $package_num;
+            }
+            $package_unit = '#bags / plant';
+            $class = 'grey-text';
+            $bag_type = 'cpp';
+        }else{
+            $package_unit = '#plants / bag';
+            $class = 'indppl-dark-green';
+            $bag_type = 'ppc';
+        }
+        $package_num = round($package_num, 2);
+        ob_start();
+        ?>
+            <h4 class="indppl-bag-rate-num <?php echo $class; ?>" data-ppc="<?php echo $bag_type; ?>" data-num="<?php echo $package_num; ?>"><?php echo $package_num; ?></h4>
+            <p class="indppl-bag-rate-unit <?php echo $class; ?>" data-unit="<?php echo $bag_type; ?>"><?php echo $package_unit; ?></p>
+        <?php
+        $package_return_array[] = ob_get_clean();
+    }
+    $return_array = array(
+        'package' => $package_return_array,
+        'bag' => round($bag, 2),
+    );
+    echo json_encode($return_array);
+    die();
+}
+add_action( 'wp_ajax_indppl_update_bag_app_rates_single_ajax', 'indppl_update_bag_app_rates_single_ajax' );
+add_action('wp_ajax_nopriv_indppl_update_bag_app_rates_single_ajax', 'indppl_update_bag_app_rates_single_ajax');
 
 function indppl_get_sponsorship(){
     if(isset($_POST['version_check'])){

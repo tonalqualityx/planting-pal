@@ -714,7 +714,6 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 // console.log(type);
-
                 if(type == 'pots'){
                     getProductInfo();
                     $('.slide-in-products-container').removeClass('left-0');
@@ -728,7 +727,7 @@ jQuery(document).ready(function( $ ) {
                     // console.log(e);
                     array = JSON.parse(e);
                     // console.log(array);
-                    // console.log(array['console']);
+                    console.log(array['console']);
                     
                     if(array['pack_id_array']){
                         var count = 0;
@@ -2450,6 +2449,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('mousedown', '.indppl-bag-controls-pos', function(e){handleMouseDown(e, $(this));});
     $('body').on('mouseup', '.indppl-bag-controls-pos', function(e){handleMouseUp(e, $(this));});
     $('body').on('mouseout', '.indppl-bag-controls-pos', function(e){handleMouseout(e, $(this));});
+    // $('body').on('mouseout', '.bag-control-row', function(e){updateBagAppRates(e.find('.some-kind-of-wonderful').first())});
 
     function handleMouseDown(e, elem){
         e.preventDefault();
@@ -2502,7 +2502,7 @@ jQuery(document).ready(function( $ ) {
         isDown=0;
         hold_end = true;
         load_app_rates = setTimeout(function(){
-            updateBagAppRates($(elem).parent().parent().find('.some-kind-of-wonderful').first());
+            updateBagAppRatesSingle($(elem).parent().parent().find('.some-kind-of-wonderful').first());
         }, 2000);
     }
 
@@ -2934,12 +2934,12 @@ jQuery(document).ready(function( $ ) {
             val = 1;
             $(elem).parent().children().val(1);
         }
-        console.log('--------');
-        console.log(elem);
-        console.log(cont_id);
-        console.log(product_num);
-        console.log(product_unit);
-        console.log(val);
+        // console.log('--------');
+        // console.log(elem);
+        // console.log(cont_id);
+        // console.log(product_num);
+        // console.log(product_unit);
+        // console.log(val);
         jQuery.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -2977,6 +2977,70 @@ jQuery(document).ready(function( $ ) {
                     });
                     // console.log(unit);
                 });
+                indpplDelSmallLoading();
+            }
+        });
+    }
+
+    function updateBagAppRatesSingle(elem){
+        var elem = elem;
+        var load = indpplAddSmallLoading();
+        $(elem).parent().parent().append(load);
+        var store_id = $('#store-id').val();
+        var type = $('#indppl-modal-product-type').val();
+        var product_id = $('#product-create-product').val();
+        var val = $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val();
+        var ppc = $(elem).parent().find('.indppl-product-create-chart-bag-unit').val();
+        var product_num = $('#indppl-how-much-header').first().data('num');
+        var product_unit = $('#indppl-how-much-header').first().data('unit');
+        var cont_id = $(elem).parent().parent().find('.bag-apprates-container-title').data('id');
+        var version_check = 1.0;
+        var package_array = [];
+        $('.bag-apprates-title').each(function(){
+            var num = $(this).data('num');
+            var unit = $(this).data('unit');
+            package_array.push({'num':num, 'unit':unit});
+        });
+        if(val == null || !$.isNumeric(val)){
+            val = 1;
+            $(elem).parent().children().val(1);
+        }
+        console.log('--------');
+        console.log(elem);
+        console.log(cont_id);
+        console.log(product_num);
+        console.log(product_unit);
+        console.log(val);
+        console.log(package_array);
+        jQuery.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_update_bag_app_rates_single_ajax',
+                type: type,
+                store_id: store_id,
+                product_id: product_id,
+                val: val,
+                ppc: ppc,
+                product_num: product_num,
+                product_unit: product_unit,
+                cont_id: cont_id,
+                package_array: package_array,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function(e){
+                var array = $.parseJSON(e);
+                console.log(array);
+                $(elem).parents('.bag-control-row').find('.indppl-bag-rate-num:eq(1)').text(array['bag']);
+                $(elem).parents('.bag-control-row').find('.indppl-bag-rate-num:eq(1)').data('num', array['bag']);
+                
+                $(elem).parents('.bag-control-row').find('.indppl-grey-package').each(function(index, value){
+                    console.log(index);
+                    $(this).html(array['package'][index]);
+                });
+                
                 indpplDelSmallLoading();
             }
         });

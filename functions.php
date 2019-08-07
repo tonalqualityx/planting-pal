@@ -1382,6 +1382,11 @@ function update_bag_package_table($store_id, $product_id, $type){
         'post_id',
         'child'
     );
+    foreach($order_array as $key => $value){
+        if(!in_array($value, $store_related)){
+            unset($order_array[$key]);
+        }
+    }
     $test = array('parent' => array($product_id), 'child' => $containers);
     $role = array('role_to_return' => 'all');
     $pro_container = toolset_get_related_posts(
@@ -1513,7 +1518,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         $default = get_post_meta($id, 'wpcf-default-container', true);
         // $app_qty_array = [];
         ?>
-        <tr>
+        <tr class='bag-control-row'>
             <td class='bag-apprates-container-title' data-id='<?php echo $id; ?>'>
                 <?php echo $title; ?>
             </td>
@@ -1525,9 +1530,15 @@ function update_bag_package_table($store_id, $product_id, $type){
                 $largest_package = '';
                 
                 foreach($order_array as $knife => $pack_id){
-                    ?>
-                    <td>
-                    <?php
+                    if($knife != $first_key){
+                        ?>
+                        <td class='indppl-grey-package'>
+                        <?php
+                    }else{
+                        ?>
+                        <td>
+                        <?php
+                    }
                     foreach($pro_container as $k => $v){
                         $items = array(
                             array(
@@ -1598,7 +1609,16 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 $color_class = 'color-black';
                             }
                             if($knife != $first_key){
-                                if($qty){
+                                if($app_qty >= 1){
+                                    ?>
+                                    <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
+                                    <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
+                                    <?php
+                                }else if($app_qty < 1 && $app_qty > 0){
+                                    $app_qty = round(1 / $app_qty, 2);
+                                    $ppc_text = '#bags / plant';
+                                    $color_class = 'grey-text';
+                                    $pp_dilema = 'cpp';
                                     ?>
                                     <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
                                     <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
@@ -1736,7 +1756,17 @@ function update_bag_package_table($store_id, $product_id, $type){
                             $color_class = 'color-black';
                         }
                         if($knife != $first_key){
-                            if($qty){
+                            // echo $app_qty;
+                            if($app_qty >= 1){
+                                ?>
+                                <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
+                                <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
+                                <?php
+                            }else if($app_qty < 1 && $app_qty > 0){
+                                $app_qty = round(1 / $app_qty, 2);
+                                $ppc_text = '#bags / plant';
+                                $color_class = 'grey-text';
+                                $pp_dilema = 'cpp';
                                 ?>
                                 <h4 class='indppl-bag-rate-num <?php echo $color_class; ?>' data-ppc='<?php echo $pp_dilema; ?>' data-num='<?php echo $app_qty; ?>'><?php echo $app_qty; ?></h4>
                                 <p class='indppl-bag-rate-unit <?php echo $color_class; ?>' data-unit='<?php echo $pp_dilema; ?>'><?php echo $ppc_text; ?></p>
