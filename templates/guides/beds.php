@@ -13,7 +13,7 @@ $saved_data = str_replace(array("\'", "u201d", "u2019"), array("'", '\"', "'"), 
 $saved_data = json_decode($saved_data);
 
 $store_owner = get_the_author_meta('ID', $store);
-$sub         = indppl_user_status();
+$sub         = indppl_user_status($store_owner);
 $pro         = in_array('paidaccountpro', $sub) ? true : false;
 
 $saved_defaults = array();

@@ -2983,35 +2983,6 @@ jQuery(document).ready(function( $ ) {
         });
     }
 
-    function monitorProgress(store){
-        var store = store;
-
-        $(document).ajaxComplete(function (event, jqxhr, settings){
-            // console.log(settings);
-            // console.log(jqxhr);
-            // console.log(event);
-            var args = settings.data;
-            if(args.search('stopAjaxComplete' ) < 0){
-                $(".log").text("Triggered ajaxComplete handler.");
-                // console.log(store);
-                jQuery.ajax({
-                    url:indppl_ajax.ajaxurl,
-                    dataType: 'text',
-                    method: 'POST',
-                    data: {
-                        action: 'indppl_store_progress_bar_ajax',
-                        store_id: store,
-                        stopAjaxComplete : true,
-                    },
-                    type: 'POST',
-                    success: function(results){
-                        $('.indppl-progress-container').html(results);
-                    }
-                });
-            }
-        });
-    }
-
     function containerSubmit(){
         indpplAddLoading();
         $first_time = $('.ind-first-time').length;
@@ -3150,3 +3121,32 @@ jQuery(document).ready(function( $ ) {
     }
 
 });
+
+function monitorProgress(store) {
+    var store = store;
+
+    jQuery(document).ajaxComplete(function (event, jqxhr, settings) {
+        // console.log(settings);
+        // console.log(jqxhr);
+        // console.log(event);
+        var args = settings.data;
+        if (args.search('stopAjaxComplete') < 0) {
+            jQuery(".log").text("Triggered ajaxComplete handler.");
+            // console.log(store);
+            jQuery.ajax({
+                url: indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_store_progress_bar_ajax',
+                    store_id: store,
+                    stopAjaxComplete: true,
+                },
+                type: 'POST',
+                success: function (results) {
+                    jQuery('.indppl-progress-container').html(results);
+                }
+            });
+        }
+    });
+}
