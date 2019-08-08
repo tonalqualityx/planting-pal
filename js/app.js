@@ -2652,7 +2652,7 @@ jQuery(document).ready(function( $ ) {
         (function($){
             var user_status = $('#user-status').val();
             if(user_status != 'paidaccountpro'){
-                $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="/garden-center-pricing/" class="indppl-button up-sell-link">Upgrade Now!</a></div></div>');
+                $('.indppl-containers-table').prepend('<div class="greyed-out-form"><div class="up-sell-overlay"><h2 class="up-sell-title">Upgrade to Pro to gain these features and more!</h2><a href="#indppl-update-sub" class="indppl-button up-sell-link mepr-open-upgrade-popup">Upgrade Now!</a></div></div>');
             }
         })(jQuery);
     }
@@ -3214,3 +3214,40 @@ function monitorProgress(store) {
         }
     });
 }
+
+var indpplMembrInitialized = false;
+
+function indpplMembrModalInit(){
+    
+    var indpplMembrInitialized = true;
+
+    $('.mepr-open-cancel-confirm').magnificPopup({
+      type: 'inline',
+      closeBtnInside: false
+    });
+  
+    $('.mepr-confirm-no').on('click', function(e) {
+      $.magnificPopup.close();
+    });
+  
+    $('.mepr-confirm-yes').on('click', function(e){
+      location.href = $(this).data('url');
+    });
+  
+    $('.mepr-open-upgrade-popup').magnificPopup({
+      type: 'inline',
+      closeBtnInside: false
+    });
+  
+    $('.mepr-upgrade-cancel').on('click', function(e) {
+      $.magnificPopup.close();
+    });
+  
+    $('.mepr-upgrade-buy-now').on('click', function(e){
+      var id = $(this).data('id');
+      var selector = 'select#mepr-upgrade-dropdown-' + id;
+      var url = $(selector).val();
+      location.href = url;
+    });
+}
+  

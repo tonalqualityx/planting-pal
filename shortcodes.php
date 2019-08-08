@@ -569,6 +569,7 @@ function pp_store_management(){
         <?php
     }
     
+    indppl_membr_modal_init();
     
     $return = ob_get_clean();
     
