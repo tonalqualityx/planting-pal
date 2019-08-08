@@ -2296,8 +2296,10 @@ jQuery(document).ready(function( $ ) {
 
     });
 
-    $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-password-strength-area');
-    $('#mepr_coupon_code-22').remove();
+    if (window.location.pathname == "/register/free-membership/"){
+        $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-form-row.mepr_email');
+        $('#mepr_coupon_code-22').remove();
+    }
 
     $('body').on('click', '.indppl-apprate-primary-radio', function(){
         $('.apprate-circle-fill').addClass('hide');
