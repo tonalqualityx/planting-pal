@@ -2714,6 +2714,21 @@ PLANTS FORM
   margin-top: 190px!important;
 }
 
+/***********
+Uprade Modal
+***********/
+
+body .mfp-wrap {
+  z-index: 99999;
+}
+
+#indppl-update-sub {
+  background: white;
+  padding: 15px;
+  max-width: 1200px;
+  margin: auto;
+}
+
 /* big mobile */
 @media screen and (min-width: 640px){
   .plants-form-header h3 {

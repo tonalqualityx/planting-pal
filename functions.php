@@ -2651,3 +2651,31 @@ function check_sponsorship($product_id){
 
     return $response;
 }
+
+function indppl_membr_modal_init(){ ?>
+    <div id="indppl-update-sub" class="mepr-white-popup mfp-hide">
+        <center>
+            <div class="mepr-upgrade-txn-text">
+                Please select a new plan            </div>
+            <br>
+            <div>
+                <select id="mepr-upgrade-dropdown-2" class="mepr-upgrade-dropdown">
+                                                                                                                            <option value="http://plantpal.com/register/paid-membership-annual__trashed/">Paid Membership Annual (1 month for free then $100 / month)</option>
+                                                                                                            <option value="http://plantpal.com/register/paid-membership-pro-annual__trashed/">Paid Membership Pro Annual (1 month for free then $300 / month)</option>
+                                                </select>
+            </div>
+            <br>
+            <div class="mepr-cancel-txn-buttons">
+                <button class="mepr-btn mepr-upgrade-buy-now" data-id="2">Select Plan</button>
+                <button class="mepr-btn mepr-upgrade-cancel">Cancel</button>
+            </div>
+        </center>
+    </div>
+    <script>
+        jQuery(document).ready(function( $ ) {
+            if(!indpplMembrInitialized){
+                indpplMembrModalInit();
+            }
+        });
+    </script>
+<?php }
