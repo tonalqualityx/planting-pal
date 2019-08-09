@@ -95,7 +95,7 @@
 
 <div id='keep-going-container' class="container">
     <div class='flex-basis-66'>
-        <form action="" method="post" enctype="text/plain" >
+        <form action="" id="get-planting-guide-form" method="post" enctype="text/plain" >
             <h3 class='lobster keep-going light-green-text'>Keep Going!</h3>
             <p class='light-green-text keep-going-text'>Get a step-by-step guide how to use these products when you get home</p>
             <input type="hidden" name="next-step" value="planting-guide">

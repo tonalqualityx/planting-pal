@@ -1289,6 +1289,11 @@ jQuery(document).ready(function( $ ) {
         $('#' + section).append(productsThisStep);
     }
 
+    $('#get-planting-guide-form').submit(function(e){
+        e.preventDefault();
+        $('#get-planting-guide').click();
+    });
+
     $('body').on('click', '#get-planting-guide', function(e){
         e.preventDefault();
         
