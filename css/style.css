@@ -123,16 +123,20 @@ a.orange-text:hover {
   border: none;
 }
 
-.orange-bg, .slide-in-products-container input[type=submit] {
-  background: #f26226;
-  color: white;
+.orange-bg, 
+.slide-in-products-container input[type=submit],
+body .mepr-white-popup .mepr-btn {
+  background: #f26226!important;
+  color: white!important;
 }
 
 .grey-bg {
   background: grey!important;
 }
 
-.indppl-btn, .slide-in-products-container input[type=submit] {
+.indppl-btn, 
+.slide-in-products-container input[type=submit],
+body .mepr-white-popup .mepr-btn {
   padding: 7px 15px;
   border-radius: 25px;
   display: inline-block;
@@ -142,9 +146,17 @@ a.orange-text:hover {
   border: none!important;
 }
 
-.indppl-btn:hover, .indppl-btn:active, .indppl-btn:visited, .product-create-submit:hover, .product-create-submit:hover, .slide-in-products-container input[type=submit]:hover, .slide-in-products-container input[type=submit]:focus, a.orange-bg:hover{
+.indppl-btn:hover, 
+.indppl-btn:active, 
+.indppl-btn:visited, 
+.product-create-submit:hover, 
+.product-create-submit:hover, 
+.slide-in-products-container input[type=submit]:hover,
+.slide-in-products-container input[type=submit]:focus,
+a.orange-bg:hover,
+body .mepr-white-popup .mepr-btn:hover{
   color: white;
-  background: #e25216;
+  background: #e25216!important;
   text-decoration: none!important;
   border: none;
 }
@@ -2717,6 +2729,11 @@ PLANTS FORM
 /***********
 Uprade Modal
 ***********/
+
+body #mepr-upgrade-txn-2 {
+  width: 90%!important;
+  max-width: 1200px!important;
+}
 
 body .mfp-wrap {
   z-index: 99999;
