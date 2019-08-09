@@ -2444,6 +2444,7 @@ jQuery(document).ready(function( $ ) {
     var hold_end = false;
     var timeout;
     var load_app_rates;
+    var current_change;
     requestAnimationFrame(watcher);
 
     $('body').on('mousedown', '.indppl-bag-controls-neg', function(e){handleMouseDown(e, $(this));});
@@ -2457,7 +2458,9 @@ jQuery(document).ready(function( $ ) {
     function handleMouseDown(e, elem){
         e.preventDefault();
         e.stopPropagation();
-        clearTimeout(load_app_rates);
+        if(current_change == elem){
+            clearTimeout(load_app_rates);
+        }
         current_button = $(elem);
         if($(elem).hasClass('indppl-bag-controls-neg')){
             timeout = setTimeout(function(){
@@ -2504,9 +2507,10 @@ jQuery(document).ready(function( $ ) {
         clearTimeout(timeout);
         isDown=0;
         hold_end = true;
-        load_app_rates = setTimeout(function(){
+        current_change = elem;
+        // load_app_rates = setTimeout(function(){
             updateBagAppRatesSingle($(elem).parent().parent().find('.some-kind-of-wonderful').first());
-        }, 2000);
+        // }, 1000);
     }
 
     function watcher(time){
@@ -2987,8 +2991,8 @@ jQuery(document).ready(function( $ ) {
 
     function updateBagAppRatesSingle(elem){
         var elem = elem;
-        var load = indpplAddSmallLoading();
-        $(elem).parent().parent().append(load);
+        // var load = indpplAddSmallLoading();
+        // $(elem).parent().parent().append(load);
         var store_id = $('#store-id').val();
         var type = $('#indppl-modal-product-type').val();
         var product_id = $('#product-create-product').val();
@@ -3044,7 +3048,7 @@ jQuery(document).ready(function( $ ) {
                     $(this).html(array['package'][index]);
                 });
                 
-                indpplDelSmallLoading();
+                // indpplDelSmallLoading();
             }
         });
     }

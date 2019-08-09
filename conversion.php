@@ -995,6 +995,7 @@ function getMass($in_value, $in_input, $in_output)
 // CONVERSION: DENSITY
 function getDensity($in_value, $in_output)
 {
+    // var_dump($in_value . ": " . $in_output);
     $pre_calc = getVolume("5", "cup", $in_output);
     return $pre_calc / $in_value;
 };
