@@ -2679,3 +2679,7 @@ function indppl_membr_modal_init(){ ?>
         });
     </script>
 <?php }
+
+function indppl_login_redirect($url, $request, $user){
+    
+}
