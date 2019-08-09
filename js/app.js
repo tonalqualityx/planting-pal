@@ -2296,7 +2296,7 @@ jQuery(document).ready(function( $ ) {
 
     });
 
-    if (window.location.pathname == "/register/free-membership/"){
+    if (window.location.pathname == "/register/free-membership/" || window.location.pathname == "/register/show-signup/"){
         $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-form-row.mepr_email');
         $('#mepr_coupon_code-22').remove();
     }
