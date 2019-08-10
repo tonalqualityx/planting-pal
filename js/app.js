@@ -1131,6 +1131,19 @@ jQuery(document).ready(function( $ ) {
         var target = theInput.data('target');
         $("#" + target).html(content);
         var products = theInput.parents('ul').data('products');
+
+        if($(this).parents('ul').data('step') == 1){
+            step = 0;
+            $('#alternative-guide-sections .alternate').each(function(){
+
+                step = $(this).data('step');
+                console.log(step);
+                var replace = $('.planting-guide-options[data-step=' + step + '] ul');
+                replace.after($(this));
+                $('#alternative-guide-sections').prepend(replace);
+            });
+        }
+
         productsToStep(products);
     });
 
@@ -1204,6 +1217,7 @@ jQuery(document).ready(function( $ ) {
         var custom = false;
         var image = '';
         var option = '';
+        var path = 'a';
         $('.planting-guide-options').each(function(){
             content = '';
             step = $(this).data('step');
@@ -1240,7 +1254,14 @@ jQuery(document).ready(function( $ ) {
             } else {
                 description = content;
             }
-            steps.push({title: title, step : step, description : description, products : products, image : image, option : option });
+            console.log(step + " " + option + " " + path);
+            if(step == '1' && option == 'b'){
+                console.log('made it');
+                path = 'b';
+            }
+            console.log(path);
+
+            steps.push({title: title, step : step, description : description, products : products, image : image, option : option, path : path });
         });
         
         $.ajax({
@@ -1258,6 +1279,9 @@ jQuery(document).ready(function( $ ) {
             }
         });
     });
+
+    // Alternate Guide Options
+
 
     function productsToStep(products){
         var productsThisStep = new Array();

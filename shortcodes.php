@@ -407,7 +407,6 @@ function pp_store_management(){
     $store_id = '';
     $user_id = get_current_user_id();
     $status = indppl_user_status($user_id);
-    var_dump($status);
     ob_start();
 
     if(in_array('showaccount', $status)){
