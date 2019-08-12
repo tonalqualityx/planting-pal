@@ -60,7 +60,7 @@ $store_link = str_replace("//", "", $website); ?>
         </div>
     </div>
     <div class="planting-guide-header indppl-flex indppl-justify-center">
-        <img src="">
+        <!-- <img src=""> -->
         <h1 class="lobster" style="text-align: center;"><?php echo $type_label; ?>Planting Guide</h1>
     </div>
     <div class="planting-guide-content">
