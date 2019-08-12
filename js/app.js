@@ -525,27 +525,39 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var size = $('#indpll-product-create-size-num').val();
         var unit = $('#product-create-standard-unit-add').val();
-        var create_new = true;
-        $('.indppl-product-create-size-btn').each(function(){
-            var this_size = $(this).data('size');
-            var this_unit = $(this).data('unit');
-            if(this_size == size && this_unit == unit){
-                create_new = false;
-            }
-        })
-        // console.log(create_new);
-        var weight = ['lb', 'oz', 'g', 'kg'];
-        if(create_new == true){
-            if($.inArray(unit, weight)){
-                $('.product-create-5-cups-container').hide();
+        console.log(unit);
+        if(unit == 'each' && size < 1 || unit == null){
+            if(unit == null){
+                $('.unit-required-text').remove();
+                $('.product-create-new-size-container').append('<p class="unit-required-text color-red">Select a unit for this package</p>')
             }else{
-                $('.product-create-5-cups-container').show();
+                $('.unit-required-text').remove();
+                $('.product-create-new-size-container').append('<p class="unit-required-text color-red">If Unit is Each the size must be 1 or greater</p>')
             }
-            var name = unit;
-            if(unit == 'qt-l' || unit == 'qt-d'){
-                name = 'Quart';
+        }else{
+            $('.unit-required-text').remove();
+            var create_new = true;
+            $('.indppl-product-create-size-btn').each(function(){
+                var this_size = $(this).data('size');
+                var this_unit = $(this).data('unit');
+                if(this_size == size && this_unit == unit){
+                    create_new = false;
+                }
+            })
+            // console.log(create_new);
+            var weight = ['lb', 'oz', 'g', 'kg'];
+            if(create_new == true){
+                if($.inArray(unit, weight)){
+                    $('.product-create-5-cups-container').hide();
+                }else{
+                    $('.product-create-5-cups-container').show();
+                }
+                var name = unit;
+                if(unit == 'qt-l' || unit == 'qt-d'){
+                    name = 'Quart';
+                }
+                $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-size-selected" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
             }
-            $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-size-selected" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
         }
         checkIfEach();
 
@@ -595,6 +607,9 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-form-required').remove();
         var required = true;
         // console.log($('.indppl-add-product-name').val());
+        // if($('.unit-required-text').length > 0){
+        //     required = false;
+        // }
         if($('.indppl-add-product-name').val() == ""){
             $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
             required = false;
@@ -2203,6 +2218,7 @@ jQuery(document).ready(function( $ ) {
                 type: 'POST',
                 success: function (response) {
                     $('#' + response + '-container-available').parents('.indppl-containers-row').remove();
+                    $('#' + response + '-container').parents('.indppl-containers-row').remove();
                     $('.del-container-message-container').remove();
                     indpplDelLoading();
                 }
