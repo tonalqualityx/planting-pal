@@ -41,6 +41,11 @@ $pro = in_array('paidaccountpro',$sub) ? true : false;
 $saved_defaults = array();
 $inst_checked = ' checked="checked" ';
 
+$products_list = array();
+foreach ($apprates['ground'] as $k => $v) {
+    $products_list[$k] = true;
+}
+
 // set checkmarks
 $check_box  = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
 $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
@@ -121,6 +126,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                         echo "</div>";
                         echo "<div><p><strong>Product(s) used in this step:</strong></p></div>";
                         echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
+                        $preload_prods = array();
                         if($saved_data[$sec]->products){
                             // var_dump($saved_data[$sec]->products);
                             $saved_prods = array();
@@ -130,9 +136,22 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                                     'instructions' => $saved_prod->instructions,
                                 );
                             }
+
+                            $preload_prods = $saved_prods;
                             
-                            indppl_guide_products($saved_prods);
+                        } else {
+                            foreach($products_list as $k => $v){
+                                $def_inst = get_post_meta($k, 'wpcf-step-' . $sec . '-instructions',TRUE);
+
+                                if($def_inst){
+                                    $preload_prods[] = array(
+                                        'product' => $k,
+                                        'instructions' => $def_inst,
+                                    );
+                                }
+                            }
                         }
+                        indppl_guide_products($preload_prods);
                     echo "</div>";
                 echo "</div>";
                 echo "</div>";
