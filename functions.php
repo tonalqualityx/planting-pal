@@ -4,6 +4,12 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 Collection of functions for the entire site.
  */
 
+function bmp_myme_types($mime_types){
+    $mime_types['bmp'] = 'image/bmp'; //Adding bmp extension
+    return $mime_types;
+}
+add_filter('upload_mimes', 'bmp_myme_types', 1, 1);
+
 function only_on_home(){
     ?>
         <script>
