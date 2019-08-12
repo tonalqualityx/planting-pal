@@ -7,8 +7,18 @@ $address1 = get_post_meta($store, 'wpcf-address1', TRUE);
 $address2 = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone = get_post_meta($store, 'wpcf-phone', TRUE);
 $email = get_post_meta($store, 'wpcf-email', TRUE);
+
 $website = get_post_meta($store, 'wpcf-weburl', TRUE);
-$website = $website;
+$show_website = false;
+if($website && $website != ''){
+    $show_website = truel;
+    if (!preg_match('^(http|https):\/\/', $website)) {
+        $url = "//" . $website;
+    } else {
+        $url = preg_replace('^(http|https):\/\/', '//', $website);
+    }
+    $website = $url;
+}
 
 $saved_data = get_post_meta($store, 'wpcf-planting-guide-ground-options', TRUE);
 $saved_data = str_replace(array("\'", "u201d","u2019"), array("'",'\"',"'"), $saved_data);
@@ -70,7 +80,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     if($email && $email != '') {
                         echo "<p>$email</p>";
                     }
-                    if($website && $website != '') {
+                    if($show_website) {
                         echo "<p><a href='{$website}'>$website</a></p>";
                     } ?>
         
@@ -78,48 +88,53 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
             </div>
         </div>
         <div class="planting-guide-header indppl-flex indppl-justify-center">
-            <img src="">
-            <h1 style="text-align: center;">Planting Guide</h1>
+            <!-- <img src=""> -->
+            <h1 class="lobster" style="text-align: center;">In Ground Planting Guide</h1>
         </div>
         <div class="planting-guide-content">
             <?php 
             $sec = 0;
             foreach($sections as $section => $options){
-                $format_section = str_replace(array(' ',':'), array('-',''), $section);
-                echo "<h3 class='orange-text' id='{$format_section}-header'>$section</h3>";
-                echo "<div id='$format_section' class='guide-step-instructions'><p>";
-                if($saved_data[$sec]){
-                    echo $saved_data[$sec]->description;
-                    $saved_defaults[$sec]['description'] = $saved_data[$sec]->description;
-                    $saved_defaults[$sec]['products'] = $saved_data[$sec]->products;    
-                } else {
-                    $saved_data[$sec]['description'] = '';
-                    echo $options['a-instructions'];
-                    if($options['a-image'] && $options['a-image'] != ''){
-                        echo "<img src='{$options['a-image']}' class='indppl-step-img'>";
-                    }
-                }
-                echo "</p>";
-                if($saved_data[$sec]->image){
-                    if($saved_data[$sec]->image && $saved_data[$sec]->image != ''){
-                        echo "<img src='{$saved_data[$sec]->image}' class='indppl-step-img'>";
-                    }
-                    $saved_defaults[$sec]['image'] = $saved_data[$sec]->image;
-                }
+                echo "<div class='guide-product-instructions'>";
+                    echo "<div class='guide-step-section'>";
+                        $format_section = str_replace(array(' ',':'), array('-',''), $section);
+                        echo "<div class='green-header indppl-dark-green-bg'><h4 class='white-text'>Step {$sec}:</h4><h3 class='white-text' id='{$format_section}-header'>$section</h3></div>";
+                        echo "<div id='$format_section' class='guide-step-instructions'><p>";
+                        if($saved_data[$sec]->image){
+                            if($saved_data[$sec]->image && $saved_data[$sec]->image != ''){
+                                echo "<img src='{$saved_data[$sec]->image}' class='indppl-step-img'>";
+                            }
+                            $saved_defaults[$sec]['image'] = $saved_data[$sec]->image;
+                        }
+                        if($saved_data[$sec]){
+                            echo $saved_data[$sec]->description;
+                            $saved_defaults[$sec]['description'] = $saved_data[$sec]->description;
+                            $saved_defaults[$sec]['products'] = $saved_data[$sec]->products;    
+                        } else {
+                            if($options['a-image'] && $options['a-image'] != ''){
+                                echo "<img src='{$options['a-image']}' class='indppl-step-img'>";
+                            }
+                            $saved_data[$sec]['description'] = '';
+                            echo $options['a-instructions'];
+                        }
+                        echo "</p>";
+                        echo "</div>";
+                        echo "<div><p><strong>Product(s) used in this step:</strong></p></div>";
+                        echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
+                        if($saved_data[$sec]->products){
+                            // var_dump($saved_data[$sec]->products);
+                            $saved_prods = array();
+                            foreach($saved_data[$sec]->products as $saved_prod){
+                                $saved_prods[] = array(
+                                    'product' => $saved_prod->id,
+                                    'instructions' => $saved_prod->instructions,
+                                );
+                            }
+                            
+                            indppl_guide_products($saved_prods);
+                        }
+                    echo "</div>";
                 echo "</div>";
-                echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
-                if($saved_data[$sec]->products){
-                    // var_dump($saved_data[$sec]->products);
-                    $saved_prods = array();
-                    foreach($saved_data[$sec]->products as $saved_prod){
-                        $saved_prods[] = array(
-                            'product' => $saved_prod->id,
-                            'instructions' => $saved_prod->instructions,
-                        );
-                    }
-
-                    indppl_guide_products($saved_prods);
-                }
                 echo "</div>";
                 $sec++;
             } ?>
