@@ -1099,6 +1099,7 @@ function indppl_setup_guide_forms_ajax(){
     $default = $defaults[0];
     $store = htmlspecialchars($_POST['store']);
     $options = toolset_get_related_posts($default->ID, 'guide-steps',['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child', 'args' =>['meta_key'=>'toolset-post-sortorder'], 'orderby' => 'meta_value_num', 'order' => 'ASC']);
+    $b_track = toolset_get_related_posts($default->ID, 'b-track', ['query_by_role' => 'parent', 'return' => 'post_id', 'role_to_return' => 'child', 'args' => ['meta_key' => 'toolset-post-sortorder'], 'orderby' => 'meta_value_num', 'order' => 'ASC']);
     $apprates = indppl_apprates($store);
 
     $sections = array();
@@ -1111,6 +1112,17 @@ function indppl_setup_guide_forms_ajax(){
             'b-instructions' => get_post_meta($option, 'wpcf-option-b-instructions', TRUE),
             'b-image' => get_post_meta($option, 'wpcf-option-b-image', TRUE),
             'id' => $option,
+        );
+    }
+
+    foreach($b_track as $b_option) {
+        // var_dump(get_post_meta($b_option));
+        $b_sections[get_post_meta($b_option, 'wpcf-b-step-title', TRUE)] = array(
+            'a-instructions' => get_post_meta($b_option, 'wpcf-b-option-a-instructions', TRUE),
+            'a-image' => get_post_meta($b_option, 'wpcf-b-option-a-image', TRUE),
+            'b-instructions' => get_post_meta($b_option, 'wpcf-b-option-b-instructions', TRUE),
+            'b-image' => get_post_meta($b_option, 'wpcf-b-option-b-image', TRUE),
+            'id' => $b_option,
         );
     }
     
@@ -2017,16 +2029,14 @@ function indppl_build_guide_ajax() {
 
         // Stash the shopping list, email address, and store in the DB for later marketing
         $market_args = array(
-            'user_email' => $email,
+            'user_email' => $send_email,
             'store_id' => $store,
             'shopping_list' => json_encode($list),
             'plants' => json_encode($plants),
         );
 
         // var_dump(json_encode($list));
-        // var_dump($market_args);
         $save_data = indppl_insert_marketing_data($market_args);
-        
         // Load this array so you can build the email
         $guide_links = array();
 

@@ -1146,6 +1146,19 @@ jQuery(document).ready(function( $ ) {
         var target = theInput.data('target');
         $("#" + target).html(content);
         var products = theInput.parents('ul').data('products');
+
+        if($(this).parents('ul').data('step') == 1){
+            step = 0;
+            $('#alternative-guide-sections .alternate').each(function(){
+
+                step = $(this).data('step');
+                console.log(step);
+                var replace = $('.planting-guide-options[data-step=' + step + '] ul');
+                replace.after($(this));
+                $('#alternative-guide-sections').prepend(replace);
+            });
+        }
+
         productsToStep(products);
     });
 
@@ -1219,6 +1232,7 @@ jQuery(document).ready(function( $ ) {
         var custom = false;
         var image = '';
         var option = '';
+        var path = 'a';
         $('.planting-guide-options').each(function(){
             content = '';
             step = $(this).data('step');
@@ -1255,7 +1269,14 @@ jQuery(document).ready(function( $ ) {
             } else {
                 description = content;
             }
-            steps.push({title: title, step : step, description : description, products : products, image : image, option : option });
+            console.log(step + " " + option + " " + path);
+            if(step == '1' && option == 'b'){
+                console.log('made it');
+                path = 'b';
+            }
+            console.log(path);
+
+            steps.push({title: title, step : step, description : description, products : products, image : image, option : option, path : path });
         });
         
         $.ajax({
@@ -1273,6 +1294,9 @@ jQuery(document).ready(function( $ ) {
             }
         });
     });
+
+    // Alternate Guide Options
+
 
     function productsToStep(products){
         var productsThisStep = new Array();
@@ -1304,6 +1328,11 @@ jQuery(document).ready(function( $ ) {
         $('#' + section).append(productsThisStep);
     }
 
+    $('#get-planting-guide-form').submit(function(e){
+        e.preventDefault();
+        $('#get-planting-guide').click();
+    });
+
     $('body').on('click', '#get-planting-guide', function(e){
         e.preventDefault();
         
@@ -1330,7 +1359,7 @@ jQuery(document).ready(function( $ ) {
                     email : email
                 }, 
                 success : function(response) {
-                    // console.log(response);
+                    console.log(response);
                     // $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
                     $('.keep-going').text("Sent!");
                     $('.keep-going-text').text("Now, be sure to get everything on your shopping list. Together, we'll go over how, where, when and how much to use when its time to plants.");
@@ -2312,7 +2341,7 @@ jQuery(document).ready(function( $ ) {
 
     });
 
-    if (window.location.pathname == "/register/free-membership/"){
+    if (window.location.pathname == "/register/free-membership/" || window.location.pathname == "/register/show-signup/"){
         $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-form-row.mepr_email');
         $('#mepr_coupon_code-22').remove();
     }

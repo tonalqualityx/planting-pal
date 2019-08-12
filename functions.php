@@ -2102,28 +2102,46 @@ function indppl_encodeURIComponent($str) {
 
 function indppl_guide_products($products){
     foreach ($products as $product) {
-    $brands       = get_the_terms($product['product'], 'brand');
-    $brand        = $brands[0];
-    $sponsorship  = toolset_get_related_post($product['product'], 'sponsorship-product');
-    $image        = get_post_meta($product['product'], 'wpcf-product-image', TRUE);
-    $sponsor_copy = '';?>
+
+        $brands       = get_the_terms($product['product'], 'brand');
+        $brand        = $brands[0];
+        $label = get_the_title( $product['product'] ); 
+        $sponsorship  = toolset_get_related_post($product['product'], 'sponsorship-product');
+        $image        = get_post_meta($product['product'], 'wpcf-product-image', TRUE);
+        $sponsor_copy = '';?>
+
         <div class='indppl-flex indppl-align-center guide-product-template'>
             <?php if ($sponsorship) {
+
                 $sponsor_image = get_post_meta($sponsorship, 'wpcf-sponsorship-image', TRUE);
                 $sponsor_copy  = get_post_meta($sponsorship, 'wpcf-sponsorship-copy', TRUE);
                 $sponsor_link  = get_post_meta($sponsorship, 'wpcf-sponsor-url', TRUE);
                 $image         = $sponsor_image;
-                ?>
-            <?php }
 
-            if ($image && $image != '') {?>
-                <div class='product-guide-image'><img src="<?php echo $image; ?>" alt="<?php echo $product['label']; ?>"></div>
-            <?php }?>
+                if ($image && $image != '') {?>
+                    <div class='product-guide-image'><img src="<?php echo $image; ?>" alt="<?php echo $label; ?>"></div>
+                <?php }
+            } ?>
 
             <div class='product-guide-step-instructions'>
-                <span class='strong product-name'><span class='brand'><?php echo $brand->name; ?></span> <span class='product'><?php echo $product["label"]; ?></span></span> <?php echo $product["instructions"]; ?>
+                <div class='product-name'>
+                    <div class='brand'><?php echo $brand->name; ?></div>
+                    <div class='strong product'><?php echo $label; ?></div>
+                </div>
+                
+                <?php echo $product["instructions"]; ?>
+                <?php if($pro){ 
+                    echo "<p>Your customer's calculated application rates will appear here.</p>";
+                }?>
                 <?php if ($sponsorship) {?>
-                    <br /><a href="#" class='sponsor-link'>Learn more about this product - Click Here</a><span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
+                    <p>
+                        <a href="#" class='sponsor-link orange-text'>+ Learn more about this product</a>
+                        <span class="product-name hide">
+                            <span class="brand"><?php echo $brand->name; ?></span>
+                            <span class="product"><?php echo $label; ?></span>
+                        </span>
+                        <span class='hide sponsor-copy'><?php echo $sponsor_copy; ?><br /><a href='<?php echo $sponsor_link; ?>' target="_blank">Learn More...</a></span>
+                    </p>
                 <?php }?>
             </div>
         </div>
@@ -2679,3 +2697,7 @@ function indppl_membr_modal_init(){ ?>
         });
     </script>
 <?php }
+
+function indppl_login_redirect($url, $request, $user){
+    
+}
