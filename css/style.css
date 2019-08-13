@@ -879,6 +879,7 @@ p.round-button-error{
   cursor: pointer;
   left: 21%;
   padding: 5px;
+  z-index: 9999;
 }
 .container-season{
   color: #449040;

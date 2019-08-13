@@ -793,57 +793,57 @@ function pp_store_containers(){
         <table class='indppl-containers-table'>
             <tr>
                 <th>Select all plant sizes you carry</th>
+                <?php
+                if(get_post_meta($store_id, "wpcf-spring-start", true)){
+                    $spring_start = get_post_meta($store_id, 'wpcf-spring-start', true);
+                }else{
+                    $spring_start = '3/20';
+                }
+                if(get_post_meta($store_id, "wpcf-spring-end", true)){
+                    $spring_end = get_post_meta($store_id, 'wpcf-spring-end', true);
+                }else{
+                    $spring_end = '6/20';
+                }
+                // var_dump($spring_start . " : " . $spring_end);
+                if(get_post_meta($store_id, "wpcf-summer-start", true)){
+                    $summer_start = get_post_meta($store_id, 'wpcf-summer-start', true);
+                }else{
+                    $summer_start = '6/21';
+                }
+                if(get_post_meta($store_id, "wpcf-summer-end", true)){
+                    $summer_end = get_post_meta($store_id, 'wpcf-summer-end', true);
+                }else{
+                    $summer_end = '9/22';
+                }
+
+                if(get_post_meta($store_id, "wpcf-fall-start", true)){
+                    $fall_start = get_post_meta($store_id, 'wpcf-fall-start', true);
+                }else{
+                    $fall_start = '9/23';
+                }
+                if(get_post_meta($store_id, "wpcf-fall-end", true)){
+                    $fall_end = get_post_meta($store_id, 'wpcf-fall-end', true);
+                }else{
+                    $fall_end = '12/20';
+                }
+
+                if(get_post_meta($store_id, "wpcf-winter-start", true)){
+                    $winter_start = get_post_meta($store_id, 'wpcf-winter-start', true);
+                }else{
+                    $winter_start = '12/21';
+                }
+                if(get_post_meta($store_id, "wpcf-winter-end", true)){
+                    $winter_end = get_post_meta($store_id, 'wpcf-winter-end', true);
+                }else{
+                    $winter_end = '3/19';
+                }
+                ?>
                 <th class='contianer-date-col'>
                     <h4 class='container-season'>Spring</h4>
                     <div class='container-date-container'>
                         <span class='padding-right-5'>
                             starts
                         </span>
-                        <?php
-                        if(get_post_meta($store_id, "wpcf-spring-start", true)){
-                            $spring_start = get_post_meta($store_id, 'wpcf-spring-start', true);
-                        }else{
-                            $spring_start = '3/20';
-                        }
-                        if(get_post_meta($store_id, "wpcf-spring-end", true)){
-                            $spring_end = get_post_meta($store_id, 'wpcf-spring-start', true);
-                        }else{
-                            $spring_end = '6/20';
-                        }
-                        
-                        if(get_post_meta($store_id, "wpcf-summer-start", true)){
-                            $summer_start = get_post_meta($store_id, 'wpcf-summer-start', true);
-                        }else{
-                            $summer_start = '6/21';
-                        }
-                        if(get_post_meta($store_id, "wpcf-summer-end", true)){
-                            $summer_end = get_post_meta($store_id, 'wpcf-summer-start', true);
-                        }else{
-                            $summer_end = '9/22';
-                        }
-
-                        if(get_post_meta($store_id, "wpcf-fall-start", true)){
-                            $fall_start = get_post_meta($store_id, 'wpcf-fall-start', true);
-                        }else{
-                            $fall_start = '9/23';
-                        }
-                        if(get_post_meta($store_id, "wpcf-fall-end", true)){
-                            $fall_end = get_post_meta($store_id, 'wpcf-fall-start', true);
-                        }else{
-                            $fall_end = '12/20';
-                        }
-
-                        if(get_post_meta($store_id, "wpcf-winter-start", true)){
-                            $winter_start = get_post_meta($store_id, 'wpcf-winter-start', true);
-                        }else{
-                            $winter_start = '12/21';
-                        }
-                        if(get_post_meta($store_id, "wpcf-winter-end", true)){
-                            $winter_end = get_post_meta($store_id, 'wpcf-winter-start', true);
-                        }else{
-                            $winter_end = '3/19';
-                        }
-                        ?>
                         <div><img class='indppl-cal-img' src='<?php echo home_url(); ?>/wp-content/plugins/planting-pal/assets/img/calendar.png'></div>
                         <input type='text' name='spring-start' class='container-date' value='<?php echo $spring_start; ?>'>
                     </div>

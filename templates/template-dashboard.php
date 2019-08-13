@@ -36,8 +36,10 @@ wp_head();?>
                 <?php if(isset($_GET['store-id'])){
                     echo get_the_title( htmlspecialchars($_GET['store-id']) ); 
                 } ?>
-                <?php the_title(); ?> <?php if (is_page('store-profile') && empty($_GET) && in_array('paidaccountpro', $status)) {$add_button = get_add_store_button();
-    echo $add_button;}?></h1>
+                <?php the_title(); ?> <?php if (is_page('store-profile') && empty($_GET) && in_array('paidaccountpro', $status))
+                // {$add_button = get_add_store_button();
+                // echo $add_button;}
+                ?></h1>
             <?php 
             if (have_posts()) : while (have_posts()) : the_post();
                 the_content();
