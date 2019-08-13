@@ -94,7 +94,8 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                 echo "<div class='guide-product-instructions'>";
                     echo "<div class='guide-step-section'>";
                         $format_section = str_replace(array(' ',':'), array('-',''), $section);
-                        echo "<div class='green-header indppl-dark-green-bg'><h4 class='white-text'>Step {$sec}:</h4><h3 class='white-text' id='{$format_section}-header'>$section</h3></div>";
+                        $step_number = ($sec == 0 ? '' : "<h4 class='white-text'>Step {$sec}:</h4>");
+                        echo "<div class='green-header indppl-dark-green-bg'>{$step_number}<h3 class='white-text' id='{$format_section}-header'>$section</h3></div>";
                         echo "<div id='$format_section' class='guide-step-instructions'><p>";
                         if($saved_data[$sec]->image){
                             if($saved_data[$sec]->image && $saved_data[$sec]->image != ''){
@@ -130,7 +131,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
 
                             $preload_prods = $saved_prods;
                             
-                        } elseif($saved_data[0]['description'] == ''){
+                        } elseif($saved_data[0]->description == ''){
                             $def_inst = false;
                             if($sec == 1){
                                 foreach ($apprates['beds']['filler'] as $k => $v) {
