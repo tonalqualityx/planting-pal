@@ -7,7 +7,19 @@ $address1    = get_post_meta($store, 'wpcf-address1', TRUE);
 $address2    = get_post_meta($store, 'wpcf-address2', TRUE);
 $phone       = get_post_meta($store, 'wpcf-phone', TRUE);
 $email       = get_post_meta($store, 'wpcf-email', TRUE);
+
 $website     = get_post_meta($store, 'wpcf-weburl', TRUE);
+$show_website = false;
+if ($website && $website != '') {
+    $show_website = truel;
+    if (!preg_match('^(http|https):\/\/', $website)) {
+        $url = "//" . $website;
+    } else {
+        $url = preg_replace('^(http|https):\/\/', '//', $website);
+    }
+    $website = $url;
+}
+
 $saved_data = get_post_meta($store, 'wpcf-planting-guide-pots-options', TRUE);
 $saved_data = str_replace(array("\'", "u201d", "u2019"), array("'", '\"', "'"), $saved_data);
 $saved_data = json_decode($saved_data);
@@ -18,6 +30,13 @@ $pro = in_array('paidaccountpro', $sub) ? true : false;
 
 $saved_defaults = array();
 $inst_checked = ' checked="checked" ';
+
+$products_list = array();
+foreach ($apprates['pots'] as $type_key => $type) {
+    foreach($type as $list_key => $list_val){
+        $products_list[$list_key] = true;
+    }
+}
 
 // Setup checkmarks
 $check_box  = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
@@ -58,7 +77,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                     if ($email && $email != '') {
                         echo "<p>$email</p>";
                     }
-                    if ($website && $website != '') {
+                    if($show_website) {
                         echo "<p><a href='{$website}'>$website</a></p>";
                     } ?>
 
@@ -66,44 +85,93 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
             </div>
         </div>
         <div class="planting-guide-header indppl-flex indppl-justify-center">
-            <img src="">
-            <h1 style="text-align: center;">Planting Guide</h1>
+            <h1 class="lobster" style="text-align: center;">Potted Plants Planting Guide</h1>
         </div>
         <div class="planting-guide-content">
             <?php 
             $sec = 0;
             foreach($sections as $section => $options){
-                $format_section = str_replace(array(' ',':'), array('-',''), $section);
-                echo "<h3 class='orange-text' id='{$format_section}-header'>$section</h3>";
-                echo "<div id='$format_section' class='guide-step-instructions'><p>";
-                if($saved_data[$sec]){
-                    echo $saved_data[$sec]->description;
-                    $saved_defaults[$sec]['description'] = $saved_data[$sec]->description;
-                    $saved_defaults[$sec]['products'] = $saved_data[$sec]->products;    
-                } else {
-                    $saved_data[$sec]['description'] = '';
-                    echo $options['a-instructions'];
-                    echo "<img src='{$options['a-image']}' class='indppl-step-img'>";
-                }
-                echo "</p>";
-                if($saved_data[$sec]->image){
-                    echo "<img src='{$saved_data[$sec]->image}' class='indppl-step-img'>";
-                    $saved_defaults[$sec]['image'] = $saved_data[$sec]->image;
-                }
-                echo "</div>";
-                echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
-                if($saved_data[$sec]->products){
-                    // var_dump($saved_data[$sec]->products);
-                    $saved_prods = array();
-                    foreach($saved_data[$sec]->products as $saved_prod){
-                        $saved_prods[] = array(
-                            'product' => $saved_prod->id,
-                            'instructions' => $saved_prod->instructions,
-                        );
-                    }
+                echo "<div class='guide-product-instructions'>";
+                    echo "<div class='guide-step-section'>";
+                        $format_section = str_replace(array(' ',':'), array('-',''), $section);
+                        echo "<div class='green-header indppl-dark-green-bg'><h4 class='white-text'>Step {$sec}:</h4><h3 class='white-text' id='{$format_section}-header'>$section</h3></div>";
+                        echo "<div id='$format_section' class='guide-step-instructions'><p>";
+                        if($saved_data[$sec]->image){
+                            if($saved_data[$sec]->image && $saved_data[$sec]->image != ''){
+                                echo "<img src='{$saved_data[$sec]->image}' class='indppl-step-img'>";
+                            }
+                            $saved_defaults[$sec]['image'] = $saved_data[$sec]->image;
+                        }
+                        if($saved_data[$sec]){
+                            echo $saved_data[$sec]->description;
+                            $saved_defaults[$sec]['description'] = $saved_data[$sec]->description;
+                            $saved_defaults[$sec]['products'] = $saved_data[$sec]->products;    
+                        } else {
+                            if($options['a-image'] && $options['a-image'] != ''){
+                                echo "<img src='{$options['a-image']}' class='indppl-step-img'>";
+                            }
+                            $saved_data[$sec]['description'] = '';
+                            echo $options['a-instructions'];
+                        }
+                        echo "</p>";
+                        echo "</div>";
+                        echo "<div><p><strong>Product(s) used in this step:</strong></p></div>";
+                        echo "<div id='{$format_section}-products' class='guide-product-instructions'>";
+                        $preload_prods = array();
+                        if($saved_data[$sec]->products){
+                            // var_dump($saved_data[$sec]->products);
+                            $saved_prods = array();
+                            foreach($saved_data[$sec]->products as $saved_prod){
+                                $saved_prods[] = array(
+                                    'product' => $saved_prod->id,
+                                    'instructions' => $saved_prod->instructions,
+                                );
+                            }
 
-                    indppl_guide_products($saved_prods);
-                }
+                            $preload_prods = $saved_prods;
+                            
+                        } elseif($saved_data[0]['description'] == ''){
+                            $def_inst = false;
+                            if($sec == 2){
+                                foreach ($apprates['pots']['filler'] as $k => $v) {
+
+                                    $def_inst = get_post_meta($k, 'wpcf-pots-instructions-step-2-bulk',TRUE);
+
+                                    if($def_inst){
+                                        $preload_prods[] = array(
+                                            'product' => $k,
+                                            'instructions' => $def_inst,
+                                        );
+                                    }
+                                }
+                                foreach($apprates['pots']['blended'] as $k => $v){
+
+                                    $def_inst = get_post_meta($k, 'wpcf-pots-instructions-step-2-blended',TRUE);
+
+                                    if($def_inst){
+                                        $preload_prods[] = array(
+                                            'product' => $k,
+                                            'instructions' => $def_inst,
+                                        );
+                                    }
+                                }
+                            } else {
+                                foreach($products_list as $k => $v){
+                                    $def_inst = get_post_meta($k, 'wpcf-pots-instructions-step-' . $sec,TRUE);
+
+                                    if($def_inst){
+                                        $preload_prods[] = array(
+                                            'product' => $k,
+                                            'instructions' => $def_inst,
+                                        );
+                                    }
+                                }
+                            }
+                            
+                        }
+                        indppl_guide_products($preload_prods);
+                    echo "</div>";
+                echo "</div>";
                 echo "</div>";
                 $sec++;
             } ?>
