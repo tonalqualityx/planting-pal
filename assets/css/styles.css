@@ -107,6 +107,7 @@
 .selections p {
   text-align: center;
   padding-top: 8px;
+  margin-bottom: 3px;
 }
 
 .row.type-header {

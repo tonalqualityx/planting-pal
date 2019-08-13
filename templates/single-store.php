@@ -428,7 +428,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
 
 ?>
 
-<body>
+<body id="plant-form-page">
     <!-- <div class="desktopWarning">
         <p class="desktopWarning-p">This site is optimized for mobile phones in portrait layout.</p><i class="material-icons d-block portrait-only">screen_lock_portrait</i>
     </div> -->
@@ -438,19 +438,19 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
             ?>
             <div class="border-bottom-grey indppl-small-header">
                 <div class="container">
-                    <img src="<?php echo INDPPL_ROOT_URL; ?>/assets/img/Planting-Pal-short-carrot.png" id="logo-header">
+                    <img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/Planting-Pal-short-carrot-cropped.png" id="logo-header">
                 </div>
             </div>
             <div>
                 <div id="app-header" class="types">
-                    <div class="row no-gutters">
-                        <div class="col-4 selections"><a class='ground-store-button' href="#ground"><img data-url="<?php echo INDPPL_ROOT_URL; ?>assets/img/" class="indppl-ground-img" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/inground-orange.png" id="type"></a>
+                    <div class="indppl-flex indppl-no-wrap indppl-space-around">
+                        <div class="selections"><a class='ground-store-button' href="#ground"><img data-url="<?php echo INDPPL_ROOT_URL; ?>assets/img/" class="indppl-ground-img" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/inground-orange.png" id="type"></a>
                             <p class='indppl-planting-types-text orange-text'><strong>In-Ground Plantings</strong><br></p>
                         </div>
-                        <div class="col-4 selections"><a class='pots-store-button' href="#pots"><img data-url="<?php echo INDPPL_ROOT_URL; ?>assets/img/" class="indppl-pots-img" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/pot.png" id="type"></a>
+                        <div class="selections"><a class='pots-store-button' href="#pots"><img data-url="<?php echo INDPPL_ROOT_URL; ?>assets/img/" class="indppl-pots-img" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/pot.png" id="type"></a>
                             <p class='indppl-planting-types-text grey-text'><strong>Pot Plantings</strong><br></p>
                         </div>
-                        <div class="col-4 selections"><a class='beds-store-button' href="#beds"><img data-url="<?php echo INDPPL_ROOT_URL; ?>assets/img/" class="indppl-beds-img" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/raisedbed.png" id="type"></a>
+                        <div class="selections"><a class='beds-store-button' href="#beds"><img data-url="<?php echo INDPPL_ROOT_URL; ?>assets/img/" class="indppl-beds-img" src="<?php echo INDPPL_ROOT_URL; ?>assets/img/raisedbed.png" id="type"></a>
                         <p class='indppl-planting-types-text grey-text'><strong>Raised Bed Plantings</strong><br></p>
                         </div>
                     </div>
