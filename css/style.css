@@ -590,7 +590,7 @@ ul.style-free {
 }
 .indppl-small-header img{
   width: 300px;
-  max-width: 100%;
+  max-width: 80%;
 }
 .flex-half{
   width: 50%;
@@ -1572,7 +1572,7 @@ tr.in-ground-not-bag td:nth-child(n+4){
   background: white;
   max-width: 100%!important;
   margin: 0!important;
-  padding-top: 15px;
+  padding-top: 7px;
 }
 .pots-apprates-filler-percent{
   font-weight: 600;
@@ -2357,6 +2357,11 @@ img.keep-going {
   position: relative;
   max-width: 100%;
   padding: 1% 5%;
+  font-size: 14px;
+}
+
+.rb-form h3, .pots-form h3{
+  font-size: 32px;
 }
 
 div .rb-form:nth-child(n+2), div .pots-form:nth-child(n+2){
@@ -2729,7 +2734,7 @@ PLANTS FORM
 }
 
 #plant-form-page {
-  padding-top: 115px;
+  padding-top: 135px;
 }
 
 /***********
@@ -2762,6 +2767,22 @@ body .mfp-wrap {
   }
   #plant-form-page {
     padding-top: 215px;
+  }
+
+  .indppl-small-header img {
+    max-width: 100%;
+  }
+
+  .row.type-header-2 {
+    font-size: 19px;
+  }
+
+  .rb-form, .pots-form {
+    font-size: 18px;
+  }
+
+  .rb-form h3, .pots-form h3 {
+    font-size: 40px;
   }
 }
 
