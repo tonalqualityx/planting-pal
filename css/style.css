@@ -45,6 +45,10 @@ img{
   justify-content: space-between;
 }
 
+.indppl-space-around {
+  justify-content: space-around;
+}
+
 .indppl-align-center {
   align-items: center;
 }
@@ -585,9 +589,8 @@ ul.style-free {
   height: 60px;
 }
 .indppl-small-header img{
-  margin-top: -25px;
   width: 300px;
-  max-width: 50vw!important;
+  max-width: 100%;
 }
 .flex-half{
   width: 50%;
@@ -2092,7 +2095,7 @@ APP PAGES
   text-align: center;
   max-width: 600px;
   width: 100%;
-  margin: 25px auto 15px;
+  margin: 15px auto 7px;
   justify-content: space-evenly;
 }
 
@@ -2724,8 +2727,9 @@ PLANTS FORM
   right: 0;
   display: none;
 }
-.indppl-ground-header{
-  margin-top: 190px!important;
+
+#plant-form-page {
+  padding-top: 115px;
 }
 
 /***********
@@ -2756,6 +2760,9 @@ body .mfp-wrap {
   .plant-form-header-image {
     display: block;
   }
+  #plant-form-page {
+    padding-top: 215px;
+  }
 }
 
 /* mobile to desktop */
@@ -2767,9 +2774,6 @@ body .mfp-wrap {
   }
   .pb-remove-button{
     top: 10px;
-  }
-  .indppl-ground-header{
-    margin-top: 267px!important;
   }
   .indppl-planting-types-text{
     font-size: 14px;
