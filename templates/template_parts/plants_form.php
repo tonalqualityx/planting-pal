@@ -164,14 +164,14 @@ if ($storeid == '') {
                     ?>
                     <div class="pots-form pb-first">
                         <h3>Pot #<span class="counter" data-count="1">1</span></h3>
-                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                            <div class="">
+                        <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
+                            <div class="quantity-inputs">
                                 <p style='margin-bottom: 35px;'></p>
                                 <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
                                 <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
                             <div class=" tacos">
-                                <div class="indppl-flex">
+                                <div class="indppl-flex indppl-no-wrap">
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots" value='<?php echo $pots["length"][$key]; ?>'>
@@ -190,12 +190,12 @@ if ($storeid == '') {
                                         <label class="dark-green-text">Height</label>
                                     </div>                            
                                 </div>
-                                <div class="indppl-flex partial-container">
+                                <div class="indppl-flex partial-container indppl-no-wrap">
                                     <div class=" empty-filled indppl-flex margin-right-0">
                                         <input class="pots indppl-pots-empty fill-empty" type="radio" id="pstatus_e-<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
                                         <label class="form-check-label empty-label ppl-green-bg white-text indppl-pots-empty fill-empty" for="pstatus_e-<?php echo $key; ?>">Empty</label>
                                     </div>
-                                    <div class=" empty-filled indppl-flex margin-right-0">
+                                    <div class=" empty-filled indppl-flex indppl-no-wrap margin-right-0">
                                         <input class="indppl-pots-partial pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_p-<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
                                         <label class="form-check-label partial-label" for="pstatus_p-<?php echo $key; ?>">Partially Filled</label>
                                     </div>
@@ -248,14 +248,14 @@ if ($storeid == '') {
                     <div class="rb-form pb-first">
                         <h3>Raised Bed #<span class="counter" data-count="1">1</span></h3>
 
-                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                            <div class="" >
+                        <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
+                            <div class="quantity-inputs" >
                                 <p style='margin-bottom: 35px;'></p>
                                 <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
                                 <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
                             <div class="tacos">
-                                <div class="indppl-flex">
+                                <div class="indppl-flex indppl-no-wrap">
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2" value='<?php echo $beds["length"][$key]; ?>'>
@@ -274,12 +274,12 @@ if ($storeid == '') {
                                         <label class="dark-green-text">Height</label>
                                     </div>
                                 </div>
-                                <div class="indppl-flex ">
+                                <div class="indppl-flex indppl-no-wrap">
                                     <div class="empty-filled indppl-flex margin-right-0">
                                         <input class="pots fill-empty" <?php if(!$beds["need"][$key]){ echo "checked"; } ?> type="radio" id="rbstatus_e-<?php echo $key; ?>"  name="rbstatus_<?php echo $key; ?>" checked value="empty">
                                         <label class="form-check-label empty-label ppl-green-bg white-text fill-empty" for="rbstatus_e-<?php echo $key; ?>">Empty</label>
                                     </div>
-                                    <div class="empty-filled indppl-flex margin-right-0">
+                                    <div class="empty-filled indppl-flex indppl-no-wrap margin-right-0">
                                         <input class="indppl-beds-partial pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" id="rbstatus_p-<?php echo $key; ?>"  name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label partial-label" for="rbstatus_p-<?php echo $key; ?>">Partially Filled</label>
                                     </div>
                                 </div>

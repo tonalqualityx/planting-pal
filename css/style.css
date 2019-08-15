@@ -551,6 +551,7 @@ ul.style-free {
   width: 100%;
   margin: 5px 0px;
   border-radius: 5px;
+  font-size: 12px;
 }
 .app-store-img, .app-store-distance{
   flex-basis: 20%;
@@ -569,6 +570,12 @@ ul.style-free {
 .results-store a{
   color: #f26226;
 }
+
+h3.results-store {
+  font-size: 2em;
+  line-height: 1;
+}
+
 .indppl-single-store-container{
   display: flex;
   /* flex-basis: 33%; */
@@ -2046,7 +2053,7 @@ input.rounded-input {
   border: 1px solid #ABACB2 !important;
   box-shadow: inset 2px 2px 3px 0 rgba(0,0,0,0.50) !important;
   border-radius: 18px !important;
-  max-width: 61px !important;
+  /* max-width: 61px !important; */
   width: 100%;
   margin-top: 5px;
   margin: auto;
@@ -2154,7 +2161,7 @@ APP PAGES
 }
 
 .tacos .indppl-flex{
-  /* justify-content: center;s */
+  /* justify-content: center; */
   align-items: center;
 }
 #return-form-data{
@@ -2332,6 +2339,10 @@ body #logo-header {
   background: white;
   color: grey;
   transition: all 0.35s ease-in-out;
+}
+
+#plants-form .form-check-label.partial-label {
+  min-width: 141px;
 }
 
 #plants-form input[type=radio] {
@@ -2758,6 +2769,50 @@ body .mfp-wrap {
   margin: auto;
 }
 
+.app-form-inputs {
+  flex-direction: column-reverse;
+}
+
+.inches-needed label {
+  display: block;
+}
+
+.tacos .inches-needed input {
+  width: 80px;
+  max-width: 80px;
+  margin: 0;
+}
+
+.inches-needed label {
+  text-align: left;
+}
+
+@media screen and (max-width: 640px){
+  .inches-needed input {
+    margin: 0;
+  }
+
+  .quantity-inputs input, .quantity-inputs label {
+    display: block!important;
+    margin: 0!important;
+    width: 80px!important;
+    max-width: 80px!important;
+  }
+
+  .quantity-inputs p {
+    margin-bottom: 10px!important;
+  }
+
+}
+
+/* moderate mobile */
+@media screen and (min-width: 500px){
+  .app-form-inputs {
+    flex-direction: row-reverse;
+  }
+
+}
+
 /* big mobile */
 @media screen and (min-width: 640px){
   .plants-form-header h3 {
@@ -2785,6 +2840,14 @@ body .mfp-wrap {
   .rb-form h3, .pots-form h3 {
     font-size: 40px;
   }
+  .single-store-app-container{
+    font-size: 14px;
+  }
+
+  h3.results-store {
+    line-height: 1.2;
+  }
+
 }
 
 /* mobile to desktop */
@@ -2803,6 +2866,15 @@ body .mfp-wrap {
   .indppl-small-header{
     height: 90px;
   }
+
+  .single-store-app-container{
+    font-size: 16px;
+  }
+
+  h3.results-store {
+    line-height: 1.25;
+  }
+
 }
 
 @media screen and (min-width: 850px){
@@ -2817,4 +2889,13 @@ body .mfp-wrap {
     /* padding: 50px; */
     margin: 15px 50px 25px 50px;
   }
+
+  .single-store-app-container{
+    font-size: 18px;
+  }
+
+  h3.results-store {
+    line-height: 1.4;
+  }
+   
 }

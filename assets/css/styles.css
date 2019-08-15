@@ -537,10 +537,7 @@ body {
     max-width: 100%;
     max-height: unset;
   }
-  .tacos .indppl-flex {
-    justify-content: center;
-    align-items: center;
-  }
+
 }
 @media only screen and (min-width: 998px){
   #indppl-form-go-back{
