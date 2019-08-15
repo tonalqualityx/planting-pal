@@ -2704,6 +2704,16 @@ function indppl_membr_modal_init(){ ?>
     </script>
 <?php }
 
-function indppl_login_redirect($url, $request, $user){
+function indppl_login_redirect($redirect_to, $request, $user){
     
+    global $user;
+    // if(isset($user->roles) && is_array($user->roles)){
+
+    //     if(in_array('showaccount',$user->roles)){
+            $new_redirect = '/garden-center-upgrade';
+            return $new_redirect;
+    //     } 
+    // }
 }
+
+add_filter('login_redirect', 'indppl_login_redirect', 10, 3);
