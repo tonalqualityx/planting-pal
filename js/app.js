@@ -2003,7 +2003,7 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
-    $('body').on('click', '.next-button', function(e){
+    $('body').on('touchstart click', 'a.next-button', function(e){
         e.preventDefault();
         $('.next-button-error').remove();
         $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");

@@ -164,14 +164,14 @@ if ($storeid == '') {
                     ?>
                     <div class="pots-form pb-first">
                         <h3>Pot #<span class="counter" data-count="1">1</span></h3>
-                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                            <div class="">
+                        <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
+                            <div class="quantity-inputs">
                                 <p style='margin-bottom: 35px;'></p>
                                 <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
                                 <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
                             <div class=" tacos">
-                                <div class="indppl-flex">
+                                <div class="indppl-flex indppl-no-wrap">
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" id="plength_1" name="pots[length][]" placeholder="L&quot;" class="rounded-input2 pots" value='<?php echo $pots["length"][$key]; ?>'>
@@ -190,12 +190,12 @@ if ($storeid == '') {
                                         <label class="dark-green-text">Height</label>
                                     </div>                            
                                 </div>
-                                <div class="indppl-flex partial-container">
+                                <div class="indppl-flex partial-container indppl-no-wrap">
                                     <div class=" empty-filled indppl-flex margin-right-0">
                                         <input class="pots indppl-pots-empty fill-empty" type="radio" id="pstatus_e-<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" <?php if(!$pots["need"][$key]){ echo "checked"; } ?> value="empty">
                                         <label class="form-check-label empty-label ppl-green-bg white-text indppl-pots-empty fill-empty" for="pstatus_e-<?php echo $key; ?>">Empty</label>
                                     </div>
-                                    <div class=" empty-filled indppl-flex margin-right-0">
+                                    <div class=" empty-filled indppl-flex indppl-no-wrap margin-right-0">
                                         <input class="indppl-pots-partial pots" <?php if($pots["need"][$key]){ echo "checked"; } ?> type="radio" id="pstatus_p-<?php echo $key; ?>" name="pstatus_<?php echo $key; ?>" value="partial">
                                         <label class="form-check-label partial-label" for="pstatus_p-<?php echo $key; ?>">Partially Filled</label>
                                     </div>
@@ -248,14 +248,14 @@ if ($storeid == '') {
                     <div class="rb-form pb-first">
                         <h3>Raised Bed #<span class="counter" data-count="1">1</span></h3>
 
-                        <div class="indppl-app-split indppl-flex" style="margin-bottom:20px;">
-                            <div class="" >
+                        <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
+                            <div class="quantity-inputs" >
                                 <p style='margin-bottom: 35px;'></p>
                                 <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
                                 <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
                             <div class="tacos">
-                                <div class="indppl-flex">
+                                <div class="indppl-flex indppl-no-wrap">
                                     <div>
                                         <p style='margin-bottom: 35px;'></p>
                                         <input type="number" min="0" name="beds[length][]" placeholder="L&quot;" class="rounded-input2" value='<?php echo $beds["length"][$key]; ?>'>
@@ -274,12 +274,12 @@ if ($storeid == '') {
                                         <label class="dark-green-text">Height</label>
                                     </div>
                                 </div>
-                                <div class="indppl-flex ">
+                                <div class="indppl-flex indppl-no-wrap">
                                     <div class="empty-filled indppl-flex margin-right-0">
                                         <input class="pots fill-empty" <?php if(!$beds["need"][$key]){ echo "checked"; } ?> type="radio" id="rbstatus_e-<?php echo $key; ?>"  name="rbstatus_<?php echo $key; ?>" checked value="empty">
                                         <label class="form-check-label empty-label ppl-green-bg white-text fill-empty" for="rbstatus_e-<?php echo $key; ?>">Empty</label>
                                     </div>
-                                    <div class="empty-filled indppl-flex margin-right-0">
+                                    <div class="empty-filled indppl-flex indppl-no-wrap margin-right-0">
                                         <input class="indppl-beds-partial pots" <?php if($beds["need"][$key]){ echo "checked"; } ?> type="radio" id="rbstatus_p-<?php echo $key; ?>"  name="rbstatus_<?php echo $key; ?>" value="partial"><label class="form-check-label partial-label" for="rbstatus_p-<?php echo $key; ?>">Partially Filled</label>
                                     </div>
                                 </div>
@@ -320,105 +320,105 @@ if ($storeid == '') {
 </form>
 <script type="text/javascript">
 
-$(document).ready(function(){
+jQuery(document).ready(function(){
     
-            $('#pot_add').click(function(){
+            jQuery('#pot_add').click(function(){
 
                // Selecting last id
-               var lastname_id = $('.pots-form input[type=number]:nth-child(2)').last().attr('id');
+               var lastname_id = jQuery('.pots-form input[type=number]:nth-child(2)').last().attr('id');
                var split_id = lastname_id.split('_');
 
                // New index
                var index = Number(split_id[1]) + 1;
 
                // Create clone
-               var p_newel = $('.pots-form:last-of-type').clone(true);
-               var count = $(p_newel).find('.counter').data('count');
+               var p_newel = jQuery('.pots-form:last-of-type').clone(true);
+               var count = jQuery(p_newel).find('.counter').data('count');
                count++;
-               $(p_newel).find('.counter').data('count', count);
-               $(p_newel).find('.counter').html(count);
-               $(p_newel).removeClass('pb-first');
+               jQuery(p_newel).find('.counter').data('count', count);
+               jQuery(p_newel).find('.counter').html(count);
+               jQuery(p_newel).removeClass('pb-first');
                // Set id of new element
-               $(p_newel).find('input[type=number]:nth-child(1)').attr("id","qty_"+index);
-               $(p_newel).find('input[type=number]:nth-child(2)').attr("id","plength_"+index);
-               $(p_newel).find('input[type=number]:nth-child(3)').attr("id","pwidth_"+index);
-               $(p_newel).find('input[type=number]:nth-child(4)').attr("id","pheight_"+index);
-               $(p_newel).find('input[type=radio].indppl-pots-partial').attr("id","pstatus_p-"+index);
-               $(p_newel).find('.empty-label').attr("for", "pstatus_e-"+index);
-               $(p_newel).find('input[type=radio].indppl-pots-empty').attr("id","pstatus_e-"+index);
-               $(p_newel).find('.partial-label').attr("for", "pstatus_p-"+index);
-               $(p_newel).find('input[type=number]:nth-child(7)').attr("id","pneed_"+index);
+               jQuery(p_newel).find('input[type=number]:nth-child(1)').attr("id","qty_"+index);
+               jQuery(p_newel).find('input[type=number]:nth-child(2)').attr("id","plength_"+index);
+               jQuery(p_newel).find('input[type=number]:nth-child(3)').attr("id","pwidth_"+index);
+               jQuery(p_newel).find('input[type=number]:nth-child(4)').attr("id","pheight_"+index);
+               jQuery(p_newel).find('input[type=radio].indppl-pots-partial').attr("id","pstatus_p-"+index);
+               jQuery(p_newel).find('.empty-label').attr("for", "pstatus_e-"+index);
+               jQuery(p_newel).find('input[type=radio].indppl-pots-empty').attr("id","pstatus_e-"+index);
+               jQuery(p_newel).find('.partial-label').attr("for", "pstatus_p-"+index);
+               jQuery(p_newel).find('input[type=number]:nth-child(7)').attr("id","pneed_"+index);
 
                // Set Name to new element
-               $(p_newel).find('input[type=radio]:nth-child(1)').attr("name","pstatus_"+index);
-               $(p_newel).find('input[type=radio]:nth-child(2)').attr("name","pstatus_"+index);
+               jQuery(p_newel).find('input[type=radio]:nth-child(1)').attr("name","pstatus_"+index);
+               jQuery(p_newel).find('input[type=radio]:nth-child(2)').attr("name","pstatus_"+index);
 
                // Set value
-               $(p_newel).find('input[type=number]:nth-child(1)').val("");
-               $(p_newel).find('input[type=number]:nth-child(2)').val("");
-               $(p_newel).find('input[type=number]:nth-child(3)').val("");
-               $(p_newel).find('input[type=number]:nth-child(4)').val("");
-               //$(p_newel).find('input[type=radio]:nth-child(1)').val("");
-               //$(p_newel).find('input[type=radio]:nth-child(2)').val("");
-               $(p_newel).find('input[type=number]:nth-child(5)').val("");
-               $(p_newel).find('input[type=number]:nth-child(6)').val("");
-               $(p_newel).find('input[type=number]:nth-child(7)').val("");
+               jQuery(p_newel).find('input[type=number]:nth-child(1)').val("");
+               jQuery(p_newel).find('input[type=number]:nth-child(2)').val("");
+               jQuery(p_newel).find('input[type=number]:nth-child(3)').val("");
+               jQuery(p_newel).find('input[type=number]:nth-child(4)').val("");
+               //jQuery(p_newel).find('input[type=radio]:nth-child(1)').val("");
+               //jQuery(p_newel).find('input[type=radio]:nth-child(2)').val("");
+               jQuery(p_newel).find('input[type=number]:nth-child(5)').val("");
+               jQuery(p_newel).find('input[type=number]:nth-child(6)').val("");
+               jQuery(p_newel).find('input[type=number]:nth-child(7)').val("");
 
                // Insert element
-               $(p_newel).insertAfter(".pots-form:last");
+               jQuery(p_newel).insertAfter(".pots-form:last");
            });
         });
 
-        $(document).ready(function(){
+        jQuery(document).ready(function(){
 
-            $('#rb_add').click(function(){
+            jQuery('#rb_add').click(function(){
 
                // Selecting last id
-               var lastname_id = $('.rb-form input[type=number]:nth-child(2)').last().attr('id');
+               var lastname_id = jQuery('.rb-form input[type=number]:nth-child(2)').last().attr('id');
                var split_id = lastname_id.split('_');
 
                // New index
                var index = Number(split_id[1]) + 1;
 
                // Create clone
-               var r_newel = $('.rb-form:last').clone(true);
-            //    if($(r_newel).hasClass('pb-first')){
-                   $(r_newel).removeClass('pb-first');
+               var r_newel = jQuery('.rb-form:last').clone(true);
+            //    if(jQuery(r_newel).hasClass('pb-first')){
+                   jQuery(r_newel).removeClass('pb-first');
             //    }
 
-                var count = $(r_newel).find('.counter').data('count');
+                var count = jQuery(r_newel).find('.counter').data('count');
                 count++;
-                $(r_newel).find('.counter').data('count', count);
-                $(r_newel).find('.counter').html(count);    
+                jQuery(r_newel).find('.counter').data('count', count);
+                jQuery(r_newel).find('.counter').html(count);    
 
                // Set id of new element
-               $(r_newel).find('.offset-1 input[type=number]:nth-child(1)').attr("id","rbqty_"+index);
-               $(r_newel).find('.tacos  input[type=number]:nth-child(1)').attr("id","plength_"+index);
-               $(r_newel).find('.pwidth input[type=number]:nth-child(1)').attr("id","pwidth_"+index);
-               $(r_newel).find('.tacos  input[type=number]:nth-child(2)').attr("id","pheight_"+index);
-               $(r_newel).find('.indppl-beds-partial').attr("id","rbstatus_p-"+index);
-               $(r_newel).find('.empty-label').attr("for", "rbstatus_e-"+index);
-               $(r_newel).find('input.fill-empty').attr("id","rbstatus_e-"+index);
-               $(r_newel).find('.partial-label').attr("for", "rbstatus_p-"+index);
-               $(r_newel).find('input[type=number]:nth-child(7)').attr("id","pneed_"+index);
+               jQuery(r_newel).find('.offset-1 input[type=number]:nth-child(1)').attr("id","rbqty_"+index);
+               jQuery(r_newel).find('.tacos  input[type=number]:nth-child(1)').attr("id","plength_"+index);
+               jQuery(r_newel).find('.pwidth input[type=number]:nth-child(1)').attr("id","pwidth_"+index);
+               jQuery(r_newel).find('.tacos  input[type=number]:nth-child(2)').attr("id","pheight_"+index);
+               jQuery(r_newel).find('.indppl-beds-partial').attr("id","rbstatus_p-"+index);
+               jQuery(r_newel).find('.empty-label').attr("for", "rbstatus_e-"+index);
+               jQuery(r_newel).find('input.fill-empty').attr("id","rbstatus_e-"+index);
+               jQuery(r_newel).find('.partial-label').attr("for", "rbstatus_p-"+index);
+               jQuery(r_newel).find('input[type=number]:nth-child(7)').attr("id","pneed_"+index);
 
                // Set Name to new element
-               $(r_newel).find('input[type=radio]:nth-child(1)').attr("name","rbstatus_"+index);
-               $(r_newel).find('input[type=radio]:nth-child(2)').attr("name","rbstatus_"+index);
+               jQuery(r_newel).find('input[type=radio]:nth-child(1)').attr("name","rbstatus_"+index);
+               jQuery(r_newel).find('input[type=radio]:nth-child(2)').attr("name","rbstatus_"+index);
 
                // Set value
-               $(r_newel).find('input[type=number]:nth-child(1)').val("");
-               $(r_newel).find('input[type=number]:nth-child(2)').val("");
-               $(r_newel).find('input[type=number]:nth-child(3)').val("");
-               $(r_newel).find('input[type=number]:nth-child(4)').val("");
-               //$(r_newel).find('input[type=radio]:nth-child(1)').val("");
-               //$(r_newel).find('input[type=radio]:nth-child(2)').val("");
-               $(r_newel).find('input[type=number]:nth-child(5)').val("");
-               $(r_newel).find('input[type=number]:nth-child(6)').val("");
-               $(r_newel).find('input[type=number]:nth-child(7)').val("");
+               jQuery(r_newel).find('input[type=number]:nth-child(1)').val("");
+               jQuery(r_newel).find('input[type=number]:nth-child(2)').val("");
+               jQuery(r_newel).find('input[type=number]:nth-child(3)').val("");
+               jQuery(r_newel).find('input[type=number]:nth-child(4)').val("");
+               //jQuery(r_newel).find('input[type=radio]:nth-child(1)').val("");
+               //jQuery(r_newel).find('input[type=radio]:nth-child(2)').val("");
+               jQuery(r_newel).find('input[type=number]:nth-child(5)').val("");
+               jQuery(r_newel).find('input[type=number]:nth-child(6)').val("");
+               jQuery(r_newel).find('input[type=number]:nth-child(7)').val("");
 
                // Insert element
-               $(r_newel).insertAfter(".rb-form:last");
+               jQuery(r_newel).insertAfter(".rb-form:last");
            });
         });
     </script>
