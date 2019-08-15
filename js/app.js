@@ -2346,6 +2346,18 @@ jQuery(document).ready(function( $ ) {
         $('#mepr_coupon_code-22').remove();
     }
 
+    var indpplCurLocation = window.location.pathname.split("/");
+    if(indpplCurLocation[1] == 'register'){
+        var theClone = '<h1>test</h1>';
+        $('.mepr_bold.mepr_price').each(function(){
+            console.log($(this));
+            theClone = $(this).clone();
+        });
+
+        $("#mepr-payment-methods-wrapper").prepend(theClone);
+        // console.log(theClone);
+    }
+
     $('body').on('click', '.indppl-apprate-primary-radio', function(){
         $('.apprate-circle-fill').addClass('hide');
         $(this).find('.apprate-circle-fill').removeClass('hide');
