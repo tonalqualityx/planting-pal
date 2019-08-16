@@ -3284,33 +3284,33 @@ function indpplMembrModalInit(){
     
     var indpplMembrInitialized = true;
 
-    jQuery('.mepr-open-cancel-confirm').magnificPopup({
-      type: 'inline',
-      closeBtnInside: false
-    });
+    // jQuery('.mepr-open-cancel-confirm').magnificPopup({
+    //   type: 'inline',
+    //   closeBtnInside: false
+    // });
   
-    jQuery('.mepr-confirm-no').on('click', function(e) {
-      jQuery.magnificPopup.close();
-    });
+    // jQuery('.mepr-confirm-no').on('click', function(e) {
+    //   jQuery.magnificPopup.close();
+    // });
   
-    jQuery('.mepr-confirm-yes').on('click', function(e){
-      location.href = jQuery(this).data('url');
-    });
+    // jQuery('.mepr-confirm-yes').on('click', function(e){
+    //   location.href = jQuery(this).data('url');
+    // });
   
-    jQuery('.mepr-open-upgrade-popup').magnificPopup({
-      type: 'inline',
-      closeBtnInside: false
-    });
+    // jQuery('.mepr-open-upgrade-popup').magnificPopup({
+    //   type: 'inline',
+    //   closeBtnInside: false
+    // });
   
-    jQuery('.mepr-upgrade-cancel').on('click', function(e) {
-      jQuery.magnificPopup.close();
-    });
+    // jQuery('.mepr-upgrade-cancel').on('click', function(e) {
+    //   jQuery.magnificPopup.close();
+    // });
   
-    jQuery('.mepr-upgrade-buy-now').on('click', function(e){
-      var id = jQuery(this).data('id');
-      var selector = 'select#mepr-upgrade-dropdown-' + id;
-      var url = jQuery(selector).val();
-      location.href = url;
-    });
+    // jQuery('.mepr-upgrade-buy-now').on('click', function(e){
+    //   var id = jQuery(this).data('id');
+    //   var selector = 'select#mepr-upgrade-dropdown-' + id;
+    //   var url = jQuery(selector).val();
+    //   location.href = url;
+    // });
 }
   
