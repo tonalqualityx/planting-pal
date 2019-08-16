@@ -104,6 +104,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                 // On refactor turn this into a function that returns an array - it's used elsewhere
                 foreach($prods as $prod => $rates){
 
+                    $need = 0;
                     $product  = get_the_title($prod);
                     $standard = get_post_meta($prod, 'wpcf-unit', TRUE);
                     $brand = get_the_terms($prod, 'brand');
@@ -122,18 +123,34 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     $cuft = getVolume($ci, 'ci', 'cuft');
 
                     $sqft = (intval($pots['qty'][$i]) * intval($pots['length'][$i]) * intval($pots['width'][$i]))/144;
+
                     
                     switch($type){
                         
                         case 'filler':
-                            $fill_rate = intval($rates['amount'])/100;
-                            $amount = $cuft * $fill_rate;
-                            $unit_args = array(array('unit' => 'cuft', 'amount' => $amount));
+                        
+                            $quarts = getVolume($cuft, 'cuft', 'qt-d');
 
-                            $normalized = indppl_normalize($unit_args, $standard, $cups);
-                            $need = $normalized[0]['standard-amount'];
-                            break;
+                            if($quarts >= 8){
+
+                                $fill_rate = intval($rates['amount'])/100;
+                                $amount = $cuft * $fill_rate;
+                                
+                            } elseif($rates['primary'] == 'true'){
+                                
+                                $amount = $cuft;
+                                
+                            }
+                            if($quarts >= 8 || $rates['primary'] == 'true'){
+                                
+                                $unit_args = array(array('unit' => 'cuft', 'amount' => $amount));
+                                
+                                $normalized = indppl_normalize($unit_args, $standard, $cups);
+                                $need = $normalized[0]['standard-amount'];
+                            }
                             
+                            break;
+
                         case 'blended' :
                             // Calculate the blended rates
                             $fill_rate = $rates['amount'] * $cuft;
@@ -202,6 +219,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                 // On refactor turn this into a function that returns an array - it's used elsewhere
                 foreach ($prods as $prod => $rates) {
 
+                    $need = 0;
                     $product  = get_the_title($prod);
                     $standard = get_post_meta($prod, 'wpcf-unit', TRUE);
                     $brand    = get_the_terms($prod, 'brand');
@@ -219,15 +237,31 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     $cuft = getVolume($ci, 'ci', 'cuft');
 
                     $sqft = (intval($beds['qty'][$i]) * intval($beds['length'][$i]) * intval($beds['width'][$i])) / 144;
-
+                    
+                    
                     switch ($type) {
+                        
+                        case 'filler':
 
-                    case 'filler':
-                        $fill_rate  = intval($rates['amount']) / 100;
-                        $amount     = $cuft * $fill_rate;
-                        $unit_args  = array(array('unit' => 'cuft', 'amount' => $amount));
-                        $normalized = indppl_normalize($unit_args, $standard, $cups);
-                        $need       = $normalized[0]['standard-amount'];
+                        $quarts = getVolume($cuft, 'cuft', 'qt-d');
+
+                        if($quarts >= 8){
+
+                            $fill_rate  = intval($rates['amount']) / 100;
+                            $amount     = $cuft * $fill_rate;
+
+                        } elseif($rates['primary'] == 'true'){
+                            $amount = $cuft;
+                        }
+
+                        if($quarts >= 8 || $rates['primary'] == 'true'){
+
+                            $unit_args  = array(array('unit' => 'cuft', 'amount' => $amount));
+                            $normalized = indppl_normalize($unit_args, $standard, $cups);
+                            $need       = $normalized[0]['standard-amount'];
+                        
+                        }
+
                         break;
 
                     case 'blended':

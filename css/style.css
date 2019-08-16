@@ -2274,6 +2274,7 @@ SHOPPING LIST
 }
 body #logo-header {
   margin-bottom: 15px;
+  max-height: 150px;
 }
 
 .row.type-header-2, #list-container .row, #buttons.row {
@@ -2745,8 +2746,8 @@ PLANTS FORM
   display: none;
 }
 
-#plant-form-page {
-  padding-top: 135px;
+#plants-form {
+  margin-top: 135px;
 }
 
 /***********
@@ -2821,8 +2822,8 @@ body .mfp-wrap {
   .plant-form-header-image {
     display: block;
   }
-  #plant-form-page {
-    padding-top: 215px;
+  #plants-form {
+    margin-top: 215px;
   }
 
   .indppl-small-header img {

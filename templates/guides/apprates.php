@@ -92,6 +92,7 @@ if($type == 'ground'){ // If guide is in ground
     $pi = 0;
     foreach($plants[$type]['qty'] as $pot){
 
+        $proceed = false;
         $fraction = 0;
         $fraction_int = '';
         $s = '';
@@ -99,15 +100,18 @@ if($type == 'ground'){ // If guide is in ground
         $cur_sqft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi];
         $cur_sqft = $cur_sqft/144;
         $cur_need = 0;
+
         if($plants[$type]['need'][$pi] != ''){
             $cur_need = $plants[$type]['need'][$pi];
+        } else {
+            $cur_need = $plants[$type]['height'][$pi];
         }
-        $cur_cuft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi] * ($plants[$type]['height'][$pi] - $cur_need);
+        $cur_cuft = $plants[$type]['length'][$pi] * $plants[$type]['width'][$pi] * $cur_need;
         $cur_cuft = $cur_cuft / 1728;
 
         $cur_rates_need = ' ';
         if ($cur_need > 0) {
-            $cur_rates_need = " with $cur_need inches of existing soil ";
+            $cur_rates_need = " with $cur_need inches of soil needed ";
         }
 
         if($plants[$type]['qty'][$pi] != '' && $plants[$type]['qty'][$pi] != 0){
@@ -122,7 +126,7 @@ if($type == 'ground'){ // If guide is in ground
                     $cur_rates = round($cur_rates, 2);
                     if($cur_sqft > 1){ $s = 's'; }
                     $cur_rates = "Apply " . $cur_rates . " ". $guide_rates[$type]['surface'][$product['id']]['unit'] . $s;
-
+                    $proceed = true;
                 }
 
             } 
@@ -137,65 +141,79 @@ if($type == 'ground'){ // If guide is in ground
                 }
 
                 $cur_rates = "$cur_rates each";
+                $proceed = true;
             }
 
             if(!$cur_rates){
                 if(isset($guide_rates[$type]['filler'][$product['id']])){
 
                     // Figure out if we need to indicate that this product has existing soil
-                    $prod_need = ($cur_cuft * $guide_rates[$type]['filler'][$product['id']]['amount'])/100;
-                    
-                    // Setup the current item to be normalized
-                    $cur_items = array(
-                        array(
-                            'amount' => $prod_need,
-                            'unit'  => 'cuft',
-                        )
-                    );
-                    
-                    // Normalize to bag value
-                    $cur_normalized = indppl_normalize($cur_items, $bag[1], $cur_cups);
-
-                    
-                    // var_dump($guide_rates[$type]['filler'][$product['id']]);
-                    $fraction = $cur_normalized[0]['standard-amount']/$bag[0];
-                    $fraction_int = '';
-               
-                    if($cur_normalized[0]['standard-amount'] > $bag[0] && $fraction > 1){
-                        $fraction_int = floor($fraction);
-                        $fraction = $fraction - $fraction_int;
+                    $quarts = getVolume($cur_cuft, 'cuft', 'qt-d');
+                    if($quarts >= 8){
+                        $prod_need = ($cur_cuft * $guide_rates[$type]['filler'][$product['id']]['amount'])/100;
+                    } elseif($guide_rates[$type]['filler'][$product['id']]['primary'] == 'true'){
+                        $prod_need = $cur_cuft;
                     }
-                    // $fraction = 1/$fraction;
-                    if($fraction >= 0.15){
-                        $cur_unit = " of a {$bag[0]} {$bag[1]} package";
-                        if($fraction == floor($fraction) && $fraction_int != ''){
-                            $fraction = $fraction_int + $fraction;
-                            $fraction_int = '';
-                        } elseif($fraction_int != '' && $fraction_int > 0) {
-                            $fraction_int = $fraction_int . " & ";
-                        } 
-                        $fraction = indppl_readable_fraction($fraction);
-                        $cur_amount = $fraction_int . $fraction;
-                        $cur_rates = $cur_amount . " " . $cur_unit;
+                    
+                    if($quarts >=8 || $guide_rates[$type]['filler'][$product['id']]['primary'] == 'true'){
 
-                    } else {
-                        // Now determine if that's a reasonable fraction to manage - if not set the variables as cups...
-                        $new_normalized = indppl_normalize($cur_items, 'cup', $cur_cups);
+                        $proceed = true;
 
-                        $cur_amount = round($new_normalized[0]['standard-amount'], 1);
-                        if($cur_amount > 1){
-                            $s = 's';
-                        }
-                        $cur_unit = 'cup' . $s ;
-
-                        $cur_rates = $cur_amount . " " . $cur_unit;
+                        // Setup the current item to be normalized
+                        $cur_items = array(
+                            array(
+                                'amount' => $prod_need,
+                                'unit'  => 'cuft',
+                            )
+                        );
                         
+                        // Normalize to bag value
+                        $cur_normalized = indppl_normalize($cur_items, $bag[1], $cur_cups);
+    
+                        
+                        // var_dump($guide_rates[$type]['filler'][$product['id']]);
+                        $fraction = $cur_normalized[0]['standard-amount']/$bag[0];
+                        $fraction_int = '';
+                   
+                        if($cur_normalized[0]['standard-amount'] > $bag[0] && $fraction > 1){
+                            $fraction_int = floor($fraction);
+                            $fraction = $fraction - $fraction_int;
+                        }
+                        // $fraction = 1/$fraction;
+                        if($fraction >= 0.15){
+                            $cur_unit = " of a {$bag[0]} {$bag[1]} package";
+                            if($fraction == floor($fraction) && $fraction_int != ''){
+                                $fraction = $fraction_int + $fraction;
+                                $fraction_int = '';
+                            } elseif($fraction_int != '' && $fraction_int > 0) {
+                                $fraction_int = $fraction_int . " & ";
+                            } 
+                            $fraction = indppl_readable_fraction($fraction);
+                            $cur_amount = $fraction_int . $fraction;
+                            $cur_rates = $cur_amount . " " . $cur_unit;
+    
+                        } else {
+                            // Now determine if that's a reasonable fraction to manage - if not set the variables as cups...
+                            $new_normalized = indppl_normalize($cur_items, 'cup', $cur_cups);
+    
+                            $cur_amount = round($new_normalized[0]['standard-amount'], 1);
+                            if($cur_amount > 1){
+                                $s = 's';
+                            }
+                            $cur_unit = 'cup' . $s ;
+    
+                            $cur_rates = $cur_amount . " " . $cur_unit;
+                            
+                        }
                     }
+
                 }
 
                 // BLENDED!
                 if(isset($guide_rates[$type]['blended'][$product['id']])){
                     
+                    $proceed = true;
+
                     if($dry == 'dry' && $volume){
 
                         $prod_need = ($cur_cuft * $guide_rates[$type]['blended'][$product['id']]['amount'])/100;
@@ -258,7 +276,7 @@ if($type == 'ground'){ // If guide is in ground
             }
 
                 
-            if(true){
+            if($proceed){
                 $print_apprates .= "{$plants[$type]['length'][$pi]}x{$plants[$type]['width'][$pi]}x{$plants[$type]['height'][$pi]} $cur_rates_need ({$cur_rates}), ";
             }
         }
@@ -267,4 +285,8 @@ if($type == 'ground'){ // If guide is in ground
     }
 }
 
-echo "<strong>How much to use: </strong>" . rtrim($print_apprates, ", "); ?>
+if($print_apprates != ''){
+    return "<strong>How much to use: </strong>" . rtrim($print_apprates, ", ");
+} else {
+    return false;
+}
