@@ -2112,7 +2112,8 @@ jQuery(document).ready(function( $ ) {
                     return false;
                 }else{
                     var height = $(this).parents('.tacos').find('.height').val();
-                    if(beds_need > height){
+                    if(parseInt(beds_need) > parseInt(height)){
+                        console.log(beds_need + " " + height);
                         over_height = true;
                         over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
                     }
