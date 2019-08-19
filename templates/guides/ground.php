@@ -326,7 +326,12 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
                                     <textarea id="instructions-<?php echo $key; ?>-<?php echo $format_section; ?>" name="instructions-<?php echo $key; ?>" rows=1 ><?php echo $product_instructions; ?></textarea>
                                 </div>
                                 <div class="product-instructions-sponsored-image">
-                                    <?php $sponsorship = check_sponsorship($key);
+                                    <?php 
+                                    if($key == 'new'){
+                                        $sponsorship = false;
+                                    } else {
+                                        $sponsorship = check_sponsorship($key);
+                                    }
                                     // var_dump($sponsorship);
                                     if($sponsorship){
                                         echo "<img src='{$sponsorship['image']}'>";
