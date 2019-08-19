@@ -322,7 +322,11 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
         $cups = get_post_meta($key, 'wpcf-5cups', TRUE);
         $brand = get_the_terms( $key, 'brand' );
         $brand = $brand[0]->name;
-        $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
+        if(!is_int($key)){
+            $packages = array();
+        } else {
+            $packages = toolset_get_related_posts($key, 'product-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id'] );
+        }
         $store_packages = toolset_get_related_posts($storeid, 'store-package', ['query_by_role' => 'parent', 'role_to_return' => 'child', 'return' => 'post_id']);
         $normalized_packs = array();
         $stocked_packages = array();
