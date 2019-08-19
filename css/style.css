@@ -417,7 +417,7 @@ ul.style-free {
     top: 0;
     height: 100%;
     width: 100%;
-    background: #0000005a;
+    background: rgba(0,0,0,0.35);
     z-index: 99999999;
 }
 #indppl-loading-icon{

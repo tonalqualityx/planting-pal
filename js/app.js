@@ -378,7 +378,7 @@ jQuery(document).ready(function( $ ) {
                     var status = $('#user-status').val();
                     // console.log(status);
                     if(status == 'paidaccountpro'){
-                        $('.product-create-product option:first').after('<option id="add_new_brand_select" value="new">Create New Product</option>');
+                        $('.product-create-product option:first').after('<option id="add_new_product_select" value="new">Create New Product</option>');
                     }
                     indpplDelLoading();
                 }
@@ -610,6 +610,10 @@ jQuery(document).ready(function( $ ) {
         // if($('.unit-required-text').length > 0){
         //     required = false;
         // }
+        var product_dryliquid = $('.product-create-dry-wet:checked').val();
+        if(!product_dryliquid){
+            product_dryliquid = $('.product-create-dry-wet').val();
+        }
         if($('.indppl-add-product-name').val() == ""){
             $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
             required = false;
@@ -618,13 +622,28 @@ jQuery(document).ready(function( $ ) {
             $('.product-create-new-size-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
             required = false;
         }
-        console.log($('.product-create-5-cups-container').is(':visible'));
+        // console.log($('.product-create-5-cups-container').is(':visible'));
         if($('.product-create-5-cups-inside-container').is(':visible') && $('.product-create-5-cups-container').is(':visible')){
-            console.log($('#indpll-product-create-cups-num').val());
+            // console.log($('#indpll-product-create-cups-num').val());
             if($('#indpll-product-create-cups-num').val() == ""){
                 $('.product-create-5-cups-inside-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
                 required = false;
             }
+        }
+        if($('.indppl-size-selected').length > 0){
+            var unit_list = indppl_get_units(product_dryliquid);
+            $('.indppl-size-selected').each(function(){
+                var unit = $(this).data('unit');
+                if(!(unit in unit_list)){
+                    required = false;
+                    if(product_dryliquid == 'wet'){
+                        var dl = 'liquid';
+                    }else{
+                        var dl = 'dry';
+                    }
+                    $('.product-create-size-container').append("<span class='indppl-form-required margin-left-10 color-red'>One or more of these are not for a " + dl + " product.</span>")
+                }
+            });
         }
         if(required == false){
             indpplDelLoading();
@@ -633,6 +652,7 @@ jQuery(document).ready(function( $ ) {
         // var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
         var type = $('#indppl-modal-product-type').val();
         var product_id = $('#product-create-product').val();
+        console.log(product_id);
         var brand = $('#product-create-brand').val();
         var store_id = $('#store-id').val();
         var product_unit = $('.indppl-new-package').first().data('unit');
@@ -640,6 +660,7 @@ jQuery(document).ready(function( $ ) {
         if($('#product-create-fraction-bag').is(':checked')){
             fraction = true;
         }
+        
         var product_dryliquid = $('.product-create-dry-wet:checked').val();
         if(!product_dryliquid){
             product_dryliquid = $('.product-create-dry-wet').val();
@@ -742,8 +763,8 @@ jQuery(document).ready(function( $ ) {
                     // console.log(e);
                     array = JSON.parse(e);
                     // console.log(array);
-                    console.log(array['console']);
-                    
+                    console.log(array['product_id']);
+                    console.log(product_id);
                     if(array['pack_id_array']){
                         var count = 0;
                         $('.indppl-size-selected').each(function(){
@@ -755,7 +776,7 @@ jQuery(document).ready(function( $ ) {
                         })
                     }
                     if(product_id == 'new'){
-                        $('.product-create-product').children().last().attr('value', array['product_id']);
+                        $('#add_new_product_select').attr('value', array['product_id']);
                     }
                     $('.product-create-app-rates-chart-container').empty();
                     $('.product-create-app-rates-chart-container').append(array['app_rates']);
@@ -2609,6 +2630,12 @@ jQuery(document).ready(function( $ ) {
         }else{
             return true;
         }
+    }
+
+    function toTitleCase(str) {
+        return str.replace(/(?:^|\s)\w/g, function(match) {
+            return match.toUpperCase();
+        });
     }
 
     function get100Percent(){
