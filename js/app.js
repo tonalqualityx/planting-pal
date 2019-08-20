@@ -1148,6 +1148,14 @@ jQuery(document).ready(function( $ ) {
             }
         });
         $('.overflow').scrollTop(num);
+
+        setTimeout(function(e){
+            console.log(header);
+            $('.slide-in-products-container > .container').animate({
+                // scrollTop: $("#" + header).offset().top
+                scrollTop: 710
+            }, 200);
+        }, 200);
         
     });
 
