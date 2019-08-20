@@ -1572,7 +1572,7 @@ tr.in-ground-not-bag td:nth-child(n+4){
   max-width: 500px;
 }
 .indppl-follow-header{
-  position: fixed;
+  /* position: fixed; off for now... */
   top: 0;
   left: 0;
   right: 0;
@@ -2747,7 +2747,7 @@ PLANTS FORM
 }
 
 #plants-form {
-  margin-top: 135px;
+  /* margin-top: 135px; off until floating header is back */
 }
 
 /***********
@@ -2874,7 +2874,7 @@ body .mfp-wrap {
     display: block;
   }
   #plants-form {
-    margin-top: 215px;
+    /* margin-top: 215px; off until floating header is back */
   }
 
   .indppl-small-header img {
