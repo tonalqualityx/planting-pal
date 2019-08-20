@@ -488,7 +488,7 @@ function pp_store_management(){
                             <p>Enter your Garden Center's store information here. This info will be used to help customers find you in the Planting Pal app and customize your planting guide with contact information and store logo.</p>
                         </div>
                         <div class="indppl-video">
-                            <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
@@ -505,7 +505,7 @@ function pp_store_management(){
                         <p>Select the plant container sizes you stock at your Garden Center. Only the sizes you select here will be shown to your customer in the app. Also, since some sizes are seasonal, select which plant container sizes you want showing up in the different seasons.</p>
                     </div>
                     <div class="indppl-video">
-                        <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
                         
@@ -522,7 +522,7 @@ function pp_store_management(){
                         <p>Your planting recommendations are like a gourmet recipe where each product is an ingredient. The product recommendation 'recipes' you build on this page will show up on the app's Shopping List and Planting Guide to tell your customers what products to use and in what quantities.</p>
                     </div>
                     <div class="indppl-video">
-                        <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div id="pp-store-products">
@@ -537,7 +537,7 @@ function pp_store_management(){
                         <p>We're not big fans of one-size-fits-all. That applies to planting guides as well. From here, you'll be able to manage customized planting guides for each planting situation your customer faces.</p>
                     </div>
                     <div class="indppl-video">
-                        <iframe width="266" height="150" src="https://www.youtube.com/embed/FrpVUC1A71g" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
 

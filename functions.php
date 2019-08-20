@@ -1134,12 +1134,12 @@ function update_package_table($store_id, $product_id, $type){
     ?>
     <div class='product-create-chart-header-container'>
         <div class="indppl-instructions">
-            <div class="indppl-instruction-text">
+            <div class="indppl-instructions-text">
                 <h2><?php echo $header; ?> Planting Application Rates For:</h2>
                 <p>Tell us how much of this product you recommend for each plant container size. We’ll use these application rates to create a customized shopping list in the app AND show exactly how much to use for each size plant on the planting guide (paid subscriptions only)</p>
             </div>
             <div class="indppl-video">
-                <video></video>
+                <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
             </div>
         </div>
         <div class='product-create-chart-title-container'>
@@ -1420,7 +1420,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                 <p>Tell us how much of this product you recommend for each plant container size. Adjust ‘How Much’ by clicking the + or - buttons. We’ll use these application rates to create a customized shopping list in the app AND show exactly how much to use fore each size plant on the planting guide (paid subscriptions only)</p>
             </div>
             <div class="indppl-video">
-                <video></video>
+                <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
             </div>
         </div>
         <div class='product-create-chart-title-container'>
@@ -2648,7 +2648,7 @@ function indppl_instructions($args = array()){
     if(isset($args['text-class'])){
         $text_class = $args['text-class'];
     }else{
-        $text_class = 'indppl-instruction-text';
+        // $text_class = 'indppl-instructions-text';
     }
     ob_start();
     ?>
