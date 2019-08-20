@@ -79,7 +79,12 @@ $store_link = str_replace("//", "", $website); ?>
                 <div class='guide-step-section'>
 
                     <div class='green-header indppl-dark-green-bg'>
-                        <h4 class='white-text'><?php echo $step_num; ?></h4>
+                        <?php
+                        if($step_num == 'Step 0:'){
+                            // Hang tight...
+                        } else { ?>
+                            <h4 class='white-text'><?php echo $step_num; ?></h4>
+                        <?php } ?>
                         <h3 class='white-text'><?php echo $step_title_text; ?></h3>
                     </div>
 

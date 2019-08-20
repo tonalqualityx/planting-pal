@@ -213,7 +213,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
         }
 
         ?>
-        <div class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >
+        <div id="<?php echo $format_section; ?>-header" class="planting-guide-options <?php echo $hide; ?> section-<?php echo $options['id']; ?>" data-step="<?php echo $i; ?>" data-title="<?php echo $format_section; ?>-header" >
             <h3><?php echo $section; ?></h3>
             <h4>Text and Graphics</h4>
             <p>Choose from the pre-written text and graphics for this step or use your own.</p>
