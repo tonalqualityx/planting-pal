@@ -3064,7 +3064,7 @@ jQuery(document).ready(function( $ ) {
                 };
             container_array.push(new_array);
         });
-        console.log(container_array);
+        // console.log(container_array);
         // console.log(unit);
         var type = jQuery('#indppl-modal-product-type').val();
         var product_id = jQuery('#product-create-product').val();
