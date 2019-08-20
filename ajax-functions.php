@@ -1008,6 +1008,48 @@ function indppl_save_product_ajax(){
 add_action( 'wp_ajax_indppl_save_product_ajax', 'indppl_save_product_ajax' );
 add_action('wp_ajax_nopriv_indppl_save_product_ajax', 'indppl_save_product_ajax');
 
+function indppl_update_app_rates_chart_ajax(){
+    if(isset($_POST['version_check'])){
+        if($_POST['version_check'] != 1.0){
+            exit;
+            die();
+        }
+    }else{
+        exit;
+        die();
+    }
+    if(isset($_POST['store_id'])){
+        $store_id = $_POST['store_id'];
+    }
+    if(isset($_POST['product_id'])){
+        $product_id = $_POST['product_id'];
+    }
+    if(isset($_POST['type'])){
+        $type = $_POST['type'];
+    }
+    if(isset($_POST['container_array'])){
+        $container_array = $_POST['container_array'];
+    }
+    $send_array = [];
+    foreach($container_array as $key => $value){
+        $temp = array(
+            'unit' => $value['unit'],
+            'amount' => $value['num'],
+        );
+        $send_array[$product_id]['containers'][$value['id']] = $temp;
+    }
+    $save = indppl_apprates($store_id, $type, $send_array);
+
+
+
+    $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    echo $updated_app_rates;
+    die();
+}
+add_action( 'wp_ajax_indppl_update_app_rates_chart_ajax', 'indppl_update_app_rates_chart_ajax' );
+add_action('wp_ajax_nopriv_indppl_update_app_rates_chart_ajax', 'indppl_update_app_rates_chart_ajax');
+
+
 function indppl_product_save_exit_ajax(){
     if(isset($_POST['version_check'])){
         if($_POST['version_check'] != 1.0){
@@ -1187,6 +1229,9 @@ function indppl_update_app_rates_ajax(){
     if(isset($_POST['container_unit'])){
         $container_unit = $_POST['container_unit'];
     }
+    if(isset($_POST['chart'])){
+        $chart = $_POST['chart'];
+    }
     $cups = get_post_meta($product_id, 'wpcf-5cups', true);
     $cups_unit = get_post_meta($product_id, 'wpcf-5cups-unit', true);
     if(!$cups_unit || $cups_unit == ''){
@@ -1218,6 +1263,9 @@ function indppl_update_app_rates_ajax(){
         $update_array[] = $final;
     }
     $send_array = [];
+    if($chart){
+        $update_array = update_package_table($store_id, $product_id, $type);
+    }
     $send_array['app_rates'] = $update_array;
     $send_array['console'] = $console;
     echo json_encode($send_array);

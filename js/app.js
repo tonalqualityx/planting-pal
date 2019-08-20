@@ -937,13 +937,17 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     });
 
-    $('body').on('change', '.some-kind-of-wonderful', function(e){
+    // $('body').on('change', '.some-kind-of-wonderful', function(e){
+    //     e.preventDefault();
+    //     if($('#product-create-fraction-bag').is(':checked')){
+    //         updateBagAppRates($(this));
+    //     }else{
+    //         updateAppRates($(this));
+    //     }
+    // })
+    $('body').on('click', '#product-update', function(e){
         e.preventDefault();
-        if($('#product-create-fraction-bag').is(':checked')){
-            updateBagAppRates($(this));
-        }else{
-            updateAppRates($(this));
-        }
+        updateAppRatesChart($(this));
     })
 
     $('body').on('click', '.indppl-add-product-pots-btn', function(e){
@@ -2773,7 +2777,7 @@ jQuery(document).ready(function( $ ) {
     }
 
     function indpplAddLoading(location, primary, secondary, background){
-        console.log(location);
+        // console.log(location);
         if(location == undefined){
             location = 'body';
         }
@@ -2947,6 +2951,102 @@ jQuery(document).ready(function( $ ) {
         $('.spining-loader').remove();
     }
 
+    function updateAppRatesChart(elem){
+        indpplAddLoading();
+        // jQuery(elem).parent().parent().append(img);
+        // if(jQuery(elem).hasClass('indppl-product-create-chart-app-rate-num')){
+        //     var cont_id = jQuery(elem).attr('name');
+        //     var num = jQuery(elem).attr('value');
+        //     var unit = jQuery(elem).next().val();
+        //     if(!jQuery.isNumeric(num)){
+        //         jQuery(elem).attr('value', 1);
+        //     }
+        // }else if(jQuery(elem).hasClass('indppl-product-create-chart-app-unit')){
+        //     var cont_id = jQuery(elem).attr('name');
+        //     var num = jQuery(elem).prev().attr('value');
+        //     var unit = jQuery(elem).val();
+        //     if(!jQuery.isNumeric(num)){
+        //         jQuery(elem).prev().attr('value' , 1);
+        //     }
+        // }
+        // if(num == null || !jQuery.isNumeric(num)){
+        //     num = 1;
+        // }
+        // if(unit == null){
+        //     unit = 'lb';
+        // }
+        var container_array = []
+        $('.indppl-product-create-chart-app-rate-num').each(function(){
+            var cont_id = $(this).attr('name');
+            var num = $(this).val();
+            var unit = $(this).parent().find('.indppl-product-create-chart-app-unit').val();
+            var new_array = {
+                    'id' : cont_id,
+                    'num' : num,
+                    'unit' : unit,
+                };
+            container_array.push(new_array);
+        });
+        console.log(container_array);
+        // console.log(unit);
+        var type = jQuery('#indppl-modal-product-type').val();
+        var product_id = jQuery('#product-create-product').val();
+        var store_id = jQuery('#store-id').val();
+        var brand = jQuery('#product-create-brand').val();
+        var current_pack = {};
+        var i = 0;
+        var version_check = 1.0;
+        jQuery('.indppl-product-create-size-btn').each(function(){
+            if(jQuery(this).hasClass('indppl-size-selected')){
+                current_pack[i] = {};
+                current_pack[i]['size'] = jQuery(this).data('size');
+                current_pack[i]['unit'] = jQuery(this).data('unit');
+                i++;
+            }
+        });
+        jQuery.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_update_app_rates_chart_ajax',
+                type: type,
+                store_id: store_id,
+                product_id: product_id,
+                brand: brand,
+                container_array: container_array,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function(e){
+                // console.log(e);
+                $('.product-create-app-rates-chart-container').empty();
+                $('.product-create-app-rates-chart-container').append(e);
+                var units = indppl_get_units($('input:radio.product-create-dry-wet:checked').val());
+                // console.log(units);
+                $('.indppl-product-create-chart-app-unit').each(function(){
+                    var select = $(this).data('unit');
+                    var elem = $(this);
+                    // console.log(select);
+                    $.each(units, function(index, value){
+                        var name = value;
+                        // if(value == 'qt-d' || value == 'qt-l'){
+                        //     name = 'Quart';
+                        // }
+                        if(select == index || (select == 'tbl' && index == 'tbls')){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+                    });
+                    // console.log(unit);
+                });
+                indpplDelLoading();
+            }
+        });
+    }
+
     function updateAppRates(elem){
         var img = indpplAddSmallLoading();
         jQuery(elem).parent().parent().append(img);
@@ -2975,8 +3075,8 @@ jQuery(document).ready(function( $ ) {
         // console.log(unit);
         var type = jQuery('#indppl-modal-product-type').val();
         var product_id = jQuery('#product-create-product').val();
-        var brand = jQuery('#product-create-brand').val();
         var store_id = jQuery('#store-id').val();
+        var brand = jQuery('#product-create-brand').val();
         var current_pack = {};
         var i = 0;
         var version_check = 1.0;
@@ -3016,6 +3116,8 @@ jQuery(document).ready(function( $ ) {
 
                     jQuery(elem).parent().siblings().eq(1+index).html(`<p class="green-text text-align-center margin-0 plant-num-text">`+value+`</p><p class="white-text green-bg text-align-center margin-0">plants</p>`);
                 });
+
+
                 indpplDelSmallLoading();
             }
         });

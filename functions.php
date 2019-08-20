@@ -1329,6 +1329,7 @@ function update_package_table($store_id, $product_id, $type){
         <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/>
         <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
         <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="+ Add Another Product"/>
+        <input type="submit" name="product-update" id="product-update" class="product-update" value="Update"/>
         <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit hide" value="Exit"/>
     </div>
     <?php
