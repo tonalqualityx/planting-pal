@@ -949,6 +949,10 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         updateAppRatesChart($(this));
     })
+    $('body').on('click', '#product-bag-update', function(e){
+        e.preventDefault();
+        updateAppRatesBagChart($(this));
+    })
 
     $('body').on('click', '.indppl-add-product-pots-btn', function(e){
         e.preventDefault();
@@ -2517,6 +2521,7 @@ jQuery(document).ready(function( $ ) {
         $(elem).parent().parent().find('.indppl-product-create-chart-app-rate-num').first().val(number);
         $(elem).parent().parent().find('.indppl-bag-rate-num').first().text(number);
         isDown = -.01;
+        
     };
 
     function bagControlsPOS(elem){        
@@ -2569,10 +2574,16 @@ jQuery(document).ready(function( $ ) {
                     isDown = parseFloat(-1);
                 }
             }, 3000);
+
             if(isDown == 0){
                 bagControlsNEG(elem);
             }
-            
+            // var num2 = parseFloat($(elem).parent().next().find('.indppl-bag-rate-num').first().text());
+            // var new_num = 1 / num2;
+            // if(new_num == 'Infinity'){
+            //     new_num = 0;
+            // }
+            // $(elem).parent().next().find('.indppl-bag-rate-num').last().text(new_num.toFixed(2));
         }else{
             timeout = setTimeout(function(){
                 if(isDown != 0){
@@ -2588,6 +2599,12 @@ jQuery(document).ready(function( $ ) {
                 bagControlsPOS(elem);
             }
         }
+        var num2 = parseFloat($(elem).parent().next().find('.indppl-bag-rate-num').first().text());
+        var new_num = 1 / num2;
+        if(new_num == 'Infinity'){
+            new_num = 0;
+        }
+        $(elem).parent().next().find('.indppl-bag-rate-num').last().text(new_num.toFixed(2));
     }
     function handleMouseout(e, elem){
         e.preventDefault();
@@ -2604,8 +2621,16 @@ jQuery(document).ready(function( $ ) {
         isDown=0;
         hold_end = true;
         current_change = elem;
+        // if($(elem).hasClass('indppl-bag-controls-neg')){
+            var num2 = parseFloat($(elem).parent().next().find('.indppl-bag-rate-num').first().text());
+            var new_num = 1 / num2;
+            if(new_num == 'Infinity'){
+                new_num = 0;
+            }
+            $(elem).parent().next().find('.indppl-bag-rate-num').last().text(new_num.toFixed(2));
+        // }
         // load_app_rates = setTimeout(function(){
-            updateBagAppRatesSingle($(elem).parent().parent().find('.some-kind-of-wonderful').first());
+            // updateBagAppRatesSingle($(elem).parent().parent().find('.some-kind-of-wonderful').first());
         // }, 1000);
     }
 
@@ -2847,7 +2872,7 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 array = JSON.parse(e);
-                console.log(array['console']);
+                // console.log(array['console']);
                 $('.product-create-brand-cut-off').children().each(function(){
                     $(this).empty();
                 })
@@ -2953,28 +2978,6 @@ jQuery(document).ready(function( $ ) {
 
     function updateAppRatesChart(elem){
         indpplAddLoading();
-        // jQuery(elem).parent().parent().append(img);
-        // if(jQuery(elem).hasClass('indppl-product-create-chart-app-rate-num')){
-        //     var cont_id = jQuery(elem).attr('name');
-        //     var num = jQuery(elem).attr('value');
-        //     var unit = jQuery(elem).next().val();
-        //     if(!jQuery.isNumeric(num)){
-        //         jQuery(elem).attr('value', 1);
-        //     }
-        // }else if(jQuery(elem).hasClass('indppl-product-create-chart-app-unit')){
-        //     var cont_id = jQuery(elem).attr('name');
-        //     var num = jQuery(elem).prev().attr('value');
-        //     var unit = jQuery(elem).val();
-        //     if(!jQuery.isNumeric(num)){
-        //         jQuery(elem).prev().attr('value' , 1);
-        //     }
-        // }
-        // if(num == null || !jQuery.isNumeric(num)){
-        //     num = 1;
-        // }
-        // if(unit == null){
-        //     unit = 'lb';
-        // }
         var container_array = []
         $('.indppl-product-create-chart-app-rate-num').each(function(){
             var cont_id = $(this).attr('name');
@@ -3014,6 +3017,85 @@ jQuery(document).ready(function( $ ) {
                 store_id: store_id,
                 product_id: product_id,
                 brand: brand,
+                container_array: container_array,
+                version_check: version_check,
+            },
+            type: 'POST',
+            success: function(e){
+                // console.log(e);
+                $('.product-create-app-rates-chart-container').empty();
+                $('.product-create-app-rates-chart-container').append(e);
+                var units = indppl_get_units($('input:radio.product-create-dry-wet:checked').val());
+                // console.log(units);
+                $('.indppl-product-create-chart-app-unit').each(function(){
+                    var select = $(this).data('unit');
+                    var elem = $(this);
+                    // console.log(select);
+                    $.each(units, function(index, value){
+                        var name = value;
+                        // if(value == 'qt-d' || value == 'qt-l'){
+                        //     name = 'Quart';
+                        // }
+                        if(select == index || (select == 'tbl' && index == 'tbls')){
+                            selected = `selected`;
+                        }else{
+                            selected = ``;
+                        }
+                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+                    });
+                    // console.log(unit);
+                });
+                indpplDelLoading();
+            }
+        });
+    }
+
+    function updateAppRatesBagChart(elem){
+        indpplAddLoading();
+        var container_array = [];
+        $('.indppl-product-create-chart-app-rate-num').each(function(){
+            var cont_id = $(this).attr('name');
+            var num = $(this).val();
+            var unit = $(this).parent().find('.indppl-product-create-chart-bag-unit').val();
+            var new_array = {
+                    'id' : cont_id,
+                    'num' : num,
+                    'unit' : unit,
+                };
+            container_array.push(new_array);
+        });
+        // console.log(container_array);
+        // console.log(unit);
+        var type = jQuery('#indppl-modal-product-type').val();
+        var product_id = jQuery('#product-create-product').val();
+        var store_id = jQuery('#store-id').val();
+        var brand = jQuery('#product-create-brand').val();
+        var current_pack = {};
+        var i = 0;
+        var version_check = 1.0;
+        var first_product_num = $('#indppl-how-much-header').data('num');
+        var first_product_unit = $('#indppl-how-much-header').data('unit');
+        jQuery('.indppl-product-create-size-btn').each(function(){
+            if(jQuery(this).hasClass('indppl-size-selected')){
+                current_pack[i] = {};
+                current_pack[i]['size'] = jQuery(this).data('size');
+                current_pack[i]['unit'] = jQuery(this).data('unit');
+                i++;
+            }
+        });
+        jQuery.ajax({
+            url:indppl_ajax.ajaxurl,
+            dataType: 'text',
+            method: 'POST',
+            data: {
+                action: 'indppl_update_app_rates_chart_ajax',
+                type: type,
+                store_id: store_id,
+                product_id: product_id,
+                brand: brand,
+                first_product_num: first_product_num,
+                first_product_unit: first_product_unit,
+                bag: 'true',
                 container_array: container_array,
                 version_check: version_check,
             },

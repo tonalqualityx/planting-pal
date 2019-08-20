@@ -1030,19 +1030,52 @@ function indppl_update_app_rates_chart_ajax(){
     if(isset($_POST['container_array'])){
         $container_array = $_POST['container_array'];
     }
-    $send_array = [];
-    foreach($container_array as $key => $value){
-        $temp = array(
-            'unit' => $value['unit'],
-            'amount' => $value['num'],
-        );
-        $send_array[$product_id]['containers'][$value['id']] = $temp;
+    if(isset($_POST['bag'])){
+        $bag = $_POST['bag'];
     }
-    $save = indppl_apprates($store_id, $type, $send_array);
+    if(isset($_POST['first_product_num'])){
+        $first_num = $_POST['first_product_num'];
+    }
+    if(isset($_POST['first_product_unit'])){
+        $first_unit = $_POST['first_product_unit'];
+    }
+    $send_array = [];
+    if($bag){
+        $args = array(
+            $product_id => array(
+                'bag' => array(),
+            ),
+        );
+        foreach($container_array as $key => $value){
+            if(!$value['num'] == 0){
+                $app_rate = $first_num / $value['num'];
+            }else{
+                $app_rate = 0;
+            }
+            $args[$product_id]['bag'][$value['id']] = array(
+                'amount' => $app_rate,
+                'unit' => $first_unit,
+            );
+
+        }
+        // $console = $args;
+        indppl_apprates($store_id, $type, $args);
+        $updated_app_rates = update_bag_package_table($store_id, $product_id, $type);
+
+    }else{
+        foreach($container_array as $key => $value){
+            $temp = array(
+                'unit' => $value['unit'],
+                'amount' => $value['num'],
+            );
+            $send_array[$product_id]['containers'][$value['id']] = $temp;
+        }
+        $save = indppl_apprates($store_id, $type, $send_array);
+        $updated_app_rates = update_package_table($store_id, $product_id, $type);
+    }
 
 
 
-    $updated_app_rates = update_package_table($store_id, $product_id, $type);
     echo $updated_app_rates;
     die();
 }

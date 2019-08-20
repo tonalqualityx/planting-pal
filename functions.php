@@ -1861,6 +1861,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         <a href='#'class='product-create-submit-back indppl-orange'>Back</a>
         <a href='#' id="product-create-submit" class="product-create-submit indppl-round-button indppl-orange-bg">+ Add Another Product</a>
         <a href='#' data-exit="true" id="product-create-submit-exit" class="product-create-submit indppl-round-button indppl-orange-bg">Save & Exit</a>
+        <input type="submit" name="product-bag-update" id="product-bag-update" class="product-bag-update" value="Update"/>
         <!-- <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/> -->
     </div>
     <?php
