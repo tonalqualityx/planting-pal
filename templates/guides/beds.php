@@ -50,7 +50,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
     <p>For each step in the planting guide, choose from the text and graphics provided or create your own. Then, select the products being used in each step - its also recommended to include product-specific info here too. As you're building, check how your planting guide looks in the preview window.</p>
   </div>
   <div class="indppl-video">
-    <video></video>
+        <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
 </div>
 <div class="planting-guide-preview-title ppl-med-green-bg">
