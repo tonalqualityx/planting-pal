@@ -409,171 +409,184 @@ function pp_store_management(){
     $status = indppl_user_status($user_id);
     ob_start();
 
-    if(isset($_GET['store-id'])){
-        $safe_store_id = intval($_GET['store-id']);
-        $author_id = get_post_field('post_author', $safe_store_id);
-        
-        if($user_id == $author_id || current_user_can('administrator') || indppl_user_is_auth($user_id, $safe_store_id)){
-            $store_id = intval(htmlspecialchars($_GET['store-id']));
-            echo "<script>monitorProgress({$store_id});</script>";
-        }else{
-            ?>
-            <h3 class='color-red'>Sorry, but you must be logged in and authorized to access this store in order to make edits.</h3>
-            <?php
-        }
-    }
-    if(isset($_POST['submit'])){
-        if($store_id == null){$store_id = 0;}
-        if(isset($_POST['store-id'])){
-            $store_id = intval($_POST['store-id']);
-        }
-        indppl_save_post($store_id);
-    }
-    
+    if(in_array('showaccount',$status)){
+        FLBuilder::render_query( array(
+            'page_id' => 48306
+        ));
+    //    $show_content = get_post(48306);
+    //    $show_content = $show_content->post_content;
+    //    $show_content = apply_filters('the_content', $show_content); ?>
+       
+       <?php //echo $show_content;
+    } else {
 
-
-    
-    if($store_id > 0){
-        $setup = get_post_meta($store_id, 'wpcf-issetup', true);
-        if($setup){
-            ?>
-            <p>Your store is Live. To make your store private hit the button below.</p>
-            <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Private</a>
-            <?php
-        }else{
-            $progress = indppl_store_progress_bar($store_id, TRUE);
-            if($progress['complete'] == 100){ ?>
-                <p>Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready!</p>
-                <?php 
-                    $user = get_current_user_id();
-                    $args = array(
-                        'author' => $user,
-                        'post_type' => 'store',
-                        'posts_per_page' => -1,
-                        // 'meta_query' => array(
-                            'meta_key' => 'wpcf-issetup',
-                            'meta_value' => 1
-                        // ),
-                    );
-                    
-                    $user_stores = get_posts($args);
-                    $user_stores_count = count($user_stores);
-                    if($user_stores_count > 0){
-                        // echo "<p>You will be billed for an additional store when this store is brought online.</p>";
-                        // indppl_notify_new_store($store_id, $user);
-                    }
+        if(isset($_GET['store-id'])){
+            $safe_store_id = intval($_GET['store-id']);
+            $author_id = get_post_field('post_author', $safe_store_id);
+            
+            if($user_id == $author_id || current_user_can('administrator') || indppl_user_is_auth($user_id, $safe_store_id)){
+                $store_id = intval(htmlspecialchars($_GET['store-id']));
+                echo "<script>monitorProgress({$store_id});</script>";
+            }else{
                 ?>
-                <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
-
-            <?php } else {
-                echo "<h2>Store Setup Progress</h2>";
-                echo $progress['bar'];
+                <h3 class='color-red'>Sorry, but you must be logged in and authorized to access this store in order to make edits.</h3>
+                <?php
             }
+        }
+        if(isset($_POST['submit'])){
+            if($store_id == null){$store_id = 0;}
+            if(isset($_POST['store-id'])){
+                $store_id = intval($_POST['store-id']);
+            }
+            indppl_save_post($store_id);
+        }
         
-        } ?>
-
-        <ul class='indppl-nav indppl-nav-tabs'>
-            <li class="indppl-active"><a href='#indppl-tab-1'>1. Store Info</a></li>
-            <li><a href='#indppl-tab-2'>2. Container Size Selection</a></li>
-            <li><a href='#indppl-tab-3'>3. Products Recommendations</a></li>
-            <li><a href='#indppl-tab-4'>4. Planting Guides</a></li>
-        </ul>
+    
+    
         
-        <div class='indppl-tab-content'>
-            <div id='indppl-tab-1' class='indppl-tab-pane indppl-active'>
-                <div class='indppl-store-management-container'>
+        if($store_id > 0){
+            $setup = get_post_meta($store_id, 'wpcf-issetup', true);
+            if($setup){
+                ?>
+                <p>Your store is Live. To make your store private hit the button below.</p>
+                <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Private</a>
+                <?php
+            }else{
+                $progress = indppl_store_progress_bar($store_id, TRUE);
+                if($progress['complete'] == 100){ ?>
+                    <p>Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready!</p>
+                    <?php 
+                        $user = get_current_user_id();
+                        $args = array(
+                            'author' => $user,
+                            'post_type' => 'store',
+                            'posts_per_page' => -1,
+                            // 'meta_query' => array(
+                                'meta_key' => 'wpcf-issetup',
+                                'meta_value' => 1
+                            // ),
+                        );
+                        
+                        $user_stores = get_posts($args);
+                        $user_stores_count = count($user_stores);
+                        if($user_stores_count > 0){
+                            // echo "<p>You will be billed for an additional store when this store is brought online.</p>";
+                            // indppl_notify_new_store($store_id, $user);
+                        }
+                    ?>
+                    <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
+    
+                <?php } else {
+                    echo "<h2>Store Setup Progress</h2>";
+                    echo $progress['bar'];
+                }
+            
+            } ?>
+    
+            <ul class='indppl-nav indppl-nav-tabs'>
+                <li class="indppl-active"><a href='#indppl-tab-1'>1. Store Info</a></li>
+                <li><a href='#indppl-tab-2'>2. Container Size Selection</a></li>
+                <li><a href='#indppl-tab-3'>3. Products Recommendations</a></li>
+                <li><a href='#indppl-tab-4'>4. Planting Guides</a></li>
+            </ul>
+            
+            <div class='indppl-tab-content'>
+                <div id='indppl-tab-1' class='indppl-tab-pane indppl-active'>
+                    <div class='indppl-store-management-container'>
+                        <div class="indppl-instructions">
+                            <div class="indppl-instructions-text">
+                                <h2>Store Information</h2>
+                                <p>Enter your Garden Center's store information here. This info will be used to help customers find you in the Planting Pal app and customize your planting guide with contact information and store logo.</p>
+                            </div>
+                            <div class="indppl-video">
+                                <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    $store_info  = indppl_store_info($store_id);
+                    echo $store_info;
+                    ?>
+                </div>
+                <div id='indppl-tab-2' class='indppl-tab-pane'>
+                    
                     <div class="indppl-instructions">
                         <div class="indppl-instructions-text">
-                            <h2>Store Information</h2>
-                            <p>Enter your Garden Center's store information here. This info will be used to help customers find you in the Planting Pal app and customize your planting guide with contact information and store logo.</p>
+                            <h2>Container Size Selection</h2>
+                            <p>Select the plant container sizes you stock at your Garden Center. Only the sizes you select here will be shown to your customer in the app. Also, since some sizes are seasonal, select which plant container sizes you want showing up in the different seasons.</p>
                         </div>
                         <div class="indppl-video">
                             <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                     </div>
-                </div>
-                <?php
-                $store_info  = indppl_store_info($store_id);
-                echo $store_info;
-                ?>
-            </div>
-            <div id='indppl-tab-2' class='indppl-tab-pane'>
-                
-                <div class="indppl-instructions">
-                    <div class="indppl-instructions-text">
-                        <h2>Container Size Selection</h2>
-                        <p>Select the plant container sizes you stock at your Garden Center. Only the sizes you select here will be shown to your customer in the app. Also, since some sizes are seasonal, select which plant container sizes you want showing up in the different seasons.</p>
+                            
+                    <div class="margin-top-20">
+                        <?php $containers = do_shortcode('[pp-store-containers]');
+                        echo $containers; ?>
                     </div>
-                    <div class="indppl-video">
-                        <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
-                        
-                <div class="margin-top-20">
-                    <?php $containers = do_shortcode('[pp-store-containers]');
-                    echo $containers; ?>
-                </div>
-
-            </div>
-            <div id='indppl-tab-3' class='indppl-tab-pane'>
-                <div class="indppl-instructions">
-                    <div class="indppl-instructions-text">
-                        <h2>Product Recommendation 'Recipes'</h2>
-                        <p>Your planting recommendations are like a gourmet recipe where each product is an ingredient. The product recommendation 'recipes' you build on this page will show up on the app's Shopping List and Planting Guide to tell your customers what products to use and in what quantities.</p>
-                    </div>
-                    <div class="indppl-video">
-                        <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
-                <div id="pp-store-products">
-                    <?php echo do_shortcode('[pp-store-products]'); ?>
-                </div>
-            </div>
-            <div id='indppl-tab-4' class='indppl-tab-pane'>
-                
-                <div class="indppl-instructions">
-                    <div class="indppl-instructions-text">
-                        <h2>Planting Guides</h2>
-                        <p>We're not big fans of one-size-fits-all. That applies to planting guides as well. From here, you'll be able to manage customized planting guides for each planting situation your customer faces.</p>
-                    </div>
-                    <div class="indppl-video">
-                        <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                </div>
-
-                <?php 
-                $guides = do_shortcode('[pp-store-guides]');
-                echo $guides; 
-                ?>
-            </div>
-        </div>
-        <?php
-        // $return = ob_get_clean();
-    }else if($_GET['new'] == true){
-        // ob_start();
-        ?>
-        <h2>Store Management</h2>
-        <p>This is a place for instructions</p>
-        <?php
-        $store_info = indppl_store_info($store_id);
-        echo $store_info;
-        // $return = ob_get_clean();
-    }else{
-        // ob_start();
-        ?>
-        <div class='indppl-store-management-container'>
-            <!-- <h2>My Stores</h2>
-            <p>This is a place for instructions</p> -->
-            <?php
-            $store_info  = do_shortcode('[pp-my-stores]');
-            echo $store_info;
-            echo do_shortcode('[pp-my-dups]');
-            ?>
-        </div>
-        <?php
-    }
     
-    indppl_membr_modal_init();
+                </div>
+                <div id='indppl-tab-3' class='indppl-tab-pane'>
+                    <div class="indppl-instructions">
+                        <div class="indppl-instructions-text">
+                            <h2>Product Recommendation 'Recipes'</h2>
+                            <p>Your planting recommendations are like a gourmet recipe where each product is an ingredient. The product recommendation 'recipes' you build on this page will show up on the app's Shopping List and Planting Guide to tell your customers what products to use and in what quantities.</p>
+                        </div>
+                        <div class="indppl-video">
+                            <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div id="pp-store-products">
+                        <?php echo do_shortcode('[pp-store-products]'); ?>
+                    </div>
+                </div>
+                <div id='indppl-tab-4' class='indppl-tab-pane'>
+                    
+                    <div class="indppl-instructions">
+                        <div class="indppl-instructions-text">
+                            <h2>Planting Guides</h2>
+                            <p>We're not big fans of one-size-fits-all. That applies to planting guides as well. From here, you'll be able to manage customized planting guides for each planting situation your customer faces.</p>
+                        </div>
+                        <div class="indppl-video">
+                            <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+    
+                    <?php 
+                    $guides = do_shortcode('[pp-store-guides]');
+                    echo $guides; 
+                    ?>
+                </div>
+            </div>
+            <?php
+            // $return = ob_get_clean();
+        }else if($_GET['new'] == true){
+            // ob_start();
+            ?>
+            <h2>Store Management</h2>
+            <p>This is a place for instructions</p>
+            <?php
+            $store_info = indppl_store_info($store_id);
+            echo $store_info;
+            // $return = ob_get_clean();
+        }else{
+            // ob_start();
+            ?>
+            <div class='indppl-store-management-container'>
+                <!-- <h2>My Stores</h2>
+                <p>This is a place for instructions</p> -->
+                <?php
+                $store_info  = do_shortcode('[pp-my-stores]');
+                echo $store_info;
+                echo do_shortcode('[pp-my-dups]');
+                ?>
+            </div>
+            <?php
+        }
+        
+        indppl_membr_modal_init();
+    }
+
     
     $return = ob_get_clean();
     
