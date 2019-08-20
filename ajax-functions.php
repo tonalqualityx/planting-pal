@@ -927,6 +927,8 @@ function indppl_save_product_ajax(){
         $new_package = toolset_connect_posts('store-package', $store_id, $new_id);
         $prod_pack = toolset_connect_posts('product-package', $product_id, $new_id);
         // var_dump($new_package);
+        // $console = $new_package;
+
         array_push($pack_id_array, $new_id);
     }
     foreach($package_array as $package_id){
@@ -986,7 +988,7 @@ function indppl_save_product_ajax(){
     
         update_post_meta($store_id, 'wpcf-apprate-update', json_encode($old_update));
     }
-    // $console = $pack_id_array;
+    
     $ajax_array = [];
     $ajax_array['app_rates'] = $updated_app_rates;
     $ajax_array['product_id'] = $product_id;
@@ -996,6 +998,7 @@ function indppl_save_product_ajax(){
         $ajax_array['default'] = $set_default;
     }
     if($next){
+        $ajax_array['product_name'] = $product_name;
         $ajax_array['update'] = $update;
     }
     $ajax_array['console'] = $console;

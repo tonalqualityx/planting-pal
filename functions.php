@@ -1252,6 +1252,7 @@ function update_package_table($store_id, $product_id, $type){
                 // var_dump($pro_container);
                 if(!$default || empty($pro_container)){
                     // echo 'no foreach';
+
                     $app_qty = 0;
                     $wet_dry = get_post_meta($product_id, 'wpcf-dryliquid', true);
                     if($wet_dry = 'dry'){
@@ -1286,8 +1287,11 @@ function update_package_table($store_id, $product_id, $type){
                 )
             );
             foreach($product_related as $k => $val){
+                // var_dump($store_related);
+                // var_dump('<br />');
+                // var_dump($val);
+                // var_dump('<br /><br />');
                 if(in_array($val, $store_related)){
-                    
                     $package_size = get_post_meta($val, 'wpcf-size', true);
                     $package_unit = get_post_meta($val, 'wpcf-unit', true);
                     $cups = get_post_meta($product_id, 'wpcf-5cups', true);

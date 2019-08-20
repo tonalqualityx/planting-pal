@@ -652,7 +652,7 @@ jQuery(document).ready(function( $ ) {
         // var non_default = $("#container-select-form").find('input').filter('.indppl-non-default-container').serializeArray();
         var type = $('#indppl-modal-product-type').val();
         var product_id = $('#product-create-product').val();
-        console.log(product_id);
+        // console.log(product_id);
         var brand = $('#product-create-brand').val();
         var store_id = $('#store-id').val();
         var product_unit = $('.indppl-new-package').first().data('unit');
@@ -697,8 +697,7 @@ jQuery(document).ready(function( $ ) {
         var new_pack = {};
         var i = 0;
         var version_check = 1.0;
-        // console.log(product_input);
-        // console.log(product_dryliquid);
+
         if($(this).is('#product-create-next')){
             var next = true;
             $('.indppl-product-create-size-btn').each(function(){
@@ -721,6 +720,9 @@ jQuery(document).ready(function( $ ) {
                 }
             })
         }
+        console.log(product_id);
+        console.log(store_id);
+        console.log(type);
         $.ajax({
             url:indppl_ajax.ajaxurl,
             dataType: 'text',
@@ -763,8 +765,8 @@ jQuery(document).ready(function( $ ) {
                     // console.log(e);
                     array = JSON.parse(e);
                     // console.log(array);
-                    console.log(array['product_id']);
-                    console.log(product_id);
+                    // console.log(array['product_id']);
+                    // console.log(product_id);
                     if(array['pack_id_array']){
                         var count = 0;
                         $('.indppl-size-selected').each(function(){
@@ -775,8 +777,11 @@ jQuery(document).ready(function( $ ) {
                             }
                         })
                     }
+                    console.log(product_id);
                     if(product_id == 'new'){
-                        $('#add_new_product_select').attr('value', array['product_id']);
+                        $('#product-create-product').append(`<option value="` + array['product_id'] +`" selected>` + array['product_name'] + `</option>`);
+                        // $('#product-create-product').val(1).change();
+                        $('.indppl-add-product-name').val(array['product_name']);
                     }
                     $('.product-create-app-rates-chart-container').empty();
                     $('.product-create-app-rates-chart-container').append(array['app_rates']);
