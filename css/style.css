@@ -2788,6 +2788,57 @@ body .mfp-wrap {
   text-align: left;
 }
 
+/*** FIX FOR ORDERING ON PLANTING PRODUCT INPUT FORMS **/
+
+.product-create-brand-cut-off {
+  display:flex;
+  flex-direction: column;
+}
+
+.product-create-brand-cut-off *:nth-child(1) {
+  order: 1;
+}
+
+.product-create-brand-cut-off *:nth-child(2) {
+  order: 3;
+}
+
+.product-create-brand-cut-off *:nth-child(3) {
+  order: 4;
+}
+
+.product-create-brand-cut-off *:nth-child(4) {
+  order: 5;
+}
+
+.product-create-brand-cut-off *:nth-child(5) {
+  order: 2;
+}
+
+.product-create-brand-cut-off *:nth-child(6) {
+  order: 6;
+}
+
+.product-create-brand-cut-off *:nth-child(7) {
+  order: 7;
+}
+
+.product-create-brand-cut-off *:nth-child(8) {
+  order: 8;
+}
+
+.product-create-brand-cut-off *:nth-child(9) {
+  order: 9;
+}
+
+.product-create-brand-cut-off *:nth-child(10) {
+  order: 10;
+}
+
+.product-create-brand-cut-off *:nth-child(11) {
+  order: 11;
+}
+
 @media screen and (max-width: 640px){
   .inches-needed input {
     margin: 0;
