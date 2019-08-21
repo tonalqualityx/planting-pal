@@ -23,7 +23,7 @@ jQuery(document).ready(function( $ ) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 lat = position.coords.latitude;
                 lon = position.coords.longitude;
-                showPosition(position);
+                showPosition(lat, lon);
             },
             function(error){
                 // console.log(error);
