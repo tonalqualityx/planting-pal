@@ -18,19 +18,45 @@ jQuery(document).ready(function( $ ) {
         geoSubmit();
     })
 
-    function geoSubmit(){
-        var zip = $('#zip-for-location').val();
-        // var radius = $('#geo-radius-custom').val();
-        // if(parseInt(radius) > 30){
-        //     $('#geo-radius-custom').val(30);
-        // }
+    if($('.store-locate-container').length > 0){
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 lat = position.coords.latitude;
                 lon = position.coords.longitude;
+                showPosition(position);
+            },
+            function(error){
+                // console.log(error);
             });
         }
+    }
+    function geoSubmit(){
+        
+        // var radius = $('#geo-radius-custom').val();
+        // if(parseInt(radius) > 30){
+        //     $('#geo-radius-custom').val(30);
+        // }
+        var lat;
+        var lon;
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                lat = position.coords.latitude;
+                lon = position.coords.longitude;
+            },
+            function(error){
+                // console.log(error);
+                lat = null;
+                lon = null;
+            });
+        }
+        showPosition(lat, lon);
+        
+    }
+
+    function showPosition(lat=null, lon=null) {
+        // console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
         var radius = 30;
+        var zip = $('#zip-for-location').val();
         indpplAddLoading();
         setTimeout(function(){
             $.ajax({
