@@ -413,11 +413,6 @@ function pp_store_management(){
         FLBuilder::render_query( array(
             'page_id' => 48306
         ));
-    //    $show_content = get_post(48306);
-    //    $show_content = $show_content->post_content;
-    //    $show_content = apply_filters('the_content', $show_content); ?>
-       
-       <?php //echo $show_content;
     } else {
 
         if(isset($_GET['store-id'])){
@@ -597,122 +592,125 @@ add_shortcode('pp-store-management', 'pp_store_management');
 function pp_my_stores(){
     ob_start();
 
-    ?>
-    
-        <?php
-            $user_id = get_current_user_id();
-            $args = array(
-                'author' => $user_id,
-                'post_type' => 'store',
-                'orderby' => 'post-date',
-            );
-            $stores = new WP_Query($args);
-            $status = indppl_user_status($user_id);
-            global $wp;
-            $curernt_url =  home_url( $wp->request );
-            if($stores->have_posts()){
-                ?>
-                <div class='indppl-my-stores-container'>
-                    <?php
-                    while($stores->have_posts()){
-                        $stores->the_post();
-                        $id = get_the_ID();
-                        $img = get_post_meta($id, 'wpcf-logo', true);
-                        $title = get_the_title();
-                        $address1 = get_post_meta($id, 'wpcf-address1', true);
-                        $city = get_post_meta($id, 'wpcf-city', true);
-                        $state = get_post_meta($id, 'wpcf-state', true);
-                        $link = home_url() . '/store-profile?store-id=' . $id;
-                        $permalink = get_the_permalink($id);
-                        $live = get_post_meta($id, 'wpcf-issetup', true);
-                        ?>
-                        <div class='indppl-single-store-container white-background indppl-space-between'>
-                            <?php
-                            if($title){
-                                ?>
-                            <div class="indppl-store-dash-left">
-                                <div class='indppl-flex'>
-                                    <div class='indppl-store-thumb indppl-dash-thumb'>
-                                            <img src='<?php echo $img; ?>'>
-                                    </div>
-                                    <div class="indppl-store-address">
-                                        <h4 class=''><?php echo $title; ?></h4>
-                                        <p class='indppl-small-store-text'><?php echo $address1; ?></p>
-                                        <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
-                                    </div>
+    if(in_array('showaccount',$status)){
+        FLBuilder::render_query( array(
+            'page_id' => 48306
+        ));
+    } else { 
+        
+        $user_id = get_current_user_id();
+        $args = array(
+            'author' => $user_id,
+            'post_type' => 'store',
+            'orderby' => 'post-date',
+        );
+        $stores = new WP_Query($args);
+        $status = indppl_user_status($user_id);
+        global $wp;
+        $curernt_url =  home_url( $wp->request );
+        if($stores->have_posts()){
+            ?>
+            <div class='indppl-my-stores-container'>
+                <?php
+                while($stores->have_posts()){
+                    $stores->the_post();
+                    $id = get_the_ID();
+                    $img = get_post_meta($id, 'wpcf-logo', true);
+                    $title = get_the_title();
+                    $address1 = get_post_meta($id, 'wpcf-address1', true);
+                    $city = get_post_meta($id, 'wpcf-city', true);
+                    $state = get_post_meta($id, 'wpcf-state', true);
+                    $link = home_url() . '/store-profile?store-id=' . $id;
+                    $permalink = get_the_permalink($id);
+                    $live = get_post_meta($id, 'wpcf-issetup', true);
+                    ?>
+                    <div class='indppl-single-store-container white-background indppl-space-between'>
+                        <?php
+                        if($title){
+                            ?>
+                        <div class="indppl-store-dash-left">
+                            <div class='indppl-flex'>
+                                <div class='indppl-store-thumb indppl-dash-thumb'>
+                                        <img src='<?php echo $img; ?>'>
                                 </div>
-                                <div class="dash-buttons">
-                                    <p><a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a> Manage profile, products, & planting guide</p>
-                                    <p><a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a> Test store in the app</p>
-                                    <p style="display:none;"><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a> Copy store settings to create a new store</p>
-                                    <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a> Delete this store</p>
-                                    <?php if(in_array('paidaccountpro', $status)){ ?>
-                                        <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-store-auth'>Authorize</a> Manage who can duplicate this store</p>
-                                    <?php } ?>
+                                <div class="indppl-store-address">
+                                    <h4 class=''><?php echo $title; ?></h4>
+                                    <p class='indppl-small-store-text'><?php echo $address1; ?></p>
+                                    <p class='indppl-small-store-text'><?php echo $city . ', ' . $state; ?></p>
                                 </div>
                             </div>
-                                <?php
-                            }
-                            ?>
-                            <div class=''>
-                                
-                                <div class=''>
-                                    <?php 
-                                    $status = "Offline";
-                                    $status_class = "grey-text";
-                                    $progress = indppl_store_progress_bar($id, false, false);
-
-                                    if($live){
-                                        $status = "Online";
-                                        $status_class = "green-text";
-                                    }
-                                         ?>
-                                    <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>' id='status-<?php echo $id; ?>'><?php echo $status; ?></span></p>
-                                    <?php 
-                                    $gauge_level = 360*($progress['complete']/100);
-                                    $p51 = '';
-                                    if($gauge_level > 180){
-                                        $p51 = 'p51';
-                                    }
-                                    ?>
-                                    <div class="c100 <?php echo $p51; ?> center orange">
-                                        <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
-                                        <div class="slice">
-                                            <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
-                                            <div class="fill"></div>
-                                        </div>
-                                    </div>
-                                    <?php if ($progress['complete'] < 100) { ?>
-                                        <a href="<?php echo $link; ?>" class="orange-text text-center" style="display:block; margin-top:5px;">finish store setup</a>
-
-                                    <?php } 
-                                    if($progress['complete'] == 100 && !$live){ ?>
-                                        <a href='#' data-store='<?php echo $id; ?>' class='orange-text text-center indppl-live-store' style="display:block; margin-top:5px;">Go Live</a>
-                                    <?php
-                                    }elseif($progress['complete'] == 100 && $live){
-                                        ?>
-                                        <a href='#' class='orange-text text-center indppl-store-deactivate' data-store='<?php echo $id; ?>' style="display:block; margin-top:5px;">Deactivate</a>
-                                        <?php
-                                    }
-                                    ?>
-                                </div>
+                            <div class="dash-buttons">
+                                <p><a class='indppl-button button-primary indppl-small-store-link' href='<?php echo $link; ?>'>Edit</a> Manage profile, products, & planting guide</p>
+                                <p><a class='indppl-button button-primary indppl-small-store-perma-link' href='<?php echo $permalink; ?>' target="_blank">Test</a> Test store in the app</p>
+                                <p style="display:none;"><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-duplicate-store'>Duplicate</a> Copy store settings to create a new store</p>
+                                <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-delete-store'>Delete</a> Delete this store</p>
+                                <?php if(in_array('paidaccountpro', $status)){ ?>
+                                    <p><a href='#' data-store='<?php echo $id; ?>' class='indppl-button button-primary indppl-store-auth'>Authorize</a> Manage who can duplicate this store</p>
+                                <?php } ?>
                             </div>
                         </div>
-                        <?php
-                    }
-                    wp_reset_postdata(); ?>
-                </div>
-                <?php
-            }else if(home_url() . '/my-account' == $curernt_url){
-                $store_form = indppl_store_info($id);
-                echo $store_form;
-            }else{
-                $add_button = get_add_store_button();
-                echo $add_button;
-            }
-            do_shortcode('[pp-my-dups]');
-        ?>
-    <?php
+                            <?php
+                        }
+                        ?>
+                        <div class=''>
+                            
+                            <div class=''>
+                                <?php 
+                                $status = "Offline";
+                                $status_class = "grey-text";
+                                $progress = indppl_store_progress_bar($id, false, false);
+
+                                if($live){
+                                    $status = "Online";
+                                    $status_class = "green-text";
+                                }
+                                        ?>
+                                <p><strong>Store Status:</strong> <span class='<?php echo $status_class; ?>' id='status-<?php echo $id; ?>'><?php echo $status; ?></span></p>
+                                <?php 
+                                $gauge_level = 360*($progress['complete']/100);
+                                $p51 = '';
+                                if($gauge_level > 180){
+                                    $p51 = 'p51';
+                                }
+                                ?>
+                                <div class="c100 <?php echo $p51; ?> center orange">
+                                    <span><span class="gauge-small">store setup</span><?php echo $progress['complete']; ?>%<span class="gauge-small">complete</span></span>
+                                    <div class="slice">
+                                        <div class="bar" style="transform: rotate(<?php echo $gauge_level; ?>deg);"></div>
+                                        <div class="fill"></div>
+                                    </div>
+                                </div>
+                                <?php if ($progress['complete'] < 100) { ?>
+                                    <a href="<?php echo $link; ?>" class="orange-text text-center" style="display:block; margin-top:5px;">finish store setup</a>
+
+                                <?php } 
+                                if($progress['complete'] == 100 && !$live){ ?>
+                                    <a href='#' data-store='<?php echo $id; ?>' class='orange-text text-center indppl-live-store' style="display:block; margin-top:5px;">Go Live</a>
+                                <?php
+                                }elseif($progress['complete'] == 100 && $live){
+                                    ?>
+                                    <a href='#' class='orange-text text-center indppl-store-deactivate' data-store='<?php echo $id; ?>' style="display:block; margin-top:5px;">Deactivate</a>
+                                    <?php
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                }
+                wp_reset_postdata(); ?>
+            </div>
+            <?php
+        }else if(home_url() . '/my-account' == $curernt_url){
+            $store_form = indppl_store_info($id);
+            echo $store_form;
+        }else{
+            $add_button = get_add_store_button();
+            echo $add_button;
+        }
+        do_shortcode('[pp-my-dups]');
+
+    }
     $return = ob_get_clean();
     return $return;
 }
