@@ -1210,8 +1210,9 @@ PRODUCT MANAGEMENT
   text-decoration: none;
   border: black 1px solid; */
 }
-.indppl-product-create-size-btn:hover{
+.indppl-product-create-size-btn:hover, .indppl-product-create-size-btn:focus{
   text-decoration: none;
+  color:black;
 }
 .product-create-size-container{
   margin-top: 10px;

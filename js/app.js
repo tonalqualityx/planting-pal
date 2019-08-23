@@ -448,7 +448,7 @@ jQuery(document).ready(function( $ ) {
                 if(array['new_size']){
                     $('.product-create-new-size-container').append(array['new_size']);
                 }
-                $('.product-more-things-header').append("<h3 class='product-create-dry-wet-title green-text'>A Couple More Things</h3>");
+               
                 if(array['dry_wet']){
                     $('.product-create-dry-wet-container').append(array['dry_wet'][0]);
                     units = indppl_get_units(array['dry_wet'][1]);
@@ -516,6 +516,7 @@ jQuery(document).ready(function( $ ) {
                         $('.product-create-fraction-bag').hide();
                     }
                 }else{
+                    $('.product-more-things-header').append("<h3 class='product-create-dry-wet-title green-text'>A Couple More Things</h3>");
                     $('.product-create-fraction-bag').show();
                 }
                 if(array['fraction']){

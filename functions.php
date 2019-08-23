@@ -1893,14 +1893,21 @@ function indppl_get_product_info(){
     }else{
         $heading = 'Product selection for Raised Beds';
     }
+    $instructions = array(
+        'header' => $heading,
+        'text' => "Planting Pal works best by selecting the 'All Purpose' version for each product type (ie all purpose fertilizer vs. rose fertilizer). If necessary, plant-specific substitutions can be made when using the app. If you don't see the product you need listed in the dropdown, you can create your own!",
+        'video' => '<iframe width="238" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+    );
     ?>
     
-        <div class='slide-in-products-inside-container'>
-            <a href='#' class='modal-close'>X</a>
-            <!-- <h2><?php echo $heading; ?></h2> -->
-            <form id='product-create-form' method="post" action='#' class="form-horizontal">
-                <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
-                <div class='create-product-header-instructions'></div>
+    <div class='slide-in-products-inside-container'>
+        <a href='#' class='modal-close'>X</a>
+        <!-- <h2><?php echo $heading; ?></h2> -->
+        <form id='product-create-form' method="post" action='#' class="form-horizontal">
+            <input type='hidden' name='indppl-modal-product-type' id='indppl-modal-product-type' value=<?php echo $type; ?>>
+                <div class='create-product-header-instructions'>
+                    <?php echo indppl_instructions($instructions); ?>
+                </div>
                 <select class='product-create-brand' id='product-create-brand' name='product-create-brand'>
                     <option value='' disabled selected>Select Brand</option>
                     <?php
