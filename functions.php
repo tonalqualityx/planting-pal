@@ -1338,7 +1338,8 @@ function update_package_table($store_id, $product_id, $type){
 
     </table>
     <div class="product-create-submit-container">
-        <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/>
+        <!-- <input type="submit" name="product-create-submit-back" class='product-create-submit-back' value="Back"/> -->
+        <a href='#'class='product-create-submit-back indppl-orange'>Back</a>
         <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
         <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="+ Add Another Product"/>
         <input type="submit" name="product-update" id="product-update" class="product-update" value="Update"/>
@@ -1455,7 +1456,10 @@ function update_bag_package_table($store_id, $product_id, $type){
         <?php if(count($product_related) > 1){
             ?>
             <th colspan='5'>
-            <p>Let us do the math! Recommendations for all product sizes will adjust automatically</p>
+            <p>
+                Let us do the math! Click the refresh button to check your rates! 
+                <input type="submit" name="product-bag-update" id="product-bag-update" class="product-bag-update" value="Refresh"/>
+            </p>
         <?php } ?>
         </th>
     </tr>
@@ -1870,7 +1874,7 @@ function update_bag_package_table($store_id, $product_id, $type){
         <a href='#'class='product-create-submit-back indppl-orange'>Back</a>
         <a href='#' id="product-create-submit" class="product-create-submit indppl-round-button indppl-orange-bg">+ Add Another Product</a>
         <a href='#' data-exit="true" id="product-create-submit-exit" class="product-create-submit indppl-round-button indppl-orange-bg">Save & Exit</a>
-        <input type="submit" name="product-bag-update" id="product-bag-update" class="product-bag-update" value="Update"/>
+        <!-- <input type="submit" name="product-bag-update" id="product-bag-update" class="product-bag-update" value="Update"/> -->
         <!-- <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit" value="Exit"/> -->
     </div>
     <?php
