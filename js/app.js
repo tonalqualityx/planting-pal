@@ -571,13 +571,14 @@ jQuery(document).ready(function( $ ) {
                 }
             })
             // console.log(create_new);
-            var weight = ['lb', 'oz', 'g', 'kg'];
+            // used to remove 5-cups option
+            // var weight = ['lb', 'oz', 'g', 'kg'];
             if(create_new == true){
-                if($.inArray(unit, weight)){
-                    $('.product-create-5-cups-container').hide();
-                }else{
-                    $('.product-create-5-cups-container').show();
-                }
+                // if($.inArray(unit, weight)){
+                //     $('.product-create-5-cups-container').hide();
+                // }else{
+                //     $('.product-create-5-cups-container').show();
+                // }
                 var name = unit;
                 if(unit == 'qt-l' || unit == 'qt-d'){
                     name = 'Quart';

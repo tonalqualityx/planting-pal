@@ -1298,13 +1298,17 @@ function update_package_table($store_id, $product_id, $type){
                     $package_size = get_post_meta($val, 'wpcf-size', true);
                     $package_unit = get_post_meta($val, 'wpcf-unit', true);
                     $cups = get_post_meta($product_id, 'wpcf-5cups', true);
+                    $cups_unit = get_post_meta($product_id, 'wpcf-5cups-unit', true);
                     
                     // var_dump($cups);
                     // echo $cups;
                     
-                    $conversion = indppl_normalize($items, $package_unit, $cups);
+                    $conversion = indppl_normalize($items, $package_unit, $cups, $cups_unit);
                     // var_dump($conversion);
                     // $conversion = getVolume($app_qty, $app_unit, $package_unit);
+                    // var_dump($package_size);
+                    // var_dump($package_unit);
+                    // var_dump('<br /><br />');
                     if($conversion[0]['standard-amount'] == 0){
                         $final = 0;
                     }else{
