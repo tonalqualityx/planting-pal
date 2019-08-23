@@ -168,7 +168,8 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
             $distance = $value;
             $phone = get_post_meta($id, 'wpcf-phone', true);
             $url = get_post_meta($id, 'wpcf-weburl', true);
-            $author = get_the_author_meta("ID");
+            $author = get_post_field( 'post_author', $id );
+            // var_dump($url);
             $pro_array = indppl_user_status($author);
             if(in_array('paidaccountpro', $pro_array)){
                 $is_pro = true;
@@ -188,11 +189,11 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
                     <p class='store-list-text'><?php echo $city . ", " . $state . " " . $store_zip; ?></p>
                     <?php
 
-                    if($is_pro == 1){
+                    if($is_pro == true){
                         ?>
                         <p class='store-list-text'>
                             <a class='orange-text' href=tel:<?php echo $phone; ?>><?php echo phone_number_format($phone); ?></a>
-                            <a class='orange-text' href='<?php echo $url; ?>' target='_blank'>Website</a></p>
+                            <a class='orange-text' href='<?php echo $url; ?>' target='_blank'><?php echo $url; ?></a></p>
                         <?php
                     }
                     ?>
