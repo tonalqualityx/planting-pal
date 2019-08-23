@@ -1172,11 +1172,24 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
                 if($cups == null){
                     $cups = 1.5;
                 }
-                $density = $cups/5;
-                $items[$k]['unit-per-standard'] = $density;
-                $density = getMass($density, $cups_unit, $unit);
+                // var_dump($items[$k]['unit']);
+                // var_dump($unit);
+                // $single_cup = getVolume($cups/5, 'cup', $items[$k]['unit']);
+                // $density = getMass($single_cup * 5, $cups_unit, $unit);
+                $single_pound = 5/$cups;
+                // var_dump($single_pound);
+                $single_pack_unit = getVolume($single_pound, 'cup', $items[$k]['unit']);
+                // var_dump($single_pack_unit);
+                $single_pack_density = getMass($single_pack_unit, $cups_unit, $unit);
+                // var_dump($single_pack_density);
+                // var_dump($items[$k]['amount']);
+                $items[$k]['unit-per-standard'] = $single_pack_density;
+                // echo "<br /><br />";
+
                 // $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
-                $items[$k]['standard-amount'] = $density * $item['amount'];
+                $items[$k]['standard-amount'] = $single_pack_density * $items[$k]['amount'];
+                // var_dump($items[$k]['standard-amount']);
+                $items[$k]['invert'] = true;
             }else{
                 $cup = $cups/5;
                 $mass = getMass($cup, $cups_unit, $item['unit']);

@@ -1289,6 +1289,7 @@ function update_package_table($store_id, $product_id, $type){
                     'amount' => $app_qty,
                 )
             );
+
             foreach($product_related as $k => $val){
                 // var_dump($store_related);
                 // var_dump('<br />');
@@ -1312,7 +1313,11 @@ function update_package_table($store_id, $product_id, $type){
                     if($conversion[0]['standard-amount'] == 0){
                         $final = 0;
                     }else{
-                        $final = $package_size / $conversion[0]['standard-amount'];
+                        if($conversion[0]['invert']){
+                            $final = $package_size * $conversion[0]['standard-amount'];
+                        } else {
+                            $final = $package_size / $conversion[0]['standard-amount'];
+                        }
                     }
                     // echo $;
                     
