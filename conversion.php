@@ -1129,13 +1129,12 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
     // CANNOT CONTAIN THESE KEYS OR THEY WILL BE OVERWRITTEN: 
     // 'type' 'standardized-unit' 'standardized-value'
     $units = indppl_get_units();
-
     if (in_array($unit, $units['volume'])) {
         $standard_type = 'volume';
     } else {
         $standard_type = 'mass';
     }
-
+    
     $ref = &$items; // Copy items so we can manipulate it
     foreach($ref as $k => $item){
         // Find the type of the unit
@@ -1156,7 +1155,7 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
             if($unit == $item['unit'] || $item['amount'] == 0){
 
                 $items[$k]['standard-amount'] = $item['amount'];
-            
+                
             } else {
                 $convert = 'get' . ucfirst($standard_type);
                 $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
