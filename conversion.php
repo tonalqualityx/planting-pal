@@ -1165,9 +1165,17 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
             if($item['amount'] == 0){
                 $items[$k]['standard-amount'] = $item['amount'];
             }else if($standard_type == 'mass'){
-                $items[$k]['unit-per-standard'] = getDensity($cups, $unit);
-                $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
-                var_dump($items[$k]['unit-per-standard']);
+                if($cups_unit == null){
+                    $cups_unit = 'lb';
+                }
+                if($cups == null){
+                    $cups = 1.5;
+                }
+                $density = $cups/5;
+                $items[$k]['unit-per-standard'] = $density;
+                $density = getMass($density, $cups_unit, $unit);
+                // $items[$k]['standard-amount'] = $item['amount']/$items[$k]['unit-per-standard'];
+                $items[$k]['standard-amount'] = $density * $item['amount'];
             }else{
                 $cup = $cups/5;
                 $mass = getMass($cup, $cups_unit, $item['unit']);
