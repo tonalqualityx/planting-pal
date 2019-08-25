@@ -1200,14 +1200,27 @@ jQuery(document).ready(function( $ ) {
         
     });
 
-    $("body").on('click', '.planting-guide-instructions label', function() {
+    $("body").on('click', '.planting-guide-instructions .planting-guide-option-input > label', function() {
 
         var theInput = $(this).prev('input');
-        console.log(theInput.data('content'));
-        var content = $("#" + theInput.data('content')).html();
-        var image = $("#" + theInput.data('content') + "-image").attr('src');
-        console.log(image);
-        content = content + "<img src='" + image + "' class='indppl-step-img'>";
+        var content = '';
+        var image = '';
+        // console.log(theInput.data('content'));
+        // console.log(theInput.data('content'));
+        console.log(theInput.data('custom'));
+        if(theInput.data('custom')){
+            content = $("#" + theInput.data('content')).val();
+            console.log(theInput.data('content'));
+            image = theInput.parents('.planting-guide-instructions').find('.custom-image-container > img').attr('src');
+            console.log(image);
+        } else {
+            content = $("#" + theInput.data('content')).html();
+            image = $("#" + theInput.data('content') + "-image").attr('src');
+        }
+        // console.log(image);
+        if(image && image != 'undefined'){
+            content = content + "<img src='" + image + "' class='indppl-step-img'>";
+        }
 
         if(content == ''){
             image = $("#" + theInput.data('target') + "-uploaded").html();
@@ -1222,7 +1235,7 @@ jQuery(document).ready(function( $ ) {
             $('#alternative-guide-sections .alternate').each(function(){
 
                 step = $(this).data('step');
-                console.log(step);
+                // console.log(step);
                 var replace = $('.planting-guide-options[data-step=' + step + '] ul');
                 replace.after($(this));
                 $('#alternative-guide-sections').prepend(replace);
@@ -1429,7 +1442,7 @@ jQuery(document).ready(function( $ ) {
                     email : email
                 }, 
                 success : function(response) {
-                    console.log(response);
+
                     // $('.container').last().prepend('<h3 class="planting-guide-sent-text">Your planting guide has been sent to your email.</h3>');
                     $('.keep-going').text("Sent!");
                     $('.keep-going-text').text("Now, be sure to get everything on your shopping list. Together, we'll go over how, where, when and how much to use when its time to plants.");
@@ -1446,11 +1459,11 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.sponsor-link', function(e){
         e.preventDefault();
-        // console.log('triggered');
+
         var content = $(this).parent().find('.sponsor-copy').html();
         var brand = $(this).siblings('.product-name').find('.brand').text();
         var product = $(this).siblings('.product-name').find('.product').text();
-        // console.log(product);
+
         var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
         if(!image || image == 'undefined'){
             content = $(this).next('.sponsor-copy').html();
@@ -1467,8 +1480,7 @@ jQuery(document).ready(function( $ ) {
         if(!product || product == 'undefined'){
             product = $(this).parents('.sponsorship').next().children().last().html();
         }
-        // console.log(brand);
-        // console.log(product);
+
         $('body').prepend("<div class='sponsored-modal'>" + image + "<p class='brand'>" + brand + "</p><h4>" + product + "</h4><p>" + content + "</p></div>");
     });
 
@@ -1502,7 +1514,7 @@ jQuery(document).ready(function( $ ) {
                 blend_array[$(this).data('product')] = {'amount': $(this).val()};
                 blend_array[$(this).data('product')]['unit'] = $(this).parent().parent().find('.blended-select').val();
             });
-            // console.log(blend_array);
+
             var surface_array = {}
             $('.surface-num').each(function(){
                 surface_array[$(this).data('product')] = {'amount': $(this).val()};
@@ -1516,7 +1528,7 @@ jQuery(document).ready(function( $ ) {
                 each_array[product]['medium'] = $(this).parent().parent().find('.pots-apprates-each-num-8-24').val();
                 each_array[product]['large'] = $(this).parent().parent().find('.pots-apprates-each-num-24').val();
             });
-            // console.log(type);
+
             $.ajax({
                 url:indppl_ajax.ajaxurl,
                 dataType: 'text',
@@ -1533,7 +1545,7 @@ jQuery(document).ready(function( $ ) {
                 },
                 type: 'POST',
                 success: function(e){
-                    // console.log(e);
+
                     indpplDelLoading();
                     $('.slide-in-products-container').removeClass('left-0');
                     setTimeout(function(){
@@ -1562,7 +1574,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                // console.log(e);
+
                 $('.slide-in-sponsor-container .container').append(e); 
                 indpplDelLoading();
             }
@@ -1583,7 +1595,6 @@ jQuery(document).ready(function( $ ) {
         }
         if(check == 'partial'){
             $(this).parents('.indppl-flex').next('.inches-needed').removeClass('hide');
-            console.log($(this));
         } else {
             $(this).parents('.indppl-flex').next('.inches-needed').addClass('hide');
             $(this).parents('.indppl-flex').next('.inches-needed').children('input').val('0');
@@ -1593,7 +1604,6 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('submit', '#store-management-form', function(e){
         var phone = validatePhone($('#phone').val());
-        // console.log(phone);
         if(phone == false){
             e.preventDefault();
             alert('Phone number must be 10 digits.');
@@ -1635,7 +1645,6 @@ jQuery(document).ready(function( $ ) {
             type: 'POST',
             success: function(e){
                 array = JSON.parse(e);
-                // console.log(array['refresh']);
                 $('.indppl-add-sponsor-main-container').html(array['refresh']);
                 $('#add-sponsor-img').attr('src', array['img']);
                 indpplDelLoading();
@@ -1671,7 +1680,6 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                // console.log(e);
                 $('.slide-in-sponsor-container .container').append(e); 
                 indpplDelLoading();
             }
@@ -1695,7 +1703,6 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                // console.log(e);
                 $('.indppl-add-sponsor-main-container').html(e);
                 indpplDelLoading();
                 $('.sponsor-modal-close').hide();
@@ -1725,9 +1732,9 @@ jQuery(document).ready(function( $ ) {
         var dry_wet = ($('.product-create-dry-wet:checked').val());
         $('#product-create-standard-unit-add').empty();
         units = indppl_get_units(dry_wet);
-        // console.log(array['dry_wet'][2]);
+
         $.each(units, function(index, value){
-            // console.log(value);
+
             var name = value;
             // if(value == 'qt-d' || value == 'qt-l'){
             //     name = 'Quart';
@@ -1806,7 +1813,7 @@ jQuery(document).ready(function( $ ) {
     // Remove authorized duplicator
     $("body").on('click', '.remove-auth', function (e) {
         e.preventDefault();
-        // console.log('sdfsfsdfsdf');
+
         indpplAddLoading();
         var auth = $(this).data('id');
         var entry = $(this);
@@ -1823,7 +1830,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                // console.log(response);
+
                 $('.indppl-loading-background').remove();
                 if(response == 'success'){
                     entry.parent().remove();
@@ -1875,7 +1882,7 @@ jQuery(document).ready(function( $ ) {
     $("body").on('click', '#store-duplicate', function (e) {
 
         e.preventDefault();
-        // console.log($("#store-duplication-form input[name=billing]").is(':checked'));
+
         // Billing confirmation
         // if (!$("#store-duplication-form input[name=billing]").is(":checked") ){
         //     alert("Please indicate that you understand that your subscription will be increased to reflect the new store.");
@@ -1968,7 +1975,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                // console.log(response);
+
                 $('.indppl-my-stores-container').replaceWith(response);
                 indpplDelLoading();
             }
@@ -1992,7 +1999,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                // console.log(response);
+
                 if(response){
                     $(elem).replaceWith("<a href='#' class='orange-text text-center indppl-store-deactivate' data-store=" + id + " style='display: block; margin - top: 5px;'>Deactivate</a>");
                     $('#status-' + id).removeClass('grey-text').addClass('green-text').text('Online');
@@ -2019,7 +2026,7 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function (response) {
-                // console.log(response);
+
                 if(response){
                     $(elem).replaceWith("<a href='#' data-store=" + id + " class='orange-text text-center indppl-live-store' style='display: block; margin - top: 5px;'>Go Live</a>");
                     $('#status-' + id).removeClass('green-text').addClass('grey-text').text('Offline');
@@ -2084,8 +2091,7 @@ jQuery(document).ready(function( $ ) {
         var over_height = false;
         var over_height_elem;
         $('.ground-shopping-list').find('.rounded-input').each(function(){
-            // console.log($.isNumeric($(this).val()));
-            // console.log(ground);
+
             if($(this).val() > 0 && $.isNumeric($(this).val()) && ground == false){
                 ground = true;
                 return false;
@@ -2120,7 +2126,7 @@ jQuery(document).ready(function( $ ) {
         $(".indppl-pots-partial").each(function(){
             if($(this).is(':checked')){
                 var pots_need = $(this).parent().parent().parent().find('.rounded-input3').val();
-                // console.log(pots_need);
+  
                 if(!pots_need >= 1 && pots_need != null){
                     required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
                     
@@ -2129,12 +2135,11 @@ jQuery(document).ready(function( $ ) {
                     return false;
                 }else{
                     var height = $(this).parents('.tacos').find('.height').val();
-                    // console.log(height);
-                    // console.log(pots_need);
+
                     if(pots_need > height){
                         over_height = true;
                         over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
-                        // console.log(over_height_elem);
+
                     }
                 }
             }
@@ -2146,10 +2151,10 @@ jQuery(document).ready(function( $ ) {
         var beds_load = true;
         var beds_empty = true;
         $('.rb-form').find('.rounded-input.beds').each(function(){
-            // console.log($(this).val());
+
             var count = 0;
             $(this).parent().parent().find('.rounded-input2').each(function(){
-                // console.log($(this).val());
+
                 if($(this).val() >= 1){
                     count++;
                     beds_empty = false;
@@ -2176,7 +2181,6 @@ jQuery(document).ready(function( $ ) {
                 var beds_need = $(this).parent().parent().parent().find('.rounded-input3').val();
                 if(!beds_need >= 1 && beds_need != null){
                     beds_required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
-                    // console.log('testing' + beds_need);
                     beds_load = false;
                     bed_partial_empty = false;
                     return false;
@@ -2193,7 +2197,7 @@ jQuery(document).ready(function( $ ) {
         if(bed_partial_empty == false){
             beds_empty = false;
         }
-        // console.log('ground: ' + ground + " Pots: " + pots_load + " beds: " + beds_load + " pots empty: " + pots_empty + " beds empty: " + beds_empty);
+
         if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true)) || 
         (pots_load == true && (beds_empty == true || beds_load == true)) ||
         (beds_load == true && (pots_empty == true || pots_load == true) && over_height == false)){
@@ -2222,7 +2226,7 @@ jQuery(document).ready(function( $ ) {
                 $(this).after('<p class="next-button-error">Fill in all required fields</p>');
             }
             if(over_height == true){
-                // console.log(over_height_elem);
+
                 $(over_height_elem).prev().replaceWith('<p class="round-button-error">Cannot exceed height</p>')
             }
 
@@ -2266,13 +2270,13 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('mouseenter', 'tr.indppl-containers-row', function(){
-        // console.log($(this).find('.indppl-container-edit-title'));
+
         if($(this).find('.indppl-container-edit-title').length > 0){
             var id = $(this).find('.container-available').children(0).data('container');
             if(typeof id === 'undefined'){
                 id = $(this).attr('id');
             }
-            // console.log(id);
+
             $(this).last().children().last().append('<a class="container-delete" data-id=' + id + '>Delete</a>');
         }
     });
@@ -2297,7 +2301,7 @@ jQuery(document).ready(function( $ ) {
         indpplAddLoading();
         var id = $(this).data('id');
         if($.type(id) === "string"){
-            console.log(id);
+
             $('#' + id).remove();
             $('.del-container-message-container').remove();
             indpplDelLoading();
@@ -2400,6 +2404,7 @@ jQuery(document).ready(function( $ ) {
             $(this).parents('ul').find('.custom-image-container').html(image);
 
             $(this).parents('ul').find('.indppl-custom .planting-guide-option-input label').trigger('click');
+            
 
             alert('Your changes will be saved to the custom section.');
 
@@ -2412,10 +2417,11 @@ jQuery(document).ready(function( $ ) {
 
     });
 
-    if (window.location.pathname == "/register/free-membership/" || window.location.pathname == "/register/show-signup/"){
-        $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-form-row.mepr_email');
-        $('#mepr_coupon_code-22').remove();
-    }
+    // Turn off extra coupon code
+    // if (window.location.pathname == "/register/free-membership/" || window.location.pathname == "/register/show-signup/"){
+    //     $('<div><label>Coupon Code</label><input type="text" id="temp-mepr_coupon_code-22" name="mepr_coupon_code" value="" /></div>').insertAfter('.mp-form-row.mepr_email');
+    //     $('#mepr_coupon_code-22').remove();
+    // }
 
     var indpplCurLocation = window.location.pathname.split("/");
     if(indpplCurLocation[1] == 'register'){

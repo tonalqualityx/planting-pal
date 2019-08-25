@@ -260,7 +260,7 @@ $check_mark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox
 
                         <div class="planting-guide-option-input indppl-flex">
                             <input type="radio" name="section-<?php echo $i; ?>" id="radio-<?php echo $options['id']; ?>-custom" data-content='content-<?php echo $options['id']; ?>-custom' data-target="<?php echo $format_section; ?>" class='guide-step-description' <?php echo $c; ?> data-custom="true" data-option="c">
-                            <label for="radio-<?php echo $options['id']; ?>-custom" >Custom</label>
+                            <label for="radio-<?php echo $options['id']; ?>-custom" data-custom="true">Custom</label>
                         </div>
 
                         <div class='indppl-custom-guide-instructions instructions-content <?php if ($c != '') {echo " active";}?>'>
