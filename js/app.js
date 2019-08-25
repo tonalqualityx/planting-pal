@@ -2385,7 +2385,7 @@ jQuery(document).ready(function( $ ) {
 
         } else {
             // Sales Pitch
-            var message = "<div class='store-delete-modal indppl-loading-background'><div class='store-delete-modal-inside'><h3>Feature Not Available</h3><p>This feature is not available at your current subscription level.</p><p>When you upgrade to pro you'll have access to edit this text, plus many other tools to boost your sales!<a href='/pricing' class='indppl-btn'>Upgrade Now</a> <a href='#' class='indppl-btn grey-bg indppl-delete-product-no'>Later</a></div></div>";
+            var message = "<div class='store-delete-modal indppl-loading-background'><div class='store-delete-modal-inside'><h3>Feature Not Available</h3><p>This feature is not available at your current subscription level.</p><p>When you upgrade to pro you'll have access to edit this text, plus many other tools to boost your sales!<a href='/garden-center-pricing' class='indppl-btn'>Upgrade Now</a> <a href='#' class='indppl-btn grey-bg indppl-delete-product-no'>Later</a></div></div>";
             $('body').append(message);
         }
     });
