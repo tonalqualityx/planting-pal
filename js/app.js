@@ -991,13 +991,14 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.product-create-pots-submit', function(e){
         e.preventDefault();
         indpplAddLoading();
+        $('.indppl-form-required').remove();
         var required = true;
         if($('.indppl-add-product-name').val() == ""){
             $('.indppl-add-product-name').after("<span class='indppl-form-required margin-left-10 margin-top-20 color-red'>Required</span>");
             required = false;
         }
         if(!$('.indppl-size-selected')[0]){
-            $('.indppl-product-create-size-num-inside-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
+            $('.indppl-product-create-size-num-inside-container').after("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
             required = false;
         }
         if(required == false){
