@@ -18,6 +18,22 @@ jQuery(document).ready(function( $ ) {
         geoSubmit();
     })
 
+    navigator.permissions.query({name: 'geolocation'}).then(function(status) {
+        status.onchange = function(){
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    lat = position.coords.latitude;
+                    lon = position.coords.longitude;
+                    showPosition(lat, lon);
+                },
+                function(error){
+                    // console.log(error);
+                });
+            }
+        };
+        // console.log(status);
+      });
+    
     if($('.store-locate-container').length > 0){
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -52,6 +68,8 @@ jQuery(document).ready(function( $ ) {
         showPosition(lat, lon);
         
     }
+
+    
 
     function showPosition(lat=null, lon=null) {
         // console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);

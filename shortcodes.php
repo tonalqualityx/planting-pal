@@ -207,7 +207,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
                         ?>
                         <p class='store-distance store-list-text'>In Town</p>
                         <?php
-                    }else{
+                    }else if($zip != null || $lat != 0){
                         ?>
                         <p class='store-distance store-list-text'>Greater than 30mi</p>
                         <?php
