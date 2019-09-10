@@ -1314,7 +1314,9 @@ function update_package_table($store_id, $product_id, $type){
                         $final = 0;
                     }else{
                         if($conversion[0]['invert']){
-                            $final = $package_size * $conversion[0]['standard-amount'];
+                            $final = $app_qty/5 * $cups;
+                            $final = $package_size / $final; 
+                            // $final = $package_size * $conversion[0]['standard-amount'];
                         } else {
                             $final = $package_size / $conversion[0]['standard-amount'];
                         }
