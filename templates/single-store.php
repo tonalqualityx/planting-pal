@@ -8,6 +8,7 @@ wp_head();
 $storeid = get_the_ID(  );
 $user_plants = array();
 $display = 'plants_form';
+$mass_units = indppl_get_units('mass');
 
 if(isset($_POST['next-step'])){
     $display = $_POST['next-step'];
@@ -45,7 +46,6 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                 $brand = $brand[0];
                 $plant = get_the_title($container);
                 $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
-                // echo "<h1>$amount</h1>";
 
                 if($standard != 'each'){
                     $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
@@ -54,14 +54,13 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     $normalized = indppl_normalize($unit_args, $standard, $cups);
                     
                     if($standard != 'lb'){
-                        $need = getVolume($amount, $unit, $standard);
-                        // echo "<h2>Volume: $need $standard</h2>";
+                        $amount = getVolume($amount, $unit, $standard);
+
                     } else {
                         $calc = getDensity($cups, $unit);
                         $cups1 = $cups/5;
                         $amount_cups = getVolume($amount, $unit, 'cup');
-                        $need = $amount_cups * $cups1;
-                        // echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
+                        $amount = $amount_cups * $cups1;
                     }
                 } 
                 // var_dump($need);
@@ -82,6 +81,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         $products[$key]['name'] = $brand->name . " " . $product;
                         $products[$key]['need'] = $need;
                         $products[$key]['unit'] = $standard;
+                        var_dump($products);
                     }
                 }
 
@@ -124,6 +124,13 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
 
                     $sqft = (intval($pots['qty'][$i]) * intval($pots['length'][$i]) * intval($pots['width'][$i]))/144;
 
+                    $mass_conversion = false;
+                    $mass_conversion = null;
+
+                    if(in_array($standard, $mass_units)){
+                        $mass_conversion = true;
+                        $mass_amount = ind_mass_to_cuft($standard, $cups, $cuft);
+                    }
                     
                     switch($type){
                         
@@ -131,23 +138,31 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         
                             $quarts = getVolume($cuft, 'cuft', 'qt-d');
 
+                        
                             if($quarts >= 8){
 
                                 $fill_rate = intval($rates['amount'])/100;
-                                $amount = $cuft * $fill_rate;
+                                $amount = $mass_conversion ? $mass_amount * $fill_rate : $cuft * $fill_rate;
+                                // $amount = $cuft * $fill_rate;
                                 
                             } elseif($rates['primary'] == 'true'){
                                 
-                                $amount = $cuft;
+                                $amount = $mass_conversion ? $mass_amount : $cuft;
                                 
                             }
                             if($quarts >= 8 || $rates['primary'] == 'true'){
                                 
                                 $unit_args = array(array('unit' => 'cuft', 'amount' => $amount));
-                                
-                                $normalized = indppl_normalize($unit_args, $standard, $cups);
-                                $need = $normalized[0]['standard-amount'];
+
+                                if($mass_conversion){
+                                    $need = $amount;
+                                } else {
+
+                                    $normalized = indppl_normalize($unit_args, $standard, $cups);
+                                    $need = $normalized[0]['standard-amount'];
+                                }
                             }
+
                             
                             break;
 
@@ -237,6 +252,14 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     $cuft = getVolume($ci, 'ci', 'cuft');
 
                     $sqft = (intval($beds['qty'][$i]) * intval($beds['length'][$i]) * intval($beds['width'][$i])) / 144;
+
+                    $mass_conversion = false;
+                    $mass_conversion = null;
+
+                    if (in_array($standard, $mass_units)) {
+                        $mass_conversion = true;
+                        $mass_amount     = ind_mass_to_cuft($standard, $cups, $cuft);
+                    }
                     
                     
                     switch ($type) {
@@ -248,17 +271,22 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         if($quarts >= 8){
 
                             $fill_rate  = intval($rates['amount']) / 100;
-                            $amount     = $cuft * $fill_rate;
+                            $amount = $mass_conversion ? $mass_amount * $fill_rate : $cuft * $fill_rate;
+                            // $amount     = $cuft * $fill_rate;
 
                         } elseif($rates['primary'] == 'true'){
-                            $amount = $cuft;
+                            $amount = $mass_conversion ? $mass_amount : $cuft;
                         }
 
                         if($quarts >= 8 || $rates['primary'] == 'true'){
 
-                            $unit_args  = array(array('unit' => 'cuft', 'amount' => $amount));
-                            $normalized = indppl_normalize($unit_args, $standard, $cups);
-                            $need       = $normalized[0]['standard-amount'];
+                            if($mass_conversion){
+                                $need = $amount;
+                            } else {
+                                $unit_args  = array(array('unit' => 'cuft', 'amount' => $amount));
+                                $normalized = indppl_normalize($unit_args, $standard, $cups);
+                                $need       = $normalized[0]['standard-amount'];
+                            }
                         
                         }
 

@@ -559,8 +559,15 @@ function pp_store_management(){
         }else if($_GET['new'] == true){
             // ob_start();
             ?>
-            <h2>Store Management</h2>
-            <p>This is a place for instructions</p>
+            <div class="indppl-instructions margin-top-20">
+                <div class="indppl-instructions-text">
+                    <h2>Store Management</h2>
+                    <p>It's time to get started setting up your store. Check out the video for more details.</p>
+                </div>
+                <div class="indppl-video">
+                    <iframe width="266" height="150" src="https://www.youtube.com/embed/cVknBmohzGA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
+                </div>
+            </div>
             <?php
             $store_info = indppl_store_info($store_id);
             echo $store_info;

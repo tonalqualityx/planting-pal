@@ -1128,6 +1128,7 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
     // Will return a 'standardized-amount' and 'standardized-unit' value
     // CANNOT CONTAIN THESE KEYS OR THEY WILL BE OVERWRITTEN: 
     // 'type' 'standardized-unit' 'standardized-value'
+    
     $units = indppl_get_units();
     if (in_array($unit, $units['volume'])) {
         $standard_type = 'volume';
@@ -1258,10 +1259,10 @@ function indppl_get_units($return = 'all'){
         ),
         "mass" => array(
             "lbs",
+            "lb",
             "oz",
             "g",
-            "kg",
-            "lb"
+            "kg"
         ),
     );
 
@@ -1272,4 +1273,25 @@ function indppl_get_units($return = 'all'){
     return $units;
 
     
+}
+
+// Returns the amount of pounds needed to meet the cuft requirement
+function ind_mass_to_cuft($unit, $cups, $cuft){
+
+    // Convert to lbs
+    $lbs = getMass(1, 'lb', $unit);
+
+    // Get 1lb in CUFT
+    $convert = getVolume($cuft, 'cuft', 'cup');
+
+    return ($convert/5) * $cups;
+
+}
+
+function ind_vol_to_lbs($value, $unit, $cups, $lbs){
+
+    // convert to cuft
+
+    // get lbs
+
 }
