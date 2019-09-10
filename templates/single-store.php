@@ -46,27 +46,21 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                 $brand = $brand[0];
                 $plant = get_the_title($container);
                 $amount = $apprates['ground'][$key]['containers'][$container]['amount'] * $count;
-                // echo "<h1>$amount</h1>";
 
                 if($standard != 'each'){
                     $unit = $apprates['ground'][$key]['containers'][$container]['unit'];
                     $unit_args = array(array('unit' => $unit, 'amount' => $amount));
                     
-                    if(in_array($standard, $mass_units)){
-
-                    } else {
-                        $normalized = indppl_normalize($unit_args, $standard, $cups);
-                    }
+                    $normalized = indppl_normalize($unit_args, $standard, $cups);
                     
                     if($standard != 'lb'){
-                        $need = getVolume($amount, $unit, $standard);
-                        // echo "<h2>Volume: $need $standard</h2>";
+                        $amount = getVolume($amount, $unit, $standard);
+
                     } else {
                         $calc = getDensity($cups, $unit);
                         $cups1 = $cups/5;
                         $amount_cups = getVolume($amount, $unit, 'cup');
-                        $need = $amount_cups * $cups1;
-                        // echo "<h2>Weight: 5 cups = $cups lbs so 1 cup = $cups1 lbs so $amount $unit = $need lbs</h2>";
+                        $amount = $amount_cups * $cups1;
                     }
                 } 
                 // var_dump($need);
@@ -87,6 +81,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         $products[$key]['name'] = $brand->name . " " . $product;
                         $products[$key]['need'] = $need;
                         $products[$key]['unit'] = $standard;
+                        var_dump($products);
                     }
                 }
 
