@@ -4,7 +4,7 @@
  * Plugin URI: https://becomeindelible.com
  * Description: Sets up and displays the user interface for planting pal
  * Author: Indelible Inc.
- * Version: 0.1.0
+ * Version: 1.1.1
  * Author URI: https://becomeindelible.com
  * License: GPL2+
  * Github Plugin URI: tonalqualityx/planting-pal
