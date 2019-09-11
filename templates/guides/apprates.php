@@ -5,6 +5,7 @@
 $print_apprates = '';
 $s = '';
 $cur_cups = get_post_meta( $product['id'], 'wpcf-5cups', TRUE );
+$cur_cups_unit = get_post_meta($product['id'], 'wpcf-5cups-unit', TRUE);
 $dry = get_post_meta($product['id'], 'wpcf-dryliquid', TRUE);
 $bag = explode(" ", $list[$product['id']]['name']);
 $volume = false;
@@ -63,8 +64,13 @@ if($type == 'ground'){ // If guide is in ground
 
                     } else {
                         // Now determine if that's a reasonable fraction to manage - if not set the variables as cups...
-                        $new_normalized = indppl_normalize($cur_items, 'cup', $cur_cups);
-                        $cur_amount = round($new_normalized[0]['standard-amount'], 1);
+                        $new_normalized = indppl_normalize($cur_items, 'cup', $cur_cups, $cur_cups_unit);
+                        if(isset($new_normalized[0]['invert'])){
+                            $cur_amount = 1;
+                        } else {
+                            $cur_amount = round($new_normalized[0]['standard-amount'], 1);
+                        }
+
                         if($cur_amount > 1){
                             $s = 's';
                         }
