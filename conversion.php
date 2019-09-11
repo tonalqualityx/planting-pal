@@ -1144,34 +1144,34 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
         } else {
             $items[$k]['type'] = 'mass';
         }
-        
-        // echo "<h4>Type</h4>";
-        // var_dump($items);
-        // // var_dump($standard_type);
-        // // Compare and run the appropriate function
-        // echo $standard_type;
-        // echo $items[$k]['type'];
-        // var_dump("<br /><br />");
+
+        // If they are the same type convert using the proper function
         if($standard_type == $items[$k]['type']){
             if($unit == $item['unit'] || $item['amount'] == 0){
 
                 $items[$k]['standard-amount'] = $item['amount'];
+                $items[$k]['conversion'] = "none";
                 
             } else {
+
                 $convert = 'get' . ucfirst($standard_type);
                 $items[$k]['standard-amount'] = $convert( $item['amount'], $item['unit'], $unit);
-            
+                $items[$k]['conversion'] = "same type";                
             }
+
         } else {
+            // We're going to need some values here if nothing is set...
+            if($cups_unit == null || $cups_unit == ''){
+                $cups_unit = 'lb';
+            }
+            if($cups == null || $cups == ''){
+                $cups = 1.5;
+            }
+
+            // If they aren't the same type we need to do some converting...
             if($item['amount'] == 0){
                 $items[$k]['standard-amount'] = $item['amount'];
             }else if($standard_type == 'mass'){
-                if($cups_unit == null || $cups_unit == ''){
-                    $cups_unit = 'lb';
-                }
-                if($cups == null || $cups == ''){
-                    $cups = 1.5;
-                }
                 // var_dump($items[$k]['unit']);
                 // var_dump($unit);
                 // $single_cup = getVolume($cups/5, 'cup', $items[$k]['unit']);
@@ -1190,6 +1190,7 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
                 $items[$k]['standard-amount'] = $single_pack_density * $items[$k]['amount'];
                 // var_dump($items[$k]['standard-amount']);
                 $items[$k]['invert'] = true;
+                $items[$k]['conversion'] = "volume to mass";
             }else{
                 $cup = $cups/5;
                 $mass = getMass($cup, $cups_unit, $item['unit']);
@@ -1197,6 +1198,7 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
                 $blank = getVolume($total_cups, 'cup', $unit);
                 $items[$k]['unit-per-standard'] = 1;
                 $items[$k]['standard-amount'] = $blank;
+                $items[$k]['conversion'] = "mass to volume";
             }
 
         }
