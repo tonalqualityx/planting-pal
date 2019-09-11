@@ -55,12 +55,16 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     
                     if(!in_array($standard, $mass_units)){
                         $amount = getVolume($amount, $unit, $standard);
-
+                        
                     } else {
-                        $cups1 = $cups/5;
-                        $amount_cups = getVolume($amount, $unit, 'cup');
-                        $amount = $amount_cups * $cups1;
-                        $normalized[0]['standard-amount'] = $amount;
+                        if(!in_array($unit, $mass_units)){
+                            $cups1 = $cups/5;
+                            $amount_cups = getVolume($amount, $unit, 'cup');
+                            $amount = $amount_cups * $cups1;
+                            $normalized[0]['standard-amount'] = $amount;
+                        } else {
+                            $amount = getMass($amount, $unit, $standard);
+                        }
                     }
                 } 
                 // var_dump($need);

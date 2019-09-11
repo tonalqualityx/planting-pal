@@ -1128,7 +1128,7 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
     // Will return a 'standardized-amount' and 'standardized-unit' value
     // CANNOT CONTAIN THESE KEYS OR THEY WILL BE OVERWRITTEN: 
     // 'type' 'standardized-unit' 'standardized-value'
-    
+
     $units = indppl_get_units();
     if (in_array($unit, $units['volume'])) {
         $standard_type = 'volume';
@@ -1166,10 +1166,10 @@ function indppl_normalize($items = array(), $unit, $cups = null, $cups_unit = nu
             if($item['amount'] == 0){
                 $items[$k]['standard-amount'] = $item['amount'];
             }else if($standard_type == 'mass'){
-                if($cups_unit == null){
+                if($cups_unit == null || $cups_unit == ''){
                     $cups_unit = 'lb';
                 }
-                if($cups == null){
+                if($cups == null || $cups == ''){
                     $cups = 1.5;
                 }
                 // var_dump($items[$k]['unit']);

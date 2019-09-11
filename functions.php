@@ -1390,6 +1390,7 @@ function update_bag_package_table($store_id, $product_id, $type){
        $normalize_array[] = array('amount' => $amount, 'unit' => $unit, 'package' => $value);
     }
     $sorted_products = indppl_normalize($normalize_array, $standard_unit);
+
     $temp_sorted = array();
     usort($sorted_products, function($a, $b){
         return $b['standard-amount'] <=> $a['standard-amount'];
@@ -1569,6 +1570,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                         <?php
                     }
                     foreach($pro_container as $k => $v){
+
                         $items = array(
                             array(
                                 'unit' => $app_unit,
@@ -1577,7 +1579,6 @@ function update_bag_package_table($store_id, $product_id, $type){
                             );
 
                         if($id == $v['child']){
-                            
                             
                             $qty = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-qty', true);
                             $unit = get_post_meta($pro_container[$k]['intermediary'], 'wpcf-apprate-unit-holdover', true);
@@ -1604,8 +1605,21 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 );
                                 // $conversion = getVolume($qty, $unit, $package_unit);
                                 $conversion = indppl_normalize($to_convert, $package_unit, $cups);
+
+                                if($conversion[0]['invert']){
+                                    $invert = true;
+                                    $qty_cups = getVolume($qty, $unit, 'cup');
+                                    $cup_single = $cups/5;
+                                    $qty_weight = $qty_cups * $cup_single;
+                                    $conversion = getMass($package_size, $package_unit, 'lb') / $qty_weight;
+                                    $final = $conversion;
+                                    $per_plant = 1/$final;
+                                } else {
+                                    $conversion = $conversion[0]['standard-amount'];
+                                    $final = $package_size / $conversion;
+                                    $per_plant = $conversion / $package_size;
+                                }
                                 // var_dump($conversion);
-                                $conversion = $conversion[0]['standard-amount'];
                                 // $conversion = getVolume($qty, $unit, $package_unit); 
                                 // if($conversion >= $package_size){
                                 //     $final = $conversion / $package_size;
@@ -1613,10 +1627,10 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 //     $final_2 = round($final, 2);
                                 //     $pp_dilema = 'cpp';
                                 // }else{
-                                    $final = $package_size / $conversion;
-                                    $final_1 = round($final, 2);
-                                    $final_2 = round($conversion / $package_size, 2);
-                                    $pp_dilema = 'ppc';
+
+                                $final_1 = round($final, 2);
+                                $final_2 = round($per_plant, 2);
+                                $pp_dilema = 'ppc';
                                 // }
                                 
                             }
@@ -1659,9 +1673,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                                     <?php
                                 }
                             }else{
-                                if($pp_dilema == 'ppc'){
-    
-                                }
+                                
                                 if($app_qty){
                                     $color_class = 'black-text';
                                     ?>
@@ -1709,6 +1721,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                     }
                     
                     if(!$default || empty($pro_container)){
+                        
                         if($non_default_app_rate){
                             $unit = $non_default_app_rate;
                         }else{
@@ -1767,10 +1780,10 @@ function update_bag_package_table($store_id, $product_id, $type){
                             //     $final_2 = round($final, 2);
                             //     $pp_dilema = 'cpp';
                             // }else{
-                                $final = $package_size / $conversion;
-                                $final_1 = round($final, 2);
-                                $final_2 = round($conversion / $package_size, 2);
-                                $pp_dilema = 'ppc';
+                            $final = $package_size / $conversion;
+                            $final_1 = round($final, 2);
+                            $final_2 = round($conversion / $package_size, 2);
+                            $pp_dilema = 'ppc';
                             // }
                         }
                         $app_qty = round($final, 2);
@@ -1807,9 +1820,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 <?php
                             }
                         }else{
-                            if($pp_dilema == 'ppc'){
-
-                            }
+                            var_dump($app_qty);
                             if($app_qty){
                                 $color_class = 'black-text';
                                 if($app_qty == INF){
@@ -2734,3 +2745,17 @@ function indppl_membr_modal_init(){ ?>
         });
     </script>
 <?php }
+
+function ind_parse_array($array){
+    echo "<ul><li>";
+    if(is_array($array)){
+        foreach($array as $key => $val){
+            echo $key;
+            ind_parse_array($val);
+        }
+    } else {    
+        echo $array;
+    }
+
+    echo "</li></ul>";
+}
