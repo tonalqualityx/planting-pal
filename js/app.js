@@ -17,7 +17,14 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         geoSubmit();
     })
-    if (document.documentMode || /Edge/.test(navigator.userAgent)) {
+    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+    var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    
+    if (isSafari && iOS) {
+        // alert("You are using Safari on iOS!");
+    } else if(isSafari) {
+        // alert("You are using Safari.");
+    }else if(document.documentMode || /Edge/.test(navigator.userAgent)) {
         // alert('Hello Microsoft User! This site works best in Chrome!');
     }else{
         navigator.permissions.query({name: 'geolocation'}).then(function(status) {
