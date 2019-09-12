@@ -81,7 +81,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         $products[$key]['name'] = $brand->name . " " . $product;
                         $products[$key]['need'] = $need;
                         $products[$key]['unit'] = $standard;
-                        var_dump($products);
+                        // var_dump($products);
                     }
                 }
 
