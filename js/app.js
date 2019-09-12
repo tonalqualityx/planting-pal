@@ -100,6 +100,13 @@ jQuery(document).ready(function( $ ) {
         }, 200);
     }
 
+
+    $('#mepr-address-country option').each(function(){
+        if($(this).val() != 'US' && $(this).val() != "CA" && $(this).val() != ''){
+            $(this).remove();
+        }
+    });
+
     $('body').on('click', '#indppl-app-pagination', function(e){
         e.preventDefault();
         indpplAddLoading();
@@ -3558,6 +3565,7 @@ function monitorProgress(store) {
         }
     });
 }
+
 
 var indpplMembrInitialized = false;
 
