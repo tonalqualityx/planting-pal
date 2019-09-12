@@ -53,6 +53,13 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
     $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : '1';
     $args = array(
         'post_type' => 'store',
+        'meta_query' => array(
+            array(
+                'key' => 'wpcf-issetup',
+                'value' => '1',
+                'compare' => '=',
+            ),
+        ),
     );
     $store_name_search = false;
     // var_dump($is_zip);
