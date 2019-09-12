@@ -53,14 +53,18 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                     
                     $normalized = indppl_normalize($unit_args, $standard, $cups);
                     
-                    if($standard != 'lb'){
+                    if(!in_array($standard, $mass_units)){
                         $amount = getVolume($amount, $unit, $standard);
-
+                        
                     } else {
-                        $calc = getDensity($cups, $unit);
-                        $cups1 = $cups/5;
-                        $amount_cups = getVolume($amount, $unit, 'cup');
-                        $amount = $amount_cups * $cups1;
+                        if(!in_array($unit, $mass_units)){
+                            $cups1 = $cups/5;
+                            $amount_cups = getVolume($amount, $unit, 'cup');
+                            $amount = $amount_cups * $cups1;
+                            $normalized[0]['standard-amount'] = $amount;
+                        } else {
+                            $amount = getMass($amount, $unit, $standard);
+                        }
                     }
                 } 
                 // var_dump($need);
@@ -81,7 +85,7 @@ if(isset($_POST['next-step']) && $_POST['next-step'] == 'shopping_list'){
                         $products[$key]['name'] = $brand->name . " " . $product;
                         $products[$key]['need'] = $need;
                         $products[$key]['unit'] = $standard;
-                        // var_dump($products);
+
                     }
                 }
 
