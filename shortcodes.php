@@ -503,6 +503,7 @@ function pp_store_management(){
                             </div>
                             <div class="indppl-video">
                                 <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                <p class="indppl-watch-video">Watch: How to use this page.</p>
                             </div>
                         </div>
                     </div>
@@ -520,6 +521,7 @@ function pp_store_management(){
                         </div>
                         <div class="indppl-video">
                             <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <p class="indppl-watch-video">Watch: How to use this page.</p>
                         </div>
                     </div>
                             
@@ -537,6 +539,7 @@ function pp_store_management(){
                         </div>
                         <div class="indppl-video">
                             <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <p class="indppl-watch-video">Watch: How to use this page.</p>
                         </div>
                     </div>
                     <div id="pp-store-products">
@@ -552,6 +555,7 @@ function pp_store_management(){
                         </div>
                         <div class="indppl-video">
                             <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <p class="indppl-watch-video">Watch: How to use this page.</p>
                         </div>
                     </div>
     
@@ -569,10 +573,11 @@ function pp_store_management(){
             <div class="indppl-instructions margin-top-20">
                 <div class="indppl-instructions-text">
                     <h2>Store Management</h2>
-                    <p>It's time to get started setting up your store. Check out the video for more details.</p>
+                    <p>Enter your Garden Center's store information here. This info will be used to help customers find you in the Planting Pal app and customize your planting guide with contact information and store logo.</p>
                 </div>
                 <div class="indppl-video">
                     <iframe width="266" height="150" src="https://www.youtube.com/embed/cVknBmohzGA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
+                    <p class="indppl-watch-video">Watch: How to use this page.</p>
                 </div>
             </div>
             <?php
@@ -988,7 +993,7 @@ function pp_store_containers(){
         </table>
         <div class='container-button-container'>
             <a href='#' class='add-container-btn indppl-button'>+ Add New Plant Container Size</a>
-            <p class="container-submit"><input type="submit" name="container-submit" id="container-submit" class="button button-primary" value="Save Changes"/></p>
+            <!-- <p class="container-submit"><input type="submit" name="container-submit" id="container-submit" class="button button-primary" value="Save Changes"/></p> -->
         </div>
     </form>
     <?php

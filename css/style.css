@@ -148,7 +148,8 @@ body .mepr-white-popup .mepr-btn {
 
 .indppl-btn, 
 .slide-in-products-container input[type=submit],
-body .mepr-white-popup .mepr-btn {
+body .mepr-white-popup .mepr-btn,
+input[type=submit].button-primary {
   padding: 7px 15px;
   border-radius: 25px;
   display: inline-block;
@@ -156,6 +157,8 @@ body .mepr-white-popup .mepr-btn {
   font-size: 0.8em;
   margin-top: 10px;
   border: none!important;
+  text-transform: uppercase;
+  font-weight: 800;
 }
 
 .indppl-btn:hover, 
@@ -166,7 +169,8 @@ body .mepr-white-popup .mepr-btn {
 .slide-in-products-container input[type=submit]:hover,
 .slide-in-products-container input[type=submit]:focus,
 a.orange-bg:hover,
-body .mepr-white-popup .mepr-btn:hover{
+body .mepr-white-popup .mepr-btn:hover,
+input[type=submit].button-primary:hover{
   color: white;
   background: #e25216!important;
   text-decoration: none!important;
@@ -350,7 +354,7 @@ ul.style-free {
 
 .indppl-nav-tabs{
   display: flex;
-  padding-bottom: 10px;
+  padding-bottom: 0;
   padding-left: 0;
   /* justify-content: space-evenly; */
   width: 100%;
@@ -363,12 +367,16 @@ ul.style-free {
   margin-bottom: -1px;
   margin-top: 30px;
   margin-right: 30px;
+  position: relative;
 }
 
 .indppl-nav-tabs > li:after {
   content: '>>';
   position: absolute;
   margin-left: 4px;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
 }
 
 .indppl-nav-tabs > li:last-child{
@@ -386,6 +394,7 @@ ul.style-free {
   border: 1px solid transparent;
   border-radius: 4px 4px 0 0;
   text-decoration: none;
+  display: inline-block;
 }
 
 .indppl-nav-tabs > li > a:hover{
@@ -2524,8 +2533,9 @@ Instructions
 }
 .indppl-watch-video{
   /* text-align: center; */
-  font-size: 1em;
+  font-size: 0.9em;
   font-weight: 600;
+  color: #302f2f;
 }
 .apprates-header{
   font-weight: 800;
@@ -2849,6 +2859,10 @@ body .mfp-wrap {
 
 #dashboard-content .fl-pricing-table-price p {
   margin-bottom: 0!important;
+}
+
+span.ui-datepicker-year{
+  display:none!important;
 }
 
 @media screen and (max-width: 640px){
