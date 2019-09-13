@@ -1,7 +1,7 @@
 <?php
 //Single Store Template
 //Use this file to collect input from end users on what they'll be planting
-
+defined('ABSPATH') or die('No script kiddies please!'); //For enemies
 wp_head();
 // get_header();
 

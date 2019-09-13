@@ -1,6 +1,9 @@
 
 if(typeof ind_base_url !== 'undefined'){
     if(window.location.href == ind_base_url){
+        ind_base_url = ind_base_url.split("//").pop();
+        ind_base_url = "https://" + ind_base_url;
+        // console.log(ind_base_url);
         if(ind_is_mobile == true && ind_desktop != true){
             window.location.href = ind_base_url + 'app';
         }
