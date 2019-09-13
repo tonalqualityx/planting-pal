@@ -300,10 +300,11 @@ jQuery(document).ready(function( $ ) {
             $(this).removeClass('indppl-dot-container');
 
         })
-        $(this).parent().parent().parent().parent().prepend("<div class='greyed-out-section'></div>");
+        var status = $('#user-status').val();
         $(this).parent().parent().removeClass('indppl-checked');
         $(this).parent().parent().addClass('indppl-unchecked');
         $(this).replaceWith('<div class="container-not-available-in-store"><svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg></div>');
+        greyOutAllUnchecked();
     });
     $('body').on('click', '.container-not-available-in-store', function(){
         $(this).parents('.indppl-table-color-offset').find('.indppl-no-dot-container').each(function(){
@@ -2818,6 +2819,7 @@ jQuery(document).ready(function( $ ) {
     }
 
     function greyOutAllUnchecked(){
+        $('.greyed-out-section').remove();
         jQuery('.container-not-available-in-store').each(function(){
             jQuery(this).parent().parent().parent().parent().prepend("<div class='greyed-out-section'></div>");
         })
