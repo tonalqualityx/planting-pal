@@ -1762,8 +1762,10 @@ jQuery(document).ready(function( $ ) {
             e.preventDefault();
             e.stopPropagation();
         }
-        if(e.which == 13 && $('#zip-for-location').focus()){
-            geoSubmit();
+        if($('#zip-for-location').length > 0){
+            if(e.which == 13 && $('#zip-for-location').focus()){
+                geoSubmit();
+            }
         }
     });
 
