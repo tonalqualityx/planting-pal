@@ -360,6 +360,7 @@ function indppl_add_new_brand_ajax(){
         $brand = $_POST['brand'];
     }
     $name = get_term_by('name', $brand, 'brand');
+    $console = $name;
     if($name != false){
         $terms = get_terms( array(
             'taxonomy' => 'brand',
@@ -380,7 +381,7 @@ function indppl_add_new_brand_ajax(){
             }
         }
         if($is_user_made){
-            echo $is_user_made;
+            $return = $is_user_made;
         }else{
             $term = wp_insert_term(
                 $brand . "_" . $count,
@@ -390,7 +391,7 @@ function indppl_add_new_brand_ajax(){
                 'name' => $brand
             ));
             $slug = get_term($term['term_id']);
-            echo $slug->slug;
+            $return = $slug->slug;
             add_term_meta($term['term_id'], 'wpcf-custom-brand', 1);
             add_term_meta($term['term_id'], 'wpcf-creator-user-id', get_current_user_id());
             $name = get_term_by('id', $term['term_id'], 'brand');
@@ -402,12 +403,14 @@ function indppl_add_new_brand_ajax(){
             'brand'
         );
         $slug = get_term($term['term_id']);
-        echo $slug->slug;
+        $return = $slug->slug;
         add_term_meta($term['term_id'], 'wpcf-custom-brand', 1);
         add_term_meta($term['term_id'], 'wpcf-creator-user-id', get_current_user_id());
         // echo "you failed";
     }
-    
+    $return_array['slug'] = $return;
+    $return_array['console'] = $console;
+    echo json_encode($return_array);
     die();
 }
 add_action( 'wp_ajax_indppl_add_new_brand_ajax', 'indppl_add_new_brand_ajax' );

@@ -391,16 +391,29 @@ jQuery(document).ready(function( $ ) {
             },
             type: 'POST',
             success: function(e){
-                // console.log(e);
+                array = JSON.parse(e);
+                console.log(array['console']);
                 $(".create-brand-button-container").hide();
                 $("#product-add-new-brand").hide();
                 $('#product-create-product').empty();
                 $(".product-create-product").show();
-
-                $('#product-create-brand').append('<option selected value="' + e + '">' + brand + '</option>');
                 var status = $('#user-status').val();
-                if(status == 'paidaccountpro'){
-                    $('.product-create-product').append('<option selected dissabled>Select Brand</option><option value="new">Add Product</option>');
+                var is_new = true;
+                $('#product-create-brand > option').each(function(){
+                    if($(this).val() == array['slug']){
+                        is_new = false;
+                    }
+                });
+                if(is_new == false){
+                    $('#product-create-brand option[value="' + array['slug'] + '"').attr('selected', 'selected');
+                    if(status == 'paidaccountpro'){
+                        $('.product-create-product').append('<option selected dissabled>Select Product</option><option value="new">Add Product</option>');
+                    }
+                }else{
+                    $('#product-create-brand').append('<option selected value="' + array['slug'] + '">' + brand + '</option>');
+                    if(status == 'paidaccountpro'){
+                        $('.product-create-product').append('<option selected dissabled>Select Product</option><option value="new">Add Product</option>');
+                    }
                 }
 
                 indpplDelLoading();
