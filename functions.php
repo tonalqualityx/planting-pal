@@ -1143,6 +1143,7 @@ function update_package_table($store_id, $product_id, $type){
             </div>
             <div class="indppl-video">
                 <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
+                <p class="indppl-watch-video">Watch: How to use this page.</p>
             </div>
         </div>
         <div class='product-create-chart-title-container'>
@@ -1438,6 +1439,7 @@ function update_bag_package_table($store_id, $product_id, $type){
             </div>
             <div class="indppl-video">
                 <iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>                
+                <p class="indppl-watch-video">Watch: How to use this page.</p>
             </div>
         </div>
         <div class='product-create-chart-title-container'>
@@ -1820,7 +1822,7 @@ function update_bag_package_table($store_id, $product_id, $type){
                                 <?php
                             }
                         }else{
-                            var_dump($app_qty);
+
                             if($app_qty){
                                 $color_class = 'black-text';
                                 if($app_qty == INF){
@@ -2380,10 +2382,10 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
             $next = "Start by adding some containers under the 'Plant Containers' tab below.";
                 break;
                 case 'containers' :
-                $next = "Next up - select which container sizes you carry. Do this under the 'Plant Containers' tab.";
+                $next = "Next up - select which container sizes you carry. Do this under the '2. Plant Containers' tab.";
                 break;
                 case 'ground' :
-                $next = "Great work! Next you'll need to add some in-ground products. Do that under the 'Products' tab below.";
+                $next = "Great work! Next you'll need to add some in-ground products. Do that under the '3. Products' tab below.";
                 break;
                 case 'pots' :
                 $next = "Next you'll need to setup the products you recommend for potted plants. Find this just below the in ground products.";
@@ -2697,7 +2699,7 @@ function indppl_instructions($args = array()){
         </div>
         <div class="indppl-video">
             <?php echo $video; ?>
-            <p class='orange-text indppl-watch-video'>Watch: how to use this page</p>
+            <p class='indppl-watch-video'>Watch: how to use this page</p>
         </div>
     </div>
     <?php
