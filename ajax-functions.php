@@ -505,7 +505,7 @@ function indppl_get_product_info_ajax(){
     $pack_units[] = [$fivecups, 'lb'];
     ob_start();
     ?>
-    <h3 class='green-text'>Which Sizes Do You Stock?</h3>
+    <h3 class='green-text ind-myriad-pro-header'>Which Sizes Do You Stock?</h3>
     <?php
     if($product_related && $product_id != 'new'){
         foreach ($product_related as $key => $value) {
@@ -581,7 +581,7 @@ function indppl_get_product_info_ajax(){
         <h4 class='indppl-sub-header'>How much does 5 level cups of this product weigh?</h4>
         <p>(We'll use this to calculate 'How much to use' on the planting guide)</p>
         <div class='product-create-5-cups-inside-container'>
-            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='<?php echo $fivecups; ?>'>
+            <input type='number' class='indppl-product-create-cups-num' id='indpll-product-create-cups-num' min='0' name='indppl-product-create-cups-num' value='1.5'>
             <select class='product-create-5-cups' id='product-create-5-cups' name='product-create-5-cups'>
                 <!-- <option class='product-create-5-cups-option' value='' disabled selected>Select Unit</option> -->
                 <?php
@@ -648,7 +648,10 @@ function indppl_get_product_info_ajax(){
     if($product_id == 'new'){
         ob_start();
         ?>
-        <input type='text' class='indppl-add-product-name' name='indppl-add-product-name' placeholder='Product Name'>
+        <div>
+            <h3 class="create-products-header green-text ind-myriad-pro-header">Product Name</h3>
+            <input type='text' class='indppl-add-product-name' name='indppl-add-product-name' placeholder='Product Name'>
+        </div>
         <?php
         $add_product = ob_get_clean();
     }
@@ -676,7 +679,7 @@ function indppl_get_product_info_ajax(){
         $console = $additive;
         ?>
         <div class='indppl-add-product-usage-type'>
-            <h3>Select Usage Type (check all that apply)</h3>
+            <h3 class='ind-myriad-pro-header green-text'>Select Usage Type (check all that apply)</h3>
             <div>
                 <input type='checkbox' name='indppl-add-product-bulk-filler' class='indppl-add-usage-type-check' id='indppl-add-product-bulk-filler' <?php if($filler){ ?>checked<?php }?>>
                 <label for='indppl-add-product-bulk-filler'>Bulk Filler/Substrate(ie Potting Soil)</label>

@@ -408,12 +408,12 @@ jQuery(document).ready(function( $ ) {
                 if(is_new == false){
                     $('#product-create-brand option[value="' + array['slug'] + '"').attr('selected', 'selected');
                     if(status == 'paidaccountpro'){
-                        $('.product-create-product').append('<option selected dissabled>Select Product</option><option value="new">Add Product</option>');
+                        $('.product-create-product').append('<option selected disabled>Select Product</option><option value="new">Add Product</option>');
                     }
                 }else{
                     $('#product-create-brand').append('<option selected value="' + array['slug'] + '">' + brand + '</option>');
                     if(status == 'paidaccountpro'){
-                        $('.product-create-product').append('<option selected dissabled>Select Product</option><option value="new">Add Product</option>');
+                        $('.product-create-product').append('<option selected disabled>Select Product</option><option value="new">Add Product</option>');
                     }
                 }
 
@@ -568,7 +568,7 @@ jQuery(document).ready(function( $ ) {
                         $('.product-create-fraction-bag').hide();
                     }
                 }else{
-                    $('.product-more-things-header').append("<h3 class='product-create-dry-wet-title green-text'>A Couple More Things</h3>");
+                    $('.product-more-things-header').append("<h3 class='product-create-dry-wet-title green-text ind-myriad-pro-header'>A Couple More Things</h3>");
                     $('.product-create-fraction-bag').show();
                 }
                 if(array['fraction']){
@@ -592,9 +592,11 @@ jQuery(document).ready(function( $ ) {
             $('.product-create-standard-unit').append('<option class="product-create-standard-unit-option" value="' + value + '">' + name + '</option>');
         })
         if(type == "wet"){
+            $('.product-more-things-header').addClass('hide');
             $('.product-create-fraction-bag').addClass('hide');
             $('.product-create-5-cups-container').addClass('hide');
         }else{
+            $('.product-more-things-header').removeClass('hide');
             $('.product-create-fraction-bag').removeClass('hide');
             $('.product-create-5-cups-container').removeClass('hide'); 
         }
@@ -649,6 +651,12 @@ jQuery(document).ready(function( $ ) {
     })
     
     $('body').on('click', '.indppl-x', function(e){
+        close_this_modal();
+    })
+    $('body').on('click', '.indppl-ok-close', function(e){
+        close_this_modal();
+    });
+    function close_this_modal(){
         // this needs to remove a package in the back end.
         if($(this).parent().hasClass('indppl-non-default-package')){
             // console.log('inside');
@@ -659,8 +667,7 @@ jQuery(document).ready(function( $ ) {
         }else{
             $(this).parent().remove();
         }
-            
-    })
+    }
     $('body').on('mouseleave', '.indppl-size-selected', function(){
         setTimeout(function(){
 
@@ -706,7 +713,7 @@ jQuery(document).ready(function( $ ) {
         if($('.product-create-5-cups-inside-container').is(':visible') && $('.product-create-5-cups-container').is(':visible')){
             // console.log($('#indpll-product-create-cups-num').val());
             if($('#indpll-product-create-cups-num').val() == ""){
-                $('.product-create-5-cups-inside-container').append("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
+                $('.product-create-5-cups-inside-container').after("<span class='indppl-form-required margin-left-10 color-red'>Required</span>");
                 required = false;
             }
         }
@@ -2108,6 +2115,8 @@ jQuery(document).ready(function( $ ) {
         $('.container-date').each(function(){
             var date = $(this).datepicker('getDate');
             var format = $.datepicker.formatDate('yymmdd', date);
+            console.log(format);
+            console.log(startformat);
             if(count == 0){
                 if(parseInt(startformat) > parseInt(format)){
                     inside = true;
@@ -2121,8 +2130,9 @@ jQuery(document).ready(function( $ ) {
                 count = 0;
             }
         })
+        console.log(overlap);
         if(overlap == true){
-            $('body').prepend("<div class='indppl-loading-background indppl-date-overlap-modal-background'><div class='container-date-overlap-modal'><div class='container-date-overlap-modal-inside'><div class='indppl-x x-date-overlap-modal'>X</div><h3 class='container-overlap-header'>The seasons overlap and products from both seasons will be available during the overlap.</h3></div></div></div>");
+            $('body').prepend("<div class='indppl-loading-background indppl-date-overlap-modal-background'><div class='container-date-overlap-modal'><div class='container-date-overlap-modal-inside'><div class='indppl-x x-date-overlap-modal'>X</div><h3 class='container-overlap-header'>These seasons overlap. Plant container sizes from both seasons will be available during the overlap.</h3><p class='indppl-overlap-ok-container'><a href='#' class='indppl-ok-close indppl-button'>OK</a></p></div></div></div>");
         }
 
     })

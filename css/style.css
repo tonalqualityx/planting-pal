@@ -673,11 +673,16 @@ h3.results-store {
 .store-delete-modal-inside, .container-date-overlap-modal-inside{
   max-width: 500px;
   width: 30vw;
-  height: 400px;
+  /* height: 400px; */
   background: white;
   border-radius: 10px;
   padding: 30px;
   border: black 1px solid;
+}
+.indppl-overlap-ok-container{
+  display: flex;
+  justify-content: center;
+
 }
 .indppl-small-store-link, .indppl-delete-store{
   margin-left: 5px;
@@ -1158,7 +1163,14 @@ div.ui-datepicker{
   width: 100%;
 }
 .indppl-add-product-name{
-  margin-top: 20px;
+  margin-top: 10px;
+}
+.ind-myriad-pro-header{
+  font-size: 1.5em;
+  font-weight: 600;
+  font-family: myriad-pro, sans-serif;
+  margin-bottom: 0;
+  margin-top: 30px;
 }
 .side-by-side{
   display: flex;
@@ -1166,7 +1178,9 @@ div.ui-datepicker{
 #geo-radius{
   margin-right: 10px;
 }
+.indppl-ok-close{
 
+}
 .indppl-green-underline:after {
   content: "";
     border-bottom:3px solid #488a41;
@@ -1208,6 +1222,10 @@ div.ui-datepicker{
 /*****************
 PRODUCT MANAGEMENT
 *****************/
+
+.create-products-header{
+  margin-bottom: 0;
+}
 
 .indppl-products-main-container h3, .planting-guide-editor h3 {
   font-size: 1.75em;
@@ -2043,6 +2061,9 @@ input.blended-num, input.surface-num{
 }
 .margin-top-30{
   margin-top: 30px;
+}
+.margin-top-10{
+  margin-top: 10px;
 }
 
 input.rounded-input {
