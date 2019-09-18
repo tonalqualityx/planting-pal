@@ -416,7 +416,6 @@ function pp_store_management(){
     $user_id = get_current_user_id();
     $status = indppl_user_status($user_id);
     ob_start();
-
     if(in_array('showaccount',$status)){
         FLBuilder::render_query( array(
             'page_id' => 48306
@@ -725,8 +724,10 @@ function pp_my_stores(){
             $store_form = indppl_store_info($id);
             echo $store_form;
         }else{
-            $add_button = get_add_store_button();
-            echo $add_button;
+            // $add_button = get_add_store_button();
+            // echo $add_button;
+            $store_form = indppl_store_info($id);
+            echo $store_form;
         }
         do_shortcode('[pp-my-dups]');
 
