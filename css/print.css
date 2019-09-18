@@ -1,0 +1,14 @@
+.planting-guide .indppl-dark-green-bg {
+    background-color: #488a41!important;
+    color: white!important;
+}
+
+.indppl-step-img {
+    display: block;
+    margin: auto;
+    width: 50%!important;
+}
+
+.guide-step-section {
+    break-inside: avoid;
+}
