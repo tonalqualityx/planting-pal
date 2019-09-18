@@ -4,6 +4,8 @@ wp_head(); ?>
 
 <body <?php body_class('single-guide'); ?>>
 
+    <a href="#" class="indppl-button button-primary print-guide no-print" onclick="window.print();return false;" />Print Guide</a>
+
     <?php
     $the_id = get_the_ID();
     if (have_posts()) : while (have_posts()) : the_post();

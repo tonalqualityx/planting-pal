@@ -2865,6 +2865,11 @@ span.ui-datepicker-year{
   display:none!important;
 }
 
+.print-guide {
+  text-align: center;
+  margin: 20px;
+}
+
 @media screen and (max-width: 640px){
   .inches-needed input {
     margin: 0;
@@ -2924,6 +2929,13 @@ span.ui-datepicker-year{
 
   h3.results-store {
     line-height: 1.2;
+  }
+
+  .print-guide {
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    margin: 0;
   }
 
 }
