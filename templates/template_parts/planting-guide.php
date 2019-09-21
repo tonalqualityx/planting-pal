@@ -9,7 +9,8 @@ $website  = get_post_meta($store, 'wpcf-weburl', TRUE);
 $guide_rates = indppl_apprates($store);
 $pro = false;
 
-$status = indppl_user_status(get_the_author_id($store));
+$status = indppl_user_status(get_post_field('post_author', $store));
+
 if(in_array('paidaccountpro', $status)){
     $pro = true;
 }
