@@ -456,7 +456,7 @@ function indppl_get_product_info_ajax(){
         $standard_unit = "<div id='product-create-standard-unit' data-unit='" . $unit . "'></div>";
         ob_start();
         ?>
-            <input type='hidden' class='product-create-dry-wet' value='<?php echo $dryliquid; ?>'>
+            <input type='radio' class='product-create-dry-wet hide' name='product-create-dry-wet' checked value='<?php echo $dryliquid; ?>'>
         <?php
         $dry_wet = ob_get_clean();
     }else{

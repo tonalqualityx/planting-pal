@@ -2840,7 +2840,7 @@ jQuery(document).ready(function( $ ) {
             $type = 'dry';
         }
         if($type == 'dry'){
-            return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Killogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
+            return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Kilogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
         }else if($type == 'bag'){
             return {'ppc': 'plants per bag / container', 'cpp': 'bags / containers per plant'};
         }else{
@@ -3125,7 +3125,8 @@ jQuery(document).ready(function( $ ) {
                 // console.log(e);
                 $('.product-create-app-rates-chart-container').empty();
                 $('.product-create-app-rates-chart-container').append(e);
-                var units = indppl_get_units($('input:radio.product-create-dry-wet:checked').val());
+                console.log($('input[name="product-create-dry-wet"]:checked').val());
+                var units = indppl_get_units($('input[name="product-create-dry-wet"]:checked').val());
                 // console.log(units);
                 $('.indppl-product-create-chart-app-unit').each(function(){
                     var select = $(this).data('unit');

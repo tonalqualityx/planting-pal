@@ -807,7 +807,7 @@ function indppl_save_post($store_id = 0){
             // var_dump(wp_get_attachment_image_src($attachment_id));
             if (is_wp_error($attachment_id)) {
                 // There was an error uploading the image.
-                echo "Error adding file";
+                // echo "Error adding file";
             }
         }
         // }
@@ -1138,7 +1138,7 @@ function update_package_table($store_id, $product_id, $type){
     <div class='product-create-chart-header-container'>
         <div class="indppl-instructions">
             <div class="indppl-instructions-text">
-                <h2><?php echo $header; ?> Planting Application Rates For:</h2>
+                <h2><?php echo $header; ?> Planting Application Rates:</h2>
                 <p>Tell us how much of this product you recommend for each plant container size. We’ll use these application rates to create a customized shopping list in the app AND show exactly how much to use for each size plant on the planting guide (paid subscriptions only)</p>
             </div>
             <div class="indppl-video">
@@ -1160,13 +1160,15 @@ function update_package_table($store_id, $product_id, $type){
         </div>
     </div>
     <table class='product-create-chart-table'>
-    <!-- <tr>
-        <th colspan='2'>Choose Application Rates</th>
-            <th colspan='5'>
-            <p>Application Rates Automatically Calculated for Other Sizes</p>
-            <p>Use the numbers below to fine tune your application rate on the left</p>
+    <tr>
+        <th colspan='2'></th>
+        <th colspan='5'>
+            <p>
+                Let us do the math! Click the refresh button to check your rates! 
+                <input type="submit" name="product-update" id="product-update" class="product-update" value="Refresh"/>
+            </p>
         </th>
-    </tr> -->
+    </tr>
     <tr>
         <th class='in-ground-header in-ground-plant-size'>Plant Container Size</th>
         <th class='in-ground-header in-ground-how-much'><p style='margin:0;'>How Much?</p><p style='margin:0;'>Per Plant Container Size</p></th>
@@ -1345,7 +1347,6 @@ function update_package_table($store_id, $product_id, $type){
         <a href='#'class='product-create-submit-back indppl-orange'>Back</a>
         <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
         <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="+ Add Another Product"/>
-        <input type="submit" name="product-update" id="product-update" class="product-update" value="Update"/>
         <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit hide" value="Exit"/>
     </div>
     <?php
