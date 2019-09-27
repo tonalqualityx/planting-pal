@@ -1554,6 +1554,11 @@ tr.in-ground-not-bag td:nth-child(n+4){
 .product-create-submit-container{
   padding-top: 40px;
 }
+
+.product-create-submit-container a {
+  margin-right: 15px;
+}
+
 .indppl-add-product-usage-type{
   display:flex;
   flex-direction: column;
@@ -2604,6 +2609,10 @@ Instructions
   font-size: 0.75em;
   margin: 0;
   margin-right: 5px;
+}
+
+.indppl-dup-stores .dash-buttons > p:nth-child(n + 3) {
+  display: none;
 }
 
 #dashboard-content .indppl-store-address h4 {
