@@ -2130,7 +2130,7 @@ jQuery(document).ready(function( $ ) {
                 inside = false;
                 count = 0;
             }
-            count++;
+            // count++;
         })
         console.log(overlap);
         if(overlap == true){
