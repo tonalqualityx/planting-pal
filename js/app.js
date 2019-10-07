@@ -636,7 +636,7 @@ jQuery(document).ready(function( $ ) {
                 // }
                 var name = unit;
                 if(unit == 'qt-l' || unit == 'qt-d'){
-                    name = 'Quart';
+                    name = 'qt';
                 }
                 $('.product-create-size-container').append('<a href="#" class=" indppl-product-create-size-btn margin-right-4 indppl-non-default-package indppl-new-package indppl-size-selected" data-id="0" data-size=' + size + ' data-unit=' + unit + '>' + size + " " + name + '</a>');
             }
@@ -651,18 +651,18 @@ jQuery(document).ready(function( $ ) {
     })
     
     $('body').on('click', '.indppl-x', function(e){
-        close_this_modal();
+        close_this_modal(this);
     })
     $('body').on('click', '.indppl-ok-close', function(e){
         close_this_modal();
     });
-    function close_this_modal(){
+    function close_this_modal(elem){
         // this needs to remove a package in the back end.
-        if($(this).parent().hasClass('indppl-non-default-package')){
-            // console.log('inside');
+        if($(elem).parent().hasClass('indppl-non-default-package')){
+            console.log('inside');
             
-            $(this).parent().removeClass('indppl-size-selected').addClass('indppl-size-not-selected');
-            $(this).parent().hide();
+            $(elem).parent().removeClass('indppl-size-selected').addClass('indppl-size-not-selected');
+            $(elem).parent().hide();
             e.stopPropagation();
         }else{
             $(this).parent().remove();
@@ -942,6 +942,11 @@ jQuery(document).ready(function( $ ) {
                             var id = $(this)[0];
                             // console.log(id);
                             $('.bag-apprates-container-title').each(function(){
+                                if($(this).data('id') == id){
+                                    $(this).addClass('color-red');
+                                }
+                            })
+                            $('.in-ground-chart-title').each(function(){
                                 if($(this).data('id') == id){
                                     $(this).addClass('color-red');
                                 }
@@ -1550,11 +1555,33 @@ jQuery(document).ready(function( $ ) {
             $(".sponsored-modal").remove();
         }
     });
-
     $('body').on('click', '.pots-apprates-save-btn', function(e){
+        $('.apprate-required').remove();
         e.preventDefault();
+        console.log($('.blended-num').val());
+        $('.blended-num').each(function(){
+            console.log($(this).val());
+            if(!$(this).val()){
+               $(this).parents('tr').after("<td colspan='4' class='color-red apprate-required'>You have incorrect information, please review the marked fields</td>");
+            }
+        });
+        $('.surface-num').each(function(){
+            console.log($(this).val());
+            if(!$(this).val()){
+               $(this).parents('tr').after("<td colspan='4' class='color-red apprate-required'>You have incorrect information, please review the marked fields</td>");
+            }
+        });
+        $('.pots-apprates-each ').each(function(){
+            console.log($(this).val());
+            if(!$(this).val() && !$(this).parents('tr').next().hasClass('apprate-each-required')){
+               $(this).parents('tr').after("<td colspan='4' class='apprate-each-required color-red apprate-required'>You have incorrect information, please review the marked fields</td>");
+            }
+        });
         if($('.pots-apprates-filler-total').text() != '100'){
-            alert('You need your mix to equal 100%!');
+            // alert('You need your mix to equal 100%!');
+            $('.pots-apprates-filler-container tbody').after("<td colspan='4' class='color-red apprate-required'>Oops! Your Bulk Filler soil formula does not add up to 100%. Please revise the percentages to continue.</td>");
+        }else if($('.apprate-required').length > 0){
+
         }else{
             indpplAddLoading();
             var store_id = $('#store-id').val();
@@ -2842,7 +2869,7 @@ jQuery(document).ready(function( $ ) {
             $type = 'dry';
         }
         if($type == 'dry'){
-            return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Kilogram', 'oz': 'Ounce', 'mL': 'Milliliter', 'L': 'Liter', 'cup': 'Cup', 'each': 'Each'};
+            return {'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Kilogram', 'oz': 'Ounce', 'cup': 'Cup', 'each': 'Each'};
         }else if($type == 'bag'){
             return {'ppc': 'plants per bag / container', 'cpp': 'bags / containers per plant'};
         }else{

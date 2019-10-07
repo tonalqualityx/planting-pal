@@ -841,7 +841,7 @@ p.round-button-error{
   margin-bottom:0;
 }
 .color-red, .duplicate-required-fill, .next-button-error, .round-button-error{
-  color:red;
+  color:red!important;
   text-decoration: none;
 }
 .duplicate-required-fill{

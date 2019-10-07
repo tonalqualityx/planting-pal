@@ -1178,7 +1178,7 @@ function update_package_table($store_id, $product_id, $type){
             if(in_array($value, $store_related)){
                 $name = get_post_meta($value, 'wpcf-unit', true);
                 if($name == 'qt-d' || $name == 'qt-l'){
-                    $name = 'Quart';
+                    $name = 'qt';
                 }
                 if($counter == 1){
                     $class='dark-grey-header';
@@ -1215,7 +1215,7 @@ function update_package_table($store_id, $product_id, $type){
         ?>
         <tr class='in-ground-not-bag'>
             <td>
-                <h4 class='in-ground-chart-title'><?php echo $title; ?></h4>
+                <h4 class='in-ground-chart-title' data-id='<?php echo $id; ?>'><?php echo $title; ?></h4>
             </td>
             <td style='text-align:center;'>
                 <?php
@@ -1493,7 +1493,7 @@ function update_bag_package_table($store_id, $product_id, $type){
             $name = get_post_meta($value, 'wpcf-unit', true);
             $colspan = 1;
             if($name == 'qt-d' || $name == 'qt-l'){
-                $name = 'Quart';
+                $name = 'qt';
             }
             if($class_count == 0){
                 $class = 'indppl-green-underline';
@@ -2029,7 +2029,11 @@ function indppl_get_products($store_id, $key, $type){
                 foreach($size_array as $key => $value){
                     $meta = get_post_meta($size_array[$key]);
                     echo $meta['wpcf-size'][0];
-                    echo $meta['wpcf-unit'][0];
+                    if($meta['wpcf-unit'][0] == 'qt-d' || $meta['wpcf-unit'][0] == 'qt-l'){
+                        echo 'qt';
+                    }else{
+                        echo $meta['wpcf-unit'][0];
+                    }
                     echo ' ';
                 }
                 ?>
@@ -2412,7 +2416,7 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
             }
 
             if($percentage == 100){
-                $next = "Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready! <br /><br /> <a href='#' class='store-go-live-btn button button-primary
+                $next = "Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready! <br /><br /> <a href='#' class='store-go-live-btn button indppl-button button-primary
             ' data-id='{$store}'>Make Public</a>";
             }
             
