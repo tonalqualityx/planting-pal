@@ -530,7 +530,7 @@ function indppl_get_product_info_ajax(){
                 // echo $author;
                 // echo $default_package;
                 if($unit_meta == 'qt-d' || $unit_meta == 'qt-l'){
-                    $unit_val = 'Quart';
+                    $unit_val = 'qt';
                 }else{
                     $unit_val = $unit_meta;
                 }
@@ -974,12 +974,26 @@ function indppl_save_product_ajax(){
         );
         $app_rates = indppl_apprates($store_id);
         $update = [];
-        if(!empty($app_rates['ground'])){
-            foreach($app_rates['ground'] as $pro_id => $product){
-                if($pro_id == $product_id){
-                    foreach($store_container_relations as $key => $container){
-                        if(!array_key_exists($container, $app_rates['ground'][$pro_id]['containers']) && !array_key_exists($container, $app_rates['ground'][$pro_id]['bag'])){
-                            $update[] = $container;
+        if($fraction == true){
+            if(!empty($app_rates['ground'])){
+                foreach($app_rates['ground'] as $pro_id => $product){
+                    if($pro_id == $product_id){
+                        foreach($store_container_relations as $key => $container){
+                            if(!array_key_exists($container, $app_rates['ground'][$pro_id]['containers']) && !array_key_exists($container, $app_rates['ground'][$pro_id]['bag'])){
+                                $update[] = $container;
+                            }
+                        }
+                    }
+                }
+            }
+        }else{
+            if(!empty($app_rates['ground'])){
+                foreach($app_rates['ground'] as $pro_id => $product){
+                    if($pro_id == $product_id){
+                        foreach($store_container_relations as $key => $container){
+                            if(!array_key_exists($container, $app_rates['ground'][$pro_id]['containers'])){
+                                $update[] = $container;
+                            }
                         }
                     }
                 }
