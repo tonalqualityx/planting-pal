@@ -2113,8 +2113,9 @@ jQuery(document).ready(function( $ ) {
         var overlap = false;
         var inside = false;
         $('.container-date').each(function(){
-            var date = $(this).datepicker('getDate');
-            var format = $.datepicker.formatDate('yymmdd', date);
+            console.log($(this));
+            var date2 = $(this).datepicker('getDate');
+            var format = $.datepicker.formatDate('yymmdd', date2);
             console.log(format);
             console.log(startformat);
             if(count == 0){
@@ -2129,10 +2130,11 @@ jQuery(document).ready(function( $ ) {
                 inside = false;
                 count = 0;
             }
+            count++;
         })
         console.log(overlap);
         if(overlap == true){
-            $('body').prepend("<div class='indppl-loading-background indppl-date-overlap-modal-background'><div class='container-date-overlap-modal'><div class='container-date-overlap-modal-inside'><div class='indppl-x x-date-overlap-modal'>X</div><h3 class='container-overlap-header'>These seasons overlap. Plant container sizes from both seasons will be available during the overlap.</h3><p class='indppl-overlap-ok-container'><a href='#' class='indppl-ok-close indppl-button'>OK</a></p></div></div></div>");
+            $('body').prepend("<div class='indppl-loading-background indppl-date-overlap-modal-background'><div class='container-date-overlap-modal'><div class='container-date-overlap-modal-inside'><h3 class='container-overlap-header'>These seasons overlap. Plant container sizes from both seasons will be available during the overlap.</h3><p class='indppl-overlap-ok-container'><a href='#' class='indppl-ok-close indppl-button'>OKAY</a></p></div></div></div>");
         }
 
     })
