@@ -2416,7 +2416,7 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
             }
 
             if($percentage == 100){
-                $next = "Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready! <br /><br /> <a href='#' class='store-go-live-btn button button-primary
+                $next = "Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready! <br /><br /> <a href='#' class='store-go-live-btn button indppl-button button-primary
             ' data-id='{$store}'>Make Public</a>";
             }
             

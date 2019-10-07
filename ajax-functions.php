@@ -717,8 +717,12 @@ function indppl_get_product_info_ajax(){
         $video = '<iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>';
     }else if($type == 'pots'){
         $header = 'Product Setup for Potted Plants';
+        $instruction_text = "Planting Pal works best by selecting the 'All Purpose' version for each product type (ie all purpose fertilizer vs. rose fertilizer). If necessary, plant-specific substitutions can be made when using the app. If you don't see the product you need listed in the dropdown, you can create your own!";
+        $video = '<iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>';
     }else if($type == 'beds'){
         $header = 'Product Setup for Raised Beds';
+        $instruction_text = "Planting Pal works best by selecting the 'All Purpose' version for each product type (ie all purpose fertilizer vs. rose fertilizer). If necessary, plant-specific substitutions can be made when using the app. If you don't see the product you need listed in the dropdown, you can create your own!";
+        $video = '<iframe width="266" height="150" src="https://www.youtube.com/embed/_u9CgVPHU6A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>';
     }
     ?>
     
@@ -2024,13 +2028,13 @@ function indppl_get_pot_apprates_ajax(){
                             </div>
                         </td>
                         <td class='pots-apprates-each-cell'>
-                            <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' value='<?php echo $each_small; ?>' placeholder='#eaches'>
+                            <input type='number' min='0' data-product='<?php echo $key; ?>' class='pots-apprates-each pots-apprates-each-num-8 max-width-100' name='pots-apprates-each-8-<?php echo $key; ?>' value='<?php echo $each_small; ?>' placeholder='#eaches'>
                         </td>
                         <td class='pots-apprates-each-cell'>
-                            <input type='number' class='pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' value='<?php echo $each_medium; ?>' placeholder='#eaches'>
+                            <input type='number' class='pots-apprates-each pots-apprates-each-num-8-24 max-width-100' name='pots-apprates-each-8-24-<?php echo $key; ?>' value='<?php echo $each_medium; ?>' placeholder='#eaches'>
                         </td>
                         <td class='pots-apprates-each-cell'>
-                            <input type='number' class='pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
+                            <input type='number' class='pots-apprates-each pots-apprates-each-num-24 max-width-100' name='pots-apprates-each-24-<?php echo $key; ?>' value='<?php echo $each_large; ?>' placeholder='#eaches'>
                         </td>
                     </tr>
                     <?php
@@ -2041,7 +2045,7 @@ function indppl_get_pot_apprates_ajax(){
         }
         ?>
         <div class='pots-apprates-save-container'>
-            <a href='#' class='orange-text apprates-close'>Back</a>
+            <a href='#' class='orange-text apprates-close'>Exit</a>
             <a href='#' class='pots-apprates-save-btn indppl-button'>Save & Exit</a>
         </div>
     </div>

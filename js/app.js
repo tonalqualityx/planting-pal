@@ -1555,11 +1555,33 @@ jQuery(document).ready(function( $ ) {
             $(".sponsored-modal").remove();
         }
     });
-
     $('body').on('click', '.pots-apprates-save-btn', function(e){
+        $('.apprate-required').remove();
         e.preventDefault();
+        console.log($('.blended-num').val());
+        $('.blended-num').each(function(){
+            console.log($(this).val());
+            if(!$(this).val()){
+               $(this).parents('tr').after("<td colspan='4' class='color-red apprate-required'>You have incorrect information, please review the marked fields</td>");
+            }
+        });
+        $('.surface-num').each(function(){
+            console.log($(this).val());
+            if(!$(this).val()){
+               $(this).parents('tr').after("<td colspan='4' class='color-red apprate-required'>You have incorrect information, please review the marked fields</td>");
+            }
+        });
+        $('.pots-apprates-each ').each(function(){
+            console.log($(this).val());
+            if(!$(this).val() && !$(this).parents('tr').next().hasClass('apprate-each-required')){
+               $(this).parents('tr').after("<td colspan='4' class='apprate-each-required color-red apprate-required'>You have incorrect information, please review the marked fields</td>");
+            }
+        });
         if($('.pots-apprates-filler-total').text() != '100'){
-            alert('You need your mix to equal 100%!');
+            // alert('You need your mix to equal 100%!');
+            $('.pots-apprates-filler-container tbody').after("<td colspan='4' class='color-red apprate-required'>Oops! Your Bulk Filler soil formula does not add up to 100%. Please revise the percentages to continue.</td>");
+        }else if($('.apprate-required').length > 0){
+
         }else{
             indpplAddLoading();
             var store_id = $('#store-id').val();
