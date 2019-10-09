@@ -1162,6 +1162,9 @@ div.ui-datepicker{
   max-width: 1200px;
   width: 100%;
 }
+.apprates-close{
+  margin-right: 15px;
+}
 .indppl-add-product-name{
   margin-top: 10px;
 }
