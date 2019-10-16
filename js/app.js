@@ -616,6 +616,7 @@ jQuery(document).ready(function( $ ) {
                 $('.product-create-new-size-container').append('<p class="unit-required-text color-red">If Unit is Each the size must be 1 or greater</p>')
             }
         }else{
+            display_5_cups(unit);
             $('.unit-required-text').remove();
             var create_new = true;
             $('.indppl-product-create-size-btn').each(function(){
@@ -644,6 +645,28 @@ jQuery(document).ready(function( $ ) {
         checkIfEach();
 
     })
+    function display_5_cups(unit){
+        var unit_array = [unit];
+        $('.indppl-product-create-size-btn').each(function(){
+            var this_unit = $(this).data('unit');
+            unit_array.push(this_unit);
+        })
+        var result = [];
+        var weight_array = ['lb', 'kg', 'g', 'oz'];
+        $.map(unit_array, function (val, i) {
+            if ($.inArray(val, weight_array) > -1) {
+                result.push(val);
+            }
+        });
+        console.log(result);
+        if(result.length > 0){
+            $('.product-create-5-cups-container').removeClass('hide');
+        }else{
+            if(!$('.product-create-5-cups-container').hasClass('hide')){
+                $('.product-create-5-cups-container').addClass('hide');
+            }
+        }
+    }
     $('body').on('mouseenter', '.indppl-size-selected', function(){
         if($(this).hasClass('indppl-non-default-package')){
             $(this).append('<span class="indppl-x">X</span>');
@@ -660,7 +683,7 @@ jQuery(document).ready(function( $ ) {
         // this needs to remove a package in the back end.
         if($(elem).parent().hasClass('indppl-non-default-package')){
             console.log('inside');
-            
+            display_5_cups(unit);
             $(elem).parent().removeClass('indppl-size-selected').addClass('indppl-size-not-selected');
             $(elem).parent().hide();
             e.stopPropagation();

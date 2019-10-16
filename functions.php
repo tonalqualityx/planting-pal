@@ -1968,7 +1968,7 @@ function indppl_get_product_info(){
                     </div>
                     <div class='product-create-first-part-container product-create-fraction-bag'>
                     </div>
-                    <div class='product-create-first-part-container product-create-5-cups-container'>
+                    <div class='product-create-first-part-container product-create-5-cups-container hide'>
                     </div>
                     <div class='product-create-first-part-container product-create-usage-type'>
                     </div>
