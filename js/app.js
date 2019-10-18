@@ -84,7 +84,13 @@ jQuery(document).ready(function( $ ) {
 
     
 
-    function showPosition(lat=null, lon=null) {
+    function showPosition(lat, lon) {
+        if(lat === undefined){
+            lat = null;
+        }
+        if(lon === undefined){
+            lon = null;
+        }
         // console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
         var radius = 30;
         var zip = $('#zip-for-location').val();
@@ -658,7 +664,10 @@ jQuery(document).ready(function( $ ) {
         checkIfEach();
 
     })
-    function display_5_cups(unit = 'default'){
+    function display_5_cups(unit){
+        if(unit === undefined){
+            unit = 'default';
+        }
         var unit_array = [unit];
         $('.indppl-product-create-size-btn.indppl-size-selected').each(function(){
             if($(this).is(':visible')){
@@ -904,7 +913,7 @@ jQuery(document).ready(function( $ ) {
                     }
                     console.log(product_id);
                     if(product_id == 'new'){
-                        $('#product-create-product').append(`<option value="` + array['product_id'] +`" selected>` + array['product_name'] + `</option>`);
+                        $('#product-create-product').append('<option value="' + array['product_id'] + '" selected>' + array['product_name'] + '</option>');
                         // $('#product-create-product').val(1).change();
                         $('.indppl-add-product-name').val(array['product_name']);
                     }
@@ -1019,9 +1028,9 @@ jQuery(document).ready(function( $ ) {
                 //     name = 'Quart';
                 // }
                 if(select == index || (select == 'tbl' && index == 'tbls')){
-                    selected = `selected`;
+                    selected = 'selected';
                 }else{
-                    selected = ``;
+                    selected = '';
                 }
                 $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
             });
@@ -2936,7 +2945,7 @@ jQuery(document).ready(function( $ ) {
             $type = 'dry';
         }
         if($type == 'dry'){
-            return {'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Kilogram', 'oz': 'Ounce', 'cup': 'Cup', 'each': 'Each'};
+            return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Kilogram', 'oz': 'Ounce', 'cup': 'Cup', 'each': 'Each'};
         }else if($type == 'bag'){
             return {'ppc': 'plants per bag / container', 'cpp': 'bags / containers per plant'};
         }else{
@@ -3128,9 +3137,9 @@ jQuery(document).ready(function( $ ) {
                     // console.log(select);
                     $.each(units, function(index, value){
                         if(select == index){
-                            selected = `selected`;
+                            selected = 'selected';
                         }else{
-                            selected = ``;
+                            selected = '';
                         }
                         $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
                     });
@@ -3395,7 +3404,7 @@ jQuery(document).ready(function( $ ) {
                 jQuery.each(array['app_rates'], function(index, value){
                     // console.log(index);
 
-                    jQuery(elem).parent().siblings().eq(1+index).html(`<p class="green-text text-align-center margin-0 plant-num-text">`+value+`</p><p class="white-text green-bg text-align-center margin-0">plants</p>`);
+                    jQuery(elem).parent().siblings().eq(1+index).html('<p class="green-text text-align-center margin-0 plant-num-text">'+value+'</p><p class="white-text green-bg text-align-center margin-0">plants</p>');
                 });
 
 
@@ -3457,9 +3466,9 @@ jQuery(document).ready(function( $ ) {
                     
                     $.each(bagunits, function(index, value){
                         if(select == index || (select == 'tbl' && index == 'tbls')){
-                            selected = `selected`;
+                            selected = 'selected';
                         }else{
-                            selected = ``;
+                            selected = '';
                         }
                         $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
                     });

@@ -118,6 +118,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
         );
     }else if($zip){
         $zip_array = geozip($zip, $radius);
+        // var_dump($zip_array);
         foreach($zip_array as $key => $value){
             $zips_only[] = $value['zip'];
             $distance_array[] = round($value['distance'], 2);
