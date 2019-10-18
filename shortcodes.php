@@ -476,7 +476,7 @@ function pp_store_management(){
                             // indppl_notify_new_store($store_id, $user);
                         }
                     ?>
-                    <a href='#' class='store-go-live-btn button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
+                    <a href='#' class='store-go-live-btn button indppl-button button-primary' data-id='<?php echo $store_id; ?>'>Make Public</a>
     
                 <?php } else {
                     echo "<h2>Store Setup Progress</h2>";

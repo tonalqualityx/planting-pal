@@ -807,7 +807,7 @@ function indppl_save_post($store_id = 0){
             // var_dump(wp_get_attachment_image_src($attachment_id));
             if (is_wp_error($attachment_id)) {
                 // There was an error uploading the image.
-                echo "Error adding file";
+                // echo "Error adding file";
             }
         }
         // }
@@ -1138,7 +1138,7 @@ function update_package_table($store_id, $product_id, $type){
     <div class='product-create-chart-header-container'>
         <div class="indppl-instructions">
             <div class="indppl-instructions-text">
-                <h2><?php echo $header; ?> Planting Application Rates For:</h2>
+                <h2><?php echo $header; ?> Planting Application Rates:</h2>
                 <p>Tell us how much of this product you recommend for each plant container size. We’ll use these application rates to create a customized shopping list in the app AND show exactly how much to use for each size plant on the planting guide (paid subscriptions only)</p>
             </div>
             <div class="indppl-video">
@@ -1160,13 +1160,15 @@ function update_package_table($store_id, $product_id, $type){
         </div>
     </div>
     <table class='product-create-chart-table'>
-    <!-- <tr>
-        <th colspan='2'>Choose Application Rates</th>
-            <th colspan='5'>
-            <p>Application Rates Automatically Calculated for Other Sizes</p>
-            <p>Use the numbers below to fine tune your application rate on the left</p>
+    <tr>
+        <th colspan='2'></th>
+        <th colspan='5'>
+            <p>
+                Let us do the math! Click the refresh button to check your rates! 
+                <input type="submit" name="product-update" id="product-update" class="product-update" value="Refresh"/>
+            </p>
         </th>
-    </tr> -->
+    </tr>
     <tr>
         <th class='in-ground-header in-ground-plant-size'>Plant Container Size</th>
         <th class='in-ground-header in-ground-how-much'><p style='margin:0;'>How Much?</p><p style='margin:0;'>Per Plant Container Size</p></th>
@@ -1176,7 +1178,7 @@ function update_package_table($store_id, $product_id, $type){
             if(in_array($value, $store_related)){
                 $name = get_post_meta($value, 'wpcf-unit', true);
                 if($name == 'qt-d' || $name == 'qt-l'){
-                    $name = 'Quart';
+                    $name = 'qt';
                 }
                 if($counter == 1){
                     $class='dark-grey-header';
@@ -1213,7 +1215,7 @@ function update_package_table($store_id, $product_id, $type){
         ?>
         <tr class='in-ground-not-bag'>
             <td>
-                <h4 class='in-ground-chart-title'><?php echo $title; ?></h4>
+                <h4 class='in-ground-chart-title' data-id='<?php echo $id; ?>'><?php echo $title; ?></h4>
             </td>
             <td style='text-align:center;'>
                 <?php
@@ -1345,7 +1347,6 @@ function update_package_table($store_id, $product_id, $type){
         <a href='#'class='product-create-submit-back indppl-orange'>Back</a>
         <input type="submit" name="product-create-submit-exit" data-exit="true" id="product-create-submit-exit" class="product-create-submit" value="Save and Exit"/>
         <input type="submit" name="product-create-submit" id="product-create-submit" class="product-create-submit" value="+ Add Another Product"/>
-        <input type="submit" name="product-update" id="product-update" class="product-update" value="Update"/>
         <input type="submit" name="product-create-exit" id="product-create-exit" class="product-create-exit hide" value="Exit"/>
     </div>
     <?php
@@ -1492,7 +1493,7 @@ function update_bag_package_table($store_id, $product_id, $type){
             $name = get_post_meta($value, 'wpcf-unit', true);
             $colspan = 1;
             if($name == 'qt-d' || $name == 'qt-l'){
-                $name = 'Quart';
+                $name = 'qt';
             }
             if($class_count == 0){
                 $class = 'indppl-green-underline';
@@ -2028,7 +2029,11 @@ function indppl_get_products($store_id, $key, $type){
                 foreach($size_array as $key => $value){
                     $meta = get_post_meta($size_array[$key]);
                     echo $meta['wpcf-size'][0];
-                    echo $meta['wpcf-unit'][0];
+                    if($meta['wpcf-unit'][0] == 'qt-d' || $meta['wpcf-unit'][0] == 'qt-l'){
+                        echo 'qt';
+                    }else{
+                        echo $meta['wpcf-unit'][0];
+                    }
                     echo ' ';
                 }
                 ?>
@@ -2411,7 +2416,7 @@ function indppl_store_progress_bar($store, $next_step = FALSE, $container = TRUE
             }
 
             if($percentage == 100){
-                $next = "Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready! <br /><br /> <a href='#' class='store-go-live-btn button button-primary
+                $next = "Excellent work! You've completed all the steps to setup your store, but it's not live yet. If you're ready, go ahead and hit the button below to make it public. Don't worry, if you still need to make some changes you don't have to go live until you're ready! <br /><br /> <a href='#' class='store-go-live-btn button indppl-button button-primary
             ' data-id='{$store}'>Make Public</a>";
             }
             
