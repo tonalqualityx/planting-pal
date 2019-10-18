@@ -2182,12 +2182,12 @@ function indppl_build_guide_ajax() {
         </div>
         <?php
         // Email user the link
-        $email_content = "<p>Hey there! Thanks for using the <a href='http://plantingpal.com'>Planting Pal</a> app to calculate your needs. Here are the guide(s) you've generated!</p><ul>";
-        foreach($guide_links as $link){
-            $email_content .= "<li><a href='{$link['link']}'>Guide for {$link['type']}</a></li>";
-        }
-        $email_content .= "</ul>";
-        $subject = "Your Custom Planting Guide";
+        ob_start();
+
+        include(INDPPL_ROOT_PATH . "/templates/template_parts/email.php");
+        $email_content = ob_get_clean();
+        
+        $subject = "Special Delivery! Your planting guide is here";
         $headers = array();
         $headers[] = 'From: Planting Pal <hello@plantingpal.com>';
         wp_mail($send_email, $subject, $email_content, $headers);
