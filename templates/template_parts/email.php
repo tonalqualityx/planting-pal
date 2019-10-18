@@ -670,9 +670,10 @@
             </td>
         </tr>
     </tbody>
+</table>
 
 <?php foreach ($guide_links as $link) { ?>
-    </table><table class="mcnButtonBlock" style="min-width:100%;" width="100%" cellspacing="0" cellpadding="0" border="0">
+    <table class="mcnButtonBlock" style="min-width:100%;" width="100%" cellspacing="0" cellpadding="0" border="0">
         <tbody class="mcnButtonBlockOuter">
             <tr>
                 <td style="padding-top:0; padding-right:18px; padding-bottom:18px; padding-left:18px;" class="mcnButtonBlockInner" valign="top" align="center">
