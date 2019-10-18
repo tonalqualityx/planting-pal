@@ -3022,3 +3022,10 @@ span.ui-datepicker-year{
   }
    
 }
+/* IE 11 rediculousness */
+_:-ms-fullscreen, :root .indppl-flex {
+  flex-wrap: nowrap; 
+}
+_:-ms-fullscreen, :root #indppl-dashboard-nav {
+  max-width: 300px;
+}

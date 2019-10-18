@@ -84,7 +84,13 @@ jQuery(document).ready(function( $ ) {
 
     
 
-    function showPosition(lat=null, lon=null) {
+    function showPosition(lat, lon) {
+        if(lat === undefined){
+            lat = null;
+        }
+        if(lon === undefined){
+            lon = null;
+        }
         // console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
         var radius = 30;
         var zip = $('#zip-for-location').val();
@@ -379,47 +385,54 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '#product-add-new-brand-btn', function(e){
         e.preventDefault();
         indpplAddLoading();
+        $('.ind-required').remove();
         var brand = $('#product-add-new-brand').val();
         var version_check = 1.0;
-        $.ajax({
-            url:indppl_ajax.ajaxurl,
-            dataType: 'text',
-            method: 'POST',
-            data: {
-                action: 'indppl_add_new_brand_ajax',
-                brand: brand,
-                version_check: version_check,
-            },
-            type: 'POST',
-            success: function(e){
-                array = JSON.parse(e);
-                console.log(array['console']);
-                $(".create-brand-button-container").hide();
-                $("#product-add-new-brand").hide();
-                $('#product-create-product').empty();
-                $(".product-create-product").show();
-                var status = $('#user-status').val();
-                var is_new = true;
-                $('#product-create-brand > option').each(function(){
-                    if($(this).val() == array['slug']){
-                        is_new = false;
+        if(brand == ''){
+            $('#product-add-new-brand').after('<p class="ind-required color-red">required</p>');
+            indpplDelLoading();
+        }else{
+            $.ajax({
+                url:indppl_ajax.ajaxurl,
+                dataType: 'text',
+                method: 'POST',
+                data: {
+                    action: 'indppl_add_new_brand_ajax',
+                    brand: brand,
+                    version_check: version_check,
+                },
+                type: 'POST',
+                success: function(e){
+                    array = JSON.parse(e);
+                    console.log(array['slug']);
+                    $(".create-brand-button-container").hide();
+                    $("#product-add-new-brand").hide();
+                    $('#product-create-product').empty();
+                    $(".product-create-product").show();
+                    var status = $('#user-status').val();
+                    var is_new = true;
+                    $('#product-create-brand > option').each(function(){
+                        if($(this).val() == array['slug']){
+                            is_new = false;
+                        }
+                    });
+                    if(is_new == false){
+                        $('#product-create-brand option[value="' + array['slug'] + '"').attr('selected', 'selected');
+                        if(status == 'paidaccountpro'){
+                            $('.product-create-product').append('<option selected disabled>Select Product</option><option value="new">Add Product</option>');
+                        }
+                    }else{
+                        $('#product-create-brand').append('<option selected value="' + array['slug'] + '">' + brand + '</option>');
+                        if(status == 'paidaccountpro'){
+                            $('.product-create-product').append('<option selected disabled>Select Product</option><option value="new">Add Product</option>');
+                        }
                     }
-                });
-                if(is_new == false){
-                    $('#product-create-brand option[value="' + array['slug'] + '"').attr('selected', 'selected');
-                    if(status == 'paidaccountpro'){
-                        $('.product-create-product').append('<option selected disabled>Select Product</option><option value="new">Add Product</option>');
-                    }
-                }else{
-                    $('#product-create-brand').append('<option selected value="' + array['slug'] + '">' + brand + '</option>');
-                    if(status == 'paidaccountpro'){
-                        $('.product-create-product').append('<option selected disabled>Select Product</option><option value="new">Add Product</option>');
-                    }
+    
+    
+                    indpplDelLoading();
                 }
-
-                indpplDelLoading();
-            }
-        });
+            });
+        }
     })
 
     $('body').on('change', '#product-create-brand', function(){
@@ -511,6 +524,7 @@ jQuery(document).ready(function( $ ) {
                     if(array['dry_wet'][1] == 'wet'){
                         $('.product-create-fraction-bag').addClass('hide');
                     }
+                    
                     $.each(units, function(index, value){
                         var name = value;
                         // console.log(value);
@@ -536,22 +550,24 @@ jQuery(document).ready(function( $ ) {
                 }
                 var units = indppl_get_units(array['dry_wet'][1]);
                 // console.log(units);
+
                 $('.indppl-product-create-chart-app-unit').each(function(){
                     var select = $(this).data('unit');
                     var elem = $(this);
-                    // console.log(select);
-                    $.each(units, function(index, value){
-                        var name = value;
-                        // if(value == 'qt-d' || value == 'qt-l'){
-                        //     name = 'Quart';
-                        // }
-                        if(select == index){
-                            selected = `selected`;
-                        }else{
-                            selected = ``;
-                        }
-                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
-                    });
+                    
+                        // $.each(units, function(index, value){
+                        //     var name = value;
+                        //     // if(value == 'qt-d' || value == 'qt-l'){
+                        //     //     name = 'Quart';
+                        //     // }
+                        //     if(select == index){
+                        //         selected = `selected`;
+                        //     }else{
+                        //         selected = ``;
+                        //     }
+                        //     $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+                        // });
+                    set_ground_unit_dropdown(elem, select, units);
                     // console.log(unit);
                 });
                 if(array['next_btn']){
@@ -606,7 +622,7 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var size = $('#indpll-product-create-size-num').val();
         var unit = $('#product-create-standard-unit-add').val();
-        console.log(unit);
+        // console.log(unit);
         if(unit == 'each' && size < 1 || unit == null){
             if(unit == null){
                 $('.unit-required-text').remove();
@@ -616,6 +632,7 @@ jQuery(document).ready(function( $ ) {
                 $('.product-create-new-size-container').append('<p class="unit-required-text color-red">If Unit is Each the size must be 1 or greater</p>')
             }
         }else{
+            display_5_cups(unit);
             $('.unit-required-text').remove();
             var create_new = true;
             $('.indppl-product-create-size-btn').each(function(){
@@ -623,6 +640,9 @@ jQuery(document).ready(function( $ ) {
                 var this_unit = $(this).data('unit');
                 if(this_size == size && this_unit == unit){
                     create_new = false;
+                    if(!$(this).is(':visible')){
+                        $(this).show();
+                    }
                 }
             })
             // console.log(create_new);
@@ -644,6 +664,33 @@ jQuery(document).ready(function( $ ) {
         checkIfEach();
 
     })
+    function display_5_cups(unit){
+        if(unit === undefined){
+            unit = 'default';
+        }
+        var unit_array = [unit];
+        $('.indppl-product-create-size-btn.indppl-size-selected').each(function(){
+            if($(this).is(':visible')){
+                var this_unit = $(this).data('unit');
+                unit_array.push(this_unit);
+            }
+        })
+        var result = [];
+        var weight_array = ['lb', 'kg', 'g', 'oz'];
+        $.map(unit_array, function (val, i) {
+            if ($.inArray(val, weight_array) > -1) {
+                result.push(val);
+            }
+        });
+        // console.log(result);
+        if(result.length > 0){
+            $('.product-create-5-cups-container').removeClass('hide');
+        }else{
+            if(!$('.product-create-5-cups-container').hasClass('hide')){
+                $('.product-create-5-cups-container').addClass('hide');
+            }
+        }
+    }
     $('body').on('mouseenter', '.indppl-size-selected', function(){
         if($(this).hasClass('indppl-non-default-package')){
             $(this).append('<span class="indppl-x">X</span>');
@@ -659,11 +706,10 @@ jQuery(document).ready(function( $ ) {
     function close_this_modal(elem){
         // this needs to remove a package in the back end.
         if($(elem).parent().hasClass('indppl-non-default-package')){
-            console.log('inside');
-            
             $(elem).parent().removeClass('indppl-size-selected').addClass('indppl-size-not-selected');
             $(elem).parent().hide();
-            e.stopPropagation();
+            display_5_cups();
+            // elem.stopPropagation();
         }else{
             $(this).parent().remove();
         }
@@ -770,10 +816,6 @@ jQuery(document).ready(function( $ ) {
                 first_package['unit'] = $('.bag-apprates-title').data('unit');
             }
         }
-        if($(this).is('#product-create-next')){
-            $('.create-product-header-instructions').hide();
-        }
-        
         var cups_num = $('.indppl-product-create-cups-num').val();
         var cups_unit = $('#product-create-5-cups').children("option:selected").val();
         
@@ -786,15 +828,20 @@ jQuery(document).ready(function( $ ) {
         var version_check = 1.0;
 
         if($(this).is('#product-create-next')){
+            $('.create-product-header-instructions').hide();
             var next = true;
             $('.indppl-product-create-size-btn').each(function(){
                 if($(this).hasClass('indppl-size-selected')){
                     if($(this).hasClass('indppl-new-package')){
-                        new_pack[i] = {};
-                        new_pack[i]['size'] = $(this).data('size');
-                        new_pack[i]['unit'] = $(this).data('unit');
-                        new_pack[i]['name'] = brand + " " + $('#product-create-product option:selected').text() + " " + $(this).data('size') + $(this).data('unit');
-                        i++;
+                        if($(this).is(':visible')){
+                            new_pack[i] = {};
+                            new_pack[i]['size'] = $(this).data('size');
+                            new_pack[i]['unit'] = $(this).data('unit');
+                            new_pack[i]['name'] = brand + " " + $('#product-create-product option:selected').text() + " " + $(this).data('size') + $(this).data('unit');
+                            i++;
+                        }else{
+                            package_array.push($(this).data('id'));
+                        }
                     }else{
                         package_array.push($(this).data('id'));
                     }
@@ -866,7 +913,7 @@ jQuery(document).ready(function( $ ) {
                     }
                     console.log(product_id);
                     if(product_id == 'new'){
-                        $('#product-create-product').append(`<option value="` + array['product_id'] +`" selected>` + array['product_name'] + `</option>`);
+                        $('#product-create-product').append('<option value="' + array['product_id'] + '" selected>' + array['product_name'] + '</option>');
                         // $('#product-create-product').val(1).change();
                         $('.indppl-add-product-name').val(array['product_name']);
                     }
@@ -878,18 +925,19 @@ jQuery(document).ready(function( $ ) {
                         var select = $(this).data('unit');
                         var elem = $(this);
                         // console.log(select);
-                        $.each(units, function(index, value){
-                            var name = value;
-                            // if(value == 'qt-d' || value == 'qt-l'){
-                            //     name = 'Quart';
-                            // }
-                            if(select == index || (select == 'tbl' && index == 'tbls')){
-                                selected = `selected`;
-                            }else{
-                                selected = ``;
-                            }
-                            $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
-                        });
+                        // $.each(units, function(index, value){
+                        //     var name = value;
+                        //     // if(value == 'qt-d' || value == 'qt-l'){
+                        //     //     name = 'Quart';
+                        //     // }
+                        //     if(select == index || (select == 'tbl' && index == 'tbls')){
+                        //         selected = `selected`;
+                        //     }else{
+                        //         selected = ``;
+                        //     }
+                        //     $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+                        // });
+                        set_ground_unit_dropdown(elem, select, units);
                         // console.log(unit);
                     });
                     var bagunits = indppl_get_units('bag');
@@ -897,18 +945,19 @@ jQuery(document).ready(function( $ ) {
                         var select = $(this).data('unit');
                         var elem = $(this);
                         // console.log(select);
-                        $.each(bagunits, function(index, value){
-                            var name = value;
-                            // if(value == 'qt-d' || value == 'qt-l'){
-                            //     name = 'Quart';
-                            // }
-                            if(select == index || (select == 'tbl' && index == 'tbls')){
-                                selected = `selected`;
-                            }else{
-                                selected = ``;
-                            }
-                            $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
-                        });
+                        // $.each(bagunits, function(index, value){
+                        //     var name = value;
+                        //     // if(value == 'qt-d' || value == 'qt-l'){
+                        //     //     name = 'Quart';
+                        //     // }
+                        //     if(select == index || (select == 'tbl' && index == 'tbls')){
+                        //         selected = `selected`;
+                        //     }else{
+                        //         selected = ``;
+                        //     }
+                        //     $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+                        // });
+                        set_ground_unit_dropdown(elem, select, bagunits);
                         // console.log(unit);
                     });
                     if($(elem).is('#product-create-next')){
@@ -960,6 +1009,33 @@ jQuery(document).ready(function( $ ) {
         });
 
     });
+
+    function set_ground_unit_dropdown(elem, select, units){
+        var static_unit = '';
+        $('.indppl-product-create-size-btn.indppl-size-selected').each(function(){
+            if($(this).is(':visible')){
+                static_unit = $(this).data('unit');
+            }
+        });
+        console.log(static_unit);
+
+        if(static_unit == 'each'){
+            $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="each" selected>Each</option>');
+        }else{
+            $.each(units, function(index, value){
+                var name = value;
+                // if(value == 'qt-d' || value == 'qt-l'){
+                //     name = 'Quart';
+                // }
+                if(select == index || (select == 'tbl' && index == 'tbls')){
+                    selected = 'selected';
+                }else{
+                    selected = '';
+                }
+                $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+            });
+        }
+    }
 
     $('body').on('click', '.product-create-submit-back', function(e){
         e.preventDefault();
@@ -1483,8 +1559,8 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '#get-planting-guide', function(e){
         e.preventDefault();
-        
         var email = $('input[name=email]').val();
+        email = email.replace(' ', '');
         if(validateEmail(email) && email != ''){
             indpplAddLoading();
             var store = $(this).data('store');
@@ -2869,7 +2945,7 @@ jQuery(document).ready(function( $ ) {
             $type = 'dry';
         }
         if($type == 'dry'){
-            return {'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Kilogram', 'oz': 'Ounce', 'cup': 'Cup', 'each': 'Each'};
+            return {'tsp': 'Teaspoon', 'tbls': 'Tablespoon', 'qt-d': 'Quart', 'cuft': 'Cubic Feet', 'lb': 'Pounds', 'g': 'Gram', 'kg': 'Kilogram', 'oz': 'Ounce', 'cup': 'Cup', 'each': 'Each'};
         }else if($type == 'bag'){
             return {'ppc': 'plants per bag / container', 'cpp': 'bags / containers per plant'};
         }else{
@@ -3061,9 +3137,9 @@ jQuery(document).ready(function( $ ) {
                     // console.log(select);
                     $.each(units, function(index, value){
                         if(select == index){
-                            selected = `selected`;
+                            selected = 'selected';
                         }else{
-                            selected = ``;
+                            selected = '';
                         }
                         $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
                     });
@@ -3161,18 +3237,19 @@ jQuery(document).ready(function( $ ) {
                     var select = $(this).data('unit');
                     var elem = $(this);
                     // console.log(select);
-                    $.each(units, function(index, value){
-                        var name = value;
-                        // if(value == 'qt-d' || value == 'qt-l'){
-                        //     name = 'Quart';
-                        // }
-                        if(select == index || (select == 'tbl' && index == 'tbls')){
-                            selected = `selected`;
-                        }else{
-                            selected = ``;
-                        }
-                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
-                    });
+                    // $.each(units, function(index, value){
+                    //     var name = value;
+                    //     // if(value == 'qt-d' || value == 'qt-l'){
+                    //     //     name = 'Quart';
+                    //     // }
+                    //     if(select == index || (select == 'tbl' && index == 'tbls')){
+                    //         selected = `selected`;
+                    //     }else{
+                    //         selected = ``;
+                    //     }
+                    //     $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+                    // });
+                    set_ground_unit_dropdown(elem, select, units);
                     // console.log(unit);
                 });
                 indpplDelLoading();
@@ -3240,18 +3317,19 @@ jQuery(document).ready(function( $ ) {
                     var select = $(this).data('unit');
                     var elem = $(this);
                     // console.log(select);
-                    $.each(units, function(index, value){
-                        var name = value;
-                        // if(value == 'qt-d' || value == 'qt-l'){
-                        //     name = 'Quart';
-                        // }
-                        if(select == index || (select == 'tbl' && index == 'tbls')){
-                            selected = `selected`;
-                        }else{
-                            selected = ``;
-                        }
-                        $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
-                    });
+                    // $.each(units, function(index, value){
+                    //     var name = value;
+                    //     // if(value == 'qt-d' || value == 'qt-l'){
+                    //     //     name = 'Quart';
+                    //     // }
+                    //     if(select == index || (select == 'tbl' && index == 'tbls')){
+                    //         selected = `selected`;
+                    //     }else{
+                    //         selected = ``;
+                    //     }
+                    //     $(elem).append('<option class="indppl-product-create-chart-app-unit-option" value="' + index + '" ' + selected + '>' + name + '</option>');
+                    // });
+                    set_ground_unit_dropdown(elem, select, units);
                     // console.log(unit);
                 });
                 indpplDelLoading();
@@ -3326,7 +3404,7 @@ jQuery(document).ready(function( $ ) {
                 jQuery.each(array['app_rates'], function(index, value){
                     // console.log(index);
 
-                    jQuery(elem).parent().siblings().eq(1+index).html(`<p class="green-text text-align-center margin-0 plant-num-text">`+value+`</p><p class="white-text green-bg text-align-center margin-0">plants</p>`);
+                    jQuery(elem).parent().siblings().eq(1+index).html('<p class="green-text text-align-center margin-0 plant-num-text">'+value+'</p><p class="white-text green-bg text-align-center margin-0">plants</p>');
                 });
 
 
@@ -3388,9 +3466,9 @@ jQuery(document).ready(function( $ ) {
                     
                     $.each(bagunits, function(index, value){
                         if(select == index || (select == 'tbl' && index == 'tbls')){
-                            selected = `selected`;
+                            selected = 'selected';
                         }else{
-                            selected = ``;
+                            selected = '';
                         }
                         $(elem).append('<option class="indppl-product-create-chart-bag-unit-option" value="' + index + '" ' + selected + '>' + value + '</option>');
                     });
