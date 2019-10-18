@@ -681,7 +681,11 @@
                         <tbody>
                             <tr>
                                 <td class="mcnButtonContent" style="font-family: Arial; font-size: 16px; padding: 18px;" valign="middle" align="center">
-                                        <a class="mcnButton " title="In Ground Planting Guide" href="<?php echo $link['link']; ?>" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;"><?php echo ucwords($link['type']);?> 
+                                        <a class="mcnButton " title="In Ground Planting Guide" href="<?php echo $link['link']; ?>" target="_blank" style="font-weight: bold;letter-spacing: normal;line-height: 100%;text-align: center;text-decoration: none;color: #FFFFFF;"><?php 
+                                        if($link['type'] == "ground"){
+                                            echo "In ";
+                                        }
+                                        echo ucwords($link['type']);?> 
                                         Planting Guide</a>
                                 </td>
                             </tr>
