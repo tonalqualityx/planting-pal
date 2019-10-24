@@ -1292,7 +1292,6 @@ function update_package_table($store_id, $product_id, $type){
                     'amount' => $app_qty,
                 )
             );
-
             foreach($product_related as $k => $val){
                 // var_dump($store_related);
                 // var_dump('<br />');
