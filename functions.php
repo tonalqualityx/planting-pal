@@ -1292,6 +1292,7 @@ function update_package_table($store_id, $product_id, $type){
                     'amount' => $app_qty,
                 )
             );
+
             foreach($product_related as $k => $val){
                 // var_dump($store_related);
                 // var_dump('<br />');
@@ -1302,7 +1303,7 @@ function update_package_table($store_id, $product_id, $type){
                     $package_unit = get_post_meta($val, 'wpcf-unit', true);
                     $cups = get_post_meta($product_id, 'wpcf-5cups', true);
                     $cups_unit = get_post_meta($product_id, 'wpcf-5cups-unit', true);
-                    
+
                     // var_dump($cups);
                     // echo $cups;
                     
@@ -1310,13 +1311,13 @@ function update_package_table($store_id, $product_id, $type){
                     // var_dump($conversion);
                     // $conversion = getVolume($app_qty, $app_unit, $package_unit);
                     // var_dump($package_size);
-                    // var_dump($package_unit);
+
                     // var_dump('<br /><br />');
                     if($conversion[0]['standard-amount'] == 0){
                         $final = 0;
                     }else{
                         if($conversion[0]['invert']){
-                            $final = $app_qty/5 * $cups;
+                            $final = $conversion[0]['standard-amount'];
                             $final = $package_size / $final; 
                             // $final = $package_size * $conversion[0]['standard-amount'];
                         } else {
