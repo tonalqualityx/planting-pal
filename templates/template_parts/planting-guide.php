@@ -14,11 +14,14 @@ $status = indppl_user_status(get_post_field('post_author', $store));
 if(in_array('paidaccountpro', $status)){
     $pro = true;
 }
-if(!preg_match('^(http|https):\/\/', $website)){
-    $url = "//" . $website;
+
+$parsed = parse_url($website);
+if (empty($parsed['scheme'])) {
+    $url = '//' . ltrim($website, '/');
 } else {
-    $url = preg_replace('^(http|https):\/\/', '//', $website);
+    $url = $website;
 }
+
 
 switch ($type) {
     case 'ground':
@@ -30,9 +33,7 @@ switch ($type) {
     case 'beds':
         $type_label = 'Raised Beds ';
         break;
-}
-
-$store_link = str_replace("//", "", $website); ?>
+} ?>
 
 <div id="planting-guide" class="planting-guide" data-type="ground" data-store="<?php echo $store ; ?>">
     <div class="store-info">
@@ -54,7 +55,7 @@ $store_link = str_replace("//", "", $website); ?>
                     echo "<p>$email</p>";
                 }
                 if($website && $website != '') {
-                    echo "<p><a href='{$website}' target='_blank'>$store_link</a></p>";
+                    echo "<p><a href='{$url}' target='_blank'>$website</a></p>";
                 } ?>
     
             </div>

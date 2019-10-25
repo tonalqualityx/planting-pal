@@ -1447,6 +1447,7 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '#guide-save', function(e){
         e.preventDefault();
         e.stopPropagation();
+        indpplAddLoading();
         var type = $('#planting-guide').data('type');
         var steps = new Array();
         var step = '';
@@ -1515,6 +1516,7 @@ jQuery(document).ready(function( $ ) {
             },
             success: function (results){
                 closeModal();
+                indpplDelLoading();
             }
         });
     });
