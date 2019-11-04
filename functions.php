@@ -79,6 +79,7 @@ function geofind($lat, $lon, $radius) {
     $subject = "Troubleshooting data";
     $message = $email;
     $headers = array('Content-Type: text/html; charset=UTF-8');
+    $headers[] = 'From: Me Myself <noreply@plantpal.flywheelsites.com>';
 
     wp_mail($to, $subject, $message, $headers);
 
