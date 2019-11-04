@@ -55,6 +55,33 @@ function geofind($lat, $lon, $radius) {
         $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
         $i++;
     }
+
+    ob_start();
+
+    echo "<h3>Lat</h3>";
+    var_dump($lat);
+
+    echo "<h3>Lon</h3>";
+    var_dump($lon);
+
+    echo "<h3>Raduys</h3>";
+    var_dump($radius);
+
+    echo "<h3>Config</h3>";
+    var_dump($configData);
+
+    echo "<h3>Zips</h3>";
+    var_dump($allzips);
+
+    $email = ob_get_clean();
+
+    $to      = 'mike@becomindelible.com';
+    $subject = "Troubleshooting data";
+    $message = $email;
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+
+    wp_mail($to, $subject, $message, $headers);
+
     return $allzips;
 } // end Function for Geo
 
