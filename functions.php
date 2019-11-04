@@ -75,7 +75,7 @@ function geofind($lat, $lon, $radius) {
 
     $email = ob_get_clean();
 
-    $to      = 'mike@becomindelible.com';
+    $to      = 'mike@becomeindelible.com';
     $subject = "Troubleshooting data";
     $message = $email;
     $headers = array('Content-Type: text/html; charset=UTF-8');
