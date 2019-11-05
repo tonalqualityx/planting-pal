@@ -43,19 +43,22 @@ if(home_url() . "/" == $actual_link){
 }
 function geofind($lat, $lon, $radius) {
 
-    $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
-    // var_dump($xml);
-    $xmlfile = file_get_contents($xml);
-    $ob = simplexml_load_string($xmlfile);
-    $json = json_encode($ob);
-    $configData = json_decode($json, true);
-    // var_dump($configData);
-    $i = 0;
-    foreach ($ob as $taco) {
-        $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
-        $i++;
-    }
-    return $allzips;
+    // $xml = 'http://api.geonames.org/findNearbyPostalCodes?lat=' . $lat . '&lng=' . $lon . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
+    // // var_dump($xml);
+    // $xmlfile = file_get_contents($xml);
+    // $ob = simplexml_load_string($xmlfile);
+    // $json = json_encode($ob);
+    // $configData = json_decode($json, true);
+    // // var_dump($configData);
+    // $i = 0;
+    // foreach ($ob as $taco) {
+    //     $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
+    //     $i++;
+    // }
+    // return $allzips;
+    $array = get_stores_by_location($lat, $lon);
+    // var_dump($array);
+    return $array;
 } // end Function for Geo
 
 function geozip($zipcode, $radius) {
@@ -73,6 +76,44 @@ function geozip($zipcode, $radius) {
     }
     return $allzips;
 } // End Zip Find
+
+function get_stores_by_location($lat, $lng){
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'postmeta';
+    // var_dump($table_name);
+	// var_dump($wpdb->terms.term_id);
+	$results = $wpdb->get_results( "
+	SELECT DISTINCT
+	    post_id, (
+	      3959 * acos (
+	      cos ( radians($lat) )
+	      * cos( radians(( SELECT meta_value FROM $table_name b WHERE meta_key = 'ind-lat' AND a.post_id = b.post_id ) ) )
+	      * cos( radians( ( SELECT meta_value FROM $table_name c WHERE meta_key = 'ind-long' AND a.post_id = c.post_id ) ) - radians($lng) )
+	      + sin ( radians($lat) )
+	      * sin( radians( ( SELECT meta_value FROM $table_name d WHERE meta_key = 'ind-lat' AND a.post_id = d.post_id ) ) )
+		)
+	) AS distance
+	FROM $table_name a
+	HAVING distance < 200;", OBJECT );
+	// return $results;
+    $store_id_array = [];
+    if(count($results) > 0){
+        foreach ($results as $value) {
+            $zip = get_post_meta($value->post_id, 'wpcf-zip', true);
+            $store_id_array[] = array('zip' => $zip, 'distance' => $value->distance);
+        }
+    }
+    return $store_id_array;
+}
+
+function get_lat_lon_from_zip($zipcode){
+    $xml = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=1&username=indelible';
+    $xmlfile = file_get_contents($xml);
+    $ob = simplexml_load_string($xmlfile);
+    $json = json_encode($ob);
+    $configData = json_decode($json, true);
+    return $configData;
+}
 
 function phone_number_format($number) {
     // Allow only Digits, remove all other characters.
@@ -810,6 +851,7 @@ function indppl_save_post($store_id = 0){
                 // echo "Error adding file";
             }
         }
+        $array = get_lat_lon_from_zip($_POST['zip']);
         // }
         $store = array(
             'ID' => $store_id,
@@ -827,6 +869,8 @@ function indppl_save_post($store_id = 0){
                 'wpcf-email' => $_POST['store-email'],
                 
                 'wpcf-weburl' => $_POST['weburl'],
+                'ind-lat' => $array['code']['lat'],
+                'ind-long' => $array['code']['lng'],
             ),
         );
         if(isset(wp_get_attachment_image_src($attachment_id)[0])){
@@ -2453,7 +2497,7 @@ function indppl_duplicate_store($store_id, $new_details){
     $ground_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-ground-options'][0]);
     $pots_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-pots-options'][0]);
     $beds_guide = str_replace(array('"',"\'"),array('\"',"'"), $meta['wpcf-planting-guide-beds-options'][0]);
-
+    $array = get_lat_lon_from_zip($new_details['zip']);
     $args = array(
         'post_type' => 'store',
         'post_status' => 'publish',
@@ -2477,6 +2521,8 @@ function indppl_duplicate_store($store_id, $new_details){
             'wpcf-city' => $new_details['city'],
             'wpcf-state' => $new_details['state'],
             'wpcf-zip' => $new_details['zip'],
+            'ind-lat' => $array['code']['lat'],
+            'ind-long' => $array['code']['lng'],
             'wstore/mikes-amazing-nursery/?desktop=truecf-phone' => $new_details['phone'],
             'wstore/mikes-amazing-nursery/?desktop=truecf-email' => $new_details['email'],
             'wpcf-weburl' => $new_details['url'],
@@ -2766,3 +2812,23 @@ function ind_parse_array($array){
 
     echo "</li></ul>";
 }
+
+function ind_add_lat_and_lon_to_existing_stores(){
+    $args = array( 'post_type' => 'store');
+    $id_array = get_posts(array(
+        'fields'          => 'ids',
+        'posts_per_page'  => -1,
+        'post_type' => 'store'
+    ));
+    foreach($id_array as $store_id){
+        $zip = get_post_meta($store_id, 'wpcf-zip', true);
+        if($zip){
+            $array = get_lat_lon_from_zip($zip);
+            update_post_meta($store_id, 'ind-lat', $array['code']['lat']);
+            update_post_meta($store_id, 'ind-long', $array['code']['lng']);
+        }
+    }
+}
+
+// only for old stores that don't have lat and lng saved in meta
+ind_add_lat_and_lon_to_existing_stores();

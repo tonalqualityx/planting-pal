@@ -98,6 +98,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
         $zips_only = array();
         if($lat != NULL){
             $zip_array = geofind($lat, $lon, $radius);
+            
             foreach($zip_array as $key => $value){
                 $zips_only[] = $value['zip'];
                 $distance_array[] = round($value['distance'], 2);
@@ -117,7 +118,12 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
             ),
         );
     }else if($zip){
-        $zip_array = geozip($zip, $radius);
+        // $zip_array = geozip($zip, $radius);
+        $loc_array = get_lat_lon_from_zip($zip);
+        // var_dump($zip);
+        $lat = $loc_array['code']['lat'];
+        $lng = $loc_array['code']['lng'];
+        $zip_array = geofind($lat, $lng, $radius);
         // var_dump($zip_array);
         foreach($zip_array as $key => $value){
             $zips_only[] = $value['zip'];
@@ -245,7 +251,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
         /* Restore original Post Data */
         wp_reset_postdata();
     } else {
-        ?><p>No Stores in your area</p><?php
+        ?><p>No Stores in your area</p><p>Contact your local garden center about using planting pal.</p><?php
     }
     ?></div><?php
     if(isset($_POST['radius'])){
@@ -485,7 +491,8 @@ function pp_store_management(){
                 }
             
             } ?>
-    
+            <?php
+            ?>
             <ul class='indppl-nav indppl-nav-tabs'>
                 <li class="indppl-active"><a href='#indppl-tab-1'>1. Store Info</a></li>
                 <li><a href='#indppl-tab-2'>2. Container Size Selection</a></li>
