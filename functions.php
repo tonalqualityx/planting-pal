@@ -2821,7 +2821,6 @@ function ind_parse_array($array){
 }
 
 function ind_add_lat_and_lon_to_existing_stores(){
-    $args = array( 'post_type' => 'store');
     $id_array = get_posts(array(
         'fields'          => 'ids',
         'posts_per_page'  => -1,
