@@ -2831,7 +2831,7 @@ function ind_add_lat_and_lon_to_existing_stores(){
         $zip = get_post_meta($store_id, 'wpcf-zip', true);
         if($zip){
             $array = get_lat_lon_from_zip($zip);
-            var_dump($array);
+            // var_dump($array);
             update_post_meta($store_id, 'ind-lat', $array['lat']);
             update_post_meta($store_id, 'ind-long', $array['lng']);
         }
