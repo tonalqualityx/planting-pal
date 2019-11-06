@@ -2826,7 +2826,7 @@ function ind_add_lat_and_lon_to_existing_stores(){
         'posts_per_page'  => -1,
         'post_type' => 'store'
     ));
-    var_dump("Updating");
+    // var_dump("Updating");
     foreach($id_array as $store_id){
         $zip = get_post_meta($store_id, 'wpcf-zip', true);
         if($zip){
