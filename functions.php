@@ -62,13 +62,26 @@ function geofind($lat, $lon, $radius) {
 } // end Function for Geo
 
 function geozip($zipcode, $radius) {
-    $xml = 'http://api.geonames.org/findNearbyPostalCodes?postalcode=' . $zipcode . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
+    $url = 'http://api.geonames.org/findNearbyPostalCodes?postalcode=' . $zipcode . '&country=USA&radius=' . $radius . '&username=indelible&maxRows=300';
 
-    $xmlfile = file_get_contents($xml);
-    $ob = simplexml_load_string($xmlfile);
+    // $xmlfile = file_get_contents($url);
+    // $ob = simplexml_load_string($xmlfile);
+    // $json = json_encode($ob);
+    // $configData = json_decode($json, true);
+    // var_dump($configData);
+    
+    // curl
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$url);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    $xmldata = curl_exec($ch);
+    curl_close($ch);
+    $ob = simplexml_load_string($xmldata);
     $json = json_encode($ob);
     $configData = json_decode($json, true);
     // var_dump($configData);
+
+    // end curl 
     $i = 0;
     foreach ($ob as $taco) {
         $allzips[] = array('zip' => $configData["code"][$i]["postalcode"], 'distance' => $configData['code'][$i]['distance']);
@@ -107,12 +120,26 @@ function get_stores_by_location($lat, $lng){
 }
 
 function get_lat_lon_from_zip($zipcode){
-    $xml = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=10&username=indelible';
-    $xmlfile = file_get_contents($xml);
-    $ob = simplexml_load_string($xmlfile);
+    $url = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=10&username=indelible';
+    // $xmlfile = file_get_contents($url);
+    // $ob = simplexml_load_string($xmlfile);
+    // $json = json_encode($ob);
+    // $configData = json_decode($json, true);
+    // var_dump($configData);
+
+    // curl
+    $ch = curl_init();
+    curl_setopt($ch,CURLOPT_URL,$url);
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    $xmldata = curl_exec($ch);
+    curl_close($ch);
+    $ob = simplexml_load_string($xmldata);
     $json = json_encode($ob);
     $configData = json_decode($json, true);
     // var_dump($configData);
+
+    // end curl 
+
     $return = [];
     foreach($configData['code'] as $key => $value){
         if($value['countryCode'] == 'US'){
