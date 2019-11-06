@@ -107,12 +107,19 @@ function get_stores_by_location($lat, $lng){
 }
 
 function get_lat_lon_from_zip($zipcode){
-    $xml = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=1&username=indelible';
+    $xml = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=10&username=indelible';
     $xmlfile = file_get_contents($xml);
     $ob = simplexml_load_string($xmlfile);
     $json = json_encode($ob);
     $configData = json_decode($json, true);
-    return $configData;
+    // var_dump($configData);
+    $return = [];
+    foreach($configData['code'] as $key => $value){
+        if($value['countryCode'] == 'US'){
+            $return = $value;
+        }
+    }
+    return $return;
 }
 
 function phone_number_format($number) {
@@ -869,8 +876,8 @@ function indppl_save_post($store_id = 0){
                 'wpcf-email' => $_POST['store-email'],
                 
                 'wpcf-weburl' => $_POST['weburl'],
-                'ind-lat' => $array['code']['lat'],
-                'ind-long' => $array['code']['lng'],
+                'ind-lat' => $array['lat'],
+                'ind-long' => $array['lng'],
             ),
         );
         if(isset(wp_get_attachment_image_src($attachment_id)[0])){
@@ -2521,8 +2528,8 @@ function indppl_duplicate_store($store_id, $new_details){
             'wpcf-city' => $new_details['city'],
             'wpcf-state' => $new_details['state'],
             'wpcf-zip' => $new_details['zip'],
-            'ind-lat' => $array['code']['lat'],
-            'ind-long' => $array['code']['lng'],
+            'ind-lat' => $array['lat'],
+            'ind-long' => $array['lng'],
             'wstore/mikes-amazing-nursery/?desktop=truecf-phone' => $new_details['phone'],
             'wstore/mikes-amazing-nursery/?desktop=truecf-email' => $new_details['email'],
             'wpcf-weburl' => $new_details['url'],
@@ -2824,8 +2831,10 @@ function ind_add_lat_and_lon_to_existing_stores(){
         $zip = get_post_meta($store_id, 'wpcf-zip', true);
         if($zip){
             $array = get_lat_lon_from_zip($zip);
-            update_post_meta($store_id, 'ind-lat', $array['code']['lat']);
-            update_post_meta($store_id, 'ind-long', $array['code']['lng']);
+            // var_dump($array);
+            // var_dump("<br /><br />");
+            update_post_meta($store_id, 'ind-lat', $array['lat']);
+            update_post_meta($store_id, 'ind-long', $array['lng']);
         }
     }
 }

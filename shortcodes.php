@@ -121,8 +121,8 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
         // $zip_array = geozip($zip, $radius);
         $loc_array = get_lat_lon_from_zip($zip);
         // var_dump($zip);
-        $lat = $loc_array['code']['lat'];
-        $lng = $loc_array['code']['lng'];
+        $lat = $loc_array['lat'];
+        $lng = $loc_array['lng'];
         $zip_array = geofind($lat, $lng, $radius);
         // var_dump($zip_array);
         foreach($zip_array as $key => $value){
