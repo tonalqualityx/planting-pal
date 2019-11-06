@@ -2839,4 +2839,4 @@ function ind_add_lat_and_lon_to_existing_stores(){
 }
 
 // only for old stores that don't have lat and lng saved in meta
-// ind_add_lat_and_lon_to_existing_stores();
+ind_add_lat_and_lon_to_existing_stores();
