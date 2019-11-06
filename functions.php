@@ -2827,11 +2827,12 @@ function ind_add_lat_and_lon_to_existing_stores(){
         'posts_per_page'  => -1,
         'post_type' => 'store'
     ));
+    var_dump("Updating");
     foreach($id_array as $store_id){
         $zip = get_post_meta($store_id, 'wpcf-zip', true);
         if($zip){
             $array = get_lat_lon_from_zip($zip);
-            var_dump("Updating");
+            var_dump($array);
             update_post_meta($store_id, 'ind-lat', $array['lat']);
             update_post_meta($store_id, 'ind-long', $array['lng']);
         }
@@ -2839,4 +2840,4 @@ function ind_add_lat_and_lon_to_existing_stores(){
 }
 
 // only for old stores that don't have lat and lng saved in meta
-// ind_add_lat_and_lon_to_existing_stores();
+ind_add_lat_and_lon_to_existing_stores();
