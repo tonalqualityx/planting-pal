@@ -1000,6 +1000,8 @@ jQuery(document).ready(function( $ ) {
         updateAppRatesBagChart($(this));
     })
 
+    console.log("halfway there");
+
     $('body').on('click', '.indppl-add-product-pots-btn', function(e){
         e.preventDefault();
         var type = $(this).data('type');
