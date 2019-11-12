@@ -7,6 +7,166 @@ if(typeof ind_base_url !== 'undefined'){
     }
 }
 
+
+$('body').on('click touchstart', 'a.next-button', function(e){
+    e.preventDefault();
+    console.log("clicked");
+    $('.next-button-error').remove();
+    $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
+    var pots_load = true;
+    var ground = false;
+    var required_array = [];
+    var beds_required_array = [];
+    var over_height = false;
+    var over_height_elem;
+    $('.ground-shopping-list').find('.rounded-input').each(function(){
+
+        if($(this).val() > 0 && $.isNumeric($(this).val()) && ground == false){
+            ground = true;
+            return false;
+        }
+    })
+    var pots_empty = true;
+    $('.pots-form').find('.rounded-input.pots').each(function(){
+        var count = 0;
+        $(this).parent().parent().find('.rounded-input2').each(function(){
+            if($(this).val() >= 1){
+                count++;
+                pots_empty = false;
+            }else{
+                required_array.push($(this));
+            }
+        })
+        if($(this).val() > 0){
+            pots_empty = false;
+        }else{
+            pots_load = false;
+            if(pots_empty == false){
+                required_array.push($(this));
+            }
+        }
+        if(count != 3){
+            pots_load = false;
+            return false;
+        }
+    })
+    // e.preventDefault();
+    var pots_partial_empty = true;
+    $(".indppl-pots-partial").each(function(){
+        if($(this).is(':checked')){
+            var pots_need = $(this).parent().parent().parent().find('.rounded-input3').val();
+
+            if(!pots_need >= 1 && pots_need != null){
+                required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
+                
+                pots_load = false;
+                pots_partial_empty = false;
+                return false;
+            }else{
+                var height = $(this).parents('.tacos').find('.height').val();
+
+                if(pots_need > height){
+                    over_height = true;
+                    over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
+
+                }
+            }
+        }
+    })
+    if(pots_partial_empty == false){
+        pots_empty = false;
+    }
+
+    var beds_load = true;
+    var beds_empty = true;
+    $('.rb-form').find('.rounded-input.beds').each(function(){
+
+        var count = 0;
+        $(this).parent().parent().find('.rounded-input2').each(function(){
+
+            if($(this).val() >= 1){
+                count++;
+                beds_empty = false;
+            }else{
+                beds_required_array.push($(this));
+            }
+        })
+        if($(this).val() > 0){
+            beds_empty = false;
+        }else{
+            beds_load = false;
+            if(beds_empty == false){
+                beds_required_array.push($(this));
+            }
+        }
+        if(count != 3){
+            beds_load = false;
+            return false;
+        }
+    })
+    var bed_partial_empty = true;
+    $(".indppl-beds-partial").each(function(){
+        if($(this).is(':checked')){
+            var beds_need = $(this).parent().parent().parent().find('.rounded-input3').val();
+            if(!beds_need >= 1 && beds_need != null){
+                beds_required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
+                beds_load = false;
+                bed_partial_empty = false;
+                return false;
+            }else{
+                var height = $(this).parents('.tacos').find('.height').val();
+                if(parseInt(beds_need) > parseInt(height)){
+                    console.log(beds_need + " " + height);
+                    over_height = true;
+                    over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
+                }
+            }
+        }
+    })
+    if(bed_partial_empty == false){
+        beds_empty = false;
+    }
+
+    if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true)) || 
+    (pots_load == true && (beds_empty == true || beds_load == true)) ||
+    (beds_load == true && (pots_empty == true || pots_load == true) && over_height == false)){
+        $("#plants-form").submit();
+    }else{
+        e.preventDefault();
+        if(!ground && pots_empty && beds_empty){
+            $(this).after('<p class="next-button-error">Nothing filled in</p>');
+        }else if(pots_empty == false && beds_empty == true){
+            $.each(required_array, function(index, value){
+                $(value).prev().replaceWith('<p class="round-button-error">Required</p>');
+            })
+            $(this).after('<p class="next-button-error">Fill in all required fields</p>');
+        }else if(pots_empty == true && beds_empty == false){
+            $.each(beds_required_array, function(index, value){
+                $(value).prev().replaceWith('<p class="round-button-error">Required</p>');
+            })
+            $(this).after('<p class="next-button-error">Fill in all required fields</p>');
+        }else if(pots_empty == false && beds_empty == false){
+            $.each(beds_required_array, function(index, value){
+                $(value).prev().replaceWith('<p class="round-button-error">Required</p>');
+            })
+            $.each(required_array, function(index, value){
+                $(value).prev().replaceWith('<p class="round-button-error">Required</p>');
+            })
+            $(this).after('<p class="next-button-error">Fill in all required fields</p>');
+        }
+        if(over_height == true){
+
+            $(over_height_elem).prev().replaceWith('<p class="round-button-error">Cannot exceed height</p>')
+        }
+
+        // if(pots_load == false || beds_load == false){
+        //     alert('You need to fill out each row you start completely.')
+        // }else{
+        //     alert('Fill out at least one of the plant types to continue.');
+        // }
+    }
+});
+
 jQuery(document).ready(function( $ ) {
     console.log('we are in 1');
     // Let's set some stuff up for use whenever we need it!
@@ -2099,11 +2259,6 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
-    $('body').on("touchstart", "a", function(e) {
-        e.preventDefault();
-        alert("you successed");
-    });
-
     $('body').on('click touchstart', 'a.next-button', function(e){
         e.preventDefault();
         console.log("clicked");
@@ -2261,7 +2416,7 @@ jQuery(document).ready(function( $ ) {
             //     alert('Fill out at least one of the plant types to continue.');
             // }
         }
-    })
+    });
 
     $('body').on('mouseenter', '.rb-form', function(){
         if(!$(this).hasClass('pb-first')){
