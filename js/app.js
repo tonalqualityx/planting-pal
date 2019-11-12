@@ -8,9 +8,7 @@ if(typeof ind_base_url !== 'undefined'){
 }
 
 
-jQuery('body').on('touchstart', 'a.next-button', function(e){
-    e.stopPropagation();
-    e.preventDefault();
+jQuery('body').on('click', 'a.next-button', function(e){
     console.log("clicked");
     jQuery('.next-button-error').remove();
     jQuery('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
