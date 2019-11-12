@@ -6,7 +6,7 @@ if(typeof ind_base_url !== 'undefined'){
         }
     }
 }
-
+console.log('no joking');
 jQuery(document).ready(function( $ ) {
 
     // Let's set some stuff up for use whenever we need it!
