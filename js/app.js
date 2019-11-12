@@ -8,7 +8,7 @@ if(typeof ind_base_url !== 'undefined'){
 }
 
 jQuery(document).ready(function( $ ) {
-    console.log('we are in 8');
+    console.log('we are in 9');
     // Let's set some stuff up for use whenever we need it!
     var checkBox = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path></svg>';
     var checkMark = '<svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><path class="check-box" d="M30 7 L30 27 L10 27 L10 7 Z"></path><path class="checkmark__check" fill="green" d="M15 12 L12 15 L20 22 L37 2 L20 17 L15 12"></path></svg>';
@@ -222,7 +222,7 @@ jQuery(document).ready(function( $ ) {
 
 
     })
-
+    console.log("dont lick the tires");
     $('body').on('click', '.store-go-live-btn', function(e){
         e.preventDefault();
         var store_id = $(this).data('id');
