@@ -2099,7 +2099,12 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
-    $('body').on('click', 'a.next-button', function(e){
+    $('body').on("touchstart", "a", function(e) {
+        e.preventDefault();
+        alert("you successed");
+    });
+
+    $('body').on('click touchstart', 'a.next-button', function(e){
         e.preventDefault();
         console.log("clicked");
         $('.next-button-error').remove();
