@@ -2101,6 +2101,7 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', 'a.next-button', function(e){
         e.preventDefault();
+        console.log("clicked");
         $('.next-button-error').remove();
         $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
         var pots_load = true;
