@@ -2090,10 +2090,10 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
-    console.log("kyle");
+    console.log("kylse");
 
-    $('body').on('click', '.next-button', function(e){
-        preventDefault(e);
+    $('body').on('touchstart click', '.next-button', function(e){
+        e.preventDefault();
         console.log("clicked");
         $('.next-button-error').remove();
         $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
