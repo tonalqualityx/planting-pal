@@ -8,7 +8,8 @@ if(typeof ind_base_url !== 'undefined'){
 }
 
 
-jQuery('body').on('click touchstart', 'a.next-button', function(e){
+jQuery('body').on('touchstart', 'a.next-button', function(e){
+    e.stopPropagation();
     e.preventDefault();
     console.log("clicked");
     jQuery('.next-button-error').remove();
