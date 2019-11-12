@@ -49,7 +49,7 @@ function indppl_enqueue(){
     wp_enqueue_style('indppl-style', INDPPL_ROOT_URL . 'css/style.css', false, '1.4');
     wp_enqueue_style('font-awesome-backup', "/wp-content/plugins/bb-plugin/fonts/fontawesome/css/all.min.css");
     wp_enqueue_style('print-styles', INDPPL_ROOT_URL . "css/print.css", array(), '', 'print');
-    wp_register_script( 'indppl-js', INDPPL_ROOT_URL . 'js/app.js', array( 'jquery' ), '1.20');
+    wp_register_script( 'indppl-js', INDPPL_ROOT_URL . 'js/app.js', array( 'jquery' ), '1.21');
     wp_localize_script( 'indppl-js', 'indppl_ajax',
       array(
          'ajaxurl' => admin_url( 'admin-ajax.php' ),
