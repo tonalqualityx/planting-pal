@@ -2228,7 +2228,7 @@ jQuery(document).ready(function( $ ) {
     })
 
     $('body').on('touchstart click', 'a.next-button', function(e){
-        // e.preventDefault();
+        e.preventDefault();
         e.stopPropagation();
         $('.next-button-error').remove();
         $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
