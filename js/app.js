@@ -2099,6 +2099,8 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
+    console.log(2);
+
     $('body').on('click', '.next-button', function(e){
         console.log("clicked");
         
