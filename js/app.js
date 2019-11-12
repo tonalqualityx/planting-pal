@@ -2099,8 +2099,7 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
-    $('body').on('click touchstart', '.next-button', function(e){
-        e.preventDefault();
+    $('body').on('click', '.next-button', function(e){
         console.log("clicked");
         $('.next-button-error').remove();
         $('.round-button-error').replaceWith("<p style='margin-bottom: 35px;'></p>");
