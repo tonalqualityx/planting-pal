@@ -825,10 +825,6 @@ input[type=submit].next-button:active{
   text-align: center;
 }
 
-input[type=submit].next-button:hover{
-  
-}
-
 .next-button-bottom{
   position: absolute!important;
   bottom: -90px!important;
@@ -1181,9 +1177,7 @@ div.ui-datepicker{
 #geo-radius{
   margin-right: 10px;
 }
-.indppl-ok-close{
 
-}
 .indppl-green-underline:after {
   content: "";
     border-bottom:3px solid #488a41;
@@ -1241,12 +1235,12 @@ PRODUCT MANAGEMENT
   margin-bottom: 5px;
 }
 
-.indppl-product-create-size-btn{
+/* .indppl-product-create-size-btn{ */
   /* padding: 5px 20px;
   color: black;
   text-decoration: none;
   border: black 1px solid; */
-}
+/* } */
 .indppl-product-create-size-btn:hover, .indppl-product-create-size-btn:focus{
   text-decoration: none;
   color:black;
@@ -2089,8 +2083,8 @@ input.rounded-input {
     box-shadow: inset 2px 2px 3px 0 rgba(0,0,0,0.50) !important;
     border-radius: 18px !important;
     max-width: 61px;
-    width: 61px;
-    margin-top: 5px;
+    /* width: 61px;
+    margin-top: 5px; */
     text-align: center;
     display: inline;
 }
@@ -2289,9 +2283,9 @@ SHOPPING LIST
   margin: 0;
   font-size: 1em;
 }
-.product-name p {
+/* .product-name p { */
   /* line-height: 0; */
-}
+/* } */
 
 .product-name .bigger {
   /* line-height: 19px; */
@@ -2328,13 +2322,13 @@ body #logo-header {
   margin: auto;
 }
 
-#buttons.row{
+/* #buttons.row{ */
   /* border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
   border-bottom: 1px solid #6a6e77;
   border-left: 1px solid #6a6e77;
   border-right: 1px solid #6a6e77; */
-}
+/* } */
 #list-container{
   border-right: 1px solid #6a6e77;
   border-left: 1px solid #6a6e77;
@@ -2797,9 +2791,9 @@ PLANTS FORM
   display: none;
 }
 
-#plants-form {
+/* #plants-form { */
   /* margin-top: 135px; off until floating header is back */
-}
+/* } */
 
 /***********
 Uprade Modal
@@ -2937,9 +2931,9 @@ span.ui-datepicker-year{
   .plant-form-header-image {
     display: block;
   }
-  #plants-form {
+  /* #plants-form { */
     /* margin-top: 215px; off until floating header is back */
-  }
+  /* } */
 
   .indppl-small-header img {
     max-width: 100%;
