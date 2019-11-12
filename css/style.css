@@ -28,6 +28,10 @@ img{
   max-width: 100%;
 }
 
+a, button, input[type="submit"], label {
+  cursor: pointer!important;
+}
+
 .no-small {
   display: none;
 }
@@ -159,6 +163,7 @@ input[type=submit].button-primary {
   border: none!important;
   text-transform: uppercase;
   font-weight: 800;
+  cursor: pointer!important;
 }
 
 .indppl-btn:hover, 
