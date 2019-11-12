@@ -19,6 +19,23 @@ the_post();
             <a class='orange-text' href="<?php echo home_url(); ?>?desktop=true">View Desktop Site</a>
         </div>
     <?php } ?>
+    <script>
+        navigator.permissions.query({name: 'geolocation'}).then(function(status) {
+            status.onchange = function(){
+                if(navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        lat = position.coords.latitude;
+                        lon = position.coords.longitude;
+                        showPosition(lat, lon);
+                    },
+                    function(error){
+                        // console.log(error);
+                    });
+                }
+            };
+            // console.log(status);
+        });
+    </script>
 </body>
 
 <?php include INDPPL_ROOT_PATH . "templates/footer.php"; ?>
