@@ -823,6 +823,7 @@ input[type=submit].next-button:active{
   max-width: 50vw;
   width: 300px;
   text-align: center;
+  display: inline-block;
 }
 
 .next-button-bottom{
