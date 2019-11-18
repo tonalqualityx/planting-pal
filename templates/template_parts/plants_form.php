@@ -165,11 +165,7 @@ if ($storeid == '') {
                     <div class="pots-form pb-first">
                         <h3>Pot #<span class="counter" data-count="1">1</span></h3>
                         <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
-                            <div class="quantity-inputs">
-                                <p style='margin-bottom: 35px;'></p>
-                                <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
-                                <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
-                            </div>
+                            
                             <div class=" tacos">
                                 <div class="indppl-flex indppl-no-wrap">
                                     <div>
@@ -206,6 +202,13 @@ if ($storeid == '') {
                                     <label class="soil-need">Inches of soil needed</label>
                                 </div>
                             </div>
+
+                            <div class="quantity-inputs">
+                                <p style='margin-bottom: 35px;'></p>
+                                <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
+                                <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="indppl-flex indppl-justify-center max-600">
@@ -228,7 +231,7 @@ if ($storeid == '') {
         </div>
         <div id='beds' class="row type-header-2 indppl-beds-header plants-form-header">
             <div class="col">
-            <h3 class="white-text">Raised Bed Plantings</h3>
+                <h3 class="white-text">Raised Bed Plantings</h3>
                 <p class="light-green-text">Enter the size & quantity of raised beds</p>
                 <img src="<?php echo INDPPL_ROOT_URL . 'assets/img/bed-header.jpg'; ?>" class='plant-form-header-image'>
             </div>

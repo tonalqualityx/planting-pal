@@ -88,15 +88,15 @@ img{
 #indppl-create-dry, #indppl-create-wet{
   min-width: 300px;
   text-align: center;
-  /* background: #9cca3a; */
+  /* background: #9ecb3b; */
   border-radius: 15px;
   /* max-width: 50%; */
 }
 .indppl-green-button-selected, .indppl-size-selected{
   min-width: 300px;
   text-align: center;
-  background: #9cca3a;
-  border: 2px #9cca3a solid;
+  background: #9ecb3b;
+  border: 2px #9ecb3b solid;
   color: black;
   border-radius: 15px;
   cursor: pointer;
@@ -261,10 +261,10 @@ input[type=submit].orange-bg:hover, input[type=submit].orange-bg:active  {
 }
 
 .indppl-light-green, .light-green-text, body h1.indppl-light-green, body h2.indppl-light-green, body h3.indppl-light-green {
-  color: #9cca3a;
+  color: #9ecb3b;
 }
 .indppl-light-green-bg{
-  background: #9cca3a;
+  background: #9ecb3b;
 }
 .indppl-orange {
   color: #f26226;
@@ -613,8 +613,9 @@ h3.results-store {
   height: 60px;
 }
 .indppl-small-header img{
-  width: 300px;
+  width: auto;
   max-width: 80%;
+  max-height: 55px;
 }
 .flex-half{
   width: 50%;
@@ -825,10 +826,6 @@ input[type=submit].next-button:active{
   text-align: center;
 }
 
-input[type=submit].next-button:hover{
-  
-}
-
 .next-button-bottom{
   position: absolute!important;
   bottom: -90px!important;
@@ -928,6 +925,19 @@ p.round-button-error{
 }
 .in-ground-how-much{
   width: 310px;
+}
+
+#plant-size p, .plant-size p {
+  margin-bottom: 0;
+}
+
+.ground-shopping-list input {
+  margin-top: 0;
+}
+
+.ig-select > .container > .indppl-app-split {
+  padding-bottom: 5px;
+  align-items: center;
 }
 
 .dark-grey-header{
@@ -1181,9 +1191,7 @@ div.ui-datepicker{
 #geo-radius{
   margin-right: 10px;
 }
-.indppl-ok-close{
 
-}
 .indppl-green-underline:after {
   content: "";
     border-bottom:3px solid #488a41;
@@ -1241,12 +1249,6 @@ PRODUCT MANAGEMENT
   margin-bottom: 5px;
 }
 
-.indppl-product-create-size-btn{
-  /* padding: 5px 20px;
-  color: black;
-  text-decoration: none;
-  border: black 1px solid; */
-}
 .indppl-product-create-size-btn:hover, .indppl-product-create-size-btn:focus{
   text-decoration: none;
   color:black;
@@ -1616,14 +1618,12 @@ tr.in-ground-not-bag td:nth-child(n+4){
 }
 .indppl-follow-header{
   /* position: fixed; off for now... */
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
   background: white;
   max-width: 100%!important;
   margin: 0!important;
   padding-top: 7px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(207,207,207,0.12), 0 1px 2px rgba(207,207,207,1);
 }
 .pots-apprates-filler-percent{
   font-weight: 600;
@@ -2089,8 +2089,8 @@ input.rounded-input {
     box-shadow: inset 2px 2px 3px 0 rgba(0,0,0,0.50) !important;
     border-radius: 18px !important;
     max-width: 61px;
-    width: 61px;
-    margin-top: 5px;
+    /* width: 61px;
+    margin-top: 5px; */
     text-align: center;
     display: inline;
 }
@@ -2149,7 +2149,7 @@ APP PAGES
   text-align: center;
   max-width: 600px;
   width: 100%;
-  margin: 15px auto 7px;
+  margin: 7px auto 0;
   justify-content: space-evenly;
 }
 
@@ -2191,6 +2191,14 @@ APP PAGES
 .indppl-app-split > * {
   width: 50%;
   text-align: right;
+}
+
+.indppl-app-split .tacos {
+  order: 1;
+} 
+
+.indppl-app-split .quantity-inputs {
+  order: -1;
 }
 
 /* .indppl-app-split > * > *, */
@@ -2284,13 +2292,10 @@ SHOPPING LIST
 }
 .shopping-list-header-text{
   text-align: left;
-  color: #9cca3a;
+  color: #9ecb3b;
   text-transform: none;
   margin: 0;
   font-size: 1em;
-}
-.product-name p {
-  /* line-height: 0; */
 }
 
 .product-name .bigger {
@@ -2320,7 +2325,7 @@ SHOPPING LIST
 }
 body #logo-header {
   margin-bottom: 15px;
-  max-height: 150px;
+  max-height: 55px;
 }
 
 .row.type-header-2, #list-container .row, #buttons.row {
@@ -2328,13 +2333,6 @@ body #logo-header {
   margin: auto;
 }
 
-#buttons.row{
-  /* border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-  border-bottom: 1px solid #6a6e77;
-  border-left: 1px solid #6a6e77;
-  border-right: 1px solid #6a6e77; */
-}
 #list-container{
   border-right: 1px solid #6a6e77;
   border-left: 1px solid #6a6e77;
@@ -2347,8 +2345,9 @@ body #logo-header {
 
 .green-header,
 .row.type-header-2{
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
+  padding-top: 0!important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   border-top: 1px solid #6a6e77;
   border-left: 1px solid #6a6e77;
   border-right: 1px solid #6a6e77;
@@ -2357,12 +2356,28 @@ body #logo-header {
   margin: auto;
 }
 
+.selections img {
+  max-height: 23px!important;
+}
+
+.selections p {
+  font-size: 12px;
+  padding-top: 0!important;
+}
+
 #plants-form .type-header-2 {
   text-align: left;
 }
 
+#plants-form .type-header-2 p {
+  margin-bottom: 5px;
+}
+
 #plants-form .indppl-plantform-subtitles {
   margin-bottom:0;
+  color: #6a6e76;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 #plants-form div:first-child > .indppl-plantform-subtitles {
@@ -2396,10 +2411,15 @@ body #logo-header {
   display: none;
 }
 
-.ig-select {
-  border-bottom-right-radius: 15px;
-  border-bottom-left-radius: 15px;
+.ig-select > .container {
+  padding: 0;
+}
+
+#plants-form .ig-select {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
   margin-bottom: 20px;
+  background: #9ecb3b;
 }
 
 img.keep-going {
@@ -2784,20 +2804,34 @@ PLANTS FORM
 .ground-store-button{
   cursor: pointer;
 }
+
 .plants-form-header h3 {
   font-size: 1.5em;
   margin-bottom: 0;
+  margin-top: 5px;
+  font-family: helvetica;
+  max-width: 60%;
+}
+
+.plants-form-header p {
+  text-transform: none;
+  font-size: 12px;
+  max-width: 60%;
 }
 
 .plant-form-header-image {
   position: absolute;
-  top: -15px;
-  max-height: calc(100% + 15px);
+  top: 0;
+  max-height: 100%;
   right: 0;
-  display: none;
+  max-width: 30%;
+  /* display: none; */
 }
 
 #plants-form {
+  padding: 5px;
+  padding-top: 10px;
+  background: #eee;
   /* margin-top: 135px; off until floating header is back */
 }
 
@@ -2937,9 +2971,6 @@ span.ui-datepicker-year{
   .plant-form-header-image {
     display: block;
   }
-  #plants-form {
-    /* margin-top: 215px; off until floating header is back */
-  }
 
   .indppl-small-header img {
     max-width: 100%;
@@ -2996,6 +3027,11 @@ span.ui-datepicker-year{
 
   h3.results-store {
     line-height: 1.25;
+  }
+
+  body #logo-header {
+    width: 385px;
+    max-height: 150px;
   }
 
 }

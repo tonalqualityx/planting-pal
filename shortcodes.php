@@ -4,9 +4,10 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
     ob_start(); ?>
     <div class='white-background'>
-        <div class='container'>
-            <img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/logo-1.png" id='logo-header'>
-            
+        <div class='container' style="padding-top:10px;">
+            <div class="indppl-small-header">
+                <img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/Planting-Pal-short-carrot-cropped.png" id='logo-header'>
+            </div>
         </div>
     </div>
     <div class="location-body light-blue-bg store-locate-container">
