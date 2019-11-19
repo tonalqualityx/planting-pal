@@ -1538,13 +1538,14 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
         var email = $('input[name=email]').val();
         email = email.replace(' ', '');
+        $('.round-button-error').remove();
         if(validateEmail(email) && email != ''){
             indpplAddLoading();
             var store = $(this).data('store');
             var plants = $(this).data('plants');
             var list = $(this).data('list');
             var ground = $(this).data('ground');
-
+            
     
             $.ajax({
                 url : indppl_ajax.ajaxurl,
@@ -1570,7 +1571,8 @@ jQuery(document).ready(function( $ ) {
                 }
             });
         }else{
-            alert('Please enter a valid email address!');
+            // alert('Please enter a valid email address!');
+            $('#get-planting-guide').after("<p class='round-button-error'>Please enter a valid email address!</p>");
         }
 
     })
@@ -2237,7 +2239,8 @@ jQuery(document).ready(function( $ ) {
         var required_array = [];
         var beds_required_array = [];
         var over_height = false;
-        var over_height_elem;
+        var pots_over_height_elem;
+        var beds_over_height_elem;
         $('.ground-shopping-list').find('.rounded-input').each(function(){
 
             if($(this).val() > 0 && $.isNumeric($(this).val()) && ground == false){
@@ -2275,21 +2278,22 @@ jQuery(document).ready(function( $ ) {
             if($(this).is(':checked')){
                 var pots_need = $(this).parent().parent().parent().find('.rounded-input3').val();
   
-                if(!pots_need >= 1 && pots_need != null){
+                if(!pots_need >= 1 && pots_need != null && pots_need != "" || pots_need === '0'){
                     required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
-                    
                     pots_load = false;
                     pots_partial_empty = false;
                     return false;
-                }else{
-                    var height = $(this).parents('.tacos').find('.height').val();
-
-                    if(pots_need > height){
-                        over_height = true;
-                        over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
-
-                    }
                 }
+                
+                var height = $(this).parents('.tacos').find('.height').val();
+                console.log(pots_need);
+                console.log(height);
+                if(parseInt(pots_need) > parseInt(height)){
+                    over_height = true;
+                    pots_over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
+
+                }
+                console.log(over_height);
             }
         })
         if(pots_partial_empty == false){
@@ -2327,17 +2331,19 @@ jQuery(document).ready(function( $ ) {
         $(".indppl-beds-partial").each(function(){
             if($(this).is(':checked')){
                 var beds_need = $(this).parent().parent().parent().find('.rounded-input3').val();
-                if(!beds_need >= 1 && beds_need != null){
+                console.log(beds_need);
+                if(!beds_need >= 1 && beds_need != null && beds_need != "" || beds_need === '0'){
                     beds_required_array.push($(this).parent().parent().parent().find('.rounded-input3'));
                     beds_load = false;
                     bed_partial_empty = false;
+                    
                     return false;
                 }else{
                     var height = $(this).parents('.tacos').find('.height').val();
                     if(parseInt(beds_need) > parseInt(height)){
                         console.log(beds_need + " " + height);
                         over_height = true;
-                        over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
+                        beds_over_height_elem = $(this).parent().parent().parent().find('.rounded-input3');
                     }
                 }
             }
@@ -2346,8 +2352,8 @@ jQuery(document).ready(function( $ ) {
             beds_empty = false;
         }
 
-        if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true)) || 
-        (pots_load == true && (beds_empty == true || beds_load == true)) ||
+        if((ground == true && (pots_empty == true || pots_load == true) && (beds_load == true || beds_empty == true) && over_height == false) || 
+        (pots_load == true && (beds_empty == true || beds_load == true) && over_height == false) ||
         (beds_load == true && (pots_empty == true || pots_load == true) && over_height == false)){
             $("#plants-form").submit();
         }else{
@@ -2373,8 +2379,13 @@ jQuery(document).ready(function( $ ) {
                 $(this).after('<p class="next-button-error">Fill in all required fields</p>');
             }
             if(over_height == true){
-
-                $(over_height_elem).prev().replaceWith('<p class="round-button-error">Cannot exceed height</p>')
+                console.log('in over your head');
+                if(pots_over_height_elem){
+                    $(pots_over_height_elem).prev().replaceWith('<p class="round-button-error">Cannot exceed height</p>');
+                }
+                if(beds_over_height_elem){
+                    $(beds_over_height_elem).prev().replaceWith('<p class="round-button-error">Cannot exceed height</p>')
+                }
             }
 
             // if(pots_load == false || beds_load == false){
@@ -2625,16 +2636,20 @@ jQuery(document).ready(function( $ ) {
             if($(window).width() > 768){
                 if(currentScroll + screen.height - 200 >= footer){
                     $('.next-button').addClass('next-button-bottom');
+                    $('.next-button-error').addClass('error-text-bottom');
                 }
                 if(currentScroll + screen.height - 200 < footer){
                     $('.next-button').removeClass('next-button-bottom');
+                    $('.next-button-error').removeClass('error-text-bottom');
                 }
             }else{
                 if(currentScroll + screen.height >= footer - 10){
                     $('.next-button').addClass('next-button-bottom');
+                    $('.next-button-error').addClass('error-text-bottom');
                 }
                 if(currentScroll + screen.height < footer + $('.indppl-footer').height()){
                     $('.next-button').removeClass('next-button-bottom');
+                    $('.next-button-error').removeClass('error-text-bottom');
                 }
             }
             var pots = document.querySelector('.indppl-pots-header');

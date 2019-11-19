@@ -809,11 +809,14 @@ span.padding-right-5{
 }
 .next-button-error{
   position: fixed;
-  bottom: -9px;
-  color: red;
-  font-weight: 800;
-  text-decoration: none;
-  font-size: 1.2em;
+    bottom: 42px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: red;
+    font-weight: 800;
+    text-decoration: none;
+    font-size: 1.2em;
 }
 .next-button,
 .next-button:focus,
@@ -829,11 +832,18 @@ input[type=submit].next-button:active{
   position: absolute!important;
   bottom: -90px!important;
 }
+
+
+.error-text-bottom{
+  position: absolute!important;
+  bottom: -138px!important;
+}
+
 p.round-button-error{
   font-weight: 800;
   color:red!important;
   text-decoration: none;
-  font-size: 1.2em;
+  font-size: 1.5rem;
   margin-bottom:0;
 }
 .color-red, .duplicate-required-fill, .next-button-error, .round-button-error{
@@ -2049,8 +2059,7 @@ POTS & BEDS APPRATES
 *********************/
 
 input.blended-num, input.surface-num{
-  width: 70px!important;
-  /* width: 70px; */
+  width: 85px!important;
 }
 .blended-select, .surface-select-sqft, .surface-select{
   height: 35px;
@@ -2415,6 +2424,11 @@ img.keep-going {
 
 .rb-form h3, .pots-form h3{
   font-size: 32px;
+}
+
+.soil-need{
+  text-align: left;
+  width: 100%;
 }
 
 div .rb-form:nth-child(n+2), div .pots-form:nth-child(n+2){
@@ -2911,6 +2925,10 @@ span.ui-datepicker-year{
 
   .quantity-inputs p {
     margin-bottom: 10px!important;
+  }
+
+  .quantity-inputs, .inches-needed{
+    max-width: 80px;
   }
 
 }

@@ -203,8 +203,8 @@ if ($storeid == '') {
                                 <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
                                     <p style='margin-bottom: 35px;'></p>    
                                     <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots" value='<?php echo $pots["need"][$key]; ?>'>
-                                    <label class="soil-need">Inches of soil needed</label>
                                 </div>
+                                <label class="soil-need">Inches of soil needed</label>
                             </div>
                         </div>
                         <div class="row">
@@ -286,8 +286,8 @@ if ($storeid == '') {
                                 <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
                                     <p style='margin-bottom: 35px;'></p>
                                     <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
-                                    <label class="soil-need dark-green-text">Inches of soil needed</label>
                                 </div>
+                                <label class="soil-need dark-green-text">Inches of soil needed</label>
                             </div>
                         </div>
                     </div> 
