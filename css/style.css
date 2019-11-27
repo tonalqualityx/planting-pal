@@ -929,6 +929,7 @@ p.round-button-error{
 
 #plant-size p, .plant-size p {
   margin-bottom: 0;
+  color: #302f2f;
 }
 
 .ground-shopping-list input {
@@ -938,6 +939,26 @@ p.round-button-error{
 .ig-select > .container > .indppl-app-split {
   padding-bottom: 5px;
   align-items: center;
+}
+
+.indppl-app-split .ground-shopping-list {
+  width: 40%;
+}
+
+.indppl-app-split .plant-size {
+  width: 60%;
+}
+
+.indppl-app-split.qty-plant-header div:first-child {
+  width: 40%;
+}
+
+.indppl-app-split.qty-plant-header div:last-child {
+  width: 60%;
+}
+
+.qty-plant-header {
+  border-bottom: 1px solid #6a6e76;
 }
 
 .dark-grey-header{
@@ -2381,8 +2402,8 @@ body #logo-header {
 }
 
 #plants-form div:first-child > .indppl-plantform-subtitles {
-  text-align:left;
-  margin-left:17px;
+  text-align:center;
+  margin-left:0;
 }
 
 #plants-form div:nth-child(2) > .indppl-plantform-subtitles {
@@ -2422,6 +2443,10 @@ body #logo-header {
   background: #9ecb3b;
 }
 
+#ground-entries input {
+  margin: auto;
+}
+
 img.keep-going {
   margin: auto;
   width: 66px;
@@ -2435,7 +2460,7 @@ img.keep-going {
 .rb-form, .pots-form{
   position: relative;
   max-width: 100%;
-  padding: 1% 5%;
+  /* padding: 1% 5%; */
   font-size: 14px;
 }
 
@@ -2810,13 +2835,14 @@ PLANTS FORM
   margin-bottom: 0;
   margin-top: 5px;
   font-family: helvetica;
-  max-width: 60%;
+  /* max-width: 60%; */
 }
 
 .plants-form-header p {
   text-transform: none;
   font-size: 12px;
-  max-width: 60%;
+  font-weight: 100;
+  /* max-width: 60%; */
 }
 
 .plant-form-header-image {
@@ -2959,6 +2985,22 @@ span.ui-datepicker-year{
 @media screen and (min-width: 500px){
   .app-form-inputs {
     flex-direction: row-reverse;
+  }
+
+  .indppl-app-split .ground-shopping-list {
+    width: 50%;
+  }
+
+  .indppl-app-split .plant-size {
+    width: 50%;
+  }
+
+  .indppl-app-split.qty-plant-header div:first-child {
+    width: 50%;
+  }
+
+  .indppl-app-split.qty-plant-header div:last-child {
+    width: 50%;
   }
 
 }

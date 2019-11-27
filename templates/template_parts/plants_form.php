@@ -46,7 +46,7 @@ if ($storeid == '') {
             <p class="light-green-text">Enter the size & quantity of plants below</p>
         </div>
     </div>
-    <div class="ig-select container" style="padding-bottom: 25px;">
+    <div id="ground-entries" class="ig-select container" style="padding-bottom: 25px;">
         <div class="container">
             <div class="indppl-app-split indppl-flex qty-plant-header">
                 <div class="">
@@ -57,7 +57,7 @@ if ($storeid == '') {
                 </div>
             </div>
         </div>
-        <hr class="light-rule">
+        <!-- <hr class="light-rule"> -->
 
         <div class="container">
             <?php 
