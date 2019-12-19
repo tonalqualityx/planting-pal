@@ -19,6 +19,35 @@ the_post();
             <a class='orange-text' href="<?php echo home_url(); ?>?desktop=true">View Desktop Site</a>
         </div>
     <?php } ?>
+
+    <script>
+        var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+        var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        
+        if (isSafari && iOS) {
+            // alert("You are using Safari on iOS!");
+        } else if(isSafari) {
+            // alert("You are using Safari.");
+        }else if(document.documentMode || /Edge/.test(navigator.userAgent)) {
+            // alert('Hello Microsoft User! This site works best in Chrome!');
+        }else{
+            navigator.permissions.query({name: 'geolocation'}).then(function(status) {
+                status.onchange = function(){
+                    if(navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function(position) {
+                            lat = position.coords.latitude;
+                            lon = position.coords.longitude;
+                            showPosition(lat, lon);
+                        },
+                        function(error){
+                            // console.log(error);
+                        });
+                    }
+                };
+                // console.log(status);
+            });
+        }
+    </script>
 </body>
 
 <?php include INDPPL_ROOT_PATH . "templates/footer.php"; ?>

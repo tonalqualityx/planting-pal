@@ -1787,7 +1787,7 @@ function indppl_get_pot_apprates_ajax(){
                                 </div>
                             </td>
                             <td class='pots-apprates-blended-cell'>
-                                <input type="number" min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='blended-num'>
+                                <input type="number" step='0.01' min='0' data-product='<?php echo $key; ?>' name='blended-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='blended-num'>
                             </td>
                             <td class='pots-apprates-blended-cell'>
                                 <select name='blended-select-<?php echo $key; ?>' class='blended-select'>
@@ -1903,7 +1903,7 @@ function indppl_get_pot_apprates_ajax(){
                                 </div>
                             </td>
                             <td class='pots-apprates-surface-cell'>
-                                <input type='number' min='0' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='surface-num'>
+                                <input type='number' min='0' step='0.01' data-product='<?php echo $key; ?>' name='surface-num-<?php echo $key; ?>' value='<?php echo $dilution; ?>' class='surface-num'>
                             </td>
                             <td class='pots-apprates-surface-cell'>
                                 <select name='surface-select-<?php echo $key; ?>' class='surface-select'>

@@ -48,10 +48,12 @@ if(is_admin()){
 }
 
 function indppl_enqueue(){
+
     wp_enqueue_style('indppl-style', INDPPL_ROOT_URL . 'css/style.min.css', array(), INDPPL_VERSION);
     wp_enqueue_style('font-awesome-backup', "/wp-content/plugins/bb-plugin/fonts/fontawesome/css/all.min.css");
     wp_enqueue_style('print-styles', INDPPL_ROOT_URL . "css/print.css", array(), INDPPL_VERSION, 'print');
     wp_register_script( 'indppl-js', INDPPL_ROOT_URL . 'js/app.min.js', array( 'jquery' ), INDPPL_VERSION);
+
     wp_localize_script( 'indppl-js', 'indppl_ajax',
       array(
          'ajaxurl' => admin_url( 'admin-ajax.php' ),
@@ -79,8 +81,8 @@ add_action('wp_enqueue_scripts', 'page_template_enqueue');
 
 
 function admin_functions_enqueue(){
-    wp_enqueue_style('indppl-admin-style', INDPPL_ROOT_URL . 'css/admin-style.css', array(), "1.0");
-    wp_register_script( 'indppl-admin-js', INDPPL_ROOT_URL . 'js/admin-app.js', array( 'jquery' ), "1.1.3");
+    wp_enqueue_style('indppl-admin-style', INDPPL_ROOT_URL . 'css/admin-style.css', array(), INDPPL_VERSION);
+    wp_register_script( 'indppl-admin-js', INDPPL_ROOT_URL . 'js/admin-app.js', array( 'jquery' ), INDPPL_VERSION);
     wp_localize_script( 'indppl-admin-js', 'indppl_admin_ajax',
       array(
          'ajaxurl' => admin_url( 'admin-ajax.php' ),
