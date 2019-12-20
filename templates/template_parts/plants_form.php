@@ -199,12 +199,12 @@ if ($storeid == '') {
                                 <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
                                     <p style='margin-bottom: 35px;'></p>    
                                     <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots" value='<?php echo $pots["need"][$key]; ?>'>
+                                    <label class="soil-need">Inches of soil needed</label>
                                 </div>
-                                <label class="soil-need">Inches of soil needed</label>
                             </div>
 
                             <div class="quantity-inputs">
-                                <p style='margin-bottom: 35px;'></p>
+                                <p style='margin-bottom: 35px!important;'></p>
                                 <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
                                 <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
@@ -253,7 +253,7 @@ if ($storeid == '') {
 
                         <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
                             <div class="quantity-inputs" >
-                                <p style='margin-bottom: 35px;'></p>
+                                <p style='margin-bottom: 35px!important;'></p>
                                 <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
                                 <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
@@ -289,8 +289,8 @@ if ($storeid == '') {
                                 <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
                                     <p style='margin-bottom: 35px;'></p>
                                     <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
+                                    <label class="soil-need dark-green-text">Inches of soil needed</label>
                                 </div>
-                                <label class="soil-need dark-green-text">Inches of soil needed</label>
                             </div>
                         </div>
                     </div> 

@@ -48,7 +48,8 @@ the_post();
             });
         }
     </script>
+<?php include INDPPL_ROOT_PATH . "templates/footer.php"; ?>
+
 </body>
 
-<?php include INDPPL_ROOT_PATH . "templates/footer.php"; ?>
 <?php wp_footer(); ?>

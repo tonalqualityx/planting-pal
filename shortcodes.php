@@ -196,7 +196,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
             ?>
             <div class='single-store-app-container'>
                 <div class='app-store-img'>
-                    <img src=<?php echo $img; ?>>
+                    <div class="app-store-logo" style="background:url(<?php echo $img; ?>);background-size:contain;"></div>
                 </div>
                 <div class='app-store-info'>
                     <h3 class='results-store'><a href='<?php echo get_permalink($id); ?>'><?php echo $title; ?></a></h3>

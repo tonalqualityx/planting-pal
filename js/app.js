@@ -1581,8 +1581,8 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
 
         var content = $(this).parent().find('.sponsor-copy').html();
-        var brand = $(this).siblings('.product-name').find('.brand').text();
-        var product = $(this).siblings('.product-name').find('.product').text();
+        var brand = $(this).parents('.product').find('.the-brand').text();
+        var product = $(this).parents('.product').find('.the-product').text();
 
         var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
         if(!image || image == 'undefined'){
