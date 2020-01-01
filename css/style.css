@@ -399,6 +399,7 @@ ul.style-free {
   border-radius: 4px 4px 0 0;
   text-decoration: none;
   display: inline-block;
+  color: #f26226;
 }
 
 .indppl-nav-tabs > li > a:hover{
@@ -408,7 +409,7 @@ ul.style-free {
 .indppl-nav-tabs > li.indppl-active > a,
 .indppl-nav-tabs > li.indppl-active > a:hover,
 .indppl-nav-tabs > li.indppl-active > a:active{
-  color: #555;
+  color: #302f2f;
   cursor: default;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -2495,12 +2496,14 @@ img.keep-going {
 .rb-form, .pots-form{
   position: relative;
   max-width: 100%;
-  /* padding: 1% 5%; */
+  padding: 15px;
   font-size: 14px;
 }
 
 .rb-form h3, .pots-form h3{
-  font-size: 32px;
+  font-size: 14px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .soil-need{

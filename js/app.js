@@ -2229,6 +2229,14 @@ jQuery(document).ready(function( $ ) {
         $('.indppl-loading-background').remove();
     })
 
+    // Trigger the button click when pressing enter
+    $('#plants-form').keypress(function (e) {
+        if (e.keyCode == 13){
+            e.preventDefault();
+            $('#plants-form-submit').click();
+        }
+    });
+
     $('body').on('touchstart click', 'a.next-button', function(e){
         e.preventDefault();
         e.stopPropagation();
