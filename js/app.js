@@ -1471,10 +1471,8 @@ jQuery(document).ready(function( $ ) {
             }
             console.log(step + " " + option + " " + path);
             if(step == '1' && option == 'b'){
-                console.log('made it');
                 path = 'b';
             }
-            console.log(path);
 
             steps.push({title: title, step : step, description : description, products : products, image : image, option : option, path : path });
         });
