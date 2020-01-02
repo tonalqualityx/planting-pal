@@ -2121,7 +2121,8 @@ jQuery(document).ready(function( $ ) {
             success: function (response) {
 
                 $('.indppl-my-stores-container').replaceWith(response);
-                indpplDelLoading();
+                location.reload();
+                // indpplDelLoading();
             }
         });
 
@@ -3738,5 +3739,18 @@ function indpplMembrModalInit(){
     //   var url = jQuery(selector).val();
     //   location.href = url;
     // });
+}
+
+function autocomplete(){
+    var autocomplete;
+    var input = document.getElementsByClassName('google-suggest');
+    for(i = 0; i < input.length; i++){
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {HTMLInputElement} */(input[i]),
+            { types: ['geocode'] });
+    }
+    google.maps.event.addListener(autocomplete, 'places_changed', function() {
+    });
+    
 }
   
