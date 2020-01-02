@@ -119,6 +119,28 @@ function get_stores_by_location($lat, $lng){
     return $store_id_array;
 }
 
+function indppl_distance($lat1, $lon1, $lat2, $lon2, $unit = null) {
+    if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+      return 0;
+    }
+    else {
+      $theta = $lon1 - $lon2;
+      $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+      $dist = acos($dist);
+      $dist = rad2deg($dist);
+      $miles = $dist * 60 * 1.1515;
+      $unit = strtoupper($unit);
+  
+      if ($unit == "K") {
+        return ($miles * 1.609344);
+      } else if ($unit == "N") {
+        return ($miles * 0.8684);
+      } else {
+        return $miles;
+      }
+    }
+  }
+
 function get_lat_lon_from_zip($zipcode){
     // geonames
     // $url = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=10&username=indelible';

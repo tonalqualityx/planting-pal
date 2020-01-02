@@ -21,7 +21,8 @@ jQuery(document).ready(function( $ ) {
         geoSubmit();
     })
     
-    
+    var lat = 0.00;
+    var lon = 0.00;
     if($('.store-locate-container').length > 0){
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -40,17 +41,18 @@ jQuery(document).ready(function( $ ) {
         // if(parseInt(radius) > 30){
         //     $('#geo-radius-custom').val(30);
         // }
-        var lat;
-        var lon;
+        // var lat;
+        // var lon;
         if(navigator.geolocation) {
+            console.log('dlkdj');
             navigator.geolocation.getCurrentPosition(function(position) {
                 lat = position.coords.latitude;
                 lon = position.coords.longitude;
             },
             function(error){
                 // console.log(error);
-                lat = null;
-                lon = null;
+                // lat = null;
+                // lon = null;
             });
         }
         showPosition(lat, lon);
@@ -66,8 +68,9 @@ jQuery(document).ready(function( $ ) {
         if(lon === undefined){
             lon = null;
         }
+        console.log(lat);
         // console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
-        var radius = 30;
+        var radius = 200;
         var zip = $('#zip-for-location').val();
         indpplAddLoading();
         setTimeout(function(){
