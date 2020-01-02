@@ -21,7 +21,8 @@ jQuery(document).ready(function( $ ) {
         geoSubmit();
     })
     
-    
+    var lat = 0.00;
+    var lon = 0.00;
     if($('.store-locate-container').length > 0){
         if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
@@ -40,17 +41,18 @@ jQuery(document).ready(function( $ ) {
         // if(parseInt(radius) > 30){
         //     $('#geo-radius-custom').val(30);
         // }
-        var lat;
-        var lon;
+        // var lat;
+        // var lon;
         if(navigator.geolocation) {
+            console.log('dlkdj');
             navigator.geolocation.getCurrentPosition(function(position) {
                 lat = position.coords.latitude;
                 lon = position.coords.longitude;
             },
             function(error){
                 // console.log(error);
-                lat = null;
-                lon = null;
+                // lat = null;
+                // lon = null;
             });
         }
         showPosition(lat, lon);
@@ -66,8 +68,9 @@ jQuery(document).ready(function( $ ) {
         if(lon === undefined){
             lon = null;
         }
+        console.log(lat);
         // console.log("Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude);
-        var radius = 30;
+        var radius = 200;
         var zip = $('#zip-for-location').val();
         indpplAddLoading();
         setTimeout(function(){
@@ -2121,7 +2124,8 @@ jQuery(document).ready(function( $ ) {
             success: function (response) {
 
                 $('.indppl-my-stores-container').replaceWith(response);
-                indpplDelLoading();
+                location.reload();
+                // indpplDelLoading();
             }
         });
 
@@ -3738,5 +3742,18 @@ function indpplMembrModalInit(){
     //   var url = jQuery(selector).val();
     //   location.href = url;
     // });
+}
+
+function autocomplete(){
+    var autocomplete;
+    var input = document.getElementsByClassName('google-suggest');
+    for(i = 0; i < input.length; i++){
+        autocomplete = new google.maps.places.Autocomplete(
+            /** @type {HTMLInputElement} */(input[i]),
+            { types: ['geocode'] });
+    }
+    google.maps.event.addListener(autocomplete, 'places_changed', function() {
+    });
+    
 }
   

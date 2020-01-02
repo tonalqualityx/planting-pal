@@ -72,6 +72,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
                 'compare' => '=',
             ),
         );
+        $search_by_title = true;
         $args['post_title_like'] = $zip;
         if($lat != NULL){
             $zip_array = geofind($lat, $lon, $radius);
@@ -183,7 +184,9 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
             $phone = get_post_meta($id, 'wpcf-phone', true);
             $url = get_post_meta($id, 'wpcf-weburl', true);
             $author = get_post_field( 'post_author', $id );
-            // var_dump($url);
+            $store_lat = get_post_meta($id, 'ind-lat', true);
+            $store_lng = get_post_meta($id, 'ind-long', true);
+            $store_distance = indppl_distance($store_lat, $store_lng, $lat, $lon);
             $pro_array = indppl_user_status($author);
             if(in_array('paidaccountpro', $pro_array)){
                 $is_pro = true;
@@ -213,18 +216,23 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
                     ?>
                 </div>
                 <div class='app-store-distance'>
-                    <?php if($distance > 0){
-                        ?>
-                        <p class='store-distance store-list-text'><?php echo round($distance, 2); ?> mi</p>
-                        <?php
-                    }else if($store_zip == $zip || $zip_array[0]['zip'] == $store_zip || $distance == 0){
-                        ?>
-                        <p class='store-distance store-list-text'>In Town</p>
-                        <?php
-                    }else if($zip != null || $lat != 0){
-                        ?>
-                        <p class='store-distance store-list-text'>Greater than 30mi</p>
-                        <?php
+                    <?php
+                    if(!$search_by_title){
+                        if($distance > 0){
+                            ?>
+                            <p class='store-distance store-list-text'><?php echo round($distance, 2); ?> mi</p>
+                            <?php
+                        }else if(($store_zip == $zip || $zip_array[0]['zip'] == $store_zip || $distance == 0) && $zip || $lat){
+                            ?>
+                            <p class='store-distance store-list-text'>0.00 mi</p>
+                            <?php
+                        }
+                    }else{
+                        if($lat){
+                            ?>
+                            <p class='store-distance store-list-text'><?php echo round($store_distance, 2); ?> mi</p>
+                            <?php
+                        }
                     }
                     ?>
                 </div>

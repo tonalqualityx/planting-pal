@@ -119,34 +119,61 @@ function get_stores_by_location($lat, $lng){
     return $store_id_array;
 }
 
+function indppl_distance($lat1, $lon1, $lat2, $lon2, $unit = null) {
+    if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+      return 0;
+    }
+    else {
+      $theta = $lon1 - $lon2;
+      $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+      $dist = acos($dist);
+      $dist = rad2deg($dist);
+      $miles = $dist * 60 * 1.1515;
+      $unit = strtoupper($unit);
+  
+      if ($unit == "K") {
+        return ($miles * 1.609344);
+      } else if ($unit == "N") {
+        return ($miles * 0.8684);
+      } else {
+        return $miles;
+      }
+    }
+  }
+
 function get_lat_lon_from_zip($zipcode){
-    $url = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=10&username=indelible';
-    // $xmlfile = file_get_contents($url);
-    // $ob = simplexml_load_string($xmlfile);
+    // geonames
+    // $url = 'http://api.geonames.org/postalCodeSearch?postalcode=' . $zipcode . '&maxRows=10&username=indelible';
+
+    // $ch = curl_init();
+    // curl_setopt($ch,CURLOPT_URL,$url);
+    // curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    // $xmldata = curl_exec($ch);
+    // curl_close($ch);
+    // $ob = simplexml_load_string($xmldata);
     // $json = json_encode($ob);
     // $configData = json_decode($json, true);
-    // var_dump($configData);
+    // foreach($configData['code'] as $key => $value){
+    //     if($value['countryCode'] == 'US'){
+    //         $return = $value;
+    //     }
+    // }
 
-    // curl
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-    $xmldata = curl_exec($ch);
-    curl_close($ch);
-    $ob = simplexml_load_string($xmldata);
-    $json = json_encode($ob);
-    $configData = json_decode($json, true);
-    // var_dump($configData);
-
-    // end curl 
-
+    // google
+    $google_url = "https://maps.googleapis.com/maps/api/geocode/json?key=" . MAPS_API_KEY . "&components=postal_code:" . $zipcode;
+    $lat_lng_info = file_get_contents($google_url);
+    $lat_lng = json_decode($lat_lng_info, true);
+    $google_lat = $lat_lng['results'][0]['geometry']['location']['lat'];
+    $google_lng = $lat_lng['results'][0]['geometry']['location']['lng'];
     $return = [];
-    foreach($configData['code'] as $key => $value){
-        if($value['countryCode'] == 'US'){
-            $return = $value;
-        }
-    }
-    return $return;
+    
+    $google_return = array(
+        'lat' => $google_lat,
+        'lng' => $google_lng
+    );
+
+    // to return geonames use $return to return google use $google_return
+    return $google_return;
 }
 
 function phone_number_format($number) {
@@ -670,7 +697,9 @@ function indppl_store_info($store_id = NULL){
     $logo = '';
     
 	if(is_int($store_id)){
-		$store_name = get_the_title($store_id);
+        $store_name = get_the_title($store_id);
+        $address = get_post_meta($store_id, 'wpcf-google-address', true);
+        
 		$address1 = get_post_meta($store_id, 'wpcf-address1', true);
 		$address2 = get_post_meta($store_id, 'wpcf-address2', true);
 		$city = get_post_meta($store_id, 'wpcf-city', true);
@@ -681,7 +710,6 @@ function indppl_store_info($store_id = NULL){
         $email = get_post_meta($store_id, 'wpcf-email', true);
 		$logo = get_post_meta($store_id, 'wpcf-logo', true);
     }
-    // var_dump($logo);
     // wp_handle_upload( $file, $overrides, $time );
     $top_url = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $top_url = explode('?new=true', $top_url);
@@ -705,64 +733,84 @@ function indppl_store_info($store_id = NULL){
                 
                 </div>
 			</div>
-			
-			<!-- Text input-->
-			<div class="form-group">
+			<div class='form-group'>
+                <label class="col-md-2 control-label" for="indppl-edit-user-address">Address</label>
+                <div class='col-md-4'>
+                    <input type='text' name='prevent_autofill' id='prevent-autofill' value='' style='display:none;' />
+                    <input id='google-suggest' class='google-suggest form-control input-md indppl-edit-user controls' name='indppl_edit_user_address' value='<?php echo $address; ?>' type='text' placeholder="Search Box" autocomplete="off">
+                </div>
+            </div>
+            <script>
+                jQuery(document).ready(function(){
+                    if(window.google && window.google.maps){
+
+                    }else if(!document.getElementById('google-map-script')){
+                        var scriptTag = document.createElement('script');
+                        scriptTag .id = 'google-map-script';
+                        scriptTag .src = 'https://maps.googleapis.com/maps/api/js?key=<?php echo MAPS_API_KEY ?>&libraries=places&callback=autocomplete';
+                        var head = document.getElementsByTagName('head')[0];
+                        head.appendChild(scriptTag);
+                    }
+                });
+            </script>
+
+			<!-- Text input -->
+			<!-- <div class="form-group">
 			<label class="col-md-2 control-label" for="address1">Address Line 1</label>
 			<div class="col-md-4">
 			<input id="address1" required name="address1" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $address1; ?>">
 			
 			</div>
-			</div>
+			</div> -->
 			
 			<!-- Text input-->
-			<div class="form-group">
+			<!-- <div class="form-group">
 			<label class="col-md-2 control-label" for="address2">Address Line 2</label>
 			<div class="col-md-4">
 			<input id="address2" name="address2" type="text" placeholder="" class="form-control input-md" value="<?php echo $address2; ?>">
 			
 			</div>
-			</div>
+			</div> -->
 			
 			<!-- Text input-->
-			<div class="form-group">
+			<!-- <div class="form-group">
 			<label class="col-md-2 control-label" for="city">City</label>
 			<div class="col-md-4">
 			<input id="city" name="city" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $city; ?>">
                 
 			</div>
-			</div>
+			</div> -->
 			
 			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-2 control-label" for="state">State</label>
-			<div class="state-selector">
-			<select id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $state; ?>">
-                <?php
-                    $state_array = array('AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY');
-                    foreach($state_array as $value){
-                        if($value == $state){
-                            $select = 'selected="selected"';
-                        }else{
-                            $select = '';
-                        }
-                        ?>
-                        <option <?php echo $select; ?> value="<?php echo $value; ?>"><?php echo $value; ?></option>
+			<!-- <div class="form-group">
+                <label class="col-md-2 control-label" for="state">State</label>
+                <div class="state-selector">
+                    <select id="state" name="state" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $state; ?>">
                         <?php
-                    }
-                ?>
-            </select>
-			</div>
-			</div>
+                            $state_array = array('AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY');
+                            foreach($state_array as $value){
+                                if($value == $state){
+                                    $select = 'selected="selected"';
+                                }else{
+                                    $select = '';
+                                }
+                                ?>
+                                <option <?php echo $select; ?> value="<?php echo $value; ?>"><?php echo $value; ?></option>
+                                <?php
+                            }
+                        ?>
+                    </select>
+                </div>
+			</div> -->
 			
 			<!-- Text input-->
-			<div class="form-group">
-			<label class="col-md-2 control-label" for="zip">Zipcode</label>
-			<div class="col-md-2">
-			<input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $zip; ?>">
-			
-			</div>
-			</div>
+			<!-- <div class="form-group">
+                <label class="col-md-2 control-label" for="zip">Zipcode</label>
+                <div class="col-md-2">
+                    <input id="zip" name="zip" type="text" placeholder="" class="form-control input-md" required="" value="<?php echo $zip; ?>">
+                
+                </div>
+			</div> -->
 			
 			<!-- Text input-->
 			<div class="form-group">
@@ -887,6 +935,37 @@ function indppl_save_post($store_id = 0){
         }
         $array = get_lat_lon_from_zip($_POST['zip']);
         // }
+        // google maps api
+        
+        $address_formatted = '';
+        $pars_address = explode(" ", $_POST['indppl_edit_user_address']);
+        foreach ($pars_address as $key => $value) {
+            $address_formatted .= $value . "+";
+        }
+        $address_formatted = substr($address_formatted, 0, -1);
+        $address_info = file_get_contents("https://maps.googleapis.com/maps/api/geocode/json?address=$address_formatted&key=" . MAPS_API_KEY);
+        $address_json = json_decode($address_info, true);
+        $address_lat = $address_json['results'][0]['geometry']['location']['lat'];
+        $address_lng = $address_json['results'][0]['geometry']['location']['lng'];
+
+        $address_parts = explode(', ', $_POST['indppl_edit_user_address']);
+
+        if(count($address_parts) > 4){
+            $address1 = $address_parts[0];
+            $address2 = $address_parts[1];
+            $city = $address_parts[2];
+            $state = $address_parts[3];
+        }else{
+            $address1 = $address_parts[0];
+            $city = $address_parts[1];
+            $state = $address_parts[2];
+        }
+        foreach($address_json['results'][0]["address_components"] as $addrComp){
+            if($addrComp['types'][0] == 'postal_code'){
+                //Return the zipcode
+                $zip = ($addrComp['long_name']);
+            }
+        }
         $store = array(
             'ID' => $store_id,
             'post_title' => wp_strip_all_tags($_POST['store-name']),
@@ -894,17 +973,20 @@ function indppl_save_post($store_id = 0){
             'post_type' => 'store',
             'post_status' => "publish",
             'meta_input' => array(
-                'wpcf-address1' => $_POST['address1'],
-                'wpcf-address2' => $_POST['address2'],
-                'wpcf-city' => $_POST['city'],
-                'wpcf-state' => $_POST['state'],
-                'wpcf-zip' => $_POST['zip'],
+                'wpcf-google-address' => $_POST['indppl_edit_user_address'],
+                'wpcf-address1' => $address1,
+                'wpcf-address2' => $address2,
+                'wpcf-city' => $city,
+                'wpcf-state' => $state,
+                'wpcf-zip' => $zip,
                 'wpcf-phone' => $_POST['phone'],
                 'wpcf-email' => $_POST['store-email'],
                 
                 'wpcf-weburl' => $_POST['weburl'],
-                'ind-lat' => $array['lat'],
-                'ind-long' => $array['lng'],
+                // 'ind-lat' => $array['lat'],
+                // 'ind-long' => $array['lng'],
+                'ind-lat' => $address_lat,
+                'ind-long' => $address_lng,
             ),
         );
         if(isset(wp_get_attachment_image_src($attachment_id)[0])){

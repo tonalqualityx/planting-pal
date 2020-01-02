@@ -31,6 +31,7 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 
 define('INDPPL_ROOT_PATH', plugin_dir_path(__FILE__));
 define('INDPPL_ROOT_URL', plugin_dir_url(__FILE__));
+define('MAPS_API_KEY', "AIzaSyBBcd9VgHUA4Szg5YQzFJDLNeWuEfXv-74");
 
 // General Required Files
 require_once(INDPPL_ROOT_PATH . "/functions.php");
