@@ -739,6 +739,27 @@ function indppl_store_info($store_id = NULL){
         $email = get_post_meta($store_id, 'wpcf-email', true);
 		$logo = get_post_meta($store_id, 'wpcf-logo', true);
     }
+
+    ?>
+        <script>
+            
+            
+            function autocomplete(){
+                var autocomplete;
+                var input = document.getElementsByClassName('google-suggest');
+                for(i = 0; i < input.length; i++){
+                    autocomplete = new google.maps.places.Autocomplete(
+                        /** @type {HTMLInputElement} */(input[i]),
+                        { types: ['geocode'] });
+                }
+                google.maps.event.addListener(autocomplete, 'places_changed', function() {
+                });
+        
+            }
+            
+        </script>
+        <?php
+
     // wp_handle_upload( $file, $overrides, $time );
     $top_url = "//$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
     $top_url = explode('?new=true', $top_url);
@@ -965,7 +986,7 @@ function indppl_save_post($store_id = 0){
         $array = get_lat_lon_from_zip($_POST['zip']);
         // }
         // google maps api
-        
+
         $address_formatted = '';
         $pars_address = explode(" ", $_POST['indppl_edit_user_address']);
         foreach ($pars_address as $key => $value) {

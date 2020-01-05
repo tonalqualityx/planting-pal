@@ -3750,16 +3750,18 @@ function indpplMembrModalInit(){
     // });
 }
 
-function autocomplete(){
-    var autocomplete;
-    var input = document.getElementsByClassName('google-suggest');
-    for(i = 0; i < input.length; i++){
-        autocomplete = new google.maps.places.Autocomplete(
-            /** @type {HTMLInputElement} */(input[i]),
-            { types: ['geocode'] });
+if(!document.getElementById('google-map-script')){
+    function autocomplete(){
+        var autocomplete;
+        var input = document.getElementsByClassName('google-suggest');
+        for(i = 0; i < input.length; i++){
+            autocomplete = new google.maps.places.Autocomplete(
+                /** @type {HTMLInputElement} */(input[i]),
+                { types: ['geocode'] });
+        }
+        google.maps.event.addListener(autocomplete, 'places_changed', function() {
+        });
+        
     }
-    google.maps.event.addListener(autocomplete, 'places_changed', function() {
-    });
-    
 }
   
