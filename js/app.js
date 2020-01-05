@@ -1474,10 +1474,8 @@ jQuery(document).ready(function( $ ) {
             }
             console.log(step + " " + option + " " + path);
             if(step == '1' && option == 'b'){
-                console.log('made it');
                 path = 'b';
             }
-            console.log(path);
 
             steps.push({title: title, step : step, description : description, products : products, image : image, option : option, path : path });
         });
@@ -1584,8 +1582,8 @@ jQuery(document).ready(function( $ ) {
         e.preventDefault();
 
         var content = $(this).parent().find('.sponsor-copy').html();
-        var brand = $(this).siblings('.product-name').find('.brand').text();
-        var product = $(this).siblings('.product-name').find('.product').text();
+        var brand = $(this).parents('.product').find('.the-brand').text();
+        var product = $(this).parents('.product').find('.the-product').text();
 
         var image = $(this).parents('.guide-product-template').find('.product-guide-image').html();
         if(!image || image == 'undefined'){
@@ -2232,6 +2230,14 @@ jQuery(document).ready(function( $ ) {
     $('body').on('click', '.indppl-date-overlap-modal-background', function(){
         $('.indppl-loading-background').remove();
     })
+
+    // Trigger the button click when pressing enter
+    $('#plants-form').keypress(function (e) {
+        if (e.keyCode == 13){
+            e.preventDefault();
+            $('#plants-form-submit').click();
+        }
+    });
 
     $('body').on('touchstart click', 'a.next-button', function(e){
         e.preventDefault();

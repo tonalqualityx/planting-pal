@@ -346,7 +346,7 @@ foreach ($sections as $section => $options) {
             <?php
             $i++;
             if ($i > 1) {?>
-                <a href="#" id="guide-back" class="indppl-button guide-controls" data-target="section-<?php echo prev($sections)['id'];
+                <a href="#" id="guide-back" class="orange-text guide-controls" data-target="section-<?php echo prev($sections)['id'];
                 next($sections); ?>" data-header="<?php echo $format_section; ?>-header">Back</a>
             <?php }
             if ($i < $count) {?>

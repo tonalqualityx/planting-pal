@@ -22,12 +22,25 @@
         
         <!-- Standard Product -->
             <div class="row products">
-                <div class="col-3 align-self-center">
+                <div class="col-3 align-self-center" style="max-width:20%;">
                     <p class='qty-title'>Qty:</p>
                     <p class="qty-bag"><?php echo $item['count']; ?></p>
                 </div>
                 <div class=" indppl-flex indppl-align-center product">
 
+                    <div class='product-name'>
+                        <?php
+                        $name = $item['name'];
+                        if(explode(' ', $item['name'])[1] == 'qt-d' || explode(' ', $item['name'])[1] == 'qt-l'){
+                            
+                            $name = explode(' ', $item['name'])[0] . ' Quart';
+                        }
+                        ?>
+                        <p class='smaller grey-text the-brand'><strong><?php echo $item['brand']; ?></strong></p>
+                        <p class="bigger black-text the-product"><strong><?php echo str_replace($item['brand'] . " ", '', $item['product']); ?></strong></p>
+                        <p class='smaller black-text'><strong>Size: <?php echo $name;?></strong></p>
+
+                    </div>
                     <?php 
 
                     // check for a sponsorship
@@ -50,19 +63,6 @@
                         echo "</div>";
                     }
                     ?>
-                    <div class='product-name'>
-                        <?php
-                        $name = $item['name'];
-                        if(explode(' ', $item['name'])[1] == 'qt-d' || explode(' ', $item['name'])[1] == 'qt-l'){
-                            
-                            $name = explode(' ', $item['name'])[0] . ' Quart';
-                        }
-                        ?>
-                        <p class='smaller grey-text'><strong><?php echo $item['brand']; ?></strong></p>
-                        <p class="bigger black-text"><strong><?php echo str_replace($item['brand'] . " ", '', $item['product']); ?></strong></p>
-                        <p class='smaller black-text'><strong>Size: <?php echo $name;?></strong></p>
-
-                    </div>
                 </div>
             </div>
         <!-- /Standard Product -->

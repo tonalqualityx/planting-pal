@@ -46,7 +46,7 @@ if ($storeid == '') {
             <p class="light-green-text">Enter the size & quantity of plants below</p>
         </div>
     </div>
-    <div class="ig-select container" style="padding-bottom: 25px;">
+    <div id="ground-entries" class="ig-select container" style="padding-bottom: 25px;">
         <div class="container">
             <div class="indppl-app-split indppl-flex qty-plant-header">
                 <div class="">
@@ -57,7 +57,7 @@ if ($storeid == '') {
                 </div>
             </div>
         </div>
-        <hr class="light-rule">
+        <!-- <hr class="light-rule"> -->
 
         <div class="container">
             <?php 
@@ -165,11 +165,7 @@ if ($storeid == '') {
                     <div class="pots-form pb-first">
                         <h3>Pot #<span class="counter" data-count="1">1</span></h3>
                         <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
-                            <div class="quantity-inputs">
-                                <p style='margin-bottom: 35px;'></p>
-                                <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
-                                <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
-                            </div>
+                            
                             <div class=" tacos">
                                 <div class="indppl-flex indppl-no-wrap">
                                     <div>
@@ -203,9 +199,16 @@ if ($storeid == '') {
                                 <div class="<?php if(!$pots["need"][$key]){ echo "hide"; } ?> inches-needed" style="margin-top:15px;">
                                     <p style='margin-bottom: 35px;'></p>    
                                     <input type="number" min="0" id="pneed_1" name="pots[need][]" class="rounded-input3 pots" value='<?php echo $pots["need"][$key]; ?>'>
+                                    <label class="soil-need">Inches of soil needed</label>
                                 </div>
-                                <label class="soil-need">Inches of soil needed</label>
                             </div>
+
+                            <div class="quantity-inputs">
+                                <p style='margin-bottom: 35px!important;'></p>
+                                <input type="number" min="0" name="pots[qty][]" id="qty_1" class="rounded-input pots margin-auto" value='<?php echo $pots["qty"][$key]; ?>'>
+                                <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
+                            </div>
+
                         </div>
                         <div class="row">
                             <div class="indppl-flex indppl-justify-center max-600">
@@ -228,7 +231,7 @@ if ($storeid == '') {
         </div>
         <div id='beds' class="row type-header-2 indppl-beds-header plants-form-header">
             <div class="col">
-            <h3 class="white-text">Raised Bed Plantings</h3>
+                <h3 class="white-text">Raised Bed Plantings</h3>
                 <p class="light-green-text">Enter the size & quantity of raised beds</p>
                 <img src="<?php echo INDPPL_ROOT_URL . 'assets/img/bed-header.jpg'; ?>" class='plant-form-header-image'>
             </div>
@@ -250,7 +253,7 @@ if ($storeid == '') {
 
                         <div class="indppl-app-split indppl-flex app-form-inputs" style="margin-bottom:20px;">
                             <div class="quantity-inputs" >
-                                <p style='margin-bottom: 35px;'></p>
+                                <p style='margin-bottom: 35px!important;'></p>
                                 <input type="number" min="0" name="beds[qty][]" class="rounded-input beds margin-auto" value='<?php echo $beds["qty"][$key]; ?>'>
                                 <label class="dark-green-text" style="width:100%;text-align:center;">Qty</label>
                             </div>
@@ -286,8 +289,8 @@ if ($storeid == '') {
                                 <div class="<?php if(!$beds["need"][$key]){ echo "hide"; } ?> inches-needed">
                                     <p style='margin-bottom: 35px;'></p>
                                     <input type="number" min="0" id="rbneed_1" name="beds[need][]" class="rounded-input3" value='<?php echo $beds["need"][$key]; ?>'>
+                                    <label class="soil-need dark-green-text">Inches of soil needed</label>
                                 </div>
-                                <label class="soil-need dark-green-text">Inches of soil needed</label>
                             </div>
                         </div>
                     </div> 
@@ -311,7 +314,7 @@ if ($storeid == '') {
         <?php } ?>
         <div class="container footer">
             <div class="row">
-                <div class="col"><a href='#' class="indppl-button next-button">NEXT</a>
+                <div class="col"><a id="plants-form-submit" href='#' class="indppl-button next-button">NEXT</a>
                 <input type="submit" id="plants-form-submit" class="hide">
                 <!-- <p class="copyright">© Copyright 2019 Planting Pal.&nbsp; All rights reserved.<br></p> -->
             </div>

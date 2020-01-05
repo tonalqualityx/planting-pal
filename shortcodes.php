@@ -4,9 +4,10 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );//For security
 function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
     ob_start(); ?>
     <div class='white-background'>
-        <div class='container'>
-            <img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/logo-1.png" id='logo-header'>
-            
+        <div class='container' style="padding-top:10px;">
+            <div class="indppl-small-header">
+                <img src="<?php echo INDPPL_ROOT_URL; ?>assets/img/Planting-Pal-short-carrot-cropped.png" id='logo-header'>
+            </div>
         </div>
     </div>
     <div class="location-body light-blue-bg store-locate-container">
@@ -198,7 +199,7 @@ function planting_pal_home($lat=NULL, $lon=NULL, $radius=NULL, $zip=null){
             ?>
             <div class='single-store-app-container'>
                 <div class='app-store-img'>
-                    <img src=<?php echo $img; ?>>
+                    <div class="app-store-logo" style="background:url(<?php echo $img; ?>);background-size:contain;"></div>
                 </div>
                 <div class='app-store-info'>
                     <h3 class='results-store'><a href='<?php echo get_permalink($id); ?>'><?php echo $title; ?></a></h3>
