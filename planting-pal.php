@@ -10,7 +10,7 @@
  * Github Plugin URI: tonalqualityx/planting-pal
  */
 
-define("INDPPL_VERSION", "1.1.5");
+define("INDPPL_VERSION", "1.1.6");
 
 add_filter('wp_headers', 'indppl_add_ie_edge_wp_headers');
 
