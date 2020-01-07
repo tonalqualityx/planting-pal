@@ -18,7 +18,7 @@ jQuery(document).ready(function( $ ) {
 
     $('body').on('click', '.geo-submit', function(e){
         e.preventDefault();
-        geoSubmit();
+        showPosition(lat, lon);
     })
     
     var lat = 0.00;
